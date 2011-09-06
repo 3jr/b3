@@ -1,0 +1,128 @@
+﻿<Window x:Class="BallOnTiltablePlate2.MainWindow"
+        xmlns="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Ball on Tilitable Plate"
+        Width="340"
+        Height="550"
+        MinWidth="340"
+        MaxWidth="340"
+        d:DesignHeight="566.5"
+        Loaded="Window_Loaded"
+        x:ClassModifier="internal"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <RoutedCommand x:Key="PreprocessorSettings">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+P</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="JugglerSettings">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+A</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="InputSettings">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+I</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="OutputSettings">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+O</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource ResourceKey=PreprocessorSettings}" 
+                        Executed="PreprocessorSettingsCmdExecuted" />
+        <CommandBinding Command="{StaticResource ResourceKey=JugglerSettings}" 
+                        Executed="JugglerSettingsCmdExecuted" />
+        <CommandBinding Command="{StaticResource ResourceKey=InputSettings}" 
+                        Executed="InputSettingsCmdExecuted" />
+        <CommandBinding Command="{StaticResource ResourceKey=OutputSettings}" 
+                        Executed="OutputSettingsCmdExecuted" />
+    </Window.CommandBindings>
+    <StackPanel Selector.SelectionChanged="Lists_SelectionChanged">
+        <Menu>
+            <MenuItem Header="_File" />
+            <MenuItem Header="Settings">
+                <MenuItem Command="{StaticResource PreprocessorSettings}" Header="Preprocessor" />
+                <MenuItem Command="{StaticResource JugglerSettings}" Header="Juggeler _Algorithm" />
+                <MenuItem Command="{StaticResource InputSettings}" Header="_Input" />
+                <MenuItem Command="{DynamicResource OutputSettings}" Header="_Output" />
+                <Separator />
+            </MenuItem>
+        </Menu>
+        <Grid Margin="7">
+            <Button x:Name="AlgorithmSettingButton"
+                    Width="75"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Command="{StaticResource JugglerSettings}"
+                    Content="Settings"
+                    ToolTip="Algorithm Settings (Ctrl+A)" />
+            <Label HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Content="Juggeler _Algorithm"
+                   Target="{Binding ElementName=AlgorithmList}" />
+        </Grid>
+        <ListBox x:Name="AlgorithmList" Margin="7,0" />
+        <Grid Margin="7">
+            <Button x:Name="PreprocessorSettingButton"
+                    Width="75"
+                    Margin="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Command="{StaticResource PreprocessorSettings}"
+                    Content="Settings"
+                    Padding="7,1"
+                    ToolTip="Preprocessor Settings (Ctrl+P)" />
+            <Label HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Content="_Preprocessor"
+                   Target="{Binding ElementName=PreprocessorList}" />
+        </Grid>
+        <ListBox x:Name="PreprocessorList"
+                 Margin="7,0"
+                 ItemsSource="{Binding SelectedItem.Preprocessors,
+                                       ElementName=AlgorithmList}" />
+        <Grid Margin="7">
+            <Button x:Name="InputSettingButton"
+                    Width="75"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Command="{StaticResource InputSettings}"
+                    Content="Settings"
+                    ToolTip="Input Settings (Ctrl+I)" />
+            <Label HorizontalAlignment="Left"
+                   Content="_Input"
+                   Target="{Binding ElementName=InputList,
+                                    Mode=OneWay}"
+                   d:LayoutOverrides="Height" />
+        </Grid>
+        <ListBox x:Name="InputList"
+                 Margin="7,0"
+                 ItemsSource="{Binding ElementName=PreprocessorList,
+                                       Path=SelectedItem.Inputs}" />
+        <Grid Margin="7">
+            <Button x:Name="OutputSettingButton"
+                    Width="75"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Command="{StaticResource OutputSettings}"
+                    Content="Settings"
+                    ToolTip="Output Settings (Ctrl+O)" />
+            <Label HorizontalAlignment="Left"
+                   Content="_Output"
+                   Target="{Binding ElementName=OutputList,
+                                    Mode=OneWay}"
+                   d:LayoutOverrides="Height" />
+        </Grid>
+        <ListBox x:Name="OutputList"
+                 Margin="7,0"
+                 ItemsSource="{Binding ElementName=PreprocessorList,
+                                       Path=SelectedItem.Outputs}" />
+    </StackPanel>
+</Window>
