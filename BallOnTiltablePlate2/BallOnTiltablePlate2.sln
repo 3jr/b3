@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimoSchmetzer", "TimoSchmetzer\TimoSchmetzer.csproj", "{E7487EA5-55A9-4439-9138-38D71A85529C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JanRapp", "JanRapp\JanRapp.csproj", "{B5D3551B-0622-43CC-9BBB-63E672A2903B}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs21
 		SccLocalPath0 = .
@@ -22,6 +24,9 @@ Global
 		SccProjectUniqueName3 = TimoSchmetzer\\TimoSchmetzer.csproj
 		SccProjectName3 = TimoSchmetzer
 		SccLocalPath3 = TimoSchmetzer
+		SccProjectUniqueName4 = JanRapp\\JanRapp.csproj
+		SccProjectName4 = JanRapp
+		SccLocalPath4 = JanRapp
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +67,16 @@ Global
 		{E7487EA5-55A9-4439-9138-38D71A85529C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{E7487EA5-55A9-4439-9138-38D71A85529C}.Release|x86.ActiveCfg = Release|x86
 		{E7487EA5-55A9-4439-9138-38D71A85529C}.Release|x86.Build.0 = Release|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|x86.ActiveCfg = Debug|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|x86.Build.0 = Debug|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|Any CPU.ActiveCfg = Release|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|x86.ActiveCfg = Release|x86
+		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
