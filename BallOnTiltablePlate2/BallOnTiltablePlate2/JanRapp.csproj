@@ -127,16 +127,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JanRapp\JanRappOld.csproj">
-      <Project>{3B610469-5CAE-4D21-96AC-E198E8F075F4}</Project>
-      <Name>JanRappOld</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SharedBase\SharedBase.csproj">
       <Project>{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}</Project>
       <Name>SharedBase</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Simulation\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
