@@ -55,49 +55,52 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="MainApp\App.xaml">
+    <ApplicationDefinition Include="JanRapp\MainApp\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\vector setter\DoubleBox.xaml.cs">
+    <Compile Include="Interfaces.cs" />
+    <Compile Include="JanRapp\Controls\vector setter\DoubleBox.xaml.cs">
       <DependentUpon>DoubleBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\vector setter\Vector2DControl.xaml.cs">
+    <Compile Include="JanRapp\Controls\vector setter\Vector2DControl.xaml.cs">
       <DependentUpon>Vector2DControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\vector setter\Vector3DControl.xaml.cs">
+    <Compile Include="JanRapp\Controls\vector setter\Vector3DControl.xaml.cs">
       <DependentUpon>Vector3DControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Visualizer.xaml.cs">
+    <Compile Include="JanRapp\Controls\Visualizer\Visualizer.xaml.cs">
       <DependentUpon>Visualizer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\WindowCustomizer.cs" />
-    <Page Include="Controls\vector setter\DoubleBox.xaml">
+    <Compile Include="TimoSchmetzer\3DPhysics.cs" />
+    <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
+    <Compile Include="JanRapp\Utilities\WindowCustomizer.cs" />
+    <Page Include="JanRapp\Controls\vector setter\DoubleBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\vector setter\Vector2DControl.xaml">
+    <Page Include="JanRapp\Controls\vector setter\Vector2DControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\vector setter\Vector3DControl.xaml">
+    <Page Include="JanRapp\Controls\vector setter\Vector3DControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Visualizer.xaml">
+    <Page Include="JanRapp\Controls\Visualizer\Visualizer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainApp\MainWindow.xaml">
+    <Page Include="JanRapp\MainApp\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="MainApp\App.xaml.cs">
+    <Compile Include="JanRapp\MainApp\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainApp\IOItem.cs" />
-    <Compile Include="MainApp\MainWindow.xaml.cs">
+    <Compile Include="JanRapp\MainApp\IOItem.cs" />
+    <Compile Include="JanRapp\MainApp\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -127,13 +130,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharedBase\SharedBase.csproj">
-      <Project>{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}</Project>
-      <Name>SharedBase</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Simulation\" />
+    <Folder Include="JanRapp\Simulation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

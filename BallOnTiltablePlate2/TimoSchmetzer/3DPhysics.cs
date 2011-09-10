@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Media;
-using BallOnTiltablePlate.MathUtilities;
+using BallOnTiltablePlate.JanRapp.Utilities.Vectors;
 
 namespace BallOnTiltablePlate.TimoSchmetzer
 {
@@ -16,7 +16,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer
     /// Anfangsbedingungen sind in die vorgesehen public deklarierten Felder einzutragen.
     /// Ergebnisse koennen nach Ausfuehrung von RunPhysics(...) aus den public deklarierten daten entnommen werden.
     /// </summary>
-    class Physics
+    class ThreeDPhysics
     {
         #region Physics
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Media.Media3D;
 using System.Windows;
 
-namespace BallOnTiltablePlate.MathUtilities
+namespace BallOnTiltablePlate.JanRapp.Utilities.Vectors
 {
     //MathUtilities by http://www.vcskicks.com/3d_gdiplus_drawing.php
     //All gegrees are taken in Radian and Metods with Deg suffix take it in Degree.

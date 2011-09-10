@@ -54,10 +54,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Physics.cs" />
+    <Compile Include="3DPhysics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\JanRapp\JanRapp.csproj">
+      <Project>{B5D3551B-0622-43CC-9BBB-63E672A2903B}</Project>
+      <Name>JanRapp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharedBase\SharedBase.csproj">
       <Project>{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}</Project>
       <Name>SharedBase</Name>
