@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BallOnTiltablePlate.JanRapp.MainApp.Properties {
+namespace BallOnTiltablePlate.JanRapp.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BallOnTiltablePlate.JanRapp.MainApp.Properties {
+namespace BallOnTiltablePlate.JanRapp.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BallOnTiltablePlate.JanRapp.MainApp.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BallOnTiltablePlate.JanRapp.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
