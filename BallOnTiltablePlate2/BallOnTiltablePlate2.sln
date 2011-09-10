@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JanRapp", "BallOnTiltablePlate2\JanRapp.csproj", "{B5D3551B-0622-43CC-9BBB-63E672A2903B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedBase", "SharedBase\SharedBase.csproj", "{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{C1F28147-3165-4F81-A007-8CF5B3E4082F}"
@@ -11,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimoSchmetzer", "TimoSchmet
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs21
 		SccLocalPath0 = .
@@ -24,9 +22,6 @@ Global
 		SccProjectUniqueName3 = TimoSchmetzer\\TimoSchmetzer.csproj
 		SccProjectName3 = TimoSchmetzer
 		SccLocalPath3 = TimoSchmetzer
-		SccProjectUniqueName4 = BallOnTiltablePlate2\\JanRapp.csproj
-		SccProjectName4 = BallOnTiltablePlate2
-		SccLocalPath4 = BallOnTiltablePlate2
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,16 +32,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|x86.ActiveCfg = Debug|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Debug|x86.Build.0 = Debug|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|Any CPU.ActiveCfg = Release|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|Mixed Platforms.Build.0 = Release|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|x86.ActiveCfg = Release|x86
-		{B5D3551B-0622-43CC-9BBB-63E672A2903B}.Release|x86.Build.0 = Release|x86
 		{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
