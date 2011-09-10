@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BallOnTiltablePlate2", "BallOnTiltablePlate2\BallOnTiltablePlate2.csproj", "{B5D3551B-0622-43CC-9BBB-63E672A2903B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JanRapp", "BallOnTiltablePlate2\JanRapp.csproj", "{B5D3551B-0622-43CC-9BBB-63E672A2903B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedBase", "SharedBase\SharedBase.csproj", "{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JanRapp", "JanRapp\JanRapp.csproj", "{3B610469-5CAE-4D21-96AC-E198E8F075F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JanRappOld", "JanRapp\JanRappOld.csproj", "{3B610469-5CAE-4D21-96AC-E198E8F075F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{C1F28147-3165-4F81-A007-8CF5B3E4082F}"
 EndProject
@@ -17,21 +17,21 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs21
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = BallOnTiltablePlate2\\BallOnTiltablePlate2.csproj
-		SccProjectName1 = BallOnTiltablePlate2
-		SccLocalPath1 = BallOnTiltablePlate2
-		SccProjectUniqueName2 = JanRapp\\JanRapp.csproj
-		SccProjectName2 = JanRapp
-		SccLocalPath2 = JanRapp
-		SccProjectUniqueName3 = SharedBase\\SharedBase.csproj
-		SccProjectName3 = SharedBase
-		SccLocalPath3 = SharedBase
-		SccProjectUniqueName4 = Test\\Test.csproj
-		SccProjectName4 = Test
-		SccLocalPath4 = Test
-		SccProjectUniqueName5 = TimoSchmetzer\\TimoSchmetzer.csproj
-		SccProjectName5 = TimoSchmetzer
-		SccLocalPath5 = TimoSchmetzer
+		SccProjectUniqueName1 = SharedBase\\SharedBase.csproj
+		SccProjectName1 = SharedBase
+		SccLocalPath1 = SharedBase
+		SccProjectUniqueName2 = Test\\Test.csproj
+		SccProjectName2 = Test
+		SccLocalPath2 = Test
+		SccProjectUniqueName3 = TimoSchmetzer\\TimoSchmetzer.csproj
+		SccProjectName3 = TimoSchmetzer
+		SccLocalPath3 = TimoSchmetzer
+		SccProjectUniqueName4 = JanRapp\\JanRappOld.csproj
+		SccProjectName4 = JanRapp
+		SccLocalPath4 = JanRapp
+		SccProjectUniqueName5 = BallOnTiltablePlate2\\JanRapp.csproj
+		SccProjectName5 = BallOnTiltablePlate2
+		SccLocalPath5 = BallOnTiltablePlate2
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

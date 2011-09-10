@@ -8,7 +8,7 @@
     <ProjectGuid>{B5D3551B-0622-43CC-9BBB-63E672A2903B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BallOnTiltablePlate2</RootNamespace>
+    <RootNamespace>BallOnTiltablePlate.JanRapp.MainApp</RootNamespace>
     <AssemblyName>BallOnTiltablePlate2</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -55,21 +55,49 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="MainApp\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="WindowCustomizer.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Controls\vector setter\DoubleBox.xaml.cs">
+      <DependentUpon>DoubleBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\vector setter\Vector2DControl.xaml.cs">
+      <DependentUpon>Vector2DControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\vector setter\Vector3DControl.xaml.cs">
+      <DependentUpon>Vector3DControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Visualizer.xaml.cs">
+      <DependentUpon>Visualizer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\WindowCustomizer.cs" />
+    <Page Include="Controls\vector setter\DoubleBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Page Include="Controls\vector setter\Vector2DControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\vector setter\Vector3DControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Visualizer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainApp\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="MainApp\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IOItem.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="MainApp\IOItem.cs" />
+    <Compile Include="MainApp\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -99,18 +127,16 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JanRapp\JanRapp.csproj">
+    <ProjectReference Include="..\JanRapp\JanRappOld.csproj">
       <Project>{3B610469-5CAE-4D21-96AC-E198E8F075F4}</Project>
-      <Name>JanRapp</Name>
+      <Name>JanRappOld</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharedBase\SharedBase.csproj">
       <Project>{593FBAD3-392D-4F52-B7FF-3E9F97E9D8A1}</Project>
       <Name>SharedBase</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MainApp\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

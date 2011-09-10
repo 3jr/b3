@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Windows.Controls;
 using BallOnTiltablePlate;
 
-namespace BallOnTiltablePlate2
+namespace BallOnTiltablePlate.JanRapp.MainApp
 {
     internal static class ListPopulater
     {

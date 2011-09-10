@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace BallOnTiltablePlate2
+namespace BallOnTiltablePlate.JanRapp.MainApp
 {
     /// <summary>
     /// Interaction logic for App.xaml

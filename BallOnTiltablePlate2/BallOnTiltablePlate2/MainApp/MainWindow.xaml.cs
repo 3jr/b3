@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using BallOnTiltablePlate;
 
-namespace BallOnTiltablePlate2
+namespace BallOnTiltablePlate.JanRapp.MainApp
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
