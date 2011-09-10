@@ -50,9 +50,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="controlls\vector setter\DoubleBox.xaml.cs">
+      <DependentUpon>DoubleBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimulationIO.xaml.cs">
       <DependentUpon>SimulationIO.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="controlls\vector setter\Vector2DControl.xaml.cs">
+      <DependentUpon>Vector2DControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="controlls\vector setter\Vector3DControl.xaml.cs">
+      <DependentUpon>Vector3DControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="controlls\Visualizer.xaml.cs">
+      <DependentUpon>Visualizer.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -62,10 +74,30 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="controlls\vector setter\DoubleBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SimulationIO.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="controlls\vector setter\Vector2DControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="controlls\vector setter\Vector3DControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="controlls\Visualizer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MainApp\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
