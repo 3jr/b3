@@ -81,6 +81,7 @@
     <Compile Include="JanRapp\Controls\Visualizer\Visualizer3D.xaml.cs">
       <DependentUpon>Visualizer3D.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\MainApp\GlobalSettings.cs" />
     <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
       <DependentUpon>Simulation3D.xaml</DependentUpon>
     </Compile>
@@ -150,10 +151,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureBlackAxies.png" />
+    <EmbeddedResource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureBlackAxies.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
+    <EmbeddedResource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

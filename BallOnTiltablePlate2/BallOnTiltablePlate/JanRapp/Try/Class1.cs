@@ -6,7 +6,7 @@ namespace JanRapp
 {
     public class JanBase : IBallOnPlateItem
     {
-        public FrameworkElement Settings { get; protected set; }
+        public FrameworkElement SettingsUI { get; protected set; }
 
         public Version Version { get; protected set; }
 

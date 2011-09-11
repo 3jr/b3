@@ -51,7 +51,13 @@ namespace BallOnTiltablePlate
 
     public interface IBallOnPlateItem
     {
-        FrameworkElement Settings { get; }
+        FrameworkElement SettingsUI { get; }
+
+        /// <summary>
+        /// this Objekt gets serialized and saved at Programm close, if not null. Must be serializeable.
+        /// This Object gets set at Porgram Start if serialized is 
+        /// </summary>
+        object SettingsSave { get; }
 
         string ItemName { get; }
 

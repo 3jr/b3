@@ -70,7 +70,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void OutputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
-            new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)OutputList.SelectedItem).DataContext).Settings, this).Show();
+            new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)OutputList.SelectedItem).DataContext).SettingsUI, this).Show();
         }
     }
 

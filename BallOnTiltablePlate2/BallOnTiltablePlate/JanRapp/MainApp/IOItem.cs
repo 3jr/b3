@@ -30,7 +30,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             try
             {
                 Assert(part != null);
-                Assert(part.Settings != null);
+                Assert(part.SettingsUI != null);
                 Assert(string.IsNullOrWhiteSpace(part.AuthorFirstName));
                 Assert(string.IsNullOrWhiteSpace(part.AuthorLastName));
                 Assert(string.IsNullOrWhiteSpace(part.ItemName));
