@@ -19,13 +19,13 @@ namespace BallOnTiltablePlate
     public interface IBallInput3D
         : IBallInput
     {
-        //Action<Point> CallOnNewPoint3D { set; }
+        //event EventHandler<BallInput3DEventArgs> DataRecived;
     }
 
     public interface IPlateOutput
         : IBallOnPlateItem
     {
-        Vector Tilt { get; set; }
+        void SetTilt(Vector tilt);
     }
 
     public interface

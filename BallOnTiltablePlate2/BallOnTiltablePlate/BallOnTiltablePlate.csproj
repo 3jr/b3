@@ -81,7 +81,7 @@
     <Compile Include="JanRapp\Controls\Visualizer\Visualizer3D.xaml.cs">
       <DependentUpon>Visualizer3D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\MainApp\GlobalSettings.cs" />
+    <Compile Include="GlobalSettings.cs" />
     <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
       <DependentUpon>Simulation3D.xaml</DependentUpon>
     </Compile>

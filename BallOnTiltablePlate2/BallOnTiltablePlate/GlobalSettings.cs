@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BallOnTiltablePlate.JanRapp.JanRapp.MainApp
+namespace BallOnTiltablePlate
 {
-    class GlobalSettings
+    static class GlobalSettings
     {
+        public static double PlateSize;
     }
 }
