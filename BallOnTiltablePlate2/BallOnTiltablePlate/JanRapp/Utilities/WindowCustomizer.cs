@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace WindowCustomizerExample
+namespace BallOnTiltablePlate.JanRapp.Utilities.WPF
 {
     public static class WindowCustomizer
     {

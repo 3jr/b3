@@ -13,7 +13,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Windows.Media.Media3D;
-using BallOnTiltablePlate.Library;
 
 namespace BallOnTiltablePlate.JanRapp.Controls
 {
@@ -270,51 +269,4 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         #endregion
     }
-    #region Converter
-    internal class Point3DToDoubleSplitterConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-
-            string coordinate = (string)parameter;
-
-            if(coordinate == "X")
-                return ((Point3D)value).X;
-
-            if(coordinate == "Y")
-                return ((Point3D)value).Y;
-
-            if(coordinate == "Z")
-                return ((Point3D)value).Z;
-
-            throw new ArgumentException("parameter must be a string of one of the coordinates of Vector3D");
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    internal class VectorToDoubleSplitterConverterToDeg : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            string coordinate = (string)parameter;
-
-            if(coordinate == "X")
-                return Helper.RadToDeg(((Vector)value).X);
-
-            if(coordinate == "Y")
-                return Helper.RadToDeg(((Vector)value).Y);
-
-            throw new ArgumentException("parameter must be a string of one of the coordinates of Vector3D");
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    #endregion
 }

@@ -7,6 +7,7 @@
              xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
              xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
+             xmlns:util="clr-namespace:BallOnTiltablePlate.JanRapp.Utilities.Vectors"
              mc:Ignorable="d"
              d:DesignHeight="451" d:DesignWidth="582" Background="#FF1D1D1D" >
     <UserControl.Resources>
@@ -19,8 +20,8 @@
         <System:Double x:Key="BallPositionX">0.2</System:Double>
         <System:Double x:Key="BallPositionY">0.2</System:Double>
         <System:Double x:Key="BallPositionZ">0.5</System:Double>-->
-        <local:VectorToDoubleSplitterConverterToDeg x:Key="VectorToDoubleSplitterConverterToDeg"/>
-        <local:Point3DToDoubleSplitterConverter x:Key="Vector3DToDoubleSplitterConverter"/>
+        <util:VectorToDoubleSplitterConverterToDeg x:Key="VectorToDoubleSplitterConverterToDeg"/>
+        <util:Point3DToDoubleSlitterConverter x:Key="Vector3DToDoubleSplitterConverter"/>
     </UserControl.Resources>
     <Grid>
         <Viewport3D>
@@ -125,14 +126,6 @@
                         </Transform3DGroup>
                     </local:Cylinder3D.Transform>
                 </local:Cylinder3D>
-                <!--<local:Cylinder3D>
-                    <local:Cylinder3D.Transform>
-                        <Transform3DGroup>
-                            <ScaleTransform3D ScaleX="{DynamicResource BallSize}" ScaleY="{DynamicResource BallSize}" ScaleZ="{DynamicResource BallSize}"/>
-                            <TranslateTransform3D OffsetX="-1.1" OffsetY="0"/>
-                        </Transform3DGroup>
-                    </local:Cylinder3D.Transform>
-                </local:Cylinder3D>-->
             </ContainerUIElement3D>
             <ContainerUIElement3D x:Name="TiltControlYI"
                                   MouseDown="TiltControlYI_MouseDown">

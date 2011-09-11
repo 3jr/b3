@@ -69,9 +69,17 @@
     <Compile Include="JanRapp\Controls\vector setter\Vector3DControl.xaml.cs">
       <DependentUpon>Vector3DControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Controls\Visualizer\Shapes\Cylinder3D.cs" />
+    <Compile Include="JanRapp\Controls\Visualizer\Shapes\Plate.cs" />
+    <Compile Include="JanRapp\Controls\Visualizer\Shapes\Primitive3D.cs" />
+    <Compile Include="JanRapp\Controls\Visualizer\Shapes\Sphere3D.cs" />
     <Compile Include="JanRapp\Controls\Visualizer\Visualizer.xaml.cs">
       <DependentUpon>Visualizer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Try\Class1.cs" />
+    <Compile Include="JanRapp\Try\Program.cs" />
+    <Compile Include="JanRapp\Try\Tests.cs" />
+    <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
     <Compile Include="TimoSchmetzer\3DPhysics.cs" />
     <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
     <Compile Include="JanRapp\Utilities\WindowCustomizer.cs" />
