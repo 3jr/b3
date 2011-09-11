@@ -82,6 +82,9 @@
       <DependentUpon>Visualizer3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="GlobalSettings.cs" />
+    <Compile Include="JanRapp\MainApp\GeneralSettingsUI.xaml.cs">
+      <DependentUpon>GeneralSettingsUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
       <DependentUpon>Simulation3D.xaml</DependentUpon>
     </Compile>
@@ -107,6 +110,10 @@
     <Page Include="JanRapp\Controls\Visualizer\Visualizer3D.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="JanRapp\MainApp\GeneralSettingsUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\MainApp\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
