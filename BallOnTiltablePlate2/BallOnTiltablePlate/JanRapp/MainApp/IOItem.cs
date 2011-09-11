@@ -15,8 +15,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             var allTypes = System.IO.Directory.GetFiles(Environment.CurrentDirectory, "*.dll")
                 .Select(p => Assembly.LoadFile(p).GetTypes())
                 .Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
-                .Where(t => t.IsClass && typeof(IBallOnPlatePart).IsAssignableFrom(t))
-                .Select( t => new { Type=t, Instance=(IBallOnPlatePart)Activator.CreateInstance(t)})
+                .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
+                .Select( t => new { Type=t, Instance=(IBallOnPlateItem)Activator.CreateInstance(t)})
                 .ToArray();
 
             return allTypes
@@ -25,7 +25,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                 .Select(t => new JuggelerItem(t.Type, t.Instance, allTypes.Select(i => i.Type), allTypes.Select(i => i.Instance))).ToArray();
         }
 
-        private static bool CheckOnPart(IBallOnPlatePart part)
+        private static bool CheckOnPart(IBallOnPlateItem part)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                 Assert(part.Settings != null);
                 Assert(string.IsNullOrWhiteSpace(part.AuthorFirstName));
                 Assert(string.IsNullOrWhiteSpace(part.AuthorLastName));
-                Assert(string.IsNullOrWhiteSpace(part.PartName));
+                Assert(string.IsNullOrWhiteSpace(part.ItemName));
                 Assert(part.Version != null);
 
                 return true;
@@ -53,9 +53,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
     internal class PreprocessorItem : ListBoxItem
     {
-        private readonly IBallOnPlatePart instance;
+        private readonly IBallOnPlateItem instance;
 
-        public IBallOnPlatePart Instance { get { return instance; } }
+        public IBallOnPlateItem Instance { get { return instance; } }
 
         private Lazy<IEnumerable<ListBoxItem>> inputs = new Lazy<IEnumerable<ListBoxItem>>();
 
@@ -66,9 +66,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         public IEnumerable<ListBoxItem> Outputs { get { return outputs.Value; } }
 
         private readonly IEnumerable<Type> allTypes;
-        private readonly IEnumerable<IBallOnPlatePart> allInstances;
+        private readonly IEnumerable<IBallOnPlateItem> allInstances;
 
-        public PreprocessorItem(Type type, IBallOnPlatePart instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlatePart> allInstances)
+        public PreprocessorItem(Type type, IBallOnPlateItem instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlateItem> allInstances)
         {
             this.DataContext = this.instance = instance;
             this.allTypes = allTypes;
@@ -103,18 +103,18 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
     internal class JuggelerItem : ListBoxItem
     {
-        private readonly IBallOnPlatePart instance;
+        private readonly IBallOnPlateItem instance;
 
-        public IBallOnPlatePart Instance { get { return instance; } }
+        public IBallOnPlateItem Instance { get { return instance; } }
 
         private Lazy<IEnumerable<PreprocessorItem>> preprocessors;
 
         public IEnumerable<PreprocessorItem> Preprocessors { get { return preprocessors.Value; } }
 
         private readonly IEnumerable<Type> allTypes;
-        private readonly IEnumerable<IBallOnPlatePart> allInstances;
+        private readonly IEnumerable<IBallOnPlateItem> allInstances;
 
-        public JuggelerItem(Type type, IBallOnPlatePart instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlatePart> allInstances)
+        public JuggelerItem(Type type, IBallOnPlateItem instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlateItem> allInstances)
         {
             this.DataContext = this.instance = instance;
             this.allTypes = allTypes;
@@ -136,9 +136,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             return PartToString(instance);
         }
 
-        public static string PartToString(IBallOnPlatePart part)
+        public static string PartToString(IBallOnPlateItem part)
         {
-            return string.Format("{0} {1}: {2} - {3}", part.AuthorFirstName, part.AuthorLastName, part.PartName, part.Version);
+            return string.Format("{0} {1}: {2} - {3}", part.AuthorFirstName, part.AuthorLastName, part.ItemName, part.Version);
         }
     }
 }

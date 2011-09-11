@@ -70,7 +70,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void OutputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
-            new SettingsWindow(((IBallOnPlatePart)((ListBoxItem)OutputList.SelectedItem).DataContext).Settings, this).Show();
+            new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)OutputList.SelectedItem).DataContext).Settings, this).Show();
         }
     }
 
@@ -81,7 +81,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             this.WindowStyle = System.Windows.WindowStyle.ToolWindow;
             this.Width = 340;
             this.ShowInTaskbar = false;
-            this.SetValue(WindowCustomizerExample.WindowCustomizer.CanMinimize, false);
+            this.SetValue(BallOnTiltablePlate.JanRapp.Utilities.WPF.WindowCustomizer.CanMinimize, false);
             this.Owner = win; //closes with owner
             WindowInteropHelper wih = new WindowInteropHelper(this);
 

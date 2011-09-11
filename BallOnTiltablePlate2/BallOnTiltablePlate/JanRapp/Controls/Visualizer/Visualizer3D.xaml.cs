@@ -19,7 +19,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
     /// <summary>
     /// Interaction logic for Visualizer.xaml
     /// </summary>
-    internal partial class Visualizer : UserControl
+    internal partial class Visualizer3D : UserControl
     {
         enum MoveState
         {
@@ -32,7 +32,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             TiltYI,
         }
 
-        public Visualizer()
+        public Visualizer3D()
         {
             InitializeComponent();
         }
@@ -41,18 +41,27 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         MoveState move;
         double maxtilt = Math.PI / 4;
 
-        private IInputOutput _io;
-        private IInputOutput IO
+        #region Resourc Property
+        public Vector PlateTilt
         {
-            get
+            set
             {
-                if(_io == null)
-                    _io = (IInputOutput)this.DataContext;
-                return _io;
+                PlateTiltX = value.X;
+                PlateTiltY = value.Y;
             }
         }
 
-        #region Resourc Property
+        public Point3D BallPositon
+        {
+            set
+            {
+                BallPositionX = value.X;
+                BallPositionY = value.Y;
+                BallPositionZ = value.Z;
+            }
+        }
+
+        #region Input Details
         public double PlateTiltX
         {
             get
@@ -68,15 +77,6 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             set
             { this.Resources["PlateTiltY"] = value; }
         }
-
-        public double BallSize
-        {
-            get
-            { return (double)this.Resources["BallSize"]; }
-            set
-            { this.Resources["BallSize"] = value; }
-        }
-
 
         public double BallPositionX
         {
@@ -101,6 +101,15 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             set
             { this.Resources["BallPositionZ"] = value; }
         }
+        #endregion
+
+        public double BallSize
+        {
+            get
+            { return (double)this.Resources["BallSize"]; }
+            set
+            { this.Resources["BallSize"] = value; }
+        }
 
         public double RotationOfCamera
         {
@@ -110,7 +119,6 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             { this.Resources["RotationOfCamera"] = value; }
         }
 
-
         public double AngleOfCamera
         {
             get
@@ -118,7 +126,6 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             set
             { this.Resources["AngleOfCamera"] = value; }
         }
-
 
         public double DistanceOfCamera
         {
@@ -149,16 +156,16 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                     this.Height = Clamp(this.Height + delta.Y, 20, double.MaxValue);
                     break;
                 case MoveState.TiltX:
-                    this.IO.Tilt = new Vector(Clamp(this.IO.Tilt.X + delta.Y * 0.005, -maxtilt, maxtilt), this.IO.Tilt.Y);
+                    this.PlateTilt = new Vector(Clamp(this.PlateTiltX + delta.Y * 0.005, -maxtilt, maxtilt), this.PlateTiltY);
                     break;
                 case MoveState.TiltY:
-                    this.IO.Tilt = new Vector(this.IO.Tilt.X,Clamp(this.IO.Tilt.Y + delta.Y * 0.005, -maxtilt, maxtilt));
+                    this.PlateTilt = new Vector(this.PlateTiltX,Clamp(this.PlateTiltY + delta.Y * 0.005, -maxtilt, maxtilt));
                     break;
                 case MoveState.TiltXI:
-                    this.IO.Tilt = new Vector(Clamp(this.IO.Tilt.X - delta.Y * 0.005, -maxtilt, maxtilt), this.IO.Tilt.Y);
+                    this.PlateTilt = new Vector(Clamp(this.PlateTiltX - delta.Y * 0.005, -maxtilt, maxtilt), this.PlateTiltY);
                     break;
                 case MoveState.TiltYI:
-                    this.IO.Tilt = new Vector(this.IO.Tilt.X,Clamp(this.IO.Tilt.Y - delta.Y * 0.005, -maxtilt, maxtilt));
+                    this.PlateTilt = new Vector(this.PlateTiltX,Clamp(this.PlateTiltY - delta.Y * 0.005, -maxtilt, maxtilt));
                     break;
                 default:
                     break;

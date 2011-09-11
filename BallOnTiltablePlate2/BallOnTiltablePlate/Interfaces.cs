@@ -3,27 +3,34 @@ using System.Windows;
 
 namespace BallOnTiltablePlate
 {
-    public interface IBallInput
-        : IBallOnPlatePart
+    public class BallInputEventArgs : EventArgs
     {
-        Action<Point> CallOnNewPoint { set; }
+        public Vector BallPosition {get; set;}
+    }
+
+    public interface IBallInput
+        : IBallOnPlateItem
+    {
+        event EventHandler<BallInputEventArgs> DataRecived;
+        void Start();
+        void Stop();
     }
 
     public interface IBallInput3D
         : IBallInput
     {
-        Action<Point> CallOnNewPoint3D { set; }
+        //Action<Point> CallOnNewPoint3D { set; }
     }
 
     public interface IPlateOutput
-        : IBallOnPlatePart
+        : IBallOnPlateItem
     {
         Vector Tilt { get; set; }
     }
 
     public interface
         IPreprocessor<in TIn, in TOut>
-        : IBallOnPlatePart
+        : IBallOnPlateItem
         where TIn : IBallInput
         where TOut : IPlateOutput
     {
@@ -32,17 +39,21 @@ namespace BallOnTiltablePlate
         TOut Output { set; }
     }
 
-    public interface IJuggler<in T>
-        : IBallOnPlatePart
+    /// <summary>
+    /// Common Interface for all Juggeler Algorithms
+    /// </summary>
+    /// <typeparam name="T">Must be a type of IPreprocessor</typeparam>
+    public sealed interface IJuggler<in T>
+        : IBallOnPlateItem
     {
         void Update(T IO);
     }
 
-    public interface IBallOnPlatePart
+    public interface IBallOnPlateItem
     {
         FrameworkElement Settings { get; }
 
-        string PartName { get; }
+        string ItemName { get; }
 
         string AuthorFirstName { get; }
 

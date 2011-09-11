@@ -23,8 +23,7 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.WPF
 
     public class ToDegree : IValueConverter
     {
-        private static Lazy<ToDegree> instance;
-
+        private static Lazy<ToDegree> instance = new Lazy<ToDegree>();
         public static ToDegree Instance
         {
             get { return instance.Value; }
@@ -43,7 +42,7 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.WPF
 
     public static class Helper
     {
-        private static Lazy<ToDegree> instance;
+        private static Lazy<ToDegree> instance = new Lazy<ToDegree>();
 
         public static ToDegree Instance
         {
@@ -63,13 +62,13 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.WPF
 
     public class Point3DToDoubleSplitterConverter : IValueConverter
     {
-        private static Lazy<Point3DToDoubleSplitterConverter>
+        private static Lazy<Point3DToDoubleSplitterConverter> instance = new Lazy<Point3DToDoubleSplitterConverter>();
 
         public static Point3DToDoubleSplitterConverter Instance
         {
             get
             {
-                return 
+                return instance.Value;
             }
         }
 
@@ -97,6 +96,15 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.WPF
 
     public class VectorToDoubleSplitterConverterToDeg : IValueConverter
     {
+        private static Lazy<VectorToDoubleSplitterConverterToDeg> instance = new Lazy<VectorToDoubleSplitterConverterToDeg>();
+        public static VectorToDoubleSplitterConverterToDeg Instance
+        {
+            get
+            {
+                return instance.Value;
+            }
+        }
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string coordinate = (string)parameter;

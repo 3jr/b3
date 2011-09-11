@@ -4,13 +4,13 @@ using BallOnTiltablePlate;
 
 namespace JanRapp
 {
-    public class JanBase : IBallOnPlatePart
+    public class JanBase : IBallOnPlateItem
     {
         public FrameworkElement Settings { get; protected set; }
 
         public Version Version { get; protected set; }
 
-        public string PartName { get { return "bla"; } }
+        public string ItemName { get { return "bla"; } }
 
         public string Describtion
         {

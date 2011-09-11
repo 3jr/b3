@@ -16,7 +16,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer
     /// Anfangsbedingungen sind in die vorgesehen public deklarierten Felder einzutragen.
     /// Ergebnisse koennen nach Ausfuehrung von RunPhysics(...) aus den public deklarierten daten entnommen werden.
     /// </summary>
-    class ThreeDPhysics
+    class Physics3D
     {
         #region Physics
 

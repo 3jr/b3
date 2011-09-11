@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
-namespace BallOnTiltablePlate.Controls.Visualizer
+namespace BallOnTiltablePlate.JanRapp.Controls.Visualizer
 {
     internal abstract class Primitive3D : ModelVisual3D
     {

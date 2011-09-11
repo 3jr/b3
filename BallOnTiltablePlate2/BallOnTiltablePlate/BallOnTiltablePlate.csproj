@@ -19,6 +19,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.30701.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -38,6 +40,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>BallOnTiltablePlate.JanRapp.MainApp.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -73,14 +78,17 @@
     <Compile Include="JanRapp\Controls\Visualizer\Shapes\Plate.cs" />
     <Compile Include="JanRapp\Controls\Visualizer\Shapes\Primitive3D.cs" />
     <Compile Include="JanRapp\Controls\Visualizer\Shapes\Sphere3D.cs" />
-    <Compile Include="JanRapp\Controls\Visualizer\Visualizer.xaml.cs">
-      <DependentUpon>Visualizer.xaml</DependentUpon>
+    <Compile Include="JanRapp\Controls\Visualizer\Visualizer3D.xaml.cs">
+      <DependentUpon>Visualizer3D.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
+      <DependentUpon>Simulation3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Try\Class1.cs" />
     <Compile Include="JanRapp\Try\Program.cs" />
     <Compile Include="JanRapp\Try\Tests.cs" />
     <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
-    <Compile Include="TimoSchmetzer\3DPhysics.cs" />
+    <Compile Include="TimoSchmetzer\Physics3D.cs" />
     <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
     <Compile Include="JanRapp\Utilities\WindowCustomizer.cs" />
     <Page Include="JanRapp\Controls\vector setter\DoubleBox.xaml">
@@ -95,7 +103,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\Controls\Visualizer\Visualizer.xaml">
+    <Page Include="JanRapp\Controls\Visualizer\Visualizer3D.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -112,6 +120,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="JanRapp\Simulation\Simulation3D.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -138,7 +150,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="JanRapp\Simulation\" />
+    <Resource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureBlackAxies.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
