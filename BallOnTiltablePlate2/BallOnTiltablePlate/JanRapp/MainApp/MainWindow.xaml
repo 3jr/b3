@@ -33,6 +33,11 @@
                 <KeyGesture>Control+O</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
+        <RoutedCommand x:Key="GeneralSettings">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+S</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource ResourceKey=PreprocessorSettings}" 
@@ -43,6 +48,8 @@
                         Executed="InputSettingsCmdExecuted" />
         <CommandBinding Command="{StaticResource ResourceKey=OutputSettings}" 
                         Executed="OutputSettingsCmdExecuted" />
+        <CommandBinding Command="{StaticResource ResourceKey=GeneralSettings}" 
+                        Executed="GeneralSettingsCmdExecuted" />
     </Window.CommandBindings>
     <StackPanel Selector.SelectionChanged="Lists_SelectionChanged">
         <Menu>
@@ -53,6 +60,7 @@
                 <MenuItem Command="{StaticResource InputSettings}" Header="_Input" />
                 <MenuItem Command="{DynamicResource OutputSettings}" Header="_Output" />
                 <Separator />
+                <MenuItem Header="General Settings"/>
             </MenuItem>
         </Menu>
         <Grid Margin="7">

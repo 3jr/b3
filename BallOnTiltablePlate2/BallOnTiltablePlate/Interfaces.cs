@@ -43,7 +43,7 @@ namespace BallOnTiltablePlate
     /// Common Interface for all Juggeler Algorithms
     /// </summary>
     /// <typeparam name="T">Must be a type of IPreprocessor</typeparam>
-    public sealed interface IJuggler<in T>
+    public interface IJuggler<in T>
         : IBallOnPlateItem
     {
         void Update(T IO);

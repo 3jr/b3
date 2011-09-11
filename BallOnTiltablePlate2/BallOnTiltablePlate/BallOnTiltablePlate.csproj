@@ -88,7 +88,6 @@
     <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
       <DependentUpon>Simulation3D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Try\Class1.cs" />
     <Compile Include="JanRapp\Try\Program.cs" />
     <Compile Include="JanRapp\Try\Tests.cs" />
     <Compile Include="JanRapp\Utilities\WPFConverter.cs" />

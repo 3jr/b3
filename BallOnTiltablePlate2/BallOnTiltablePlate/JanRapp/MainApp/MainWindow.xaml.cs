@@ -72,6 +72,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         {
             new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)OutputList.SelectedItem).DataContext).SettingsUI, this).Show();
         }
+
+        private void GeneralSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        {
+            new BallOnTiltablePlate.JanRapp.JanRapp.MainApp.GeneralSettingsUI().Show();
+        }
     }
 
     internal class SettingsWindow : Window
