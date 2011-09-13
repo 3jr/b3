@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace BallOnTiltablePlate
 {
@@ -16,10 +17,15 @@ namespace BallOnTiltablePlate
         void Stop();
     }
 
+    public class BallInputEventArgs3D : BallInputEventArgs
+    {
+        public Vector3D BallPosition3D { get; set; }
+    }
+
     public interface IBallInput3D
         : IBallInput
     {
-        //event EventHandler<BallInput3DEventArgs> DataRecived;
+        new event EventHandler<BallInputEventArgs3D> DataRecived;
     }
 
     public interface IPlateOutput
