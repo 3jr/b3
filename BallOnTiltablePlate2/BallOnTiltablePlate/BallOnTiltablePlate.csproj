@@ -8,7 +8,7 @@
     <ProjectGuid>{B5D3551B-0622-43CC-9BBB-63E672A2903B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BallOnTiltablePlate.JanRapp</RootNamespace>
+    <RootNamespace>BallOnTiltablePlate</RootNamespace>
     <AssemblyName>BallOnTiltablePlate2</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>

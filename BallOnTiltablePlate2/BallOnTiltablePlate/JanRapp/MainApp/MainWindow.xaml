@@ -60,7 +60,7 @@
                 <MenuItem Command="{StaticResource InputSettings}" Header="_Input" />
                 <MenuItem Command="{DynamicResource OutputSettings}" Header="_Output" />
                 <Separator />
-                <MenuItem Header="General Settings"/>
+                <MenuItem Command="{StaticResource GeneralSettings}" Header="General Settings"/>
             </MenuItem>
         </Menu>
         <Grid Margin="7">

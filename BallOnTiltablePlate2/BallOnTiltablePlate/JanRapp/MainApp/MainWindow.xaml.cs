@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Linq;
 using BallOnTiltablePlate;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp
@@ -19,7 +20,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            AlgorithmList.ItemsSource = ListPopulater.PopulateJugglerLists();
+            AlgorithmList.ItemsSource = Helper.ListPopulater.PopulateJugglerLists();
         }
 
         private void Lists_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -47,7 +48,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void PreprocessorSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
-            var current = (PreprocessorItem)PreprocessorList.SelectedItem;
+            var current = (Helper.PreprocessorItem)PreprocessorList.SelectedItem;
             if (current != null)
             {
                 //GetSettingsWindow(current.Instance.Settings).Show();
@@ -56,7 +57,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void JugglerSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
-            var current = (JuggelerItem)AlgorithmList.SelectedItem;
+            var current = (Helper.JuggelerItem)AlgorithmList.SelectedItem;
             if (current != null)
             {
                 //GetSettingsWindow(current.Instance.Settings).Show();
@@ -75,7 +76,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void GeneralSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
-            new BallOnTiltablePlate.JanRapp.JanRapp.MainApp.GeneralSettingsUI().Show();
+            new BallOnTiltablePlate.JanRapp.MainApp.GlobalSettingsUI().Show();
         }
     }
 
@@ -84,7 +85,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         public SettingsWindow(FrameworkElement content, MainWindow win)
         {
             this.WindowStyle = System.Windows.WindowStyle.ToolWindow;
-            this.Width = 340;
+            //this.Width = 340;
             this.ShowInTaskbar = false;
             this.SetValue(BallOnTiltablePlate.JanRapp.Utilities.WPF.WindowCustomizer.CanMinimize, false);
             this.Owner = win; //closes with owner

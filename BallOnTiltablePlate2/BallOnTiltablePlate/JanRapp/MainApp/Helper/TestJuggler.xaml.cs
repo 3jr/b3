@@ -12,16 +12,58 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BallOnTiltablePlate.JanRapp.JanRapp.MainApp.Helper
+namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
     /// <summary>
     /// Interaction logic for TestJuggler.xaml
     /// </summary>
-    public partial class TestJuggler : UserControl
+    public partial class TestJuggler : UserControl, IJuggler<IPreprocessor<IBallInput, IPlateOutput>>
     {
+        #region Base
+        public System.Windows.FrameworkElement SettingsUI
+        {
+            get { return this; }
+        }
+
+        public object SettingsSave
+        {
+            get { return null; }
+        }
+
+        public string ItemName
+        {
+            get { return "Test"; }
+        }
+
+        public string AuthorFirstName
+        {
+            get { return "_Jan"; }
+        }
+
+        public string AuthorLastName
+        {
+            get { return "Rapp"; }
+        }
+
+        public Version Version
+        {
+            get { return new Version(1, 0); }
+        }
+        #endregion
+
         public TestJuggler()
         {
             InitializeComponent();
+        }
+
+        public IPreprocessor<IBallInput, IPlateOutput> IO
+        {
+            set {  }
+        }
+
+        public void Update()
+        {
+
         }
     }
 }

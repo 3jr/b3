@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BallOnTiltablePlate.JanRapp.JanRapp.Simulation
+namespace BallOnTiltablePlate.JanRapp.Simulation
 {
     /// <summary>
     /// Interaction logic for Simulation3D.xaml

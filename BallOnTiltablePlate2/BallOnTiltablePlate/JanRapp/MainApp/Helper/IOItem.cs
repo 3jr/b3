@@ -13,10 +13,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         public static IEnumerable<object> PopulateJugglerLists()
         {
             var allTypes = System.IO.Directory.GetFiles(Environment.CurrentDirectory, "*.dll")
+                .Concat(System.IO.Directory.GetFiles(Environment.CurrentDirectory, "*.exe"))
                 .Select(p => Assembly.LoadFile(p).GetTypes())
                 .Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
                 .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
-                .Select( t => new { Type=t, Instance=(IBallOnPlateItem)Activator.CreateInstance(t)})
+                .Select(t => new { Type = t, Instance = (IBallOnPlateItem)Activator.CreateInstance(t) })
                 .ToArray();
 
             return allTypes
@@ -124,7 +125,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
             preprocessors = new Lazy<IEnumerable<PreprocessorItem>>(
                 () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t })
-                    .Where(it => preprocessorType.IsAssignableFrom(it.Type))
+                    .Where(it => preprocessorType.GetGenericTypeDefinition().IsAssignableFrom(it.Type))
                     .Select(it => new PreprocessorItem(it.Type, it.Instance, allTypes, allInstances))
             );
 
@@ -139,37 +140,6 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         public static string PartToString(IBallOnPlateItem part)
         {
             return string.Format("{0} {1}: {2} - {3}", part.AuthorFirstName, part.AuthorLastName, part.ItemName, part.Version);
-        }
-    }
-
-    private class TestBase : IBallOnPlateItem
-    {
-
-        public System.Windows.FrameworkElement SettingsUI { get; private set; }
-
-        public object SettingsSave
-        {
-            get { return null; }
-        }
-
-        public string ItemName
-        {
-            get { return "Name"; }
-        }
-
-        public string AuthorFirstName
-        {
-            get { return "_Jan"; }
-        }
-
-        public string AuthorLastName
-        {
-            get { return "Rapp"; }
-        }
-
-        public Version Version
-        {
-            get { return new Version(1,0); }
         }
     }
 }

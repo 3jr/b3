@@ -11,14 +11,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace BallOnTiltablePlate.JanRapp.JanRapp.MainApp
+namespace BallOnTiltablePlate.JanRapp.MainApp
 {
     /// <summary>
     /// Interaction logic for GeneralSettingsUI.xaml
     /// </summary>
-    public partial class GeneralSettingsUI : Window
+    public partial class GlobalSettingsUI : Window
     {
-        public GeneralSettingsUI()
+        public GlobalSettingsUI()
         {
             InitializeComponent();
         }
