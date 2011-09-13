@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace BallOnTiltablePlate.JanRapp.Controls
 {
@@ -49,18 +50,17 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             if(e.Property == ValueProperty)
             {
-                if(txtBox != null)
-                    txtBox.Text = Value.ToString();
-                if((double)e.NewValue > this.Maximum || (double)e.NewValue < this.Minimum)
-                    if((double)e.OldValue > this.Maximum || (double)e.OldValue < this.Minimum)
-                        SetValue(ValueProperty, e.OldValue);
-                    else
-                        SetValue(ValueProperty, this.Minimum / 2 + this.Maximum / 2);
-                //ValueChanged(this, new RoutedPropertyChangedEventArgs<double>((double)e.OldValue,(double)e.NewValue));
+                txtBox.Text = Value.ToString();
+                if ((double)e.NewValue > this.Maximum)
+                    Value = this.Maximum;
+                if ((double)e.NewValue < this.Minimum)
+                    Value = this.Minimum;
+                Debug.Assert(e.OldValue != e.NewValue);
+                ValueChanged(this, new RoutedPropertyChangedEventArgs<double>((double)e.OldValue,(double)e.NewValue));
             }
             else if(e.Property == TextProperty)
             {
-                this.lbl.Text = this.Text;
+                this.lbl.Content = this.Text;
             }
             base.OnPropertyChanged(e);
         }
@@ -125,11 +125,21 @@ namespace BallOnTiltablePlate.JanRapp.Controls
     DependencyProperty.Register("DefaultValue", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(0.0));
 
         
-
-        private double Change()
+        private double GetAmoutOfChange()
         {
             return (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) ? SmallChange : LargeChange;
         }
+
+        private void IncreaseValue()
+        {
+            Value = Value + GetAmoutOfChange();
+        }
+
+        private void DecreaseValue()
+        {
+            Value = Value - GetAmoutOfChange();
+        }
+
 
         public DoubleBox()
         {
@@ -137,12 +147,14 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         bool mouseDown;
-        Point mousePrevPos;
+        Point mouseStart;
+        double lastDistance;
 
         private void txtBox_MouseDown(object sender, MouseButtonEventArgs e)
         {
             mouseDown = this.CaptureMouse();
-            mousePrevPos = e.GetPosition(this);
+            mouseStart = e.GetPosition(this);
+            lastDistance = 0;
         }
 
         private void txtBox_MouseMove(object sender, MouseEventArgs e)
@@ -150,9 +162,20 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             if(mouseDown)
             {
                 Point mousePos = e.GetPosition(this);
-                Vector delta = mousePrevPos - mousePos;
-                Value = Value - delta.X * Change() / 4 + delta.Y * Change() / 4;
-                mousePrevPos = mousePos;
+                double distance= (mousePos - mouseStart).Length;
+                double deltaDistance = distance - lastDistance;
+
+                double distanceForOneIncrease = 4;
+
+                if (deltaDistance > distanceForOneIncrease || deltaDistance < -distanceForOneIncrease)
+                {
+                    if (deltaDistance > distanceForOneIncrease)
+                        IncreaseValue();
+                    if (deltaDistance < -distanceForOneIncrease)
+                        DecreaseValue();
+                
+                    lastDistance = distance;
+                }
             }
         }
 
@@ -167,32 +190,27 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             this.mouseDown = false;
         }
 
-        private void UpBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Value = Value + Change();
-            ValueChanged(this,new RoutedPropertyChangedEventArgs<double>(Value-Change(),Value));
-        }
-
-        private void DownBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Value = Value - Change();
-            ValueChanged(this, new RoutedPropertyChangedEventArgs<double>(Value + Change(), Value));
-        }
-
         private void txtBox_TextChanged(object sender, RoutedEventArgs e)
         {
             double result;
             if (Double.TryParse(txtBox.Text, out result))
-            {
-                double old = Value;
-                Value = result;
-                if (ValueChanged != null)
-                    ValueChanged(this, new RoutedPropertyChangedEventArgs<double>(old, Value));     
-            }
+                if (Value != result)
+                {
+                    double old = Value;
+                    Value = result;
+                }
             else
                 txtBox.Text = Value.ToString();
         }
 
+        private void IncreaseValueCmdExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            IncreaseValue();
+        }
 
+        private void DecreaseValueCmdExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            DecreaseValue();
+        }
     }
 }

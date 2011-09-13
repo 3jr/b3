@@ -21,14 +21,11 @@ namespace BallOnTiltablePlate.JanRapp.JanRapp.MainApp
         public GeneralSettingsUI()
         {
             InitializeComponent();
-            PlateSize.Value = GlobalSettings.PlateSize;
         }
 
         private void LegthOfPlate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            LengthConverter lengthConverter = new LengthConverter();
-            GlobalSettings.PlateSize = (double)lengthConverter.ConvertFromString(txt1.Text);
-            PlateSize.Value = GlobalSettings.PlateSize;
+            ;
         }
     }
 }

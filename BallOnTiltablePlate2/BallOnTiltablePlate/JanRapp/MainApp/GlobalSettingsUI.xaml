@@ -12,7 +12,10 @@
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       Text="Width and Length of Plate (in Meters): "
-                      ValueChanged="LegthOfPlate_ValueChanged" />
-        <TextBox x:Name="txt1" Margin="13,42,0,0" HorizontalAlignment="Left" Width="96" Height="26" VerticalAlignment="Top" />
+                      ValueChanged="LegthOfPlate_ValueChanged" 
+                      Minimum=".01"
+                      LargeChange=".1"
+                      SmallChange=".01"
+                      Value="{Binding GlobalSettings, Path=PlateSize}"/>
     </Grid>
 </Window>

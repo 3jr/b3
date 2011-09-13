@@ -5,6 +5,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="24"  MouseDown="txtBox_MouseDown" MouseMove="txtBox_MouseMove" MouseUp="txtBox_MouseUp" LostMouseCapture="txtBox_LostMouseCapture">
+    <UserControl.Resources>
+        <RoutedCommand x:Key="IncreaseValue">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Up</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="DecreaseValue">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Down</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource IncreaseValue}" Executed="IncreaseValueCmdExecuted"/>
+        <CommandBinding Command="{StaticResource DecreaseValue}" Executed="DecreaseValueCmdExecuted"/>
+    </UserControl.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*"/>
@@ -16,12 +32,12 @@
             <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
         <TextBox x:Name="txtBox" TextChanged="txtBox_TextChanged" Margin="0" Grid.RowSpan="2" Grid.Column="1"  />
-        <RepeatButton x:Name="UpBtn" Click="UpBtn_Click" Margin="0,0,0,0.001" d:LayoutOverrides="Width" Grid.Column="2" BorderBrush="{x:Null}">
+        <RepeatButton x:Name="UpBtn" Command="{StaticResource IncreaseValue}" Margin="0,0,0,0.001" d:LayoutOverrides="Width" Grid.Column="2" BorderBrush="{x:Null}">
             <Path Data="M0,10 L30,10 15,0 z" Fill="#FF222A43" Width="20" Height="6" Stretch="Fill"/>
         </RepeatButton>
-        <RepeatButton x:Name="DownBtn" Click="DownBtn_Click" Margin="0" d:LayoutOverrides="Width" Grid.Column="2" Grid.Row="1" Padding="0,1" RenderTransformOrigin="0.5,0.5" BorderBrush="{x:Null}">
+        <RepeatButton x:Name="DownBtn" Command="{StaticResource DecreaseValue}" Margin="0" d:LayoutOverrides="Width" Grid.Column="2" Grid.Row="1" Padding="0,1" RenderTransformOrigin="0.5,0.5" BorderBrush="{x:Null}">
             <Path Data="M0,0 L30,0 15,10 z" Fill="#FF222A43" Height="6" Stretch="Fill" Width="20"/>
         </RepeatButton>
-        <TextBlock x:Name="lbl" HorizontalAlignment="Left" TextWrapping="Wrap" Grid.RowSpan="2" Padding="3"/>
-    </Grid>         
+        <Label x:Name="lbl" HorizontalAlignment="Left" Target="{Binding txtBox}" Grid.RowSpan="2" Padding="3"/>
+    </Grid>
 </UserControl>
