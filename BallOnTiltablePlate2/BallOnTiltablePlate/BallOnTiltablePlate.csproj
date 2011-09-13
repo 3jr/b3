@@ -85,6 +85,18 @@
     <Compile Include="JanRapp\MainApp\GlobalSettingsUI.xaml.cs">
       <DependentUpon>GlobalSettingsUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\MainApp\Helper\TestInput.xaml.cs">
+      <DependentUpon>TestInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\MainApp\Helper\TestJuggler.xaml.cs">
+      <DependentUpon>TestJuggler.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\MainApp\Helper\TestOutput.xaml.cs">
+      <DependentUpon>TestOutput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\MainApp\Helper\TestPreprocessor.xaml.cs">
+      <DependentUpon>TestPreprocessor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
       <DependentUpon>Simulation3D.xaml</DependentUpon>
     </Compile>
@@ -114,6 +126,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\MainApp\Helper\TestInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\MainApp\Helper\TestJuggler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\MainApp\Helper\TestOutput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\MainApp\Helper\TestPreprocessor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\MainApp\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -122,7 +150,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="JanRapp\MainApp\IOItem.cs" />
+    <Compile Include="JanRapp\MainApp\Helper\IOItem.cs" />
     <Compile Include="JanRapp\MainApp\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

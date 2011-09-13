@@ -52,7 +52,8 @@ namespace BallOnTiltablePlate
     public interface IJuggler<in T>
         : IBallOnPlateItem
     {
-        void Update(T IO);
+        T IO { set; }
+        void Update();
     }
 
     public interface IBallOnPlateItem

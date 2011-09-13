@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Windows.Controls;
 using BallOnTiltablePlate;
 
-namespace BallOnTiltablePlate.JanRapp.MainApp
+namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
     internal static class ListPopulater
     {
@@ -57,11 +57,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         public IBallOnPlateItem Instance { get { return instance; } }
 
-        private Lazy<IEnumerable<ListBoxItem>> inputs = new Lazy<IEnumerable<ListBoxItem>>();
+        private Lazy<IEnumerable<ListBoxItem>> inputs;
 
         public IEnumerable<ListBoxItem> Inputs { get { return inputs.Value; } }
 
-        private Lazy<IEnumerable<ListBoxItem>> outputs = new Lazy<IEnumerable<ListBoxItem>>();
+        private Lazy<IEnumerable<ListBoxItem>> outputs;
 
         public IEnumerable<ListBoxItem> Outputs { get { return outputs.Value; } }
 
@@ -139,6 +139,37 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         public static string PartToString(IBallOnPlateItem part)
         {
             return string.Format("{0} {1}: {2} - {3}", part.AuthorFirstName, part.AuthorLastName, part.ItemName, part.Version);
+        }
+    }
+
+    private class TestBase : IBallOnPlateItem
+    {
+
+        public System.Windows.FrameworkElement SettingsUI { get; private set; }
+
+        public object SettingsSave
+        {
+            get { return null; }
+        }
+
+        public string ItemName
+        {
+            get { return "Name"; }
+        }
+
+        public string AuthorFirstName
+        {
+            get { return "_Jan"; }
+        }
+
+        public string AuthorLastName
+        {
+            get { return "Rapp"; }
+        }
+
+        public Version Version
+        {
+            get { return new Version(1,0); }
         }
     }
 }
