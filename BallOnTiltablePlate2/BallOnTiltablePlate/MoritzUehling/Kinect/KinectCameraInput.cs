@@ -9,7 +9,6 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
     {
         public event EventHandler<BallInputEventArgs> DataRecived;
 
-        public KinectSettingsWindow
 
 
         public void Start()
@@ -24,32 +23,32 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         public System.Windows.FrameworkElement SettingsUI
         {
-            get { throw new NotImplementedException(); }
+            get { return null; }
         }
 
         public object SettingsSave
         {
-            get { throw new NotImplementedException(); }
+            get { return null; }
         }
 
         public string ItemName
         {
-            get { throw new NotImplementedException(); }
+            get { return null; }
         }
 
         public string AuthorFirstName
         {
-            get { throw new NotImplementedException(); }
+            get { return null; }
         }
 
         public string AuthorLastName
         {
-            get { throw new NotImplementedException(); }
+            get { return null; }
         }
 
         public Version Version
         {
-            get { throw new NotImplementedException(); }
+            get { return null; }
         }
     }
 }
