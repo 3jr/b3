@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BallOnTiltablePlate.MoritzUehling.UI;
 
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
@@ -23,7 +24,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         public System.Windows.FrameworkElement SettingsUI
         {
-            get { return null; }
+            get { return new KinectSettingsWindows(); }
         }
 
         public object SettingsSave
