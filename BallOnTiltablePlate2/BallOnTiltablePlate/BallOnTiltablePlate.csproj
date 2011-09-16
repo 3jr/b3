@@ -103,6 +103,7 @@
     <Compile Include="JanRapp\Try\Program.cs" />
     <Compile Include="JanRapp\Try\Tests.cs" />
     <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
+    <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
     <Compile Include="TimoSchmetzer\Physics3D.cs" />
     <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
     <Compile Include="JanRapp\Utilities\WindowCustomizer.cs" />
