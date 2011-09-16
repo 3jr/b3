@@ -104,6 +104,9 @@
     <Compile Include="JanRapp\Try\Tests.cs" />
     <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
+    <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
+      <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Physics3D.cs" />
     <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
     <Compile Include="JanRapp\Utilities\WindowCustomizer.cs" />
@@ -157,6 +160,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="JanRapp\Simulation\Simulation3D.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MoritzUehling\UI\KinectSettingsWindows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

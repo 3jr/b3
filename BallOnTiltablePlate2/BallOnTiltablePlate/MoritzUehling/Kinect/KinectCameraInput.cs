@@ -9,6 +9,9 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
     {
         public event EventHandler<BallInputEventArgs> DataRecived;
 
+        public KinectSettingsWindow
+
+
         public void Start()
         {
             //

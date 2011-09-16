@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.MoritzUehling.UI.KinectSettingsWindows"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="340" d:DesignWidth="340">
+    <Grid>
+            <Image Margin="10,10,10,100" Name="kinectImage" Stretch="Fill" />
+
+            <Slider Height="25" Margin="10,0,10,0" Name="minSlider" VerticalAlignment="Bottom"  SelectionEnd="1" Value="1.6" />
+
+            <Slider Height="25" Margin="10,0,10,68" Name="angleSlider" VerticalAlignment="Bottom"  SelectionEnd="1"/>
+            <Button Content="Set angle!" VerticalAlignment="Bottom" Margin="231,239,10,30" Name="button1" Height="25" Click="button1_Click" />
+    </Grid>
+</UserControl>
