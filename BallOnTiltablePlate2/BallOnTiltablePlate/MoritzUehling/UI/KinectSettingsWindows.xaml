@@ -11,6 +11,6 @@
             <Slider Height="25" Margin="10,0,10,0" Name="minSlider" VerticalAlignment="Bottom"  SelectionEnd="1" Value="1.6" />
 
             <Slider Height="25" Margin="10,0,10,68" Name="angleSlider" VerticalAlignment="Bottom"  SelectionEnd="1"/>
-            <Button Content="Set angle!" VerticalAlignment="Bottom" Margin="231,239,10,30" Name="button1" Height="25" Click="button1_Click" />
+            <Button Content="Set angle!" VerticalAlignment="Bottom" Margin="231,239,10,30" Name="button1" Height="25" />
     </Grid>
 </UserControl>

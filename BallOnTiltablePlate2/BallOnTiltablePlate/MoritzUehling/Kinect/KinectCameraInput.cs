@@ -33,7 +33,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         public string ItemName
         {
-            get { return null; }
+            get { return "Kinect Camera Input"; }
         }
 
         public string AuthorFirstName
