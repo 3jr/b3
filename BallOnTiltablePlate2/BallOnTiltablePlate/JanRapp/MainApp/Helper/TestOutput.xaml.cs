@@ -56,6 +56,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         public TestOutput()
         {
             InitializeComponent();
+            this.Content = history;
         }
 
         public void SetTilt(Vector tilt)

@@ -20,7 +20,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            AlgorithmList.ItemsSource = Helper.ListPopulater.PopulateJugglerLists();
+            //AlgorithmList.ItemsSource = Helper.ListPopulater.PopulateJugglerLists;
         }
 
         private void Lists_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -48,8 +48,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void PreprocessorSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
-            var current = (Helper.PreprocessorItem)PreprocessorList.SelectedItem;
-            if (current != null)
+            //var current = (Helper.PreprocessorItem)PreprocessorList.SelectedItem;
+            //if (current != null)
             {
                 //GetSettingsWindow(current.Instance.Settings).Show();
             }
@@ -57,8 +57,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void JugglerSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
-            var current = (Helper.JuggelerItem)AlgorithmList.SelectedItem;
-            if (current != null)
+            //var current = (Helper.JugglerItem)AlgorithmList.SelectedItem;
+            //if (current != null)
             {
                 //GetSettingsWindow(current.Instance.Settings).Show();
             }
@@ -66,7 +66,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void InputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
-            //GetSettingsWindow(((IBallOnPlatePart)((ListBoxItem)InputList.SelectedItem).DataContext).Settings).Show();
+            new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)InputList.SelectedItem).DataContext).SettingsUI, this).Show();
         }
 
         private void OutputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
@@ -85,15 +85,15 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         public SettingsWindow(FrameworkElement content, MainWindow win)
         {
             this.WindowStyle = System.Windows.WindowStyle.ToolWindow;
-            //this.Width = 340;
+            this.SizeToContent = SizeToContent.WidthAndHeight;
             this.ShowInTaskbar = false;
             this.SetValue(BallOnTiltablePlate.JanRapp.Utilities.WPF.WindowCustomizer.CanMinimize, false);
-            this.Owner = win; //closes with owner
+            this.Owner = win;
             WindowInteropHelper wih = new WindowInteropHelper(this);
 
             this.WindowStartupLocation = System.Windows.WindowStartupLocation.Manual;
-            this.Left = 340 + win.Left;
-            this.Top = 0;
+            this.Left = win.Left + 340;
+            this.Top = win.Top;
 
             this.Content = content;
         }

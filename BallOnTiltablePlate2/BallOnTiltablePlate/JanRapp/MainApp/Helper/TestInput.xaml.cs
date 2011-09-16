@@ -15,7 +15,8 @@ using System.Windows.Media.Media3D;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
-    //You could implement a logging syste
+    //You could implement a logging system
+
     /// <summary>
     /// Interaction logic for TestInput.xaml
     /// </summary>
@@ -86,8 +87,10 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             var args = new BallInputEventArgs3D() { BallPosition3D = vec };
             args.BallPosition = new Vector(vec.X, vec.Y);
 
-            DataRecived(this, args);
-            DataRecived2D(this, args);
+            if(DataRecived != null)
+                DataRecived(this, args);
+            if(DataRecived2D != null)
+                DataRecived2D(this, args);
         }
         #endregion
     }

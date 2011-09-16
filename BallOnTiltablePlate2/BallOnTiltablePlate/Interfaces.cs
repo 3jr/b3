@@ -33,9 +33,15 @@ namespace BallOnTiltablePlate
     {
         void SetTilt(Vector tilt);
     }
-
+    
+    /// <summary>
+    /// Part of a Preprocessor, which needs also IPreprocessor
+    /// Do not derive from this Interface!
+    /// </summary>
+    /// <typeparam name="TIn"></typeparam>
+    /// <typeparam name="TOut"></typeparam>
     public interface
-        IPreprocessor<in TIn, in TOut>
+        IPreprocessorIO<in TIn, in TOut>
         : IBallOnPlateItem
         where TIn : IBallInput
         where TOut : IPlateOutput
@@ -46,25 +52,32 @@ namespace BallOnTiltablePlate
     }
 
     /// <summary>
-    /// Common Interface for all Juggeler Algorithms
+    /// For a Preprocessor the IPreprocessorIO Interface must be implemented, too!
+    /// A derived Interface may never implement IPreprocessorIO!
+    /// </summary>
+    public interface IPreprocessor
+    {
+
+    }
+
+    /// <summary>
+    /// Common Interface for all Juggler Algorithms
     /// </summary>
     /// <typeparam name="T">Must be a type of IPreprocessor</typeparam>
     public interface IJuggler<in T>
         : IBallOnPlateItem
+        where T : IPreprocessor
     {
         T IO { set; }
         void Update();
     }
 
+    /// <summary>
+    /// All Properties need to return the same values all the time.
+    /// </summary>
     public interface IBallOnPlateItem
     {
         FrameworkElement SettingsUI { get; }
-
-        /// <summary>
-        /// this Objekt gets serialized and saved at Programm close, if not null. Must be serializeable.
-        /// This Object gets set at Porgram Start if serialized is 
-        /// </summary>
-        object SettingsSave { get; }
 
         string ItemName { get; }
 

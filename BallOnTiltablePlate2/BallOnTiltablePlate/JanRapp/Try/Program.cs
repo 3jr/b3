@@ -10,13 +10,14 @@ namespace t
 
     internal class C : I { }
 
-    internal class D : J<C> { public void In(C i) { } }
+    internal class D : J<I> { public void In(I i) { } }
+    internal class D<T> : J<T> where T : I { public void In(T i) { } public T Out() { return default(T); } }
 
     internal class E : K<D> { }
 
-    internal class Program
+    internal class Programw
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine(typeof(J<>));
             Console.WriteLine(typeof(E).GetInterface("J") ?? typeof(int));
@@ -26,6 +27,12 @@ namespace t
             //typeof(C).GetInterfaces().Select(t => { Console.WriteLine(t.GetGenericTypeDefinition() == typeof(I<>)); return 1; }).ToList();
 
             Console.ReadKey();
+
+            typeof(J<I>).IsAssignableFrom(typeof(D));
+
+            J<I> j = null;
+
+            j = new D();
         }
     }
 }

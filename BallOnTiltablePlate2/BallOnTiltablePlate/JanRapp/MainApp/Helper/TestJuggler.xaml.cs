@@ -17,7 +17,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestJuggler.xaml
     /// </summary>
-    public partial class TestJuggler : UserControl, IJuggler<IPreprocessor<IBallInput, IPlateOutput>>
+    public partial class TestJuggler : UserControl, IJuggler<IPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -56,7 +56,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             InitializeComponent();
         }
 
-        public IPreprocessor<IBallInput, IPlateOutput> IO
+        public IPreprocessor IO
         {
             set {  }
         }

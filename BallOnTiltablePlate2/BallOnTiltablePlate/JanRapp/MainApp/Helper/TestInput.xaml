@@ -1,4 +1,4 @@
-﻿<UserControl xmlns:my="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"  x:Class="BallOnTiltablePlate.JanRapp.JanRapp.MainApp.Helper.TestInput"
+﻿<UserControl xmlns:my="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"  x:Class="BallOnTiltablePlate.JanRapp.MainApp.Helper.TestInput"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

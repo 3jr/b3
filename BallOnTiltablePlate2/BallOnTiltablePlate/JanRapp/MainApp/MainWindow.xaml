@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:helper="clr-namespace:BallOnTiltablePlate.JanRapp.MainApp.Helper"
         Title="Ball on Tilitable Plate"
         Width="340"
         Height="550"
@@ -56,7 +57,7 @@
             <MenuItem Header="_File" />
             <MenuItem Header="Settings">
                 <MenuItem Command="{StaticResource PreprocessorSettings}" Header="Preprocessor" />
-                <MenuItem Command="{StaticResource JugglerSettings}" Header="Juggeler _Algorithm" />
+                <MenuItem Command="{StaticResource JugglerSettings}" Header="Juggler _Algorithm" />
                 <MenuItem Command="{StaticResource InputSettings}" Header="_Input" />
                 <MenuItem Command="{DynamicResource OutputSettings}" Header="_Output" />
                 <Separator />
@@ -73,10 +74,10 @@
                     ToolTip="Algorithm Settings (Ctrl+A)" />
             <Label HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Content="Juggeler _Algorithm"
+                   Content="Juggler _Algorithm"
                    Target="{Binding ElementName=AlgorithmList}" />
         </Grid>
-        <ListBox x:Name="AlgorithmList" Margin="7,0" />
+        <ListBox x:Name="AlgorithmList" Margin="7,0" ItemsSource="{x:Static helper:ListPopulater.PopulateJugglerLists}" SelectedIndex="0"/>
         <Grid Margin="7">
             <Button x:Name="PreprocessorSettingButton"
                     Width="75"
@@ -95,7 +96,8 @@
         <ListBox x:Name="PreprocessorList"
                  Margin="7,0"
                  ItemsSource="{Binding SelectedItem.Preprocessors,
-                                       ElementName=AlgorithmList}" />
+                                       ElementName=AlgorithmList}"
+                 SelectedIndex="0"/>
         <Grid Margin="7">
             <Button x:Name="InputSettingButton"
                     Width="75"
@@ -113,7 +115,8 @@
         <ListBox x:Name="InputList"
                  Margin="7,0"
                  ItemsSource="{Binding ElementName=PreprocessorList,
-                                       Path=SelectedItem.Inputs}" />
+                                       Path=SelectedItem.Inputs}"
+                 SelectedIndex="0"/>
         <Grid Margin="7">
             <Button x:Name="OutputSettingButton"
                     Width="75"
@@ -131,6 +134,7 @@
         <ListBox x:Name="OutputList"
                  Margin="7,0"
                  ItemsSource="{Binding ElementName=PreprocessorList,
-                                       Path=SelectedItem.Outputs}" />
+                                       Path=SelectedItem.Outputs}"
+                 SelectedIndex="0"/>
     </StackPanel>
 </Window>

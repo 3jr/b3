@@ -10,20 +10,30 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
     internal static class ListPopulater
     {
-        public static IEnumerable<object> PopulateJugglerLists()
+        static IEnumerable<object> JugglerItems;
+
+        public static IEnumerable<object> PopulateJugglerLists
         {
-            var allTypes = System.IO.Directory.GetFiles(Environment.CurrentDirectory, "*.dll")
-                .Concat(System.IO.Directory.GetFiles(Environment.CurrentDirectory, "*.exe"))
+            get
+            {
+                return JugglerItems;
+            }
+        }
+
+        static ListPopulater()
+        {
+            var allTypes = System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
+                .Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe"))
                 .Select(p => Assembly.LoadFile(p).GetTypes())
                 .Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
                 .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
                 .Select(t => new { Type = t, Instance = (IBallOnPlateItem)Activator.CreateInstance(t) })
                 .ToArray();
 
-            return allTypes
+            JugglerItems = allTypes
                 .Where(t => t.Type.IsClass)
                 .Where(t => t.Type.GetInterface("IJuggler`1") != null)
-                .Select(t => new JuggelerItem(t.Type, t.Instance, allTypes.Select(i => i.Type), allTypes.Select(i => i.Instance))).ToArray();
+                .Select(t => new JugglerItem(t.Type, t.Instance, allTypes.Select(i => i.Type), allTypes.Select(i => i.Instance))).ToArray();
         }
 
         private static bool CheckOnPart(IBallOnPlateItem part)
@@ -75,7 +85,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             this.allTypes = allTypes;
             this.allInstances = allInstances;
 
-            Type[] genericArguments = type.GetInterface("IPreprocessor`2").GetGenericArguments();
+            Type[] genericArguments = type.GetInterface("IPreprocessorIO`2").GetGenericArguments();
             Type input = genericArguments[0];
             Type output = genericArguments[1];
 
@@ -84,13 +94,13 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             inputs = new Lazy<IEnumerable<ListBoxItem>>(
                 () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t })
                     .Where(it => input.IsAssignableFrom(it.Type))
-                    .Select(it => new ListBoxItem() { Content = JuggelerItem.PartToString(it.Instance), DataContext = it.Instance })
+                    .Select(it => new ListBoxItem() { Content = JugglerItem.PartToString(it.Instance), DataContext = it.Instance })
             );
 
             outputs = new Lazy<IEnumerable<ListBoxItem>>(
                 () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t })
                     .Where(it => output.IsAssignableFrom(it.Type))
-                    .Select(it => new ListBoxItem() { Content = JuggelerItem.PartToString(it.Instance), DataContext = it.Instance })
+                    .Select(it => new ListBoxItem() { Content = JugglerItem.PartToString(it.Instance), DataContext = it.Instance })
             );
 
             this.Content = this.ToString();
@@ -98,11 +108,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
         public override string ToString()
         {
-            return JuggelerItem.PartToString(instance);
+            return JugglerItem.PartToString(instance);
         }
     }
 
-    internal class JuggelerItem : ListBoxItem
+    internal class JugglerItem : ListBoxItem
     {
         private readonly IBallOnPlateItem instance;
 
@@ -115,7 +125,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         private readonly IEnumerable<Type> allTypes;
         private readonly IEnumerable<IBallOnPlateItem> allInstances;
 
-        public JuggelerItem(Type type, IBallOnPlateItem instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlateItem> allInstances)
+        public JugglerItem(Type type, IBallOnPlateItem instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlateItem> allInstances)
         {
             this.DataContext = this.instance = instance;
             this.allTypes = allTypes;
@@ -124,8 +134,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             Type preprocessorType = type.GetInterface("IJuggler`1").GetGenericArguments()[0];
 
             preprocessors = new Lazy<IEnumerable<PreprocessorItem>>(
-                () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t })
-                    .Where(it => preprocessorType.GetGenericTypeDefinition().IsAssignableFrom(it.Type))
+                () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t, })
+                    .Where(it => it.Type.GetInterface("IPreprocessorIO`2") != null)
+                    .Where(it => preprocessorType.IsAssignableFrom(it.Type))
                     .Select(it => new PreprocessorItem(it.Type, it.Instance, allTypes, allInstances))
             );
 

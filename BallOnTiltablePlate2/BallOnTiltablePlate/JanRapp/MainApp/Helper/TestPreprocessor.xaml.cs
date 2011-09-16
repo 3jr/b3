@@ -17,7 +17,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestPreprocessor.xaml
     /// </summary>
-    public partial class TestPreprocessor : UserControl, IPreprocessor<IBallInput, IPlateOutput>
+    public partial class TestPreprocessor : UserControl, IPreprocessor, IPreprocessorIO<IBallInput, IPlateOutput>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -56,14 +56,10 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             InitializeComponent();
         }
 
-        public IBallInput Input
-        {
-            set {  }
-        }
+        //Usually you would process the input and await output to than use the IO interfaces
 
-        public IPlateOutput Output
-        {
-            set {  }
-        }
+        public IBallInput Input { get; set; }
+
+        public IPlateOutput Output { get; set; }
     }
 }
