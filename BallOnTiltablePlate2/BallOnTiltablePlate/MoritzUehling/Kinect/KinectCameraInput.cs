@@ -10,11 +10,9 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
     {
         public event EventHandler<BallInputEventArgs> DataRecived;
 
-
-
         public void Start()
         {
-            //
+            
         }
 
         public void Stop()
@@ -22,7 +20,8 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             throw new NotImplementedException();
         }
 
-        public System.Windows.FrameworkElement SettingsUI
+        #region Properties
+		public System.Windows.FrameworkElement SettingsUI
         {
             get { return new KinectSettingsWindows(); }
         }
@@ -49,7 +48,9 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         public Version Version
         {
-            get { return new Version(0, 1, 1, 0); }
+            get { return new Version(0, 1, 1); }
         }
+ 
+        #endregion
     }
 }
