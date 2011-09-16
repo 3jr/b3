@@ -38,17 +38,17 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         public string AuthorFirstName
         {
-            get { return null; }
+            get { return "Moritz"; }
         }
 
         public string AuthorLastName
         {
-            get { return null; }
+            get { return "Uehling"; }
         }
 
         public Version Version
         {
-            get { return null; }
+            get { return new Version(0, 1, 1, 0); }
         }
     }
 }
