@@ -34,8 +34,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
         int angle = Camera.ElevationMinimum;
 
-        //Bitmap bitmap1 = new Bitmap(320, 240);
-
         OpenCVManager manager = new OpenCVManager();
 
         int xres = 320;
