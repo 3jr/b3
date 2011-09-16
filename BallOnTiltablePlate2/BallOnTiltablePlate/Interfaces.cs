@@ -62,6 +62,8 @@ namespace BallOnTiltablePlate
 
     /// <summary>
     /// Common Interface for all Juggler Algorithms
+    /// Do only derive Finished Jugglers from this interface and not other interfaces.
+    /// It's only purpose is to tell the MainApp that is is a Juggler and the Preprocessor required.
     /// </summary>
     /// <typeparam name="T">Must be a type of IPreprocessor</typeparam>
     public interface IJuggler<in T>

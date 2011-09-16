@@ -14,14 +14,14 @@
         x:ClassModifier="internal"
         mc:Ignorable="d">
     <Window.Resources>
-        <RoutedCommand x:Key="PreprocessorSettings">
-            <RoutedCommand.InputGestures>
-                <KeyGesture>Control+P</KeyGesture>
-            </RoutedCommand.InputGestures>
-        </RoutedCommand>
         <RoutedCommand x:Key="JugglerSettings">
             <RoutedCommand.InputGestures>
                 <KeyGesture>Control+A</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="PreprocessorSettings">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+P</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
         <RoutedCommand x:Key="InputSettings">
@@ -42,15 +42,25 @@
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource ResourceKey=PreprocessorSettings}" 
-                        Executed="PreprocessorSettingsCmdExecuted" />
+                        CanExecute="SettingsCmdCanExecute"
+                        Executed ="SettingsCmdExecuted"/>
+                        <!--Executed="PreprocessorSettingsCmdExecuted" />-->
         <CommandBinding Command="{StaticResource ResourceKey=JugglerSettings}" 
-                        Executed="JugglerSettingsCmdExecuted" />
+                        CanExecute="SettingsCmdCanExecute"
+                        Executed ="SettingsCmdExecuted"/>
+                        <!--Executed="JugglerSettingsCmdExecuted" />-->
         <CommandBinding Command="{StaticResource ResourceKey=InputSettings}" 
-                        Executed="InputSettingsCmdExecuted" />
+                        CanExecute="SettingsCmdCanExecute"
+                        Executed ="SettingsCmdExecuted"/>
+                        <!--Executed="InputSettingsCmdExecuted" />-->
         <CommandBinding Command="{StaticResource ResourceKey=OutputSettings}" 
-                        Executed="OutputSettingsCmdExecuted" />
+                        CanExecute="SettingsCmdCanExecute"
+                        Executed ="SettingsCmdExecuted"/>
+                        <!--Executed="OutputSettingsCmdExecuted" /?>-->
         <CommandBinding Command="{StaticResource ResourceKey=GeneralSettings}" 
-                        Executed="GeneralSettingsCmdExecuted" />
+                        CanExecute="SettingsCmdCanExecute"
+                        Executed ="SettingsCmdExecuted"/>
+                        <!--Executed="GeneralSettingsCmdExecuted" />-->
     </Window.CommandBindings>
     <StackPanel Selector.SelectionChanged="Lists_SelectionChanged">
         <Menu>

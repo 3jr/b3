@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Linq;
+using System.Collections.Generic;
 using BallOnTiltablePlate;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp
@@ -16,11 +17,18 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         public MainWindow()
         {
             InitializeComponent();
+
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            //AlgorithmList.ItemsSource = Helper.ListPopulater.PopulateJugglerLists;
+            settingsCmdMetadata = new Dictionary<object, Tuple<ListBox, string>>()
+            {
+                {this.Resources["JugglerSettings"], Tuple.Create(AlgorithmList, "Juggler")},
+                {this.Resources["PreprocessorSettings"], Tuple.Create(PreprocessorList, "Preprocessor")},
+                {this.Resources["InputSettings"], Tuple.Create(InputList, "Input")},
+                {this.Resources["OutputSettings"], Tuple.Create(OutputList, "Output")},
+            };
         }
 
         private void Lists_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -46,43 +54,82 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         {
         }
 
-        private void PreprocessorSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        #region old CmdExecuted
+        //private void PreprocessorSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        //{
+        //    //var current = (Helper.PreprocessorItem)PreprocessorList.SelectedItem;
+        //    //if (current != null)
+        //    {
+        //        //GetSettingsWindow(current.Instance.Settings).Show();
+        //    }
+        //}
+
+        //private void JugglerSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        //{
+        //    //var current = (Helper.JugglerItem)AlgorithmList.SelectedItem;
+        //    //if (current != null)
+        //    {
+        //        //GetSettingsWindow(current.Instance.Settings).Show();
+        //    }
+        //}
+
+        //private void InputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        //{
+        //    //new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)InputList.SelectedItem).DataContext), this).Show();
+        //}
+
+        //private void OutputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        //{
+        //    //new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)OutputList.SelectedItem).DataContext), this).Show();
+        //}
+
+        //private void GeneralSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        //{
+        //    new BallOnTiltablePlate.JanRapp.MainApp.GlobalSettingsUI().Show();
+        //} 
+        #endregion
+
+        private void SettingsCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            //var current = (Helper.PreprocessorItem)PreprocessorList.SelectedItem;
-            //if (current != null)
+            if (settingsCmdMetadata == null)
+                return;
+
+            var metaData = settingsCmdMetadata[e.Command];
+            if (metaData.Item1.SelectedItem == null)
+                return;
+
+            IBallOnPlateItem instace = ((Helper.BPItem)metaData.Item1.SelectedItem).Instance;
+            if (instace == null)
+                return;
+            if (instace.SettingsUI == null)
+                return;
+
+            e.CanExecute = true;
+        }
+
+        private void SettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        {
+            var metaData = settingsCmdMetadata[e.Command];
+            IBallOnPlateItem instace = ((Helper.BPItem)metaData.Item1.SelectedItem).Instance;
+
+            if (windows.ContainsKey(instace))
+                windows[instace].Show();
+            else
             {
-                //GetSettingsWindow(current.Instance.Settings).Show();
+                string name = metaData.Item2;
+                SettingsWindow win = new SettingsWindow(instace, this, string.Format("{0} Settings: {1}", name, instace.ToString()));
+                windows.Add(instace, win);
+                win.Show();
             }
         }
 
-        private void JugglerSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        {
-            //var current = (Helper.JugglerItem)AlgorithmList.SelectedItem;
-            //if (current != null)
-            {
-                //GetSettingsWindow(current.Instance.Settings).Show();
-            }
-        }
-
-        private void InputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        {
-            new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)InputList.SelectedItem).DataContext).SettingsUI, this).Show();
-        }
-
-        private void OutputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        {
-            new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)OutputList.SelectedItem).DataContext).SettingsUI, this).Show();
-        }
-
-        private void GeneralSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        {
-            new BallOnTiltablePlate.JanRapp.MainApp.GlobalSettingsUI().Show();
-        }
+        Dictionary<object,Tuple<ListBox,string>> settingsCmdMetadata;
+        Dictionary<IBallOnPlateItem, SettingsWindow> windows = new Dictionary<IBallOnPlateItem,SettingsWindow>();
     }
 
     internal class SettingsWindow : Window
     {
-        public SettingsWindow(FrameworkElement content, MainWindow win)
+        public SettingsWindow(IBallOnPlateItem item, MainWindow win, string Title)
         {
             this.WindowStyle = System.Windows.WindowStyle.ToolWindow;
             this.SizeToContent = SizeToContent.WidthAndHeight;
@@ -95,13 +142,14 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             this.Left = win.Left + 340;
             this.Top = win.Top;
 
-            this.Content = content;
+            this.Content = item.SettingsUI;
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            this.Content = null;
-            base.OnClosed(e);
+            this.Visibility = System.Windows.Visibility.Collapsed;
+            e.Cancel = true;
+            base.OnClosing(e);
         }
     }
 }

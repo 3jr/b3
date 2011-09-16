@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Controls;
 using BallOnTiltablePlate;
+using System.Windows;
+using System.Windows.Input;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
@@ -28,7 +30,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 .Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
                 .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
                 .Select(t => new { Type = t, Instance = (IBallOnPlateItem)Activator.CreateInstance(t) })
+                .Where(it => CheckOnPart(it.Instance))
                 .ToArray();
+
 
             JugglerItems = allTypes
                 .Where(t => t.Type.IsClass)
@@ -38,36 +42,38 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
         private static bool CheckOnPart(IBallOnPlateItem part)
         {
+
             try
             {
+                ErrorCode = 0;
                 Assert(part != null);
-                Assert(part.SettingsUI != null);
-                Assert(string.IsNullOrWhiteSpace(part.AuthorFirstName));
-                Assert(string.IsNullOrWhiteSpace(part.AuthorLastName));
-                Assert(string.IsNullOrWhiteSpace(part.ItemName));
+                Assert(!string.IsNullOrWhiteSpace(part.AuthorFirstName));
+                Assert(!string.IsNullOrWhiteSpace(part.AuthorLastName));
+                Assert(!string.IsNullOrWhiteSpace(part.ItemName));
                 Assert(part.Version != null);
 
                 return true;
             }
             catch (Exception)
             {
+                MessageBox.Show("The Item with the Class Name \'" + part.GetType().Name + "\' is invalid. The ErrorCode is:" + ErrorCode + "\n\r If you can't figure out whats wrong or think its my fault contact me(Jan Rapp)");
                 return false;
             }
         }
+
+        static int ErrorCode;
 
         private static void Assert(bool assertion)
         {
             if (!assertion)
                 throw new Exception();
+
+            ErrorCode++;
         }
     }
 
-    internal class PreprocessorItem : ListBoxItem
+    internal class PreprocessorItem : BPItem
     {
-        private readonly IBallOnPlateItem instance;
-
-        public IBallOnPlateItem Instance { get { return instance; } }
-
         private Lazy<IEnumerable<ListBoxItem>> inputs;
 
         public IEnumerable<ListBoxItem> Inputs { get { return inputs.Value; } }
@@ -80,8 +86,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         private readonly IEnumerable<IBallOnPlateItem> allInstances;
 
         public PreprocessorItem(Type type, IBallOnPlateItem instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlateItem> allInstances)
+            : base(instance)
         {
-            this.DataContext = this.instance = instance;
             this.allTypes = allTypes;
             this.allInstances = allInstances;
 
@@ -94,30 +100,19 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             inputs = new Lazy<IEnumerable<ListBoxItem>>(
                 () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t })
                     .Where(it => input.IsAssignableFrom(it.Type))
-                    .Select(it => new ListBoxItem() { Content = JugglerItem.PartToString(it.Instance), DataContext = it.Instance })
+                    .Select(it => new BPItem(it.Instance))
             );
 
             outputs = new Lazy<IEnumerable<ListBoxItem>>(
                 () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t })
                     .Where(it => output.IsAssignableFrom(it.Type))
-                    .Select(it => new ListBoxItem() { Content = JugglerItem.PartToString(it.Instance), DataContext = it.Instance })
+                    .Select(it => new BPItem(it.Instance))
             );
-
-            this.Content = this.ToString();
-        }
-
-        public override string ToString()
-        {
-            return JugglerItem.PartToString(instance);
         }
     }
 
-    internal class JugglerItem : ListBoxItem
+    internal class JugglerItem : BPItem
     {
-        private readonly IBallOnPlateItem instance;
-
-        public IBallOnPlateItem Instance { get { return instance; } }
-
         private Lazy<IEnumerable<PreprocessorItem>> preprocessors;
 
         public IEnumerable<PreprocessorItem> Preprocessors { get { return preprocessors.Value; } }
@@ -126,8 +121,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         private readonly IEnumerable<IBallOnPlateItem> allInstances;
 
         public JugglerItem(Type type, IBallOnPlateItem instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlateItem> allInstances)
+            : base(instance)
         {
-            this.DataContext = this.instance = instance;
             this.allTypes = allTypes;
             this.allInstances = allInstances;
 
@@ -139,6 +134,18 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                     .Where(it => preprocessorType.IsAssignableFrom(it.Type))
                     .Select(it => new PreprocessorItem(it.Type, it.Instance, allTypes, allInstances))
             );
+        }
+    }
+
+    internal class BPItem : ListBoxItem
+    {
+        protected readonly IBallOnPlateItem instance;
+
+        public IBallOnPlateItem Instance { get { return instance; } }
+
+        public BPItem(IBallOnPlateItem instance)
+        {
+            this.instance = instance;
 
             this.Content = this.ToString();
         }
