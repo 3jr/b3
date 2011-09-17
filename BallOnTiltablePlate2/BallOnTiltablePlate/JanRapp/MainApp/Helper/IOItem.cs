@@ -24,15 +24,17 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
         static ListPopulater()
         {
+            Stopwatch s = new Stopwatch();
+            s.Start();
             var allTypes = System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
                 .Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe"))
                 .Select(p => Assembly.LoadFile(p).GetTypes())
                 .Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
                 .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
                 .Select(t => new { Type = t, Instance = (IBallOnPlateItem)Activator.CreateInstance(t) })
-                .Where(it => CheckOnPart(it.Instance))
+                .Where(it => CheckOnPart(it.Instance, it.Type))
                 .ToArray();
-
+            Debug.WriteLine("Reading, instanciating, and validation of item took {0} milliseconds", s.ElapsedMilliseconds);
 
             JugglerItems = allTypes
                 .Where(t => t.Type.IsClass)
@@ -40,7 +42,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 .Select(t => new JugglerItem(t.Type, t.Instance, allTypes.Select(i => i.Type), allTypes.Select(i => i.Instance))).ToArray();
         }
 
-        private static bool CheckOnPart(IBallOnPlateItem part)
+        private static bool CheckOnPart(IBallOnPlateItem part, Type type)
         {
 
             try
@@ -52,11 +54,31 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 Assert(!string.IsNullOrWhiteSpace(part.ItemName));
                 Assert(part.Version != null);
 
+                if (type.GetInterface("IJuggler`1") != null)
+                {
+                    ErrorCode = 100;
+                    Type j = type.GetInterface("IJuggler`1");
+                    Assert(type.GetInterfaces().Any(t => !j.IsAssignableFrom(t) || j == t));// Derived interfaces from IJuggler are not allowed, only derived classes
+
+                }
+                else if (type.GetInterface("IPreprocessor") != null)
+                {
+                    ErrorCode = 200;
+                    Type io = type.GetInterface("IPreprocessorIO`2");
+                    Assert(io != null);
+                    Assert(io.GetInterfaces().Any(t => !io.IsAssignableFrom(t) || io == t));// Derived interfaces from IPreprocessorIO are not allowed, only derived classes
+                }
+                else if (type.GetInterface("IBallInput") != null)
+                { }
+                else if (type.GetInterface("IPlateOutput") != null)
+                { }
+                else
+                    Assert(false);
                 return true;
             }
             catch (Exception)
             {
-                MessageBox.Show("The Item with the Class Name \'" + part.GetType().Name + "\' is invalid. The ErrorCode is:" + ErrorCode + "\n\r If you can't figure out whats wrong or think its my fault contact me(Jan Rapp)");
+                MessageBox.Show("The Item with the Class Name \'" + part.GetType().Name + "\' is invalid. The ErrorCode is:" + ErrorCode + "\n\r\n\r If you can't figure out whats wrong or think its my fault contact me(Jan Rapp).");
                 return false;
             }
         }

@@ -17,7 +17,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestPreprocessor.xaml
     /// </summary>
-    public partial class TestPreprocessor : UserControl, IPreprocessor, IPreprocessorIO<IBallInput, IPlateOutput>
+    public partial class TestPreprocessor : ContentControl, IPreprocessor, IPreprocessorIO<IBallInput, IPlateOutput>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -61,5 +61,10 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         public IBallInput Input { get; set; }
 
         public IPlateOutput Output { get; set; }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Output.SetTilt(vector2DControl1.Value);
+        }
     }
 }

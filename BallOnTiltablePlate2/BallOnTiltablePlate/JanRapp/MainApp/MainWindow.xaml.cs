@@ -17,7 +17,6 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         public MainWindow()
         {
             InitializeComponent();
-
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -33,6 +32,29 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void Lists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (AlgorithmList == null ||
+                PreprocessorList == null ||
+                InputList == null ||
+                OutputList == null)
+                return; //Not yet Initialiced
+
+            if (PreprocessorList.SelectedItem != null)
+            {
+                dynamic item = ((Helper.BPItem)PreprocessorList.SelectedItem).Instance;
+
+                if (InputList.SelectedItem != null)
+                {
+                    dynamic input = ((Helper.BPItem)InputList.SelectedItem).Instance;
+                    item.Input = input;
+                }
+
+                if (OutputList.SelectedItem != null)
+                {
+                    dynamic output = ((Helper.BPItem)OutputList.SelectedItem).Instance;
+                    item.Output = output;
+                }
+            }
+
             if (AlgorithmList.SelectedItem != null ||
                PreprocessorList.SelectedItem != null ||
                InputList.SelectedItem != null ||
@@ -92,7 +114,10 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         private void SettingsCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (settingsCmdMetadata == null)
+            {
+                e.CanExecute = true;
                 return;
+            }
 
             var metaData = settingsCmdMetadata[e.Command];
             if (metaData.Item1.SelectedItem == null)
@@ -110,14 +135,15 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         private void SettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
             var metaData = settingsCmdMetadata[e.Command];
-            IBallOnPlateItem instace = ((Helper.BPItem)metaData.Item1.SelectedItem).Instance;
+            Helper.BPItem lbItem = ((Helper.BPItem)metaData.Item1.SelectedItem);
+            IBallOnPlateItem instace = lbItem.Instance;
 
             if (windows.ContainsKey(instace))
                 windows[instace].Show();
             else
             {
                 string name = metaData.Item2;
-                SettingsWindow win = new SettingsWindow(instace, this, string.Format("{0} Settings: {1}", name, instace.ToString()));
+                SettingsWindow win = new SettingsWindow(instace, this, string.Format("{0} Settings: {1}", name, lbItem.ToString()));
                 windows.Add(instace, win);
                 win.Show();
             }
@@ -129,7 +155,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
     internal class SettingsWindow : Window
     {
-        public SettingsWindow(IBallOnPlateItem item, MainWindow win, string Title)
+        public SettingsWindow(IBallOnPlateItem item, MainWindow win, string title)
         {
             this.WindowStyle = System.Windows.WindowStyle.ToolWindow;
             this.SizeToContent = SizeToContent.WidthAndHeight;
@@ -142,6 +168,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             this.Left = win.Left + 340;
             this.Top = win.Top;
 
+            this.Title = title;
             this.Content = item.SettingsUI;
         }
 

@@ -22,7 +22,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         #region Base
         public System.Windows.FrameworkElement SettingsUI
         {
-            get { return this; }
+            get { return null; }
         }
 
         public object SettingsSave

@@ -147,14 +147,12 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         bool mouseDown;
-        Point mouseStart;
-        double lastDistance;
+        Point lastMousePos;
 
         private void txtBox_MouseDown(object sender, MouseButtonEventArgs e)
         {
             mouseDown = this.CaptureMouse();
-            mouseStart = e.GetPosition(this);
-            lastDistance = 0;
+            lastMousePos = e.GetPosition(this);
         }
 
         private void txtBox_MouseMove(object sender, MouseEventArgs e)
@@ -162,19 +160,21 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             if(mouseDown)
             {
                 Point mousePos = e.GetPosition(this);
-                double distance= (mousePos - mouseStart).Length;
-                double deltaDistance = distance - lastDistance;
+                Vector vector = mousePos - lastMousePos;
+                double distance= vector.Length;
 
                 double distanceForOneIncrease = 4;
 
-                if (deltaDistance > distanceForOneIncrease || deltaDistance < -distanceForOneIncrease)
+                if (distance > distanceForOneIncrease)
                 {
-                    if (deltaDistance > distanceForOneIncrease)
+                    double angle = Math.Atan2(vector.Y, vector.X);
+                    if (angle < Math.PI/4 && angle > -Math.PI*3/4)
                         IncreaseValue();
-                    if (deltaDistance < -distanceForOneIncrease)
+                    else
                         DecreaseValue();
-                
-                    lastDistance = distance;
+
+                    vector.Normalize();
+                    lastMousePos += vector * distanceForOneIncrease;
                 }
             }
         }
