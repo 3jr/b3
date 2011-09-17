@@ -45,7 +45,6 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         public static readonly DependencyProperty ValueProperty = 
     DependencyProperty.Register("Value", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(0.0));
 
-        //TODO null reference here
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             if(e.Property == ValueProperty)

@@ -92,6 +92,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Interfaces.cs" />
+    <Compile Include="JanRapp\Controls\SettingSaver.xaml.cs">
+      <DependentUpon>SettingSaver.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Controls\vector setter\DoubleBox.xaml.cs">
       <DependentUpon>DoubleBox.xaml</DependentUpon>
     </Compile>
@@ -138,6 +141,10 @@
     <Compile Include="TimoSchmetzer\Physics3D.cs" />
     <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
     <Compile Include="JanRapp\Utilities\WindowCustomizer.cs" />
+    <Page Include="JanRapp\Controls\SettingSaver.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Controls\vector setter\DoubleBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
