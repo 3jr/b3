@@ -45,14 +45,8 @@
     <StartupObject>BallOnTiltablePlate.JanRapp.MainApp.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Emgu.CV.GPU">
-      <HintPath>DLLs\Emgu.CV.GPU.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.ML">
-      <HintPath>DLLs\Emgu.CV.ML.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.Util">
-      <HintPath>DLLs\Emgu.Util.dll</HintPath>
+    <Reference Include="Coding4Fun.Kinect.WinForm">
+      <HintPath>..\..\..\..\..\Desktop\C4FCKinect\Coding4Fun.Kinect.WinForm.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -212,15 +206,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="DLLs\tessdata\eng.cube.bigrams" />
-    <None Include="DLLs\tessdata\eng.cube.fold" />
-    <None Include="DLLs\tessdata\eng.cube.lm" />
-    <None Include="DLLs\tessdata\eng.cube.nn" />
-    <None Include="DLLs\tessdata\eng.cube.params" />
-    <None Include="DLLs\tessdata\eng.cube.size" />
-    <None Include="DLLs\tessdata\eng.cube.word-freq" />
-    <None Include="DLLs\tessdata\eng.tesseract_cube.nn" />
-    <None Include="DLLs\tessdata\eng.traineddata" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -232,35 +217,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DLLs\cudart32_40_17.dll" />
-    <Content Include="DLLs\cufft32_40_17.dll" />
-    <Content Include="DLLs\cvextern.dll" />
-    <Content Include="DLLs\cvextern_gpu.dll" />
-    <Content Include="DLLs\Emgu.CV.DebuggerVisualizers.VS2008.dll" />
-    <Content Include="DLLs\Emgu.CV.DebuggerVisualizers.VS2010.dll" />
-    <Content Include="DLLs\Emgu.CV.dll" />
-    <Content Include="DLLs\Emgu.CV.GPU.dll" />
-    <Content Include="DLLs\Emgu.CV.ML.dll" />
-    <Content Include="DLLs\Emgu.CV.OCR.dll" />
-    <Content Include="DLLs\Emgu.CV.UI.dll" />
-    <Content Include="DLLs\Emgu.Util.dll" />
-    <Content Include="DLLs\npp32_40_17.dll" />
-    <Content Include="DLLs\opencv_calib3d231.dll" />
-    <Content Include="DLLs\opencv_contrib231.dll" />
-    <Content Include="DLLs\opencv_core231.dll" />
-    <Content Include="DLLs\opencv_features2d231.dll" />
-    <Content Include="DLLs\opencv_ffmpeg.dll" />
-    <Content Include="DLLs\opencv_flann231.dll" />
-    <Content Include="DLLs\opencv_gpu231.dll" />
-    <Content Include="DLLs\opencv_highgui231.dll" />
-    <Content Include="DLLs\opencv_imgproc231.dll" />
-    <Content Include="DLLs\opencv_legacy231.dll" />
-    <Content Include="DLLs\opencv_ml231.dll" />
-    <Content Include="DLLs\opencv_objdetect231.dll" />
-    <Content Include="DLLs\opencv_video231.dll" />
-    <Content Include="DLLs\ZedGraph.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
