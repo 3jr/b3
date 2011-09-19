@@ -45,15 +45,6 @@
     <StartupObject>BallOnTiltablePlate.JanRapp.MainApp.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Coding4Fun.Kinect.WinForm">
-      <HintPath>DLLs\Coding4Fun.Kinect.WinForm.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV">
-      <HintPath>DLLs\Emgu.CV.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.DebuggerVisualizers.VS2010">
-      <HintPath>DLLs\Emgu.CV.DebuggerVisualizers.VS2010.dll</HintPath>
-    </Reference>
     <Reference Include="Emgu.CV.GPU">
       <HintPath>DLLs\Emgu.CV.GPU.dll</HintPath>
     </Reference>
