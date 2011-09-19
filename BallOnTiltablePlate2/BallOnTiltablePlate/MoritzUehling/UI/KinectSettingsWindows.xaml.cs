@@ -39,8 +39,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         int xres = 320;
         int yres = 240;
 
-        Rect viewbox;
-
         Forms.PictureBox kinectBox = new Forms.PictureBox();
         Draw.Bitmap image;
 
@@ -75,10 +73,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             image = KinectHelper.BitmapExtensions.ToBitmap(test, xres, yres);
 
             manager.GetPoints(image);
-            
-            //kinectImage.Source = BitmapSource.Create(xres, yres, 96, 96, PixelFormats.Bgr32, null, test, 320 * PixelFormats.Bgr32.BitsPerPixel / 8 );
-
-            //this.Title = minSlider.Value.ToString() + " | " + (minSlider.Value * 90).ToString();
 
             kinectBox.Image = image;
         }
