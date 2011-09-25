@@ -119,7 +119,7 @@
     <Compile Include="JanRapp\Try\Tests.cs" />
     <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
-    <Compile Include="MoritzUehling\Kinect\OpenCVManager.cs" />
+    <Compile Include="MoritzUehling\Kinect\ImageManager.cs" />
     <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
       <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
     </Compile>
@@ -217,6 +217,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MoritzUehling\Lib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

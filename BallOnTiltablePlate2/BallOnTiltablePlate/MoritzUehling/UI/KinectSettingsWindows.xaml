@@ -4,12 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="340" d:DesignWidth="340" Loaded="Init">
+             d:DesignHeight="340" d:DesignWidth="333" Loaded="Init">
     <Grid>
-            <Slider Height="25" Margin="10,0,10,0" Name="minSlider" VerticalAlignment="Bottom"  SelectionEnd="1" Value="1.6" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
 
-            <Slider Height="25" Margin="10,0,10,68" Name="angleSlider" VerticalAlignment="Bottom"  SelectionEnd="1"/>
-            <Button Content="Set angle!" VerticalAlignment="Bottom" Margin="231,239,10,30" Name="button1" Height="25" />
-            <WindowsFormsHost Margin="10,10,10,100" Name="kinectImage"  />
+        <WindowsFormsHost Margin="12,12,12,6" Name="kinectImage" Grid.Row="0" />
+
+
+        <!-- Angle -->
+        <Slider Height="25" Margin="12,0,100,61" Name="angleSlider" VerticalAlignment="Bottom"  SelectionEnd="1" Grid.Row="1" />
+        <Button Content="Set angle!" VerticalAlignment="Bottom" Margin="231,0,10,61" Width="75" Name="button1" Height="25" Grid.Row="1" HorizontalAlignment="Right" Click="button1_Click" />
+
+
+        <Label Content="Contrast: " Grid.Row="1" Height="28" HorizontalAlignment="Left" Margin="0,45,0,0" Name="label1" VerticalAlignment="Top" />
+        <Slider Height="25" Margin="50,0,12,30" Name="minSlider" VerticalAlignment="Bottom"  SelectionEnd="1" Value="0.8" Grid.Row="1" />
+
+
+        <Label Content="Limit:" Grid.Row="1" Height="28" HorizontalAlignment="Left" Margin="0,72,0,0" Name="label2" VerticalAlignment="Top" />
+        <Slider Height="25" Margin="50,0,12,0" Name="limitSlider" SelectionEnd="1" Value="2" VerticalAlignment="Bottom" Grid.Row="1" />
     </Grid>
 </UserControl>

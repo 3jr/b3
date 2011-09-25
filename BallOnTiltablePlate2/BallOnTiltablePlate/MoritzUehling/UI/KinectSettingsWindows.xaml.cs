@@ -34,13 +34,18 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
         int angle = Camera.ElevationMinimum;
 
-        OpenCVManager manager = new OpenCVManager();
+        ImageManager manager;
 
         int xres = 320;
         int yres = 240;
+        int limit;
 
         Forms.PictureBox kinectBox = new Forms.PictureBox();
         Draw.Bitmap image;
+
+        int[,] depthMap;
+
+        Draw.Point rectPoint;
 
         public void Init(object sender, RoutedEventArgs e)
         {
@@ -56,23 +61,40 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
             angleSlider.Value = ((double)(nui.NuiCamera.ElevationAngle - Camera.ElevationMinimum) * 10.0) / (double)(Camera.ElevationMaximum - Camera.ElevationMinimum);
 
+            rectPoint = new Draw.Point(0, 0);
+
             #region InitBitmap
             
             kinectBox = new Forms.PictureBox();
+            kinectBox.MouseDown += new Forms.MouseEventHandler(kinectBox_MouseDown);
             image = new Draw.Bitmap(xres, yres);
             kinectBox.Dock = Forms.DockStyle.Fill;
             kinectBox.SizeMode = Forms.PictureBoxSizeMode.StretchImage;
             kinectImage.Child = kinectBox;
             #endregion
+
+            manager = new ImageManager(xres, yres);
+
         }
 
+        void kinectBox_MouseDown(object sender, Forms.MouseEventArgs e)
+        {
+            rectPoint.X = (int)(e.X * (xres / (float)kinectBox.Width));
+            rectPoint.Y = (int)(e.Y * (yres / (float)kinectBox.Height));
+        }
+        
+        
         void nui_DepthFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
             byte[] test = GenerateColoredBytes(e.ImageFrame);
 
+
+            manager.GetPoints(image, depthMap, rectPoint, (int)limitSlider.Value);
+
             image = KinectHelper.BitmapExtensions.ToBitmap(test, xres, yres);
 
-            manager.GetPoints(image);
+            test = null;
+
 
             kinectBox.Image = image;
         }
@@ -112,10 +134,10 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
                     //var distance = GetDistance(depthData[depthIndex], depthData[depthIndex + 1]);
                     var distance = GetDistanceWithPlayerIndex(depthData[depthIndex], depthData[depthIndex + 1]);
 
-                    depthMap[x, y] = (byte)((distance / (10 * minSlider.Value)));
+                    depthMap[x, y] = distance;
                     byte color = 0;
                     #region To byte[] clor
-                    color = (byte)(depthMap[x, y]);// - ((depthMap[x - 1, y] + depthMap[x, y - 1] + depthMap[x, y + 1] + depthMap[x + 1, y]) / 4));
+                    color = (byte)(depthMap[x, y] / (10 * minSlider.Value));// - ((depthMap[x - 1, y] + depthMap[x, y - 1] + depthMap[x, y + 1] + depthMap[x + 1, y]) / 4));
 
                     colorFrame[index + RedIndex] = color;
                     colorFrame[index + GreenIndex] = color;
@@ -143,7 +165,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-
             nui.NuiCamera.ElevationAngle = Camera.ElevationMinimum + (int)((angleSlider.Value / 10) * (Camera.ElevationMaximum - Camera.ElevationMinimum));
         }
     }
