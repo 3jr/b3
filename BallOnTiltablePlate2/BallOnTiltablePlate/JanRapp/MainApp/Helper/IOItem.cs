@@ -28,6 +28,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             s.Start();
             var allTypes = System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
                 .Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe"))
+                .Where(p => IsAssemblyManged(p))
                 .Select(p => Assembly.LoadFile(p).GetTypes())
                 .Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
                 .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
@@ -40,6 +41,19 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 .Where(t => t.Type.IsClass)
                 .Where(t => t.Type.GetInterface("IJuggler`1") != null)
                 .Select(t => new JugglerItem(t.Type, t.Instance, allTypes.Select(i => i.Type), allTypes.Select(i => i.Instance))).ToArray();
+        }
+
+        private static bool IsAssemblyManged(string path)
+        {
+            try
+            {
+                AssemblyName.GetAssemblyName(path);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private static bool CheckOnPart(IBallOnPlateItem part, Type type)
