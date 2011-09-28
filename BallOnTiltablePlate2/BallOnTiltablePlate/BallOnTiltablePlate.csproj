@@ -255,7 +255,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MoritzUehling\Lib\" />
-    <Folder Include="NewFolder2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\openCV\Coding4Fun.Kinect.WinForm.dll" />
@@ -331,7 +330,7 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>move /Y  ".\Resources\openCV\*" ".\"</PostBuildEvent>
+    <PostBuildEvent>xcopy ".\Resources\openCV\*" ".\" /D /S</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
