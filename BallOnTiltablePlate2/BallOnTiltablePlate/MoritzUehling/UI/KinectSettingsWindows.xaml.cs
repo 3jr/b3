@@ -49,8 +49,10 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         int[,] depthMap;
 
         Draw.Point rectPoint;
+#endif
         public void Init(object sender, RoutedEventArgs e)
         {
+#if !TIMO
             //UseDepthAndPlayerIndex and UseSkeletalTracking
             nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex | RuntimeOptions.UseSkeletalTracking);
 
@@ -76,9 +78,9 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             #endregion
 
             manager = new ImageManager(xres, yres);
-
+#endif
         }
-
+#if !TIMO
         void kinectBox_MouseDown(object sender, Forms.MouseEventArgs e)
         {
             rectPoint.X = (int)(e.X * (xres / (float)kinectBox.Width));
@@ -174,4 +176,3 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         }
     }
 }
-#endif
