@@ -16,7 +16,7 @@ namespace BallOnTiltablePlate.Start.Physics
     /// Statringvalues must be written in the provided public Fields.
     /// Results can be obtained after execution of the RunPhysics Method out of the public fields.
     /// </summary>
-    class Physics3D : UserControl
+    class Physics3D
     {
         #region info
         public String Author = "Timo Schmetzer";
