@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
-    internal class BPItemUI : ListBoxItem
+    internal class BPItemUI : TreeViewItem
     {
         private readonly Lazy<IBallOnPlateItem> instance;
         public IBallOnPlateItem Instance { get { return instance.Value; } }
@@ -28,7 +28,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 type, typeof(BallOnPlateItemInfoAttribute));
             this.instance = new Lazy<IBallOnPlateItem>(
                 () => (IBallOnPlateItem)Activator.CreateInstance(type));
-            this.Content = this.ToString();
+            this.Header = this.ToString();
         }
 
         public override string ToString()
@@ -45,11 +45,12 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         {
             Stopwatch s = new Stopwatch();
             s.Start();
-            AllBPItems = System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
-                .Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe"))
-                .Where(p => IsAssemblyManged(p))
-                .Select(p => Assembly.LoadFile(p).GetTypes())
-                .Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
+            //AllBPItems = System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
+                //.Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe
+                //.Where(p => IsAssemblyManged(p))
+                //.Select(p => Assembly.LoadFile(p).GetTypes())
+                //.Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
+            AllBPItems = Assembly.GetEntryAssembly().GetTypes()
                 .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
                 .Where(t => CheckOnType(t))
                 .Select(t => CreateItemUI(t))
@@ -90,7 +91,6 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             try
             {
                 ErrorCode = 0;
-                Assert(type.IsClass);
                 Assert(Attribute.GetCustomAttribute(type, typeof(BallOnPlateItemInfoAttribute)) != null);
                 Assert(type.GetConstructor(Type.EmptyTypes) != null);
 
@@ -148,6 +148,29 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         }
         #endregion
         #endregion
+
+
+        public static IEnumerable<BPItemUI> OrderForTreeView(IEnumerable<BPItemUI> items)
+        {
+            var groupedItems = items.GroupBy(i => new { i.Info.AuthorFirstName, i.Info.AuthorLastName, i.Info.ItemName }).Select(g => g.ToArray());
+
+            var returnList = new List<BPItemUI>();
+
+            foreach (var group in groupedItems)
+            {
+                var sorted = group.OrderBy(g => g.Info.Version);
+
+                var head = sorted.First();
+                head.Header = head.ToString();
+
+                var children = sorted.Skip(1).Select(i => {i.Header = i.Info.Version.ToString(); return i;});
+                head.AddChild(sorted.Skip(1));
+
+                returnList.Add(head);
+            }
+
+            return returnList.Select(h => h);
+        }
     }
 
     internal class JugglerItemUI : BPItemUI
@@ -165,18 +188,18 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                     //.Where(t => t.Type.GetInterface("IPreprocessorIO`2") != null)
                     .Where(t => t is PreprocessorItemUI)
                     .Where(t => preprocessorType.IsAssignableFrom(t.Type))
-                    //.Select(t => (PreprocessorItemUI)t)
+                //.Select(t => (PreprocessorItemUI)t)
             );
         }
     }
 
     internal class PreprocessorItemUI : BPItemUI
     {
-        private Lazy<IEnumerable<ListBoxItem>> inputs;
-        public IEnumerable<ListBoxItem> Inputs { get { return inputs.Value; } }
+        private Lazy<IEnumerable<BPItemUI>> inputs;
+        public IEnumerable<BPItemUI> Inputs { get { return inputs.Value; } }
 
-        private Lazy<IEnumerable<ListBoxItem>> outputs;
-        public IEnumerable<ListBoxItem> Outputs { get { return outputs.Value; } }
+        private Lazy<IEnumerable<BPItemUI>> outputs;
+        public IEnumerable<BPItemUI> Outputs { get { return outputs.Value; } }
 
         public PreprocessorItemUI(Type type)
             : base(type)
@@ -187,13 +210,13 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
             Debug.Assert(genericArguments.Length == 2);
 
-            inputs = new Lazy<IEnumerable<ListBoxItem>>(
+            inputs = new Lazy<IEnumerable<BPItemUI>>(
                 () => BPItemUI.AllBPItems
                     .Where(t => input.IsAssignableFrom(t.Type))
                     .Select(t => t)
             );
 
-            outputs = new Lazy<IEnumerable<ListBoxItem>>(
+            outputs = new Lazy<IEnumerable<BPItemUI>>(
                 () => BPItemUI.AllBPItems
                     .Where(t => output.IsAssignableFrom(t.Type))
                     .Select(t => t)
