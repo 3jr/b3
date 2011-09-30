@@ -11,7 +11,7 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.Vectors
     //All gegrees are taken in Radian and Metods with Deg suffix take it in Degree.
     //Added calculateNormalVector
     //Used Extension Methods   Changed by Jan Rapp at 10:17 9/10/2011
-    public static class MathUtilities
+    public static class MathUtil
     {
         public static Point3D RotateXRad(this Point3D point3D, double degrees)
         {
@@ -166,15 +166,25 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.Vectors
         /// <returns>Normalenvektror der Platte als Vector3D</returns>
         public static Vector3D Get3DNormalizedVector(this Vector vec)
         {
-            Vector3D a = (Vector3D)MathUtilities.RotateYRad(
-                MathUtilities.RotateXRad(new Point3D(-1, -1, 0), -(vec.Y)), -(vec.X));
-            Vector3D b = (Vector3D)MathUtilities.RotateYRad(
-                MathUtilities.RotateXRad(new Point3D(1, -1, 0), -(vec.Y)), -(vec.X));
-            Vector3D c = (Vector3D)MathUtilities.RotateYRad(
-                MathUtilities.RotateXRad(new Point3D(-1, 1, 0), -(-1)*(vec.Y)), -(vec.X));//g removed of: MathUtilities.RotateXRad(new Point3D(-1, 1, 0), -g(vec.Y)), -(vec.X));
+            Vector3D a = (Vector3D)RotateYRad(
+                RotateXRad(new Point3D(-1, -1, 0), -(vec.Y)), -(vec.X));
+            Vector3D b = (Vector3D)RotateYRad(
+                RotateXRad(new Point3D(1, -1, 0), -(vec.Y)), -(vec.X));
+            Vector3D c = (Vector3D)RotateYRad(
+                RotateXRad(new Point3D(-1, 1, 0), -(-1)*(vec.Y)), -(vec.X));//g removed of: MathUtilities.RotateXRad(new Point3D(-1, 1, 0), -g(vec.Y)), -(vec.X));
             Vector3D n = Vector3D.CrossProduct(b - a, c - a);
             n.Normalize();
             return n;
+        }
+
+        public static double DegToRad(double degrees)
+        {
+            return (Math.PI * degrees) / 180.0;
+        }
+
+        public static double RadToDeg(double radian)
+        {
+            return (radian / Math.PI) * 180.0;
         }
     }
 }
