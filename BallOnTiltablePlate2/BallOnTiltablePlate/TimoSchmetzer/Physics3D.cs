@@ -270,7 +270,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// <param name="state">The state for which to calc</param>
         /// <returns>See summary.</returns>
         [Obsolete("Not Reliable", true)]
-        private bool IsHit(PhysicsState state) { return !MathUtilities.Orthagonal(MathUtilities.CalcNormalisizedNormalVector(state.Tilt, true), state.Velocity); }
+        private static bool IsHit(PhysicsState state) { return !MathUtilities.Orthagonal(MathUtilities.CalcNormalisizedNormalVector(state.Tilt, true), state.Velocity); }
 
         /// <summary>
         /// Spiegelt den Geschwindigkeitsvektor mittels einer Householdertransformation.
