@@ -1,4 +1,5 @@
-﻿using System;
+﻿# define TIMO
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,11 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+#if !TIMO
 using Microsoft.Research.Kinect.Nui;
 using Forms = System.Windows.Forms;
 using Draw = System.Drawing;
 using KinectHelper =  Coding4Fun.Kinect.WinForm;
 using BallOnTiltablePlate.MoritzUehling.Kinect;
+#endif
 
 namespace BallOnTiltablePlate.MoritzUehling.UI
 {
@@ -28,10 +31,10 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         {
             InitializeComponent();
         }
-
+        #if !TIMO
         //Kinect Runtime
         Runtime nui = new Runtime();
-
+        
         int angle = Camera.ElevationMinimum;
 
         ImageManager manager;
@@ -46,7 +49,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         int[,] depthMap;
 
         Draw.Point rectPoint;
-
         public void Init(object sender, RoutedEventArgs e)
         {
             //UseDepthAndPlayerIndex and UseSkeletalTracking
@@ -158,14 +160,18 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             int distance = (int)(firstFrame >> 3 | secondFrame << 5);
             return distance;
         }
-
+        
+        #endif
         private void minSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
+#if !TIMO
             nui.NuiCamera.ElevationAngle = Camera.ElevationMinimum + (int)((angleSlider.Value / 10) * (Camera.ElevationMaximum - Camera.ElevationMinimum));
+#endif
         }
     }
 }
+#endif
