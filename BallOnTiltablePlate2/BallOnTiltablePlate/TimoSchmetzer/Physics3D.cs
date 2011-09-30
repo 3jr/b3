@@ -11,6 +11,93 @@ using BallOnTiltablePlate.JanRapp.Utilities.Vectors;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Physics
 {
+    public class SimulationWrapper : IBallInput3D, IPlateOutput
+    {
+        #region Base
+        public System.Windows.FrameworkElement SettingsUI
+        {
+            get { return null; }
+        }
+
+        public object SettingsSave
+        {
+            get { return null; }
+        }
+
+        public string ItemName
+        {
+            get { return "Test"; }
+        }
+
+        public string AuthorFirstName
+        {
+            get { return "_Jan"; }
+        }
+
+        public string AuthorLastName
+        {
+            get { return "Rapp"; }
+        }
+
+        public Version Version
+        {
+            get { return new Version(1, 0); }
+        }
+        #endregion
+        private volatile bool running;
+        private volatile int TiltX;
+        private volatile int TiltY;
+
+        public void Start()
+        {
+            running = true;
+            DateTime oldtime = DateTime.Now;
+            PhysicsState state = new PhysicsState();
+            Physics3D physics = new Physics3D();
+            while (running)
+            {
+                DateTime newtime = DateTime.Now;
+                state.SecondsToElapse = ((double)(newtime - oldtime).Ticks)/
+                    (double)(TimeSpan.TicksPerSecond);
+                oldtime += (newtime - oldtime);
+                //TODO: Input of UiModifiying of Fields.
+                state.Tilt = new Vector(TiltX/10000,TiltY/10000);
+                physics.RunPhysics(state);
+                SendData((Vector3D)state.Position);
+            }
+        }
+
+        public void Stop()
+        {
+            running = false;
+        }
+
+        public void SetTilt(Vector tilt)
+        {
+            TiltX = (int)tilt.X*10000;
+            TiltY = (int)tilt.Y*10000;
+        }
+
+        public event EventHandler<BallInputEventArgs3D> DataRecived;
+        EventHandler<BallInputEventArgs> DataRecived2D;
+        event EventHandler<BallInputEventArgs> IBallInput.DataRecived
+        {
+            add { DataRecived2D += value; }
+            remove { DataRecived2D -= value; }
+        }
+
+        private void SendData(Vector3D vec)
+        {
+            var args = new BallInputEventArgs3D() { BallPosition3D = vec };
+            args.BallPosition = new Vector(vec.X, vec.Y);
+
+            if (DataRecived != null)
+                DataRecived(this, args);
+            if (DataRecived2D != null)
+                DataRecived2D(this, args);
+        }
+    }
+
     /// <summary>
     /// Represents the Constants of the Physical environment and the state of the Ball.
     /// Acts as Input and Output of the Physics3D class.
