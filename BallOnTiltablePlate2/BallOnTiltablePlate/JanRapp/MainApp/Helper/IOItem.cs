@@ -10,63 +10,89 @@ using System.Windows.Input;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
-    internal static class ListPopulater
+    internal class BPItemUI : ListBoxItem
     {
-        static IEnumerable<object> JugglerItems;
+        private readonly Lazy<IBallOnPlateItem> instance;
+        public IBallOnPlateItem Instance { get { return instance.Value; } }
+        public bool IsInstanceCreated { get { return instance.IsValueCreated; } }
 
-        public static IEnumerable<object> PopulateJugglerLists
+        public BallOnPlateItemInfoAttribute Info { get; private set; }
+
+        protected readonly Type type;
+        public Type Type { get { return type; } }
+
+        public BPItemUI(Type type)
         {
-            get
-            {
-                return JugglerItems;
-            }
+            this.type = type;
+            this.Info = (BallOnPlateItemInfoAttribute)Attribute.GetCustomAttribute(
+                type, typeof(BallOnPlateItemInfoAttribute));
+            this.instance = new Lazy<IBallOnPlateItem>(
+                () => (IBallOnPlateItem)Activator.CreateInstance(type));
+            this.Content = this.ToString();
         }
 
-        static ListPopulater()
+        public override string ToString()
+        {
+            return string.Format("{0} {1}: {2} - {3}", Info.AuthorFirstName, Info.AuthorLastName,
+                Info.ItemName, Info.Version);
+        }
+
+        #region Staic Init
+        public static IEnumerable<object> PopulateJugglerLists { get; private set; }
+        public static IEnumerable<BPItemUI> AllBPItems { get; private set; }
+
+        static BPItemUI()
         {
             Stopwatch s = new Stopwatch();
             s.Start();
-            var allTypes = System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
+            AllBPItems = System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
                 .Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe"))
                 .Where(p => IsAssemblyManged(p))
                 .Select(p => Assembly.LoadFile(p).GetTypes())
                 .Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
                 .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
-                .Select(t => new { Type = t, Instance = (IBallOnPlateItem)Activator.CreateInstance(t) })
-                .Where(it => CheckOnPart(it.Instance, it.Type))
+                .Where(t => CheckOnType(t))
+                .Select(t => CreateItemUI(t))
                 .ToArray();
             Debug.WriteLine("Reading, instanciating, and validation of item took {0} milliseconds", s.ElapsedMilliseconds);
 
-            JugglerItems = allTypes
-                .Where(t => t.Type.IsClass)
-                .Where(t => t.Type.GetInterface("IJuggler`1") != null)
-                .Select(t => new JugglerItem(t.Type, t.Instance, allTypes.Select(i => i.Type), allTypes.Select(i => i.Instance))).ToArray();
+            PopulateJugglerLists = AllBPItems
+                //.Where(t => t.Type.GetInterface("IJuggler`1") != null).ToArray();
+                .Where(t => t is JugglerItemUI);
         }
 
-        private static bool IsAssemblyManged(string path)
+        #region Init Helper
+        private static BPItemUI CreateItemUI(Type type)
         {
-            try
+            if (type.GetInterface("IJuggler`1") != null)
             {
-                AssemblyName.GetAssemblyName(path);
-                return true;
+                return new JugglerItemUI(type);
             }
-            catch (Exception)
+            else if (type.GetInterface("IPreprocessor") != null)
             {
-                return false;
+                return new PreprocessorItemUI(type);
             }
+            else if (type.GetInterface("IBallInput") != null)
+            {
+                return new BPItemUI(type);
+            }
+            else if (type.GetInterface("IPlateOutput") != null)
+            {
+                return new BPItemUI(type);
+            }
+
+            throw new InvalidOperationException();
         }
 
-        private static bool CheckOnPart(IBallOnPlateItem part, Type type)
+        private static bool CheckOnType(Type type)
         {
 
             try
             {
                 ErrorCode = 0;
-                Assert(part != null);
-                Assert(!string.IsNullOrWhiteSpace(part.AuthorFirstName));
-                Assert(!string.IsNullOrWhiteSpace(part.AuthorLastName));
-                Assert(!string.IsNullOrWhiteSpace(part.ItemName));
-                Assert(part.Version != null);
+                Assert(type.IsClass);
+                Assert(Attribute.GetCustomAttribute(type, typeof(BallOnPlateItemInfoAttribute)) != null);
+                Assert(type.GetConstructor(Type.EmptyTypes) != null);
 
                 if (type.GetInterface("IJuggler`1") != null)
                 {
@@ -88,17 +114,18 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 { }
                 else
                     Assert(false);
+
+
                 return true;
             }
             catch (Exception)
             {
-                MessageBox.Show("The Item with the Class Name \'" + part.GetType().Name + "\' is invalid. The ErrorCode is:" + ErrorCode + "\n\r\n\r If you can't figure out whats wrong or think its my fault contact me(Jan Rapp).");
+                MessageBox.Show("The Item with the Class Name \'" + type.Name + "\' is invalid. The ErrorCode is:" + ErrorCode + "\n\r\n\r If you can't figure out whats wrong or think its my fault contact me(Jan Rapp).");
                 return false;
             }
         }
 
         static int ErrorCode;
-
         private static void Assert(bool assertion)
         {
             if (!assertion)
@@ -106,27 +133,54 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
             ErrorCode++;
         }
+
+        private static bool IsAssemblyManged(string path)
+        {
+            try
+            {
+                AssemblyName.GetAssemblyName(path);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #endregion
     }
 
-    internal class PreprocessorItem : BPItem
+    internal class JugglerItemUI : BPItemUI
+    {
+        private Lazy<IEnumerable<BPItemUI>> preprocessors;
+        public IEnumerable<BPItemUI> Preprocessors { get { return preprocessors.Value; } }
+
+        public JugglerItemUI(Type type)
+            : base(type)
+        {
+            Type preprocessorType = type.GetInterface("IJuggler`1").GetGenericArguments()[0];
+
+            preprocessors = new Lazy<IEnumerable<BPItemUI>>(
+                () => BPItemUI.AllBPItems
+                    //.Where(t => t.Type.GetInterface("IPreprocessorIO`2") != null)
+                    .Where(t => t is PreprocessorItemUI)
+                    .Where(t => preprocessorType.IsAssignableFrom(t.Type))
+                    //.Select(t => (PreprocessorItemUI)t)
+            );
+        }
+    }
+
+    internal class PreprocessorItemUI : BPItemUI
     {
         private Lazy<IEnumerable<ListBoxItem>> inputs;
-
         public IEnumerable<ListBoxItem> Inputs { get { return inputs.Value; } }
 
         private Lazy<IEnumerable<ListBoxItem>> outputs;
-
         public IEnumerable<ListBoxItem> Outputs { get { return outputs.Value; } }
 
-        private readonly IEnumerable<Type> allTypes;
-        private readonly IEnumerable<IBallOnPlateItem> allInstances;
-
-        public PreprocessorItem(Type type, IBallOnPlateItem instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlateItem> allInstances)
-            : base(instance)
+        public PreprocessorItemUI(Type type)
+            : base(type)
         {
-            this.allTypes = allTypes;
-            this.allInstances = allInstances;
-
             Type[] genericArguments = type.GetInterface("IPreprocessorIO`2").GetGenericArguments();
             Type input = genericArguments[0];
             Type output = genericArguments[1];
@@ -134,66 +188,16 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             Debug.Assert(genericArguments.Length == 2);
 
             inputs = new Lazy<IEnumerable<ListBoxItem>>(
-                () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t })
-                    .Where(it => input.IsAssignableFrom(it.Type))
-                    .Select(it => new BPItem(it.Instance))
+                () => BPItemUI.AllBPItems
+                    .Where(t => input.IsAssignableFrom(t.Type))
+                    .Select(t => t)
             );
 
             outputs = new Lazy<IEnumerable<ListBoxItem>>(
-                () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t })
-                    .Where(it => output.IsAssignableFrom(it.Type))
-                    .Select(it => new BPItem(it.Instance))
+                () => BPItemUI.AllBPItems
+                    .Where(t => output.IsAssignableFrom(t.Type))
+                    .Select(t => t)
             );
-        }
-    }
-
-    internal class JugglerItem : BPItem
-    {
-        private Lazy<IEnumerable<PreprocessorItem>> preprocessors;
-
-        public IEnumerable<PreprocessorItem> Preprocessors { get { return preprocessors.Value; } }
-
-        private readonly IEnumerable<Type> allTypes;
-        private readonly IEnumerable<IBallOnPlateItem> allInstances;
-
-        public JugglerItem(Type type, IBallOnPlateItem instance, IEnumerable<Type> allTypes, IEnumerable<IBallOnPlateItem> allInstances)
-            : base(instance)
-        {
-            this.allTypes = allTypes;
-            this.allInstances = allInstances;
-
-            Type preprocessorType = type.GetInterface("IJuggler`1").GetGenericArguments()[0];
-
-            preprocessors = new Lazy<IEnumerable<PreprocessorItem>>(
-                () => allInstances.Zip(allTypes, (i, t) => new { Instance = i, Type = t, })
-                    .Where(it => it.Type.GetInterface("IPreprocessorIO`2") != null)
-                    .Where(it => preprocessorType.IsAssignableFrom(it.Type))
-                    .Select(it => new PreprocessorItem(it.Type, it.Instance, allTypes, allInstances))
-            );
-        }
-    }
-
-    internal class BPItem : ListBoxItem
-    {
-        protected readonly IBallOnPlateItem instance;
-
-        public IBallOnPlateItem Instance { get { return instance; } }
-
-        public BPItem(IBallOnPlateItem instance)
-        {
-            this.instance = instance;
-
-            this.Content = this.ToString();
-        }
-
-        public override string ToString()
-        {
-            return PartToString(instance);
-        }
-
-        public static string PartToString(IBallOnPlateItem part)
-        {
-            return string.Format("{0} {1}: {2} - {3}", part.AuthorFirstName, part.AuthorLastName, part.ItemName, part.Version);
         }
     }
 }

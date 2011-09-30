@@ -17,37 +17,13 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestOutput.xaml
     /// </summary>
+    [BallOnPlateItemInfo("_Jan", "Rapp", "Test", "1.1")]
     public partial class TestOutput : UserControl, IPlateOutput
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
         {
             get { return this; }
-        }
-
-        public object SettingsSave
-        {
-            get { return null; }
-        }
-
-        public string ItemName
-        {
-            get { return "Test"; }
-        }
-
-        public string AuthorFirstName
-        {
-            get { return "_Jan"; }
-        }
-
-        public string AuthorLastName
-        {
-            get { return "Rapp"; }
-        }
-
-        public Version Version
-        {
-            get { return new Version(1, 0); }
         }
         #endregion
 

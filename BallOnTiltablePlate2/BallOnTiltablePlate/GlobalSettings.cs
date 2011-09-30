@@ -8,5 +8,10 @@ namespace BallOnTiltablePlate
     static class GlobalSettings
     {
         public static double PlateSize;
+
+        internal static string ItemSettingsFolder(IBallOnPlateItem item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         protected override void OnHeaderChanged(object oldHeader, object newHeader)
         {
-            base.OnHeaderChanged(oldHeader, newHeader);
+            base.OnHeaderChanged(oldHeader, oldHeader);
 
             PlaceHolder.Content = newHeader;
             Header = ObliHeader;
@@ -59,20 +59,38 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         private void SaveCmd_Executed(object target, ExecutedRoutedEventArgs e)
         {
-
+            e.Handled = true;
+            if(File.Exists(GetSaveFolder()))
+            {
+                return;
+            }
         }
 
         private void SaveCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
+            e.CanExecute = false;
+
             if (string.IsNullOrWhiteSpace(InputBox.Text))
-                e.CanExecute = false;
+            {}
             else if (InputBox.Text.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1)
             {
-                e.CanExecute = false;
                 MessageBox.Show("Name must consist of valid file name characters");
             }
             else
                 e.CanExecute = true;
+        }
+
+        private string GetSaveFolder()
+        {
+
+            FrameworkElement current = (FrameworkElement)this.Parent;
+
+            while(BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI.AllBPItems.Any(i => i.Instance == current))
+            {
+                current = (FrameworkElement)current.Parent;
+            }
+
+            throw new NotImplementedException();
         }
 
         private void box_SelectionChanged(object sender, SelectionChangedEventArgs e)

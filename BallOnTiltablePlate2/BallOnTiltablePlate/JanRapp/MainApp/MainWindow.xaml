@@ -87,7 +87,7 @@
                    Content="Juggler _Algorithm"
                    Target="{Binding ElementName=AlgorithmList}" />
         </Grid>
-        <ListBox x:Name="AlgorithmList" Margin="7,0" ItemsSource="{x:Static helper:ListPopulater.PopulateJugglerLists}" SelectedIndex="0"/>
+        <ListBox x:Name="AlgorithmList" Margin="7,0" ItemsSource="{x:Static helper:BPItemUI.PopulateJugglerLists}" SelectedIndex="0"/>
         <Grid Margin="7">
             <Button x:Name="PreprocessorSettingButton"
                     Width="75"

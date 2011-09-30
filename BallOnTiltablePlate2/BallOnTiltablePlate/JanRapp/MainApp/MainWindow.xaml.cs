@@ -40,17 +40,17 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
             if (PreprocessorList.SelectedItem != null)
             {
-                dynamic item = ((Helper.BPItem)PreprocessorList.SelectedItem).Instance;
+                dynamic item = ((Helper.BPItemUI)PreprocessorList.SelectedItem).Instance;
 
                 if (InputList.SelectedItem != null)
                 {
-                    dynamic input = ((Helper.BPItem)InputList.SelectedItem).Instance;
+                    dynamic input = ((Helper.BPItemUI)InputList.SelectedItem).Instance;
                     item.Input = input;
                 }
 
                 if (OutputList.SelectedItem != null)
                 {
-                    dynamic output = ((Helper.BPItem)OutputList.SelectedItem).Instance;
+                    dynamic output = ((Helper.BPItemUI)OutputList.SelectedItem).Instance;
                     item.Output = output;
                 }
             }
@@ -123,7 +123,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             if (metaData.Item1.SelectedItem == null)
                 return;
 
-            IBallOnPlateItem instace = ((Helper.BPItem)metaData.Item1.SelectedItem).Instance;
+            IBallOnPlateItem instace = ((Helper.BPItemUI)metaData.Item1.SelectedItem).Instance;
             if (instace == null)
                 return;
             if (instace.SettingsUI == null)
@@ -135,7 +135,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         private void SettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
             var metaData = settingsCmdMetadata[e.Command];
-            Helper.BPItem lbItem = ((Helper.BPItem)metaData.Item1.SelectedItem);
+            Helper.BPItemUI lbItem = ((Helper.BPItemUI)metaData.Item1.SelectedItem);
             IBallOnPlateItem instace = lbItem.Instance;
 
             if (windows.ContainsKey(instace))

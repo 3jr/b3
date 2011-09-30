@@ -6,7 +6,7 @@ namespace BallOnTiltablePlate
 {
     public class BallInputEventArgs : EventArgs
     {
-        public Vector BallPosition {get; set;}
+        public Vector BallPosition { get; set; }
     }
 
     public interface IBallInput
@@ -33,7 +33,7 @@ namespace BallOnTiltablePlate
     {
         void SetTilt(Vector tilt);
     }
-    
+
     /// <summary>
     /// Part of a Preprocessor, which needs also IPreprocessor
     /// Do not derive from this Interface!
@@ -76,17 +76,49 @@ namespace BallOnTiltablePlate
 
     /// <summary>
     /// All Properties need to return the same values all the time.
+    /// A public constructor without parameters must exist.
+    /// There must allways be a BallOnPlateItemInfoAttribute attached to the class
     /// </summary>
     public interface IBallOnPlateItem
     {
         FrameworkElement SettingsUI { get; }
+    }
 
-        string ItemName { get; }
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    sealed class BallOnPlateItemInfoAttribute : Attribute
+    {
+        readonly string authorFirstName;
+        readonly string authorLastName;
+        readonly string itemName;
+        readonly Version version;
 
-        string AuthorFirstName { get; }
+        // This is a positional argument
+        public BallOnPlateItemInfoAttribute(string auhtorFirstName, string auhtorLastName, string itemName, string version)
+        {
+            this.authorFirstName = auhtorFirstName;
+            this.authorLastName = auhtorLastName;
+            this.itemName = itemName;
+            this.version = System.Version.Parse(version);
+        }
 
-        string AuthorLastName { get; }
+        public string AuthorFirstName
+        {
+            get { return authorFirstName; }
+        }
 
-        Version Version { get; }
+        public string AuthorLastName
+        {
+            get { return authorLastName; }
+        }
+
+        public string ItemName
+        {
+            get { return itemName; }
+        }
+
+        public Version Version
+        {
+            get { return version; }
+        }
     }
 }
