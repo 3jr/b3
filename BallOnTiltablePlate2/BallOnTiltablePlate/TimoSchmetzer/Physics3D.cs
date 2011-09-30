@@ -9,47 +9,32 @@ using System.Windows.Media.Media3D;
 using System.Windows.Media;
 using BallOnTiltablePlate.JanRapp.Utilities.Vectors;
 
-namespace BallOnTiltablePlate.Start.Physics
+namespace BallOnTiltablePlate.TimoSchmetzer.Physics
 {
     /// <summary>
-    /// Class, that does Physics cacultations.
-    /// Statringvalues must be written in the provided public Fields.
-    /// Results can be obtained after execution of the RunPhysics Method out of the public fields.
+    /// Represents the Constants of the Physical environment and the state of the Ball.
+    /// Acts as Input and Output of the Physics3D class.
     /// </summary>
-    class Physics3D
+    public class PhysicsState
     {
-        #region info
-        public String Author = "Timo Schmetzer";
-        public Version Version = new Version(0, 5);
-        public String Comment = "Pre-Beta. Plate must'nt be turned while Ball is on plate.";
-        #endregion
-
         #region Constats
         /// <summary>
         /// Contains the local Gravity in (m)/(s^2) (with a negative algebraic sign)
         /// </summary>
-        public static double g = -9.81;
+        public double g = -9.81;
 
         /// <summary>
         /// Contains which part of the original hight may be achieved.
         /// Enthaellt, welchen anteil der Ausgangshoehe bei Reflektion wieder erreicht werden soll.
         /// </summary>
-        public static double HightFactor = 1;
+        public double HightFactor = 1;
 
         /// <summary>
         /// Absolute Velocity Reduction on a hit.
         /// Absolute Geschwindigkeitsreduktion bei Aufprall
         /// </summary>
-        public static double AbsoluteAbsorbtion;
+        public double AbsoluteAbsorbtion = 0.08;
 
-        #endregion
-
-        #region DerivedConstants
-        /// <summary>
-        /// Contains the Locals Gravity as a Vector (= (0,0,g) ).
-        /// Entheallt die Erdbeschleunigung als Vector3D (=0,0,g).
-        /// </summary>
-        private static Vector3D G = new Vector3D(0, 0, g);
         #endregion
 
         #region Status Properties
@@ -82,6 +67,39 @@ namespace BallOnTiltablePlate.Start.Physics
         /// Enthaellt die Beschleunigung [des Balls] als Vector3D.
         /// </summary>
         public Vector3D Acceleration;
+        #endregion
+
+        /// <summary>
+        /// Run Physics gives Back the State of the System at the Time AbsoluteTime+s.SecondsToElapse
+        /// equals parameter elapsedSeconds in older Versions.
+        /// </summary>
+        public double SecondsToElapse;
+    }
+
+    /// <summary>
+    /// Class, that does Physics cacultations.
+    /// Statringvalues must be written in the provided public Fields.
+    /// Results can be obtained after execution of the RunPhysics Method out of the public fields.
+    /// </summary>
+    public class Physics3D
+    {
+        /// <summary>
+        /// The state on which caluations are based.
+        /// </summary>
+        private PhysicsState s;
+
+        #region info
+        public String Author = "Timo Schmetzer";
+        public Version Version = new Version(0, 5);
+        public String Comment = "Pre-Beta. Plate must'nt be turned while Ball is on plate.";
+        #endregion
+
+        #region DerivedConstants
+        /// <summary>
+        /// Contains the Locals Gravity as a Vector (= (0,0,g) ).
+        /// Entheallt die Erdbeschleunigung als Vector3D (=0,0,g).
+        /// </summary>
+        private Vector3D G { get { return new Vector3D(0, 0, s.g); } }
         #endregion
 
         #region Assumptions
@@ -119,14 +137,14 @@ namespace BallOnTiltablePlate.Start.Physics
         /// double.positiveInfinity if 0 or never.
         /// Gibt die Absolute Zeit zurueck, zu der der Ball sich das naechste mal Auf der Platte befinden wird.
         /// </summary>
-        private double AbsoluteTimeNextHit { get { return AbsoluteTime + CalcNextHit(); } }
+        private double AbsoluteTimeNextHit { get { return s.AbsoluteTime + CalcNextHit(); } }
 
         /// <summary>
         /// Indicates wheter the Ball, if being on the plate, would hit (true) or roll (false).
         /// Gibt zurueck ob, wenn der Ball auf der Platte waere er auftreffen wuerde(true) oder Rollen wuerde(false)
         /// </summary>
        [Obsolete("Not Reliable", true)]
-        private bool IsHit { get { return !Orthagonal(CalcNormalisizedNormalVector(Tilt, true), Velocity); } }
+        private bool IsHit { get { return !Orthagonal(CalcNormalisizedNormalVector(s.Tilt, true), s.Velocity); } }
         #endregion
 
         #region Regulation
@@ -175,61 +193,63 @@ namespace BallOnTiltablePlate.Start.Physics
         }
         #endregion
 
-        /// <summary>
-        /// Calculates Position, Velocity and Acceleration of the Ball given by the transfered data
-        /// for the the time of elapsed seconds.
-        /// Calls lock(this). You cannot Read from the object while calculating. You would obtain bad results
-        /// (e.g. Velocity is alrady caculated, while position is not, etc.).
-        /// Berechnet Position, Geschwindigkeit und Beschleunigung des Balls 
-        /// anhand der uebergebenen Daten fuer einen Zeitraum von elapsedSeconds.
-        /// Public deklarierte Daten durfen waehrend der Ausfuehrung nicht gelesen/geaendert werden.
-        /// </summary>
-        /// <param name="elapsedSecounds">Zeitraum der Physikberechnung</param>
-        public void RunPhysics(double elapsedSecounds)
+/// <summary>
+/// Calculates the New State of the Ball given by the current PhysicsState.
+/// </summary>
+/// <param name="current">Current Physics State</param>
+/// <returns>State after s.SecondsToElapse</returns>
+        public PhysicsState RunPhysics(PhysicsState current)
         {
-            lock (this)
-            {
                 //Sinnlose aufrufe vermeiden
-                if (elapsedSecounds == 0) { return; }
+                if (s.SecondsToElapse == 0) { return current; }
+
+
+                s = current;
+
                 #region Tiltevent
                 bool CalcReady = false;
-                if (Tilt != LastTilt)
+                if (s.Tilt != LastTilt)
                 { OnTiltChanged(out CalcReady); }
-                LastTilt = Tilt;
+                LastTilt = s.Tilt;
                 #endregion
+
                 #region Debugout
                 System.Diagnostics.Debug.Print(
-                    "t " + AbsoluteTime + "\t sp:" + Position.ToString() + "\t v:" + Velocity.ToString() + "\t acc:" + Acceleration.ToString()
-                    + "\t ntop:" + AbsoluteTimeNextHit + "\t n:" + CalcNormalisizedNormalVector(Tilt, true).ToString() +
-                    "\t els:" + elapsedSecounds);
+                    "t " + s.AbsoluteTime + "\t sp:" + s.Position.ToString() + "\t v:" + s.Velocity.ToString() + "\t acc:" + s.Acceleration.ToString()
+                    + "\t ntop:" + AbsoluteTimeNextHit + "\t n:" + CalcNormalisizedNormalVector(s.Tilt, true).ToString() +
+                    "\t els:" + s.SecondsToElapse);
                 #endregion
+
                 if (!CalcReady)
                 {
                     //Beschleunigung zur Hit-Berechnug setzen
-                    Acceleration = G;
+                    s.Acceleration = G;
                     double nextHit = AbsoluteTimeNextHit;
 
                     if (double.IsInfinity(nextHit))
                     {
                         //Ball rollt auf Platte (kein Hit)
-                        CalcMovement(elapsedSecounds, BallState.OnPlate);
+                        CalcMovement(s.SecondsToElapse, BallState.OnPlate);
                     }
                     //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
-                    else if (nextHit > AbsoluteTime + elapsedSecounds)
-                        CalcMovement(elapsedSecounds, BallState.InAir);
+                    else if (nextHit > s.AbsoluteTime + s.SecondsToElapse)
+                        CalcMovement(s.SecondsToElapse, BallState.InAir);
                     else
                     {
                         //Hit in diesem Update.
-                        CalcMovement(nextHit - AbsoluteTime, BallState.InAir);
+                        CalcMovement(nextHit - s.AbsoluteTime, BallState.InAir);
                         //Exakt auf Platte setzen
-                        Vector3D n = CalcNormalisizedNormalVector(Tilt, true);
-                        double PlateZ = (-Position.X * n.X - Position.Y * n.Y) / (n.Z);
-                        Position.Z = PlateZ;
+                        Vector3D n = CalcNormalisizedNormalVector(s.Tilt, true);
+                        double PlateZ = (-s.Position.X * n.X - s.Position.Y * n.Y) / (n.Z);
+                        s.Position.Z = PlateZ;
                         Reflect();
-                        RunPhysics(elapsedSecounds - (nextHit - AbsoluteTime));
+                        s.SecondsToElapse = s.SecondsToElapse - (nextHit - s.AbsoluteTime);
+                        RunPhysics(s);
                     }
                 }
-            }
+                current = s;
+                s = null;
+            return current;
         }
 
         #region PhyicalMethods
@@ -284,10 +304,10 @@ namespace BallOnTiltablePlate.Start.Physics
 
         private double[] CalcNextHitRawSolution()
         {
-            Vector3D Normal = CalcNormalisizedNormalVector(Tilt, true);
-            double a = 0.5 * Acceleration.X * Normal.X + 0.5 * Acceleration.Y * Normal.Y + 0.5 * Acceleration.Z * Normal.Z;
-            double b = Velocity.X * Normal.X + Velocity.Y * Normal.Y + Velocity.Z * Normal.Z;
-            double c = Position.X * Normal.X + Position.Y * Normal.Y + Position.Z * Normal.Z;
+            Vector3D Normal = CalcNormalisizedNormalVector(s.Tilt, true);
+            double a = 0.5 * s.Acceleration.X * Normal.X + 0.5 * s.Acceleration.Y * Normal.Y + 0.5 * s.Acceleration.Z * Normal.Z;
+            double b = s.Velocity.X * Normal.X + s.Velocity.Y * Normal.Y + s.Velocity.Z * Normal.Z;
+            double c = s.Position.X * Normal.X + s.Position.Y * Normal.Y + s.Position.Z * Normal.Z;
             double[] solutions = MNF(a, b, c);
             return solutions;
         }
@@ -298,31 +318,31 @@ namespace BallOnTiltablePlate.Start.Physics
         /// Zeit wird um elapsedSeconds erhoet.
         /// Keine Hit/Cenetrifugal berechnung.
         /// </summary>
-        private void CalcMovement(double elapsedSecounds, BallState state)
+        private void CalcMovement(double SecondsToElapse, BallState state)
         {
             //Beschleunigung berechnen
             switch (state)
             {
                 case BallState.InAir:
-                    Acceleration = G;
+                    s.Acceleration = G;
                     break;
                 case BallState.OnPlate:
-                    Acceleration = HangabtriebskraftBerechnen(Tilt, true);
+                    s.Acceleration = HangabtriebskraftBerechnen(s.Tilt, true);
                     break;
                 default:
                     throw new SystemException("Sorry. This shouldn't happen.");
             }
             //Bewegungsgleichung
-            Position += Velocity * elapsedSecounds + 0.5 * Acceleration * elapsedSecounds * elapsedSecounds;
-            Velocity += Acceleration * elapsedSecounds;
+            s.Position += s.Velocity * s.SecondsToElapse + 0.5 * s.Acceleration * s.SecondsToElapse * s.SecondsToElapse;
+            s.Velocity += s.Acceleration * s.SecondsToElapse;
             //Zeitsetzen
-            AbsoluteTime += elapsedSecounds;
+            s.AbsoluteTime += s.SecondsToElapse;
             if (state == BallState.OnPlate)
             {
                 //Exakt auf Platte setzen
-                Vector3D n = CalcNormalisizedNormalVector(Tilt, true);
-                double PlateZ = (-Position.X * n.X - Position.Y * n.Y) / (n.Z);
-                Position.Z = PlateZ;
+                Vector3D n = CalcNormalisizedNormalVector(s.Tilt, true);
+                double PlateZ = (-s.Position.X * n.X - s.Position.Y * n.Y) / (n.Z);
+                s.Position.Z = PlateZ;
             }
         }
 
@@ -334,20 +354,20 @@ namespace BallOnTiltablePlate.Start.Physics
         private void Reflect()
         {
             //Geschwindigkeit an Ebene der Platte Spiegln
-            Velocity = Householdertransformation(Velocity, CalcNormalisizedNormalVector(Tilt, true));
+            s.Velocity = Householdertransformation(s.Velocity, CalcNormalisizedNormalVector(s.Tilt, true));
             //fertig geschwindigkeitsberechnug
             //ABSORBTION (Reduktion des Geschwindigkeitsbetrags)
             //Relativ
             //hoehe propertional Energie. Energie propertional geschw. im quadr.
             //Faktor mit dem bei einer Reflektion der Geschwindigkeitsvektor verkleinert/skaliert wird.
-            double absorbtionsfaktor = Math.Sqrt(HightFactor);
-            Velocity = SkaleAbsoluteValueOfAVectorByFactor(Velocity, absorbtionsfaktor);
+            double absorbtionsfaktor = Math.Sqrt(s.HightFactor);
+            s.Velocity = SkaleAbsoluteValueOfAVectorByFactor(s.Velocity, absorbtionsfaktor);
             //Absolut
-            if (Velocity.Length > AbsoluteAbsorbtion)
+            if (s.Velocity.Length > s.AbsoluteAbsorbtion)
             {
-                Velocity = this.ResizeAbsoluteValueOfAVector(Velocity, Velocity.Length - AbsoluteAbsorbtion);
+                s.Velocity = this.ResizeAbsoluteValueOfAVector(s.Velocity, s.Velocity.Length - s.AbsoluteAbsorbtion);
             }
-            else { Velocity = new Vector3D(0, 0, 0); }
+            else { s.Velocity = new Vector3D(0, 0, 0); }
         }
 
         /// <summary>
@@ -365,9 +385,9 @@ namespace BallOnTiltablePlate.Start.Physics
             //Acceleration = G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
             //Maple created code.
             Vector3D cg = new Vector3D();
-            cg.X = g * Math.Cos(alphax) * Math.Pow(Math.Cos(alphay), 0.2e1) * Math.Sin(alphax);
-            cg.Y = g * Math.Cos(alphax) * Math.Cos(alphay) * Math.Sin(alphay);
-            cg.Z = -g * (-0.1e1 + Math.Pow(Math.Cos(alphax), 0.2e1) * Math.Pow(Math.Cos(alphay), 0.2e1));
+            cg.X = s.g * Math.Cos(alphax) * Math.Pow(Math.Cos(alphay), 0.2e1) * Math.Sin(alphax);
+            cg.Y = s.g * Math.Cos(alphax) * Math.Cos(alphay) * Math.Sin(alphay);
+            cg.Z = -s.g * (-0.1e1 + Math.Pow(Math.Cos(alphax), 0.2e1) * Math.Pow(Math.Cos(alphay), 0.2e1));
             return cg;
         }
 
@@ -407,7 +427,7 @@ namespace BallOnTiltablePlate.Start.Physics
         /// <returns>bool; true wenn Ball auf Platte ist, sonst false</returns>
         private bool IsOnPlate()
         {
-            double x = Vector3D.DotProduct(CalcNormalisizedNormalVector(Tilt, true), (Vector3D)Position);
+            double x = Vector3D.DotProduct(CalcNormalisizedNormalVector(s.Tilt, true), (Vector3D)s.Position);
             return x == 0;
         }
 
@@ -417,9 +437,9 @@ namespace BallOnTiltablePlate.Start.Physics
         /// <returns>bool; true wenn Ball unter der Platte ist, sonst false</returns>
         private bool IsDownPlate()
         {
-            Vector3D n = CalcNormalisizedNormalVector(Tilt, true);
-            double PlateZ = (-Position.X * n.X - Position.Y * n.Y) / (n.Z);
-            return Position.Z < PlateZ;
+            Vector3D n = CalcNormalisizedNormalVector(s.Tilt, true);
+            double PlateZ = (-s.Position.X * n.X - s.Position.Y * n.Y) / (n.Z);
+            return s.Position.Z < PlateZ;
         }
 
         /// <summary>
