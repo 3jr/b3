@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BallOnTiltablePlate.JanRapp.Controls" 
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" d:DesignHeight="55" d:DesignWidth="365">
+             mc:Ignorable="d" d:DesignHeight="86" d:DesignWidth="381">
     <UserControl.Resources>
         <System:Double x:Key="Increment">.05</System:Double>
         <Style TargetType="local:DoubleBox">

@@ -81,8 +81,8 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
     /// <summary>
     /// Interaction logic for Simulation3D.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo","Schmetzer","Simulation", "0.1")]
-    public partial class Simulation3D : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem
+    [BallOnPlateItemInfo("Timo", "Schmetzer", "Simulation", "0.1")]
+    public partial class Simulation3D : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, IPhysicsState
     {
         public Simulation3D()
         {
@@ -101,7 +101,7 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
 
         public void SetTilt(Vector tilt)
         {
-            throw new NotImplementedException();
+            TiltVecBox.SetValue(Controls.Vector2DControl.ValueProperty, tilt);
         }
 
         #region Event
@@ -129,6 +129,84 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         public FrameworkElement SettingsUI
         {
             get { return this; }
+        }
+
+        public double g
+        {
+            get
+            {
+                return (double)GravityDoubleBox.GetValue(Controls.DoubleBox.ValueProperty);
+            }
+        }
+
+        public double HightFactor
+        {
+            get
+            {
+                return (double)HitAttenuationFactorDoubleBox.GetValue(Controls.DoubleBox.ValueProperty);
+            }
+        }
+
+        public double AbsoluteAbsorbtion
+        {
+            get
+            {
+                return (double)AbsoluteHitAttenuationDoubleBox.GetValue(Controls.DoubleBox.ValueProperty);
+            }
+        }
+
+        public Vector Tilt
+        {
+            get
+            {
+                return (Vector)TiltVecBox.GetValue(Controls.Vector2DControl.ValueProperty);
+            }
+        }
+
+        public Point3D Position
+        {
+            get
+            {
+                return (Point3D)PositionVecBox.GetValue(Controls.Vector3DControl.ValueProperty);
+            }
+            set
+            {
+                PositionVecBox.SetValue(Controls.Vector3DControl.ValueProperty, value);
+            }
+        }
+
+        public Vector3D Velocity
+        {
+            get
+            {
+                return (Vector3D)VelocityVecBox.GetValue(Controls.Vector3DControl.ValueProperty);
+            }
+            set
+            {
+                VelocityVecBox.SetValue(Controls.Vector3DControl.ValueProperty, value);
+            }
+        }
+
+        public Vector3D Acceleration
+        {
+            get
+            {
+                return (Vector3D)AccelerationVecBox.GetValue(Controls.Vector3DControl.ValueProperty);
+            }
+            set
+            {
+                AccelerationVecBox.SetValue(Controls.Vector3DControl.ValueProperty, value);
+            }
+        }
+
+        private void TiltVecBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
+        {
+            Visualizer3DCtrl.PlateTilt = e.NewValue;
+        }
+
+        private void PositionVecBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector3D> e)
+        {
+            Visualizer3DCtrl.BallPositon = (Point3D)e.NewValue;
         }
     }
 
@@ -159,7 +237,7 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         /// Contains the rotaition of the plate against the axis in Rad.
         /// Enthaellt die Kippung der Platte als Vector in x/y Richtung in Radiant.
         /// </summary>
-        Vector Tilt { get; set; }
+        Vector Tilt { get; }
 
         /// <summary>
         /// Contains the Position [of the Ball] as Vector3D.
@@ -179,11 +257,5 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         /// </summary>
         Vector3D Acceleration { get; set; }
         #endregion
-
-        /// <summary>
-        /// Run Physics gives Back the State of the System at the Time AbsoluteTime+s.SecondsToElapse
-        /// equals parameter elapsedSeconds in older Versions.
-        /// </summary>
-        double SecondsToElapse { get; }
     }
 }

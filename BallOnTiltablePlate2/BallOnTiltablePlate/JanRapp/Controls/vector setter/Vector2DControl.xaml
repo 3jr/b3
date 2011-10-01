@@ -6,7 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BallOnTiltablePlate.JanRapp.Controls" 
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" d:DesignHeight="24" d:DesignWidth="365">
+             mc:Ignorable="d" d:DesignHeight="54.667" d:DesignWidth="405">
     <UserControl.Resources>
         <System:Double x:Key="Increment">.05</System:Double>
         <Style TargetType="local:DoubleBox">
@@ -17,7 +17,7 @@
         </Style>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
-        <local:DoubleBox x:Name="Xud" ValueChanged="X_ValueChanged" Value="0" Text="X:"/>
-        <local:DoubleBox x:Name="Yud" ValueChanged="Y_ValueChanged" Value="0" Text="Y:"/>
+        <local:DoubleBox x:Name="Xud" ValueChanged="X_ValueChanged" Value="0" Text=" X:"/>
+        <local:DoubleBox x:Name="Yud" ValueChanged="Y_ValueChanged" Value="0" Text=" Y:"/>
     </StackPanel>
 </UserControl>

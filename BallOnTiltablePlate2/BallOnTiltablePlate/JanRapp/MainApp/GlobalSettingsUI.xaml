@@ -1,8 +1,7 @@
-﻿<Window x:Class="BallOnTiltablePlate.JanRapp.MainApp.GlobalSettingsUI"
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.MainApp.GlobalSettingsUI"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
-        Title="General Settings"
         Width="393"
         Height="336">
     <Grid>
@@ -16,6 +15,6 @@
                       Minimum=".01"
                       LargeChange=".1"
                       SmallChange=".01"
-                      Value="{Binding GlobalSettings, Path=PlateSize}"/>
+                      Value="{Binding PlateSize, ElementName=GlobalSettings}"/>
     </Grid>
-</Window>
+</UserControl>

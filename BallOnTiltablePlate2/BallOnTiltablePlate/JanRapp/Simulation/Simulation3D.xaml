@@ -5,8 +5,33 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <controls:Visualizer3D/>
-    </Grid>
+             d:DesignHeight="502" d:DesignWidth="502">
+    <WrapPanel>
+		<controls:Visualizer3D Height="300" Width="300" x:Name="Visualizer3DCtrl"/>
+        <Expander Header="Variables">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <Label HorizontalAlignment="Right" Content="_Tilt:" Target="{Binding ElementName=TiltVecBox, Mode=OneWay}"/>
+                    <Label HorizontalAlignment="Right" Content="_Position:" Target="{Binding ElementName=PositionVecBox, Mode=OneWay}"/>
+                    <Label HorizontalAlignment="Right" Content="_Velocity:" Target="{Binding ElementName=VelocityVecBox, Mode=OneWay}"/>
+                    <Label HorizontalAlignment="Right" Content="_Acceleration:" Target="{Binding ElementName=AccelerationVecBox, Mode=OneWay}"/>
+                </StackPanel>
+                <StackPanel>
+                    <controls:Vector2DControl x:Name="TiltVecBox" ValueChanged="TiltVecBox_ValueChanged"/>
+                    <controls:Vector3DControl x:Name="PositionVecBox" ValueChanged="PositionVecBox_ValueChanged" />
+                    <controls:Vector3DControl x:Name="VelocityVecBox"/>
+                    <controls:Vector3DControl x:Name="AccelerationVecBox"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+        <Expander Header="Constants">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <controls:DoubleBox x:Name="GravityDoubleBox" Text="Gravity:" HorizontalAlignment="Right"/>
+                    <controls:DoubleBox x:Name="HitAttenuationFactorDoubleBox" Text="Attenuation Factor at Hit" HorizontalAlignment="Right"/>
+                    <controls:DoubleBox x:Name="AbsoluteHitAttenuationDoubleBox" Text="Absolute Attenuation at Hit" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+    </WrapPanel>
 </UserControl>

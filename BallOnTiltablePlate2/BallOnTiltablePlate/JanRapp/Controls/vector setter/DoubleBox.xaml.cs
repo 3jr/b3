@@ -22,8 +22,6 @@ namespace BallOnTiltablePlate.JanRapp.Controls
     {
         public event RoutedPropertyChangedEventHandler<double> ValueChanged;
 
-
-
         public string Text
         {
             get { return (string)GetValue(TextProperty); }

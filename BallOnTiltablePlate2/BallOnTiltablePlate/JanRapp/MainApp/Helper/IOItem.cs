@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
-    internal class BPItemUI : TreeViewItem
+    internal class BPItemUI
     {
         private readonly Lazy<IBallOnPlateItem> instance;
         public IBallOnPlateItem Instance { get { return instance.Value; } }
@@ -28,7 +28,6 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 type, typeof(BallOnPlateItemInfoAttribute));
             this.instance = new Lazy<IBallOnPlateItem>(
                 () => (IBallOnPlateItem)Activator.CreateInstance(type));
-            this.Header = this.ToString();
         }
 
         public override string ToString()
@@ -38,7 +37,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         }
 
         #region Staic Init
-        public static IEnumerable<BPItemUI> PopulateJugglerLists { get; private set; }
+        public static IEnumerable<object> PopulateJugglerLists { get; private set; }
         public static IEnumerable<BPItemUI> AllBPItems { get; private set; }
 
         static BPItemUI()
@@ -57,11 +56,12 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 .ToArray();
             Debug.WriteLine("Reading, instanciating, and validation of item took {0} milliseconds", s.ElapsedMilliseconds);
 
-            PopulateJugglerLists = AllBPItems
-                //.Where(t => t.Type.GetInterface("IJuggler`1") != null).ToArray();
-                .Where(i => i is JugglerItemUI);
-
-            PopulateJugglerLists = OrderForTreeView(PopulateJugglerLists);
+            PopulateJugglerLists =
+                OrderForTreeView(
+                    AllBPItems
+                    //.Where(t => t.Type.GetInterface("IJuggler`1") != null).ToArray();
+                    .Where(i => i is JugglerItemUI)
+                );
         }
 
         #region Init Helper
@@ -151,7 +151,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         #endregion
         #endregion
 
-        public static IEnumerable<BPItemUI> OrderForTreeView(IEnumerable<BPItemUI> items)
+        public static IEnumerable<object> OrderForTreeView(IEnumerable<BPItemUI> items)
         {
             var groupedItems = items
                 .GroupBy(i =>
@@ -160,27 +160,20 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 .OrderBy(g =>g.Key.AuthorFirstName).ThenBy(g => g.Key.AuthorLastName).ThenBy(g => g.Key.ItemName)
                 .Select(g => g.ToArray()).ToArray();
 
-            var returnList = new List<BPItemUI>();
-
+            var returnList = new List<TreeViewItem>();
+                
             foreach (var group in groupedItems)
             {
-                foreach (var g in group)
-                    g.IsSelected = false;
-
                 var sorted = group.OrderByDescending(g => g.Info.Version);
 
                 var head = sorted.First();
-                head.Header = new TextBlock() { Text = head.ToString(), Width = 200.0 };
+                TreeViewItem headUI = new TreeViewItem() { Header = head.ToString(), DataContext = head };
 
-                var children = sorted.Skip(1).Select(i => {
-                    i.Header = i.Info.Version.ToString();
-                    i.Width = 200.0;
-                    return i; 
-                });
-                foreach (var c in children)
-                    head.AddChild(c);
+                var childrenUI = sorted.Skip(1).Select(i => new TreeViewItem() { Header = i.Info.Version.ToString(), DataContext = i });
 
-                returnList.Add(head);
+                headUI.ItemsSource = childrenUI;
+
+                returnList.Add(headUI);
             }
 
             if(returnList.Count > 0)
@@ -192,15 +185,15 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
     internal class JugglerItemUI : BPItemUI
     {
-        private Lazy<IEnumerable<BPItemUI>> preprocessors;
-        public IEnumerable<BPItemUI> Preprocessors { get { return preprocessors.Value; } }
+        private Lazy<IEnumerable<object>> preprocessors;
+        public IEnumerable<object> Preprocessors { get { return preprocessors.Value; } }
 
         public JugglerItemUI(Type type)
             : base(type)
         {
             Type preprocessorType = type.GetInterface("IJuggler`1").GetGenericArguments()[0];
 
-            preprocessors = new Lazy<IEnumerable<BPItemUI>>(
+            preprocessors = new Lazy<IEnumerable<object>>(
                 () => 
                     OrderForTreeView(
                         BPItemUI.AllBPItems
@@ -215,11 +208,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
     internal class PreprocessorItemUI : BPItemUI
     {
-        private Lazy<IEnumerable<BPItemUI>> inputs;
-        public IEnumerable<BPItemUI> Inputs { get { return inputs.Value; } }
+        private Lazy<IEnumerable<object>> inputs;
+        public IEnumerable<object> Inputs { get { return inputs.Value; } }
 
-        private Lazy<IEnumerable<BPItemUI>> outputs;
-        public IEnumerable<BPItemUI> Outputs { get { return outputs.Value; } }
+        private Lazy<IEnumerable<object>> outputs;
+        public IEnumerable<object> Outputs { get { return outputs.Value; } }
 
         public PreprocessorItemUI(Type type)
             : base(type)
@@ -230,7 +223,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
             Debug.Assert(genericArguments.Length == 2);
 
-            inputs = new Lazy<IEnumerable<BPItemUI>>(
+            inputs = new Lazy<IEnumerable<object>>(
                 () => 
                     OrderForTreeView(
                         BPItemUI.AllBPItems
@@ -239,7 +232,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                     )
             );
 
-            outputs = new Lazy<IEnumerable<BPItemUI>>(
+            outputs = new Lazy<IEnumerable<object>>(
                 () =>
                     OrderForTreeView(
                         BPItemUI.AllBPItems

@@ -51,10 +51,10 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         protected override void OnHeaderChanged(object oldHeader, object newHeader)
         {
-            base.OnHeaderChanged(oldHeader, oldHeader);
+            //PlaceHolder.Content = newHeader;
+            //Header = ObliHeader;
 
-            PlaceHolder.Content = newHeader;
-            Header = ObliHeader;
+            //base.OnHeaderChanged(oldHeader, ObliHeader);
         }
 
         private void SaveCmd_Executed(object target, ExecutedRoutedEventArgs e)

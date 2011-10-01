@@ -115,6 +115,18 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         //} 
         #endregion
 
+        private void GlobalSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
+        {
+            if (globalSettingsWindow == null)
+            {
+                globalSettingsWindow = new SettingsWindow(new GlobalSettingsUI(), this, "Global Settings");
+            }
+
+            globalSettingsWindow.Show();
+        }
+
+        SettingsWindow globalSettingsWindow;
+
         private void SettingsCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (settingsCmdMetadata == null)
@@ -127,10 +139,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             if (metaData.Item1.SelectedItem == null)
                 return;
 
-            IBallOnPlateItem instace = ((Helper.BPItemUI)metaData.Item1.SelectedItem).Instance;
-            if (instace == null)
+            var item = (Helper.BPItemUI)metaData.Item1.SelectedValue;
+            if (item == null)
                 return;
-            if (instace.SettingsUI == null)
+            IBallOnPlateItem instance = item.Instance;
+            if (instance.SettingsUI == null)
                 return;
 
             e.CanExecute = true;
@@ -139,16 +152,17 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         private void SettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
             var metaData = settingsCmdMetadata[e.Command];
-            Helper.BPItemUI lbItem = ((Helper.BPItemUI)metaData.Item1.SelectedItem);
-            IBallOnPlateItem instace = lbItem.Instance;
+            var item = (Helper.BPItemUI)metaData.Item1.SelectedValue;
+            IBallOnPlateItem instance = item.Instance;
 
-            if (windows.ContainsKey(instace))
-                windows[instace].Show();
+            if (windows.ContainsKey(instance))
+                windows[instance].Focus();
             else
             {
                 string name = metaData.Item2;
-                SettingsWindow win = new SettingsWindow(instace, this, string.Format("{0} Settings: {1}", name, lbItem.ToString()));
-                windows.Add(instace, win);
+                SettingsWindow win = new SettingsWindow(instance.SettingsUI, this,
+                    string.Format("{0} Settings: {1}", name, item.ToString()));
+                windows.Add(instance, win);
                 win.Show();
             }
         }
@@ -159,7 +173,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
     internal class SettingsWindow : Window
     {
-        public SettingsWindow(IBallOnPlateItem item, MainWindow win, string title)
+        public SettingsWindow(FrameworkElement ui, MainWindow win, string title)
         {
             this.WindowStyle = System.Windows.WindowStyle.ToolWindow;
             this.SizeToContent = SizeToContent.WidthAndHeight;
@@ -173,7 +187,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             this.Top = win.Top;
 
             this.Title = title;
-            this.Content = item.SettingsUI;
+            this.Content = ui;
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

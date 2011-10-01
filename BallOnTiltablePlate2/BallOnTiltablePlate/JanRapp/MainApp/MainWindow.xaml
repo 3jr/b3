@@ -34,7 +34,7 @@
                 <KeyGesture>Control+O</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
-        <RoutedCommand x:Key="GeneralSettings">
+        <RoutedCommand x:Key="GlobalSettings">
             <RoutedCommand.InputGestures>
                 <KeyGesture>Control+S</KeyGesture>
             </RoutedCommand.InputGestures>
@@ -57,9 +57,8 @@
                         CanExecute="SettingsCmdCanExecute"
                         Executed ="SettingsCmdExecuted"/>
                         <!--Executed="OutputSettingsCmdExecuted" /?>-->
-        <CommandBinding Command="{StaticResource ResourceKey=GeneralSettings}" 
-                        CanExecute="SettingsCmdCanExecute"
-                        Executed ="SettingsCmdExecuted"/>
+        <CommandBinding Command="{StaticResource ResourceKey=GlobalSettings}"
+                        Executed ="GlobalSettingsCmdExecuted"/>
                         <!--Executed="GeneralSettingsCmdExecuted" />-->
     </Window.CommandBindings>
     <StackPanel Selector.SelectionChanged="Lists_SelectionChanged">
@@ -71,7 +70,7 @@
                 <MenuItem Command="{StaticResource InputSettings}" Header="_Input" />
                 <MenuItem Command="{DynamicResource OutputSettings}" Header="_Output" />
                 <Separator />
-                <MenuItem Command="{StaticResource GeneralSettings}" Header="General Settings"/>
+                <MenuItem Command="{StaticResource GlobalSettings}" Header="Global _Settings"/>
             </MenuItem>
         </Menu>
         <Grid Margin="7">
@@ -89,7 +88,8 @@
         </Grid>
         <TreeView x:Name="AlgorithmList"
                   Margin="7,0" 
-                  ItemsSource="{x:Static helper:BPItemUI.PopulateJugglerLists}" 
+                  ItemsSource="{x:Static helper:BPItemUI.PopulateJugglerLists}"
+                  SelectedValuePath="DataContext"
                   />
         <Grid Margin="7">
             <Button x:Name="PreprocessorSettingButton"
@@ -108,8 +108,9 @@
         </Grid>
         <TreeView x:Name="PreprocessorList"
                  Margin="7,0"
-                 ItemsSource="{Binding SelectedItem.Preprocessors,
+                 ItemsSource="{Binding SelectedItem.DataContext.Preprocessors,
                                        ElementName=AlgorithmList}"
+                  SelectedValuePath="DataContext"
                  />
         <Grid Margin="7">
             <Button x:Name="InputSettingButton"
@@ -128,7 +129,8 @@
         <TreeView x:Name="InputList"
                  Margin="7,0"
                  ItemsSource="{Binding ElementName=PreprocessorList,
-                                       Path=SelectedItem.Inputs}"
+                                       Path=SelectedItem.DataContext.Inputs}"
+                 SelectedValuePath="DataContext"
                  />
         <Grid Margin="7">
             <Button x:Name="OutputSettingButton"
@@ -147,7 +149,8 @@
         <TreeView x:Name="OutputList"
                  Margin="7,0"
                  ItemsSource="{Binding ElementName=PreprocessorList,
-                                       Path=SelectedItem.Outputs}"
+                                       Path=SelectedItem.DataContext.Outputs}"
+                  SelectedValuePath="DataContext"
                  />
     </StackPanel>
 </Window>

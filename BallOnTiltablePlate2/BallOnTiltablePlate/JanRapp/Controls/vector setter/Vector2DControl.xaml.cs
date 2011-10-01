@@ -20,6 +20,8 @@ namespace BallOnTiltablePlate.JanRapp.Controls
     /// </summary>
     internal partial class Vector2DControl : UserControl
     {
+        public event RoutedPropertyChangedEventHandler<Vector> ValueChanged;
+
         public Vector Value
         {
             get { return (Vector)GetValue(ValueProperty); }
@@ -41,6 +43,16 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             Vector v = (Vector)e.NewValue;
             c.Xud.Value = v.X;
             c.Yud.Value = v.Y;
+        }
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.Property == ValueProperty)
+            {
+                ValueChanged(this, new RoutedPropertyChangedEventArgs<Vector>((Vector)e.OldValue, (Vector)e.NewValue));
+            }
+
+            base.OnPropertyChanged(e);
         }
 
         private void X_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

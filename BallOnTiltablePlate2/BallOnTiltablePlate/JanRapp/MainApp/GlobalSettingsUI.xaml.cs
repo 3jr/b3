@@ -16,7 +16,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
     /// <summary>
     /// Interaction logic for GeneralSettingsUI.xaml
     /// </summary>
-    public partial class GlobalSettingsUI : Window
+    public partial class GlobalSettingsUI : UserControl
     {
         public GlobalSettingsUI()
         {
