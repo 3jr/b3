@@ -21,12 +21,16 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            settingsCmdMetadata = new Dictionary<object, Tuple<ListBox, string>>()
+            settingsCmdMetadata = new Dictionary<object, Tuple<TreeView, string>>()
             {
-                {this.Resources["JugglerSettings"], Tuple.Create(AlgorithmList, "Juggler")},
-                {this.Resources["PreprocessorSettings"], Tuple.Create(PreprocessorList, "Preprocessor")},
-                {this.Resources["InputSettings"], Tuple.Create(InputList, "Input")},
-                {this.Resources["OutputSettings"], Tuple.Create(OutputList, "Output")},
+                {this.Resources["JugglerSettings"],
+                    Tuple.Create<TreeView, string>(AlgorithmList, "Juggler")},
+                {this.Resources["PreprocessorSettings"],
+                    Tuple.Create<TreeView, string>(PreprocessorList, "Preprocessor")},
+                {this.Resources["InputSettings"],
+                    Tuple.Create<TreeView, string>(InputList, "Input")},
+                {this.Resources["OutputSettings"],
+                    Tuple.Create<TreeView, string>(OutputList, "Output")},
             };
         }
 
@@ -149,7 +153,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             }
         }
 
-        Dictionary<object,Tuple<ListBox,string>> settingsCmdMetadata;
+        Dictionary<object,Tuple<TreeView,string>> settingsCmdMetadata;
         Dictionary<IBallOnPlateItem, SettingsWindow> windows = new Dictionary<IBallOnPlateItem,SettingsWindow>();
     }
 

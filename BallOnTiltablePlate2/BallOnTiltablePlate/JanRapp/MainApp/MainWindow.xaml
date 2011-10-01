@@ -87,7 +87,10 @@
                    Content="Juggler _Algorithm"
                    Target="{Binding ElementName=AlgorithmList}" />
         </Grid>
-        <ListBox x:Name="AlgorithmList" Margin="7,0" ItemsSource="{x:Static helper:BPItemUI.PopulateJugglerLists}" SelectedIndex="0"/>
+        <TreeView x:Name="AlgorithmList"
+                  Margin="7,0" 
+                  ItemsSource="{x:Static helper:BPItemUI.PopulateJugglerLists}" 
+                  />
         <Grid Margin="7">
             <Button x:Name="PreprocessorSettingButton"
                     Width="75"
@@ -103,11 +106,11 @@
                    Content="_Preprocessor"
                    Target="{Binding ElementName=PreprocessorList}" />
         </Grid>
-        <ListBox x:Name="PreprocessorList"
+        <TreeView x:Name="PreprocessorList"
                  Margin="7,0"
                  ItemsSource="{Binding SelectedItem.Preprocessors,
                                        ElementName=AlgorithmList}"
-                 SelectedIndex="0"/>
+                 />
         <Grid Margin="7">
             <Button x:Name="InputSettingButton"
                     Width="75"
@@ -122,11 +125,11 @@
                                     Mode=OneWay}"
                    d:LayoutOverrides="Height" />
         </Grid>
-        <ListBox x:Name="InputList"
+        <TreeView x:Name="InputList"
                  Margin="7,0"
                  ItemsSource="{Binding ElementName=PreprocessorList,
                                        Path=SelectedItem.Inputs}"
-                 SelectedIndex="0"/>
+                 />
         <Grid Margin="7">
             <Button x:Name="OutputSettingButton"
                     Width="75"
@@ -141,10 +144,10 @@
                                     Mode=OneWay}"
                    d:LayoutOverrides="Height" />
         </Grid>
-        <ListBox x:Name="OutputList"
+        <TreeView x:Name="OutputList"
                  Margin="7,0"
                  ItemsSource="{Binding ElementName=PreprocessorList,
                                        Path=SelectedItem.Outputs}"
-                 SelectedIndex="0"/>
+                 />
     </StackPanel>
 </Window>

@@ -20,7 +20,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestInput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("_Jan", "Rapp", "Test", "1.1")]
+    [BallOnPlateItemInfo("_Jan", "Rapp", "Test", "1.0")]
     public partial class TestInput : UserControl, IBallInput3D
     {
         #region Base
@@ -69,5 +69,26 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 DataRecived2D(this, args);
         }
         #endregion
+    }
+
+    [BallOnPlateItemInfo("_Jan", "Rapp", "Test", "0.9")]
+    public class TestInput2 : IBallInput
+    {
+        public event EventHandler<BallInputEventArgs> DataRecived;
+
+        public void Start()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public FrameworkElement SettingsUI
+        {
+            get { return null; }
+        }
     }
 }

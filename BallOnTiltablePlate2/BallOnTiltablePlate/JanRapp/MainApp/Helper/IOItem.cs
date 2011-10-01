@@ -38,7 +38,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         }
 
         #region Staic Init
-        public static IEnumerable<object> PopulateJugglerLists { get; private set; }
+        public static IEnumerable<BPItemUI> PopulateJugglerLists { get; private set; }
         public static IEnumerable<BPItemUI> AllBPItems { get; private set; }
 
         static BPItemUI()
@@ -50,7 +50,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 //.Where(p => IsAssemblyManged(p))
                 //.Select(p => Assembly.LoadFile(p).GetTypes())
                 //.Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
-            AllBPItems = Assembly.GetEntryAssembly().GetTypes()
+            AllBPItems = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
                 .Where(t => CheckOnType(t))
                 .Select(t => CreateItemUI(t))
@@ -59,7 +59,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
             PopulateJugglerLists = AllBPItems
                 //.Where(t => t.Type.GetInterface("IJuggler`1") != null).ToArray();
-                .Where(t => t is JugglerItemUI);
+                .Where(i => i is JugglerItemUI);
+
+            PopulateJugglerLists = OrderForTreeView(PopulateJugglerLists);
         }
 
         #region Init Helper
@@ -149,25 +151,40 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         #endregion
         #endregion
 
-
         public static IEnumerable<BPItemUI> OrderForTreeView(IEnumerable<BPItemUI> items)
         {
-            var groupedItems = items.GroupBy(i => new { i.Info.AuthorFirstName, i.Info.AuthorLastName, i.Info.ItemName }).Select(g => g.ToArray());
+            var groupedItems = items
+                .GroupBy(i =>
+                    new { i.Info.AuthorFirstName, i.Info.AuthorLastName, i.Info.ItemName }
+                    )
+                .OrderBy(g => g.Key)
+                .Select(g => g.ToArray());
 
             var returnList = new List<BPItemUI>();
 
             foreach (var group in groupedItems)
             {
-                var sorted = group.OrderBy(g => g.Info.Version);
+                foreach (var g in group)
+                    g.IsSelected = false;
+
+                var sorted = group.OrderByDescending(g => g.Info.Version);
 
                 var head = sorted.First();
-                head.Header = head.ToString();
+                head.Header = new TextBlock() { Text = head.ToString(), Width = 200.0 };
 
-                var children = sorted.Skip(1).Select(i => {i.Header = i.Info.Version.ToString(); return i;});
-                head.AddChild(sorted.Skip(1));
+                var children = sorted.Skip(1).Select(i => {
+                    i.Header = i.Info.Version.ToString();
+                    i.Width = 200.0;
+                    return i; 
+                });
+                foreach (var c in children)
+                    head.AddChild(c);
 
                 returnList.Add(head);
             }
+
+            if(returnList.Count > 0)
+                returnList.First().IsSelected = true;
 
             return returnList.Select(h => h);
         }
@@ -184,11 +201,14 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             Type preprocessorType = type.GetInterface("IJuggler`1").GetGenericArguments()[0];
 
             preprocessors = new Lazy<IEnumerable<BPItemUI>>(
-                () => BPItemUI.AllBPItems
-                    //.Where(t => t.Type.GetInterface("IPreprocessorIO`2") != null)
-                    .Where(t => t is PreprocessorItemUI)
-                    .Where(t => preprocessorType.IsAssignableFrom(t.Type))
-                //.Select(t => (PreprocessorItemUI)t)
+                () => 
+                    OrderForTreeView(
+                        BPItemUI.AllBPItems
+                        //.Where(t => t.Type.GetInterface("IPreprocessorIO`2") != null)
+                        .Where(t => t is PreprocessorItemUI)
+                        .Where(t => preprocessorType.IsAssignableFrom(t.Type))
+                        //.Select(t => (PreprocessorItemUI)t)
+                    )
             );
         }
     }
@@ -211,15 +231,21 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             Debug.Assert(genericArguments.Length == 2);
 
             inputs = new Lazy<IEnumerable<BPItemUI>>(
-                () => BPItemUI.AllBPItems
-                    .Where(t => input.IsAssignableFrom(t.Type))
-                    .Select(t => t)
+                () => 
+                    OrderForTreeView(
+                        BPItemUI.AllBPItems
+                        .Where(t => input.IsAssignableFrom(t.Type))
+                        .Select(t => t)
+                    )
             );
 
             outputs = new Lazy<IEnumerable<BPItemUI>>(
-                () => BPItemUI.AllBPItems
-                    .Where(t => output.IsAssignableFrom(t.Type))
-                    .Select(t => t)
+                () =>
+                    OrderForTreeView(
+                        BPItemUI.AllBPItems
+                        .Where(t => output.IsAssignableFrom(t.Type))
+                        .Select(t => t)
+                    )
             );
         }
     }
