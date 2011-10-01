@@ -159,31 +159,25 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         /// Contains the rotaition of the plate against the axis in Rad.
         /// Enthaellt die Kippung der Platte als Vector in x/y Richtung in Radiant.
         /// </summary>
-        Vector Tilt { get; }
-
-        /// <summary>
-        /// Contains the absolute Time.
-        /// Enthaellt die absolute Zeit.
-        /// </summary>
-        double AbsoluteTime { get; } // = 0;
+        Vector Tilt { get; set; }
 
         /// <summary>
         /// Contains the Position [of the Ball] as Vector3D.
         /// Enthaellt die Position [des Balls] als Vector3D.
         /// </summary>
-        Point3D Position { get; }
+        Point3D Position { get; set; }
 
         /// <summary>
         /// Contains the Velocity of the Ball as Vector3D.
         /// Enthaellt die Geschwindigkeit [des Balls] als Vector3D.
         /// </summary>
-        Vector3D Velocity { get; }
+        Vector3D Velocity { get; set; }
 
         /// <summary>
         /// Contains the Acceleration [of the Ball] as Vector3D.
         /// Enthaellt die Beschleunigung [des Balls] als Vector3D.
         /// </summary>
-        Vector3D Acceleration { get; }
+        Vector3D Acceleration { get; set; }
         #endregion
 
         /// <summary>
