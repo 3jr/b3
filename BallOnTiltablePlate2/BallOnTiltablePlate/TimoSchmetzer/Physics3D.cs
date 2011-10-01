@@ -26,28 +26,26 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         #endregion
 
         /// <summary>
-        /// Calculates the New State of the Ball given by the current PhysicsState.
+        /// Calculates the New State of the Ball given by the current IPhysicsState.
         /// </summary>
         /// <param name="current">Current Physics State</param>
-        /// <returns>State after s.SecondsToElapse</returns>
-        public void RunPhysics(IPhysicsState current)
+        /// <param name="elapsedSeconds">Seconds to elapse</param>
+        /// <returns>State after elapsedSeconds</returns>
+        public void RunPhysics(IPhysicsState current, double ElapsedSeconds)
         {
             //Sinnlose aufrufe vermeiden
-            if (s.SecondsToElapse == 0) { return current; }
-            //put current to s (for calls in other Methods)
-            s = current;
+            if (current.SecondsToElapse == 0) { return; }
             #region Debugout
-            System.Diagnostics.Debug.Print(
-                "t " + s.AbsoluteTime + "\t sp:" + s.Position.ToString() + "\t v:" + s.Velocity.ToString() + "\t acc:" + s.Acceleration.ToString()
-                + "\t ntop:" + PhysicsUtilities.AbsoluteTimeNextHit(s) + "\t n:" + MathUtilities.CalcNormalisizedNormalVector(s.Tilt, true).ToString() +
-                "\t els:" + s.SecondsToElapse);
+            //System.Diagnostics.Debug.Print(
+            //    "sp:" + s.Position.ToString() + "\t v:" + s.Velocity.ToString() + "\t acc:" + s.Acceleration.ToString()
+            //    + "\t ntop:" + PhysicsUtilities.CalcNextHit(s) + "\t n:" + MathUtilities.CalcNormalisizedNormalVector(s.Tilt, true).ToString() +
+            //    "\t els:" + ElapsedSeconds);
             #endregion
             bool CentrifugalSpecificCalcNeeded = false;
             #region Test
             //TODO:Implement test
-            //When the plate is not moved the calculation is never needed.
-            CentrifugalSpecificCalcNeeded = LastTilt == s.Tilt ? false : CentrifugalSpecificCalcNeeded;
-            LastTilt = s.Tilt;
+            //When the plate is not moved the calculation is never needed, but you cannot be sure that the next state
+            //comes from the Same Simulation so other Methods (independend of the IPhysicsstate) before must be found.
             #endregion Test
             if (CentrifugalSpecificCalcNeeded)
             {
@@ -58,54 +56,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                 throw new NotImplementedException(); 
             }
             else
-            { DoOrdinaryCalculation(); }
-
-            //Return values and set Field to Null
-            current = s;
-            s = null;
-            return current;
+            { 
+                DoOrdinaryCalculation(current, ElapsedSeconds);
+            }
         }
-        #region Private
-        #region InternHelpProperties
-
-        #region DerivedConstants
-        /// <summary>
-        /// Contains the Locals Gravity as a Vector (= (0,0,g) ).
-        /// Entheallt die Erdbeschleunigung als Vector3D (=0,0,g).
-        /// </summary>
-        private Vector3D G { get { return new Vector3D(0, 0, s.g); } }
-        #endregion
-
-        #region Assumptions
-        //Currently unused.
-        ///// <summary>
-        ///// Repraesetiert die Beschleugnigungsart, die bei einer Bewegung der Blatte
-        ///// [mit Ball auf Platte] angenommen werden soll.
-        ///// </summary>
-        //public AccelerationAssumption assumption;
-
-        ///// <summary>
-        ///// Repraesetiert die Beschleugnigungsart, die bei einer Bewegung der Blatte
-        ///// [mit Ball auf Platte] angenommen werden soll.
-        ///// </summary>
-        //public enum AccelerationAssumption
-        //{
-        //    ConstantlyAccelerated = 1
-        //};
-        #endregion
-
-        #region TestHelp
-        /// <summary>
-        /// Tilt on the last call of Run Physics.
-        /// Used for testing on additional calculation.
-        /// </summary>
-        private Vector LastTilt;
-        #endregion
-
-        /// <summary>
-        /// The state on which caluations are based.
-        /// </summary>
-        private PhysicsState s;
 
         /// <summary>
         /// Represents the Status of the Ball.
@@ -117,38 +71,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             OnPlate = 1,
             DownPlate = 2
         };
-        #endregion
-        #region PhysicalMethods
-        /// <summary>
-        /// Ordinary Calculation (if Plate not Moved)
-        /// </summary>
-        private void DoOrdinaryCalculation()
-        {
-            //Beschleunigung zur Hit-Berechnug setzen
-            s.Acceleration = G;
-            double nextHit = PhysicsUtilities.AbsoluteTimeNextHit(s);
-
-            if (double.IsInfinity(nextHit))
-            {
-                //Ball rollt auf Platte (kein Hit)
-                CalcMovement(s.SecondsToElapse, BallState.OnPlate);
-            }
-            //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
-            else if (nextHit > s.AbsoluteTime + s.SecondsToElapse)
-                CalcMovement(s.SecondsToElapse, BallState.InAir);
-            else
-            {
-                //Hit in diesem Update.
-                CalcMovement(nextHit - s.AbsoluteTime, BallState.InAir);
-                //Exakt auf Platte setzen
-                Vector3D n = MathUtilities.CalcNormalisizedNormalVector(s.Tilt, true);
-                double PlateZ = (-s.Position.X * n.X - s.Position.Y * n.Y) / (n.Z);
-                s.Position.Z = PlateZ;
-                s = PhysicsUtilities.Reflect(s);
-                s.SecondsToElapse = s.SecondsToElapse - (nextHit - s.AbsoluteTime);
-                RunPhysics(s);
-            }
-        }
 
         /// <summary>
         /// Berechnet, wie kugel sich weiterbewegt unter der annahme das der BallState dabei stets der gleiche bleibt.
@@ -156,49 +78,71 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// Zeit wird um elapsedSeconds erhoet.
         /// Keine Hit/Cenetrifugal berechnung.
         /// </summary>
-        private void CalcMovement(double SecondsToElapse, BallState state)
+        private void CalcMovement(IPhysicsState state, double ElapsedSeconds, BallState Ballstate)
         {
+            Vector3D G = new Vector3D(0, 0, state.g);
             //Beschleunigung berechnen
-            switch (state)
+            switch (Ballstate)
             {
                 case BallState.InAir:
-                    s.Acceleration = G;
+                    state.Acceleration = G;
                     break;
                 case BallState.OnPlate:
-                    s.Acceleration = PhysicsUtilities.HangabtriebskraftBerechnen(s.g, s.Tilt, true);
+                    state.Acceleration = PhysicsUtilities.HangabtriebskraftBerechnen(state.g, state.Tilt, true);
                     break;
                 default:
                     throw new SystemException("Sorry. This shouldn't happen.");
             }
             //Bewegungsgleichung
-            s.Position += s.Velocity * s.SecondsToElapse + 0.5 * s.Acceleration * s.SecondsToElapse * s.SecondsToElapse;
-            s.Velocity += s.Acceleration * s.SecondsToElapse;
-            //Zeitsetzen
-            s.AbsoluteTime += s.SecondsToElapse;
-            if (state == BallState.OnPlate)
+            state.Position += state.Velocity * ElapsedSeconds + 0.5 * state.Acceleration * ElapsedSeconds * ElapsedSeconds;
+            state.Velocity += state.Acceleration * ElapsedSeconds;
+            //Wenn auf Platte - Exakt setzen
+            if (Ballstate == BallState.OnPlate)
             {
                 //Exakt auf Platte setzen
-                Vector3D n = MathUtilities.CalcNormalisizedNormalVector(s.Tilt, true);
-                double PlateZ = (-s.Position.X * n.X - s.Position.Y * n.Y) / (n.Z);
-                s.Position.Z = PlateZ;
+                Vector3D n = MathUtilities.CalcNormalisizedNormalVector(state.Tilt, true);
+                double PlateZ = (-state.Position.X * n.X - state.Position.Y * n.Y) / (n.Z);
+                state.Position = new Point3D(state.Position.X, state.Position.Y, PlateZ);
             }
         }
-        #endregion
-        #endregion
+
+        /// <summary>
+        /// Ordinary Calculation (if Plate not Moved)
+        /// </summary>
+        private void DoOrdinaryCalculation(IPhysicsState state, double ElapsedSeconds)
+        {
+            //Beschleunigung zur Hit-Berechnug setzen
+            Vector3D G = new Vector3D(0, 0, state.g);
+            state.Acceleration = G;
+            double nextHit = PhysicsUtilities.CalcNextHit(state);
+
+            if (double.IsInfinity(nextHit))
+            {
+                //Ball rollt auf Platte (kein Hit)
+                CalcMovement(state, ElapsedSeconds, BallState.OnPlate);
+            }
+            //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
+            else if (nextHit > ElapsedSeconds)
+                CalcMovement(state, ElapsedSeconds, BallState.InAir);
+            else
+            {
+                //Hit in diesem Update.
+                CalcMovement(state, nextHit, BallState.InAir);
+                //Exakt auf Platte setzen
+                Vector3D n = MathUtilities.CalcNormalisizedNormalVector(state.Tilt, true);
+                double PlateZ = (-state.Position.X * n.X - state.Position.Y * n.Y) / (n.Z);
+                new Point3D(state.Position.X, state.Position.Y, PlateZ);
+                state = PhysicsUtilities.Reflect(state);
+                RunPhysics(state, ElapsedSeconds - nextHit);
+            }
+        }
     }
+
+
+   
 
     public static class PhysicsUtilities
     {
-        /// <summary>
-        /// Returns the AbsoluteTime, after which the Ball will hit the next time on the plate.
-        /// Does not take care of whether the plate is moved. Use oly for unmoved Plates.
-        /// double.positiveInfinity if 0 or never.
-        /// Gibt die Absolute Zeit zurueck, zu der der Ball sich das naechste mal Auf der Platte befinden wird.
-        /// </summary>
-        /// <param name="state">The state for which to calc</param>
-        /// <returns>See summary.</returns>
-        public static double AbsoluteTimeNextHit(PhysicsState state) { return state.AbsoluteTime + PhysicsUtilities.CalcNextHit(state); }
-
         /// <summary>
         /// Indicates wheter the Ball, if being on the plate, would hit (true) or roll (false).
         /// Gibt zurueck ob, wenn der Ball auf der Platte waere er auftreffen wuerde(true) oder Rollen wuerde(false)
@@ -206,7 +150,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// <param name="state">The state for which to calc</param>
         /// <returns>See summary.</returns>
         [Obsolete("Not Reliable", true)]
-        private static bool IsHit(PhysicsState state) { return !MathUtilities.Orthagonal(MathUtilities.CalcNormalisizedNormalVector(state.Tilt, true), state.Velocity); }
+        private static bool IsHit(IPhysicsState state) { return !MathUtilities.Orthagonal(MathUtilities.CalcNormalisizedNormalVector(state.Tilt, true), state.Velocity); }
 
         /// <summary>
         /// Spiegelt den Geschwindigkeitsvektor mittels einer Householdertransformation.
@@ -215,7 +159,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// </summary>
         /// <param name="state">The state for which to calc</param>
         /// <returns>Reflected State</returns>
-        public static PhysicsState Reflect(PhysicsState state)
+        public static IPhysicsState Reflect(IPhysicsState state)
         {
             //Geschwindigkeit an Ebene der Platte Spiegln
             state.Velocity = MathUtilities.Householdertransformation(state.Velocity, MathUtilities.CalcNormalisizedNormalVector(state.Tilt, true));
@@ -240,18 +184,19 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// (ausgehend von abstime, d.h. wenn sich die Kugel bereits auf der Platte befindet 
         /// wird diese Lsg nicht berucksichtigt)
         /// Does not take care of whether the plate is moved. Use oly for unmoved Plates.
+        /// double.positiveInfinity if 0 or never.
         /// </summary>
         /// <param name="state">The state for which to calc</param>
         /// <returns>naechsten Zeitpunkt des Auftreffens. findet sich keine, double.PositiveInfinity</returns>
-        public static double CalcNextHit(PhysicsState state)
+        public static double CalcNextHit(IPhysicsState state)
         {
             double[] solutions = PhysicsUtilities.CalcNextHitRawSolution(state);
             //too high accuracy
             System.Diagnostics.Debug.Print(solutions[1].ToString());
-            solutions[0] += 11.1;
-            solutions[0] -= 11.1;
-            solutions[1] += 11.1;
-            solutions[1] -= 11.1;
+            solutions[0] += 1111.1;
+            solutions[0] -= 1111.1;
+            solutions[1] += 1111.1;
+            solutions[1] -= 1111.1;
             System.Diagnostics.Debug.Print(solutions[1].ToString());
             if (double.IsNaN(solutions[0]) || double.IsInfinity(solutions[0]) || solutions[0] <= 0)
             {
@@ -294,7 +239,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// </summary>
         /// <param name="state">The state for which to calc</param>
         /// <returns>Raw Solution</returns>
-        public static double[] CalcNextHitRawSolution(PhysicsState state)
+        public static double[] CalcNextHitRawSolution(IPhysicsState state)
         {
             Vector3D Normal = MathUtilities.CalcNormalisizedNormalVector(state.Tilt, true);
             double a = 0.5 * state.Acceleration.X * Normal.X + 0.5 * state.Acceleration.Y * Normal.Y + 0.5 * state.Acceleration.Z * Normal.Z;
@@ -513,4 +458,5 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             return (radian / Math.PI) * 180.0;
         }
     }
+
 }
