@@ -31,10 +31,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// <param name="current">Current Physics State</param>
         /// <param name="elapsedSeconds">Seconds to elapse</param>
         /// <returns>State after elapsedSeconds</returns>
-        public void RunPhysics(IPhysicsState current, double ElapsedSeconds)
+        public void RunPhysics(IPhysicsState current, double elapsedSeconds)
         {
             //Sinnlose aufrufe vermeiden
-            if (current.SecondsToElapse == 0) { return; }
+            if (elapsedSeconds == 0) { return; }
             #region Debugout
             //System.Diagnostics.Debug.Print(
             //    "sp:" + s.Position.ToString() + "\t v:" + s.Velocity.ToString() + "\t acc:" + s.Acceleration.ToString()
@@ -57,7 +57,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             }
             else
             { 
-                DoOrdinaryCalculation(current, ElapsedSeconds);
+                DoOrdinaryCalculation(current, elapsedSeconds);
             }
         }
 
