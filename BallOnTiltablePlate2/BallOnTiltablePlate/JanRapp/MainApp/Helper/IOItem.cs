@@ -157,8 +157,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 .GroupBy(i =>
                     new { i.Info.AuthorFirstName, i.Info.AuthorLastName, i.Info.ItemName }
                     )
-                .OrderBy(g => g.Key)
-                .Select(g => g.ToArray());
+                .OrderBy(g =>g.Key.AuthorFirstName).ThenBy(g => g.Key.AuthorLastName).ThenBy(g => g.Key.ItemName)
+                .Select(g => g.ToArray()).ToArray();
 
             var returnList = new List<BPItemUI>();
 

@@ -70,25 +70,4 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         }
         #endregion
     }
-
-    [BallOnPlateItemInfo("_Jan", "Rapp", "Test", "0.9")]
-    public class TestInput2 : IBallInput
-    {
-        public event EventHandler<BallInputEventArgs> DataRecived;
-
-        public void Start()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Stop()
-        {
-            throw new NotImplementedException();
-        }
-
-        public FrameworkElement SettingsUI
-        {
-            get { return null; }
-        }
-    }
 }

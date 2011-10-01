@@ -248,10 +248,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureBlackAxies.png" />
+    <Resource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureBlackAxies.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
+    <Resource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MoritzUehling\Lib\" />
