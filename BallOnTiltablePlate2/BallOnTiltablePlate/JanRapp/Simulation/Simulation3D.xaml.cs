@@ -138,19 +138,19 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         /// <summary>
         /// Contains the local Gravity in (m)/(s^2) (with a negative algebraic sign)
         /// </summary>
-        public double g = -9.81;
+        double g { get; } //= -9.81;
 
         /// <summary>
         /// Contains which part of the original hight may be achieved.
         /// Enthaellt, welchen anteil der Ausgangshoehe bei Reflektion wieder erreicht werden soll.
         /// </summary>
-        public double HightFactor = 1;
+        double HightFactor { get; } // = 1;
 
         /// <summary>
         /// Absolute Velocity Reduction on a hit.
         /// Absolute Geschwindigkeitsreduktion bei Aufprall
         /// </summary>
-        public double AbsoluteAbsorbtion = 0.08;
+        double AbsoluteAbsorbtion { get; } //= 0.08;
 
         #endregion
 
@@ -159,37 +159,37 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         /// Contains the rotaition of the plate against the axis in Rad.
         /// Enthaellt die Kippung der Platte als Vector in x/y Richtung in Radiant.
         /// </summary>
-        public Vector Tilt;
+        Vector Tilt { get; }
 
         /// <summary>
         /// Contains the absolute Time.
         /// Enthaellt die absolute Zeit.
         /// </summary>
-        public double AbsoluteTime = 0;
+        double AbsoluteTime { get; } // = 0;
 
         /// <summary>
         /// Contains the Position [of the Ball] as Vector3D.
         /// Enthaellt die Position [des Balls] als Vector3D.
         /// </summary>
-        public Point3D Position;
+        Point3D Position { get; }
 
         /// <summary>
         /// Contains the Velocity of the Ball as Vector3D.
         /// Enthaellt die Geschwindigkeit [des Balls] als Vector3D.
         /// </summary>
-        public Vector3D Velocity;
+        Vector3D Velocity { get; }
 
         /// <summary>
         /// Contains the Acceleration [of the Ball] as Vector3D.
         /// Enthaellt die Beschleunigung [des Balls] als Vector3D.
         /// </summary>
-        public Vector3D Acceleration;
+        Vector3D Acceleration { get; }
         #endregion
 
         /// <summary>
         /// Run Physics gives Back the State of the System at the Time AbsoluteTime+s.SecondsToElapse
         /// equals parameter elapsedSeconds in older Versions.
         /// </summary>
-        public double SecondsToElapse;
+        double SecondsToElapse { get; }
     }
 }
