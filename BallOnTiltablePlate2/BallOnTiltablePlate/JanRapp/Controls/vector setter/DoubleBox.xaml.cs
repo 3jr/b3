@@ -53,7 +53,8 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 if ((double)e.NewValue < this.Minimum)
                     Value = this.Minimum;
                 Debug.Assert(e.OldValue != e.NewValue);
-                ValueChanged(this, new RoutedPropertyChangedEventArgs<double>((double)e.OldValue,(double)e.NewValue));
+                if(ValueChanged != null)
+                    ValueChanged(this, new RoutedPropertyChangedEventArgs<double>((double)e.OldValue,(double)e.NewValue));
             }
             else if(e.Property == TextProperty)
             {
@@ -141,6 +142,9 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         public DoubleBox()
         {
             InitializeComponent();
+
+            Value = DefaultValue;
+            txtBox.Text = Value.ToString();
         }
 
         bool mouseDown;
@@ -200,6 +204,19 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 txtBox.Text = Value.ToString();
         }
 
+        private void txtBox_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            double result;
+            if (Double.TryParse(txtBox.Text, out result))
+                if (Value != result)
+                {
+                    double old = Value;
+                    Value = result;
+                }
+                else
+                    txtBox.Text = Value.ToString();
+        }
+
         private void IncreaseValueCmdExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             IncreaseValue();
@@ -209,5 +226,6 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             DecreaseValue();
         }
+
     }
 }

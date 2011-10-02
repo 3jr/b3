@@ -49,7 +49,8 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             if (e.Property == ValueProperty)
             {
-                ValueChanged(this, new RoutedPropertyChangedEventArgs<Vector>((Vector)e.OldValue, (Vector)e.NewValue));
+                if(ValueChanged != null)
+                    ValueChanged(this, new RoutedPropertyChangedEventArgs<Vector>((Vector)e.OldValue, (Vector)e.NewValue));
             }
 
             base.OnPropertyChanged(e);

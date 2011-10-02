@@ -34,7 +34,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             };
         }
 
-        private void Lists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Lists_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (AlgorithmList == null ||
                 PreprocessorList == null ||
@@ -44,17 +44,17 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
             if (PreprocessorList.SelectedItem != null)
             {
-                dynamic item = ((Helper.BPItemUI)PreprocessorList.SelectedItem).Instance;
+                dynamic item = ((Helper.BPItemUI)PreprocessorList.SelectedValue).Instance;
 
                 if (InputList.SelectedItem != null)
                 {
-                    dynamic input = ((Helper.BPItemUI)InputList.SelectedItem).Instance;
+                    dynamic input = ((Helper.BPItemUI)InputList.SelectedValue).Instance;
                     item.Input = input;
                 }
 
                 if (OutputList.SelectedItem != null)
                 {
-                    dynamic output = ((Helper.BPItemUI)OutputList.SelectedItem).Instance;
+                    dynamic output = ((Helper.BPItemUI)OutputList.SelectedValue).Instance;
                     item.Output = output;
                 }
             }
@@ -79,41 +79,6 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         private void Stop()
         {
         }
-
-        #region old CmdExecuted
-        //private void PreprocessorSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        //{
-        //    //var current = (Helper.PreprocessorItem)PreprocessorList.SelectedItem;
-        //    //if (current != null)
-        //    {
-        //        //GetSettingsWindow(current.Instance.Settings).Show();
-        //    }
-        //}
-
-        //private void JugglerSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        //{
-        //    //var current = (Helper.JugglerItem)AlgorithmList.SelectedItem;
-        //    //if (current != null)
-        //    {
-        //        //GetSettingsWindow(current.Instance.Settings).Show();
-        //    }
-        //}
-
-        //private void InputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        //{
-        //    //new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)InputList.SelectedItem).DataContext), this).Show();
-        //}
-
-        //private void OutputSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        //{
-        //    //new SettingsWindow(((IBallOnPlateItem)((ListBoxItem)OutputList.SelectedItem).DataContext), this).Show();
-        //}
-
-        //private void GeneralSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
-        //{
-        //    new BallOnTiltablePlate.JanRapp.MainApp.GlobalSettingsUI().Show();
-        //} 
-        #endregion
 
         private void GlobalSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {

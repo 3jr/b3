@@ -61,7 +61,7 @@
                         Executed ="GlobalSettingsCmdExecuted"/>
                         <!--Executed="GeneralSettingsCmdExecuted" />-->
     </Window.CommandBindings>
-    <StackPanel Selector.SelectionChanged="Lists_SelectionChanged">
+    <StackPanel>
         <Menu>
             <MenuItem Header="_File" />
             <MenuItem Header="Settings">
@@ -90,6 +90,7 @@
                   Margin="7,0" 
                   ItemsSource="{x:Static helper:BPItemUI.PopulateJugglerLists}"
                   SelectedValuePath="DataContext"
+                  SelectedItemChanged="Lists_SelectionChanged"
                   />
         <Grid Margin="7">
             <Button x:Name="PreprocessorSettingButton"
@@ -111,6 +112,7 @@
                  ItemsSource="{Binding SelectedItem.DataContext.Preprocessors,
                                        ElementName=AlgorithmList}"
                   SelectedValuePath="DataContext"
+                  SelectedItemChanged="Lists_SelectionChanged"
                  />
         <Grid Margin="7">
             <Button x:Name="InputSettingButton"
@@ -131,6 +133,7 @@
                  ItemsSource="{Binding ElementName=PreprocessorList,
                                        Path=SelectedItem.DataContext.Inputs}"
                  SelectedValuePath="DataContext"
+                 SelectedItemChanged="Lists_SelectionChanged"
                  />
         <Grid Margin="7">
             <Button x:Name="OutputSettingButton"
@@ -151,6 +154,7 @@
                  ItemsSource="{Binding ElementName=PreprocessorList,
                                        Path=SelectedItem.DataContext.Outputs}"
                   SelectedValuePath="DataContext"
+                  SelectedItemChanged="Lists_SelectionChanged"
                  />
     </StackPanel>
 </Window>
