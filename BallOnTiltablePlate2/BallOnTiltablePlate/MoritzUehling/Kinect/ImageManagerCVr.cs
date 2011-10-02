@@ -9,10 +9,10 @@ using Emgu.CV.Structure;
 
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
-    class ImageManager
+    class ImageManagerCV
     {
         int width, height;
-        public ImageManager(int width, int height)
+        public ImageManagerCV(int width, int height)
         {
             this.width = width;
             this.height = height;

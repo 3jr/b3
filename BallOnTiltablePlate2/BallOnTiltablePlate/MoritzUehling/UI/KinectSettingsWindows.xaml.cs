@@ -94,15 +94,15 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         {
             byte[] test = GenerateColoredBytes(e.ImageFrame);
 
-
-            manager.GetPoints(image, depthMap, rectPoint, (int)limitSlider.Value);
-
             image = KinectHelper.BitmapExtensions.ToBitmap(test, xres, yres);
+
+            
+
 
             test = null;
 
 
-            kinectBox.Image = image;
+            kinectBox.Image = manager.GetPoints(image, depthMap, rectPoint, (int)limitSlider.Value);
         }
 
         private byte[] GenerateColoredBytes(ImageFrame imageFrame)

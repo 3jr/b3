@@ -8,7 +8,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
     class OldImageManager
     {
-        public ImageManager(int width, int height)
+        public OldImageManager(int width, int height)
         {
             this.width = width;
             this.height = height;
