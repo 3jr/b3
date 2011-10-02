@@ -50,7 +50,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
 
 
-            return new Rectangle(point.X, yMin, xMax - xMin, (yMax - yMin));
+            return new Rectangle(xMin, yMin, xMax - xMin, (yMax - yMin));
         }
 
         Color green = Color.FromArgb(200, 255, 0, 255);
@@ -120,8 +120,6 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         /// <returns></returns>
         private int GetPixel(int x, int y)
         {
-                      
-
             return image[(width - 1) - x, y];
         }
 
