@@ -1,4 +1,4 @@
-﻿# define TIMO
+﻿# define TIMO2
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +78,8 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             #endregion
 
             manager = new ImageManager(xres, yres);
+
+            depthMap = new int[xres, yres];
 #endif
         }
 #if !TIMO
@@ -115,8 +117,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             //Height x Width x 4 (Red, Green, Blue, empty byte)
             Byte[] colorFrame = new byte[imageFrame.Image.Height * imageFrame.Image.Width * 4];
 
-            int[,] depthMap = new int[width, height];
-
             //Bgr32  - Blue, Green, Red, empty byte
             //Bgra32 - Blue, Green, Red, transparency
             //You must set transparency for Bgra as .NET defaults a byte to 0 = fully transparent
@@ -139,6 +139,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
                     var distance = GetDistanceWithPlayerIndex(depthData[depthIndex], depthData[depthIndex + 1]);
 
                     depthMap[x, y] = distance;
+                    
                     byte color = 0;
                     #region To byte[] clor
                     color = (byte)(depthMap[x, y] / (10 * minSlider.Value));// - ((depthMap[x - 1, y] + depthMap[x, y - 1] + depthMap[x, y + 1] + depthMap[x + 1, y]) / 4));
