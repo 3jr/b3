@@ -53,7 +53,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// Berechnet den Zeitpunkt des naechsten auftreffens auf der Platte
         /// (ausgehend von abstime, d.h. wenn sich die Kugel bereits auf der Platte befindet 
         /// wird diese Lsg nicht berucksichtigt)
-        /// Does not take care of whether the plate is moved. Use oly for unmoved Plates.
+        /// Does take care of whether the plate is moved. Use for moved Plates.
         /// double.positiveInfinity if 0 or never.
         /// </summary>
         /// <param name="state">The state for which to calc</param>
@@ -61,6 +61,57 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         public static double CalcNextHit(IPhysicsState state)
         {
             double[] solutions = Physics.CalcNextHitRawSolution(state);
+            //too high accuracy
+            System.Diagnostics.Debug.Print(solutions[1].ToString());
+            solutions[0] += 1111.1;
+            solutions[0] -= 1111.1;
+            solutions[1] += 1111.1;
+            solutions[1] -= 1111.1;
+            System.Diagnostics.Debug.Print(solutions[1].ToString());
+            if (double.IsNaN(solutions[0]) || double.IsInfinity(solutions[0]) || solutions[0] <= 0)
+            {
+                if (double.IsNaN(solutions[1]) || double.IsInfinity(solutions[1]) || solutions[1] <= 0)
+                {
+                    return double.PositiveInfinity;
+                }
+                else
+                {
+                    return solutions[1];
+                }
+            }
+            else if (double.IsNaN(solutions[1]) || double.IsInfinity(solutions[1]) || solutions[1] <= 0)
+            {
+                if (double.IsNaN(solutions[0]) || double.IsInfinity(solutions[0]) || solutions[0] <= 0)
+                {
+                    return double.PositiveInfinity;
+                }
+                else
+                {
+                    return solutions[0];
+                }
+            }
+            else if (solutions[0] > 0 && solutions[1] > 0)
+            {
+                return solutions[0] < solutions[1] ? solutions[0] : solutions[1];
+            }
+            else
+            {
+                throw new SystemException("Sorry. This shouldn't happen...");
+            }
+        }
+
+        /// <summary>
+        /// Berechnet den Zeitpunkt des naechsten auftreffens auf der Platte
+        /// (ausgehend von abstime, d.h. wenn sich die Kugel bereits auf der Platte befindet 
+        /// wird diese Lsg nicht berucksichtigt)
+        /// Does not take care of whether the plate is moved. Use oly for unmoved Plates.
+        /// double.positiveInfinity if 0 or never.
+        /// </summary>
+        /// <param name="state">The state for which to calc</param>
+        /// <returns>naechsten Zeitpunkt des Auftreffens. findet sich keine, double.PositiveInfinity</returns>
+        public static double CalcNextHit2(IPhysicsState state)
+        {
+            double[] solutions = Physics.CalcNextHitRawSolution2(state);
             //too high accuracy
             System.Diagnostics.Debug.Print(solutions[1].ToString());
             solutions[0] += 1111.1;
@@ -117,6 +168,17 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             double c = state.Position.X * Normal.X + state.Position.Y * Normal.Y + state.Position.Z * Normal.Z;
             double[] solutions = Mathematics.MNF(a, b, c);
             return solutions;
+        }
+
+        /// <summary>
+        /// Takes Care of PlateVelocity
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public static double[] CalcNextHitRawSolution2(IPhysicsState state)
+        {
+
+            return new double[0];
         }
 
         /// <summary>

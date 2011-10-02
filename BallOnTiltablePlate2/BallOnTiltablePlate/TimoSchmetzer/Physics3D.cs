@@ -43,7 +43,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #endregion
             bool CentrifugalSpecificCalcNeeded = false;
             #region Test
-            //TODO:Implement test
+            //CentrifugalSpecificCalcNeeded = current.AngleVelocity() != new Vector(0,0) ? true : false;
             //When the plate is not moved the calculation is never needed, but you cannot be sure that the next state
             //comes from the Same Simulation so other Methods (independend of the IPhysicsstate) before must be found.
             #endregion Test
@@ -53,6 +53,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                 //TODO: Beschleunigung der Platte auf Ball uebertragen und integrieren
                 //beschleungung orthagonal zur Platte
                 //TODO: Prinzipien in 3D anwenden.
+                //TODO: Hit Mit bewegterPlatte
                 throw new NotImplementedException(); 
             }
             else
@@ -133,6 +134,19 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                 state = Utilities.Physics.Reflect(state);
                 RunPhysics(state, ElapsedSeconds - nextHit);
             }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="ElapsedSeconds"></param>
+        private void DoMovingPlateCalculation(IPhysicsState state, double ElapsedSeconds)
+        {
+            Vector3D G = new Vector3D(0, 0, state.g);
+            state.Acceleration = G;
+            double nextHit = Utilities.Physics.CalcNextHit(state);
+
+            //state.Tilt += state.AngleVelocity() * ElapsedSeconds;
         }
     }
 }
