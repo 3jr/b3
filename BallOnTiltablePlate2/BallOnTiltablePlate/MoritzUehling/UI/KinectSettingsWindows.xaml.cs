@@ -41,7 +41,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
         int xres = 320;
         int yres = 240;
-        int limit;
 
         Forms.PictureBox kinectBox = new Forms.PictureBox();
         Draw.Bitmap image;
@@ -98,7 +97,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
             Draw.Graphics g = Draw.Graphics.FromImage(image);
 
-            Draw.Rectangle rect =manager.GetPoints(image, depthMap, rectPoint, (int)(10 * limitSlider.Value));
+            Draw.Rectangle rect =manager.GetPoints(image, depthMap, rectPoint, (int)(5 * limitSlider.Value));
 
             if (rect.Width != 1)
             {

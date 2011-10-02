@@ -1,65 +1,139 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Drawing;
-//using System.Diagnostics;
-//using Emgu.CV;
-//using Emgu.CV.Structure;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Drawing;
+using System.Diagnostics;
+namespace BallOnTiltablePlate.MoritzUehling.Kinect
+{
+    class OldImageManager
+    {
+        public OldImageManager(int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+        }
 
-//namespace BallOnTiltablePlate.MoritzUehling.Kinect
-//{
-//    class ImageManager
-//    {
-//        int width, height;
-//        public ImageManager(int width, int height)
-//        {
-//            this.width = width;
-//            this.height = height;
-//        }
+        int width, height;
 
 
-//        public Bitmap GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
-//        {
-//            //Load the image from file
-//            Image<Bgr, Byte> img = new Image<Bgr, byte>(bitmap);
+        int xMin = int.MaxValue;
+        int xMax = int.MinValue;
+        int yMin = int.MaxValue;
+        int yMax = int.MinValue;
 
-//            if (point != Point.Empty)
-//            {
-//                //Convert the image to grayscale and filter out the noise
-//                Image<Gray, Byte> gray = img.Convert<Gray, Byte>();
+        int limit = 0;
 
-//                Gray cannyThreshold = new Gray(180);
-//                Gray cannyThresholdLinking = new Gray(120);
-//                Gray circleAccumulatorThreshold = new Gray(120);
+        int[,] image;
+
+        public Rectangle GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
+        {
+            //b = bitmap;
+            int step = limit;
+            this.limit = limit;
+
+            xMin = int.MaxValue;
+            xMax = int.MinValue;
+            yMin = int.MaxValue;
+            yMax = int.MinValue;
+
+            image = data;
+
+            Stopwatch watch = new Stopwatch();
+
+            watch.Start();
+
+            Fill(GetPixel(point.X, point.Y), point.X, point.Y, 0);
+            watch.Stop();
+
+            Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
 
 
-//                Image<Gray, Byte> cannyEdges = gray.Canny(cannyThreshold, cannyThresholdLinking);
-//                LineSegment2D[] lines = cannyEdges.HoughLinesBinary(
-//                    1, //Distance resolution in pixel-related units
-//                    Math.PI / 45.0, //Angle resolution measured in radians.
-//                    limit, //threshold
-//                    40, //min Line width
-//                    0 //gap between lines
-//                    )[0]; //Get the lines from the first channel
 
-//                #region Find triangles and rectangles
-//                List<Triangle2DF> triangleList = new List<Triangle2DF>();
-//                List<MCvBox2D> boxList = new List<MCvBox2D>();
+            return new Rectangle(xMin, yMin, xMax - xMin, (yMax - yMin));
+        }
 
-//                using (MemStorage storage = new MemStorage()) //allocate storage for contour approximation
-//                    for (Contour<Point> contours = cannyEdges.FindContours(); contours != null; contours = contours.HNext)
-//                    {
-//                        Contour<Point> currentContour = contours.ApproxPoly(contours.Perimeter * 0.05, storage);
+        Color green = Color.FromArgb(200, 255, 0, 255);
+        private bool Fill(int color, int x, int y, int depth)
+        {
+            if (x == 0 && y == 0)
+                return false;
 
-//                            img.Draw(currentContour, new Bgr(Color.DarkOrange), 2);
-//                    }
-//                #endregion
+            try
+            {
+                if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
+                    return false;
 
-//            }
+                int c = GetPixel(x, y);
 
-//            return img.Bitmap;
-//        }
+                if (c == -1)
+                    return false;
 
-//    }
-//}
+                if (Math.Abs(c - color) < limit)
+                {
+
+                    if (xMin > x)
+                        xMin = x;
+
+                    if (xMax < x)
+                        xMax = x;
+
+                    if (yMin > y)
+                        yMin = y;
+
+                    if (yMax < y)
+                        yMax = y;
+
+                    SetPixel(x, y, -1);
+
+                    Fill(c, x + 1, y, depth + 1);
+                    Fill(c, x - 1, y, depth + 1);
+
+                    Fill(c, x, y - 1, depth + 1);
+                    Fill(c, x, y + 1, depth + 1);
+                    return true;
+                }
+                else
+                {
+
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        const int BlueIndex = 0;
+        const int GreenIndex = 1;
+        const int RedIndex = 2;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="color">0: Blue; 1: Green; 2: Red</param>
+        /// <returns></returns>
+        private int GetPixel(int x, int y)
+        {
+            return image[(width - 1) - x, y];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="color">0: Blue; 1: Green; 2: Red</param>
+        /// <param name="value"></param>
+        private void SetPixel(int x, int y, int value)
+        {
+
+            image[(width - 1) - x, y] = value;
+        }
+    }
+}
