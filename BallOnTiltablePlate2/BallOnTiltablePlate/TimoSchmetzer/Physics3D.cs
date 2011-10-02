@@ -36,10 +36,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             //Sinnlose aufrufe vermeiden
             if (elapsedSeconds == 0) { return; }
             #region Debugout
-            //System.Diagnostics.Debug.Print(
-            //    "sp:" + s.Position.ToString() + "\t v:" + s.Velocity.ToString() + "\t acc:" + s.Acceleration.ToString()
-            //    + "\t ntop:" + PhysicsUtilities.CalcNextHit(s) + "\t n:" + MathUtilities.CalcNormalisizedNormalVector(s.Tilt, true).ToString() +
-            //    "\t els:" + ElapsedSeconds);
+//            System.Diagnostics.Debug.Print(
+//                "sp:" + current.Position.ToString() + "\t v:" + current.Velocity.ToString() + "\t acc:" + current.Acceleration.ToString()
+//                + "\t ntop:" + Utilities.Physics.CalcNextHit(current) + "\t n:" + Utilities.Mathematics.CalcNormalisizedNormalVector(current.Tilt, true).ToString() +
+//                "\t els:" + elapsedSeconds);
             #endregion
             bool CentrifugalSpecificCalcNeeded = false;
             #region Test

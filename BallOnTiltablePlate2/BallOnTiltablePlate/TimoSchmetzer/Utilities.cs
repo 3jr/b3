@@ -62,7 +62,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         {
             double[] solutions = Physics.CalcNextHitRawSolution(state);
             //too high accuracy
-            System.Diagnostics.Debug.Print(solutions[1].ToString());
+            System.Diagnostics.Debug.Print(solutions[1].ToString()); 
             solutions[0] += 1111.1;
             solutions[0] -= 1111.1;
             solutions[1] += 1111.1;
