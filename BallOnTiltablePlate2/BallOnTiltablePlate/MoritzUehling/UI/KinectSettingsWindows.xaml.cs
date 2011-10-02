@@ -37,7 +37,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         
         int angle = Camera.ElevationMinimum;
 
-        ImageManager manager;
+        OldImageManager manager;
 
         int xres = 320;
         int yres = 240;
@@ -77,7 +77,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             kinectImage.Child = kinectBox;
             #endregion
 
-            manager = new ImageManager(xres, yres);
+            manager = new OldImageManager(xres, yres);
 
             depthMap = new int[xres, yres];
 #endif
@@ -96,13 +96,15 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
             image = KinectHelper.BitmapExtensions.ToBitmap(test, xres, yres);
 
-            
+            Draw.Graphics g = Draw.Graphics.FromImage(image);
 
+            Draw.Rectangle rect =manager.GetPoints(image, depthMap, rectPoint, (int)(10 * limitSlider.Value));
 
-            test = null;
-
-
-            kinectBox.Image = manager.GetPoints(image, depthMap, rectPoint, (int)limitSlider.Value);
+            if (rect.Width != 1)
+            {
+                g.DrawRectangle(new Draw.Pen(Draw.Color.Red), rect);
+            }
+            kinectBox.Image = image;
         }
 
         private byte[] GenerateColoredBytes(ImageFrame imageFrame)

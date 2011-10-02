@@ -26,12 +26,16 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         int[,] image;
 
-        public Bitmap GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
+        public Rectangle GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
         {
             //b = bitmap;
             int step = limit;
-
             this.limit = limit;
+
+            xMin = int.MaxValue;
+            xMax = int.MinValue;
+            yMin = int.MaxValue;
+            yMax = int.MinValue;
 
             image = data;
 
@@ -39,13 +43,14 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
             watch.Start();
 
-            SetPixel(point.X, point.Y, -1);
             Fill(GetPixel(point.X, point.Y), point.X, point.Y, 0);
             watch.Stop();
 
             Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
 
-            return bitmap;
+
+
+            return new Rectangle(point.X, yMin, xMax - xMin, (yMax - yMin));
         }
 
         Color green = Color.FromArgb(200, 255, 0, 255);
@@ -64,23 +69,33 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
                 if (c == -1)
                     return false;
 
-
                 if (Math.Abs(c - color) < limit)
                 {
+
+                    if (xMin > x)
+                        xMin = x;
+
+                    if (xMax < x)
+                        xMax = x;
+
+                    if (yMin > y)
+                        yMin = y;
+
+                    if (yMax < y)
+                        yMax = y;
+
                     SetPixel(x, y, -1);
 
                     Fill(c, x + 1, y, depth + 1);
-                    Fill(c, x, y + 1, depth + 1);
                     Fill(c, x - 1, y, depth + 1);
+
                     Fill(c, x, y - 1, depth + 1);
-
-                    if (xMin < x)
-                        xMin = x;
-
-                    if (xMax > x)
-                        xMax = x;
-
+                    Fill(c, x, y + 1, depth + 1);
                     return true;
+                }
+                else
+                {
+                
                 }
 
                 return false;
@@ -107,7 +122,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         {
                       
 
-            return image[x, y];
+            return image[(width - 1) - x, y];
         }
 
         /// <summary>
@@ -120,7 +135,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         private void SetPixel(int x, int y, int value)
         {
 
-            image[x, y] = value;
+            image[(width - 1) - x, y] = value;
         }
     }
 }
