@@ -128,11 +128,9 @@
     <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
     <Compile Include="MoritzUehling\Kinect\ImageManager.cs" />
-    <Compile Include="MoritzUehling\Kinect\OldImageManager.cs" />
     <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
       <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\tmp.cs" />
     <Compile Include="TimoSchmetzer\Utilities.cs" />
     <Compile Include="TimoSchmetzer\Physics3D.cs" />
     <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
