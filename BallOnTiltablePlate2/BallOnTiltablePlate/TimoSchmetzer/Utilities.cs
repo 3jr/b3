@@ -38,7 +38,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             //Relativ
             //hoehe propertional Energie. Energie propertional geschw. im quadr.
             //Faktor mit dem bei einer Reflektion der Geschwindigkeitsvektor verkleinert/skaliert wird.
-            double absorbtionsfaktor = Math.Sqrt(state.HightFactor);
+            double absorbtionsfaktor = Math.Sqrt(state.HitAttenuationFactor);
             state.Velocity = Mathematics.SkaleAbsoluteValueOfAVectorByFactor(state.Velocity, absorbtionsfaktor);
             //Absolut
             if (state.Velocity.Length > state.AbsoluteAbsorbtion)

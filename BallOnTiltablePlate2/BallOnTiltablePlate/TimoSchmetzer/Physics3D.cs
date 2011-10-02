@@ -80,7 +80,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// </summary>
         private void CalcMovement(IPhysicsState state, double ElapsedSeconds, BallState Ballstate)
         {
-            Vector3D G = new Vector3D(0, 0, state.g);
+            Vector3D G = new Vector3D(0, 0, state.Gravity);
             //Beschleunigung berechnen
             switch (Ballstate)
             {
@@ -88,7 +88,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                     state.Acceleration = G;
                     break;
                 case BallState.OnPlate:
-                    state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.g, state.Tilt, true);
+                    state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt, true);
                     break;
                 default:
                     throw new SystemException("Sorry. This shouldn't happen.");
@@ -111,7 +111,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         private void DoOrdinaryCalculation(IPhysicsState state, double ElapsedSeconds)
         {
             //Beschleunigung zur Hit-Berechnug setzen
-            Vector3D G = new Vector3D(0, 0, state.g);
+            Vector3D G = new Vector3D(0, 0, state.Gravity);
             state.Acceleration = G;
             double nextHit = Utilities.Physics.CalcNextHit(state);
 
@@ -142,7 +142,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// <param name="ElapsedSeconds"></param>
         private void DoMovingPlateCalculation(IPhysicsState state, double ElapsedSeconds)
         {
-            Vector3D G = new Vector3D(0, 0, state.g);
+            Vector3D G = new Vector3D(0, 0, state.Gravity);
             state.Acceleration = G;
             double nextHit = Utilities.Physics.CalcNextHit(state);
 
