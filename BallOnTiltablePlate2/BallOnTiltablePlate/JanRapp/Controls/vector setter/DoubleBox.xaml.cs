@@ -111,17 +111,6 @@ namespace BallOnTiltablePlate.JanRapp.Controls
     DependencyProperty.Register("Maximum", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(double.MaxValue));
 
 
-
-        public double DefaultValue
-        {
-            get { return (double)GetValue(DefaultValueProperty); }
-            set { SetValue(DefaultValueProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Default.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty DefaultValueProperty = 
-    DependencyProperty.Register("DefaultValue", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(0.0));
-
         
         private double GetAmoutOfChange()
         {
@@ -143,20 +132,19 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             InitializeComponent();
 
-            Value = DefaultValue;
             txtBox.Text = Value.ToString();
         }
 
         bool mouseDown;
         Point lastMousePos;
 
-        private void txtBox_MouseDown(object sender, MouseButtonEventArgs e)
+        private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
             mouseDown = this.CaptureMouse();
             lastMousePos = e.GetPosition(this);
         }
 
-        private void txtBox_MouseMove(object sender, MouseEventArgs e)
+        private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
             if(mouseDown)
             {
@@ -180,41 +168,37 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             }
         }
 
-        private void txtBox_MouseUp(object sender, MouseButtonEventArgs e)
+        private void UserControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             this.ReleaseMouseCapture();
             this.mouseDown = false;
         }
 
-        private void txtBox_LostMouseCapture(object sender, MouseEventArgs e)
+        private void UserControl_LostMouseCapture(object sender, MouseEventArgs e)
         {
             this.mouseDown = false;
         }
 
         private void txtBox_TextChanged(object sender, RoutedEventArgs e)
         {
-            double result;
-            if (Double.TryParse(txtBox.Text, out result))
+            try
+            { 
+                double result = Convert.ToDouble(txtBox.Text);
                 if (Value != result)
                 {
                     double old = Value;
                     Value = result;
                 }
-            else
-                txtBox.Text = Value.ToString();
+            }
+            catch(Exception)
+            {
+                //Ignore Exeption, the Text gets set to Value when the Textbox loses it's Keybord Focus
+            }
         }
 
-        private void txtBox_TextInput(object sender, TextCompositionEventArgs e)
+        private void txtBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            double result;
-            if (Double.TryParse(txtBox.Text, out result))
-                if (Value != result)
-                {
-                    double old = Value;
-                    Value = result;
-                }
-                else
-                    txtBox.Text = Value.ToString();
+            txtBox.Text = Value.ToString();
         }
 
         private void IncreaseValueCmdExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -226,6 +210,5 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             DecreaseValue();
         }
-
     }
 }

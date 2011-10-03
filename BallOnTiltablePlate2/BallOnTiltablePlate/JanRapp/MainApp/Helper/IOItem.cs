@@ -122,7 +122,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             }
             catch (Exception)
             {
-                MessageBox.Show("The Item with the Class Name \'" + type.Name + "\' is invalid. The ErrorCode is:" + ErrorCode + "\n\r\n\r If you can't figure out whats wrong or think its my fault contact me(Jan Rapp).");
+                MessageBox.Show("The Item with the Class Name \'" + type.Name + "\' is invalid. The ErrorCode is:" + ErrorCode + "\n\r\n\r If you can't figure out whats wrong or think its my fault contact me(Jan Rapp). \n\r\n\rSuper Ninja Pro Tip: If you can't figure out the Problem with your class you can acutally search the source code for this text or just \"Super Nija Pro Tip\" and figure out what your Error Code means and why it fails... Have fun and stay tuned for more Super Ninja Pro tips");
                 return false;
             }
         }

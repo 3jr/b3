@@ -12,7 +12,6 @@
         <Style TargetType="local:DoubleBox">
             <Setter Property="SmallChange" Value=".001"/>
             <!--<Setter Property="FormatString" Value="F4"/>-->
-            <Setter Property="DefaultValue" Value="0"/>
             <Setter Property="Value" Value="0"/>
         </Style>
     </UserControl.Resources>

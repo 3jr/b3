@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="24"  MouseDown="txtBox_MouseDown" MouseMove="txtBox_MouseMove" MouseUp="txtBox_MouseUp" LostMouseCapture="txtBox_LostMouseCapture">
+             mc:Ignorable="d" Height="24"  MouseDown="UserControl_MouseDown" MouseMove="UserControl_MouseMove" MouseUp="UserControl_MouseUp" LostMouseCapture="UserControl_LostMouseCapture">
     <UserControl.Resources>
         <RoutedCommand x:Key="IncreaseValue">
             <RoutedCommand.InputGestures>
@@ -32,7 +32,7 @@
             <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
         <Label x:Name="lbl" HorizontalAlignment="Left" Target="{Binding txtBox}" Grid.RowSpan="2" Padding="3"/>
-        <TextBox x:Name="txtBox" TextChanged="txtBox_TextChanged" Margin="0" Grid.RowSpan="2" Grid.Column="1"  />
+        <TextBox x:Name="txtBox" TextChanged="txtBox_TextChanged" LostKeyboardFocus="txtBox_LostKeyboardFocus" Margin="0" Grid.RowSpan="2" Grid.Column="1"  />
         <RepeatButton x:Name="UpBtn" Command="{StaticResource IncreaseValue}" Margin="0,0,0,0.001" d:LayoutOverrides="Width" Grid.Column="2" BorderBrush="{x:Null}">
             <Path Data="M0,10 L30,10 15,0 z" Fill="#FF222A43" Width="20" Height="6" Stretch="Fill"/>
         </RepeatButton>

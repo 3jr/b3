@@ -46,7 +46,7 @@
                     </PerspectiveCamera.Transform>
                 </PerspectiveCamera>
             </Viewport3D.Camera>
-            <ContainerUIElement3D x:Name="TiltControlX"
+            <!--<ContainerUIElement3D x:Name="TiltControlX"
                                   MouseDown="TiltControlX_MouseDown">
                 <ContainerUIElement3D.Transform>
                     <Transform3DGroup>
@@ -135,7 +135,7 @@
                         </Transform3DGroup>
                     </local:Cylinder3D.Transform>
                 </local:Cylinder3D>
-            </ContainerUIElement3D>
+            </ContainerUIElement3D>-->
             <local:Sphere3D x:Name="BallModel">
                 <local:Sphere3D.Transform>
                     <Transform3DGroup>
