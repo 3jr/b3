@@ -120,6 +120,7 @@
     <Compile Include="JanRapp\MainApp\Helper\TestPreprocessor.xaml.cs">
       <DependentUpon>TestPreprocessor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Output\BasicPlateOutput.cs" />
     <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
       <DependentUpon>Simulation3D.xaml</DependentUpon>
     </Compile>
