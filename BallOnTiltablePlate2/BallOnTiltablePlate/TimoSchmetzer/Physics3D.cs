@@ -117,8 +117,19 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
 
             if (double.IsInfinity(nextHit))
             {
-                //Ball rollt auf Platte (kein Hit)
-                CalcMovement(state, ElapsedSeconds, BallState.OnPlate);
+                if (state.Gravity < 0)
+                {
+                    //Ball rollt auf Platte (kein Hit)
+                    //Bei gravitation muss der Ball auf der Platte rollen
+                    CalcMovement(state, ElapsedSeconds, BallState.OnPlate);
+                }
+                else
+                { 
+                    //Bei Gravity 0 oder pos kann der Ball nicht auf der Platte rollen
+                    //Bei den Gravitationen muss der Ball nicht auf der Platte sein um
+                    //nicht irgendwann einen Hit zu Verursachen.
+                    CalcMovement(state, ElapsedSeconds, BallState.InAir);
+                }
             }
             //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
             else if (nextHit > ElapsedSeconds)
