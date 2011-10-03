@@ -45,7 +45,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            if(e.Property == ValueProperty)
+            if(e.Property == ValueProperty && e.NewValue != e.OldValue)
             {
                 txtBox.Text = Value.ToString();
                 if ((double)e.NewValue > this.Maximum)
