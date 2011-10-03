@@ -120,7 +120,9 @@
     <Compile Include="JanRapp\MainApp\Helper\TestPreprocessor.xaml.cs">
       <DependentUpon>TestPreprocessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Output\BasicPlateOutput.cs" />
+    <Compile Include="JanRapp\Output\BasicPlateOutput.xaml.cs">
+      <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
       <DependentUpon>Simulation3D.xaml</DependentUpon>
     </Compile>
@@ -189,6 +191,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="JanRapp\Output\BasicPlateOutput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Simulation\Simulation3D.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
