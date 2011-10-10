@@ -13,7 +13,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         public void Start()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Stop()

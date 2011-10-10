@@ -59,6 +59,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             if (x == 0 && y == 0)
                 return false;
 
+
             try
             {
                 if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
@@ -67,7 +68,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
                 int c = GetPixel(x, y);
 
                 if (c == -1)
-                    return false;
+                    return true;
 
                 if (Math.Abs(c - color) < limit)
                 {
@@ -85,12 +86,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
                         yMax = y;
 
                     SetPixel(x, y, -1);
-
-                    Fill(c, x + 1, y, depth + 1);
-                    Fill(c, x - 1, y, depth + 1);
-
-                    Fill(c, x, y - 1, depth + 1);
-                    Fill(c, x, y + 1, depth + 1);
+                    bool edge = Fill(c, x + 1, y, depth + 1) | Fill(c, x - 1, y, depth + 1) | Fill(c, x, y - 1, depth + 1) | Fill(c, x, y + 1, depth + 1);
                     return true;
                 }
                 else

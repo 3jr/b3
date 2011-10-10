@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="340" d:DesignWidth="333" Loaded="Init">
+             d:DesignHeight="355" d:DesignWidth="363" Loaded="Init">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="100" />
         </Grid.RowDefinitions>
 
-        <WindowsFormsHost Margin="12,12,12,6" Name="kinectImage" Grid.Row="0" />
+        <WindowsFormsHost Margin="12,12,12,6" Name="kinectImage" Grid.Row="0" MinHeight="240" MinWidth="320" />
 
 
         <!-- Angle -->

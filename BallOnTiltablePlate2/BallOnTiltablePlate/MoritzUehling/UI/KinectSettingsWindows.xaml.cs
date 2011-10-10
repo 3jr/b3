@@ -91,22 +91,26 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         
         void nui_DepthFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
-            byte[] test = GenerateColoredBytes(e.ImageFrame);
+            FillImageMap(e.ImageFrame);
 
-            image = KinectHelper.BitmapExtensions.ToBitmap(test, xres, yres);
-
+            int[,] oldMap = new int[xres,yres];
+            #region Rechteck
+            Draw.Rectangle rect = manager.GetPoints(image, depthMap, rectPoint, (int)(5 * limitSlider.Value));
+            
             Draw.Graphics g = Draw.Graphics.FromImage(image);
-
-            Draw.Rectangle rect =manager.GetPoints(image, depthMap, rectPoint, (int)(5 * limitSlider.Value));
 
             if (rect.Width != 1)
             {
                 g.DrawRectangle(new Draw.Pen(Draw.Color.Red), rect);
             }
+            #endregion
+
+            image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
+
             kinectBox.Image = image;
         }
 
-        private byte[] GenerateColoredBytes(ImageFrame imageFrame)
+        private void FillImageMap(ImageFrame imageFrame)
         {
             int height = yres;
             int width = xres;
@@ -114,9 +118,31 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             //Depth data for each pixel
             Byte[] depthData = imageFrame.Image.Bits;
 
+            var depthIndex = 0;
+            for (var y = 0; y < height; y++)
+            {
+                var heightOffset = y * width;
+
+                for (var x = 0; x < width; x++)
+                {
+
+                    depthMap[x, y] = GetDistanceWithPlayerIndex(depthData[depthIndex], depthData[depthIndex + 1]);
+
+                    //jump two bytes at a time
+                    depthIndex += 2;
+                }
+            }
+        }
+
+        private byte[] GenerateImage()
+        {
+            int height = yres;
+            int width = xres;
+
+
             //colorFrame contains color information for all pixels in image
             //Height x Width x 4 (Red, Green, Blue, empty byte)
-            Byte[] colorFrame = new byte[imageFrame.Image.Height * imageFrame.Image.Width * 4];
+            Byte[] colorFrame = new byte[yres * xres * 4];
 
             //Bgr32  - Blue, Green, Red, empty byte
             //Bgra32 - Blue, Green, Red, transparency
@@ -136,25 +162,28 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
                 {
                     var index = ((width - x - 1) + heightOffset) * 4;
 
-                    //var distance = GetDistance(depthData[depthIndex], depthData[depthIndex + 1]);
-                    var distance = GetDistanceWithPlayerIndex(depthData[depthIndex], depthData[depthIndex + 1]);
-
-                    depthMap[x, y] = distance;
-                    
                     byte color = 0;
                     #region To byte[] clor
-                    color = (byte)(depthMap[x, y] / (10 * minSlider.Value));// - ((depthMap[x - 1, y] + depthMap[x, y - 1] + depthMap[x, y + 1] + depthMap[x + 1, y]) / 4));
-
-                    colorFrame[index + RedIndex] = color;
-                    colorFrame[index + GreenIndex] = color;
-                    colorFrame[index + BlueIndex] = color;
+                    if (depthMap[x, y] >= 0)
+                    {
+                        color = (byte)(depthMap[x, y] / (10 * minSlider.Value));
+                        colorFrame[index + RedIndex] = color;
+                        colorFrame[index + GreenIndex] = color;
+                        colorFrame[index + BlueIndex] = color;
+                    }
+                    else
+                    {
+                        colorFrame[index + RedIndex] = 255;
+                        colorFrame[index + GreenIndex] = 0;
+                        colorFrame[index + BlueIndex] = 0;
+                    }
                     #endregion
 
                     //jump two bytes at a time
                     depthIndex += 2;
                 }
             }
-            
+
             return colorFrame;
         }
 
