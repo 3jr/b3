@@ -204,6 +204,36 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
     }
     public static class Mathematics
     {
+        public struct LineEquation
+        {
+            //f(x) = m*x+c
+            public double m;
+            public double c;
+        }
+
+        public static LineEquation GetLineEquation(Point[] values)
+        {
+            //Do Linear Regression
+            int n = values.Length;
+            double SumX = 0;
+            double SumY = 0;
+            double SumSquaredX = 0;
+            double XYProductSum = 0;
+            foreach (Point P in values)
+            {
+                SumX += (int)P.X;
+                SumY += (int)P.Y;
+                SumSquaredX += (int)(P.X * P.X);
+                XYProductSum += (int)(P.X * P.Y);
+            }
+            double AverageX = SumX / n;
+            double AverageY = SumY / n;
+            LineEquation eq = new LineEquation();
+            eq.m = (n*XYProductSum-SumX*SumY)/(n*SumSquaredX-SumX*SumX);
+            eq.c = AverageY - eq.m * AverageX;
+            return eq;
+        }
+
         /// <summary>
         /// Berechnet die Nullstellen eines Polynoms der Form a*x*x + b*x +c
         /// anhand der Mitternachtsformel
