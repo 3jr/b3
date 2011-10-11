@@ -1,5 +1,4 @@
-﻿# define TIMO2
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,13 +11,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-#if !TIMO
 using Microsoft.Research.Kinect.Nui;
 using Forms = System.Windows.Forms;
 using Draw = System.Drawing;
 using KinectHelper =  Coding4Fun.Kinect.WinForm;
 using BallOnTiltablePlate.MoritzUehling.Kinect;
-#endif
 
 namespace BallOnTiltablePlate.MoritzUehling.UI
 {
@@ -31,7 +28,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         {
             InitializeComponent();
         }
-        #if !TIMO
         //Kinect Runtime
         Runtime nui = new Runtime();
         
@@ -48,12 +44,10 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         int[,] depthMap;
 
         Draw.Point rectPoint;
-#endif
         public void Init(object sender, RoutedEventArgs e)
         {
-#if !TIMO
             //UseDepthAndPlayerIndex and UseSkeletalTracking
-            nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex | RuntimeOptions.UseSkeletalTracking);
+            nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex);
 
             //register for event
             nui.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(nui_DepthFrameReady);
@@ -79,9 +73,8 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             manager = new OldImageManager(xres, yres);
 
             depthMap = new int[xres, yres];
-#endif
+
         }
-#if !TIMO
         void kinectBox_MouseDown(object sender, Forms.MouseEventArgs e)
         {
             rectPoint.X = (int)(e.X * (xres / (float)kinectBox.Width));
@@ -194,16 +187,13 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             return distance;
         }
         
-        #endif
         private void minSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-#if !TIMO
             nui.NuiCamera.ElevationAngle = Camera.ElevationMinimum + (int)((angleSlider.Value / 10) * (Camera.ElevationMaximum - Camera.ElevationMinimum));
-#endif
         }
     }
 }

@@ -16,6 +16,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         int width, height;
 
+        Queue<PointInfo> pointsToCheck = new Queue<PointInfo>();
 
         int xMin = int.MaxValue;
         int xMax = int.MinValue;
@@ -42,51 +43,71 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             Stopwatch watch = new Stopwatch();
 
             watch.Start();
+            #region Füllen
+            pointsToCheck.Enqueue(new PointInfo(point.X, point.Y, GetPixel(point.X, point.Y)));
 
-            Fill(GetPixel(point.X, point.Y), point.X, point.Y, 0);
+            while (pointsToCheck.Count != 0)
+            {
+                Fill(pointsToCheck.Dequeue());
+            }
+
+            #endregion
+
+            #region kanten finden...
+
+            //Linke kante...
+
+            #endregion
+
+
             watch.Stop();
 
             Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
-
-
+           
 
             return new Rectangle(xMin, yMin, xMax - xMin, (yMax - yMin));
         }
 
         Color green = Color.FromArgb(200, 255, 0, 255);
-        private bool Fill(int color, int x, int y, int depth)
+        private bool Fill(PointInfo p)
         {
-            if (x == 0 && y == 0)
+            if (p.x == 0 && p.y == 0)
                 return false;
-
 
             try
             {
-                if (x < 0 || x > width - 1 || y < 0 || y > height - 1)
+                if (p.x < 0 || p.x > width - 1 || p.y < 0 || p.y > height - 1)
                     return false;
 
-                int c = GetPixel(x, y);
+                int c = GetPixel(p.x, p.y);
 
                 if (c == -1)
                     return true;
 
-                if (Math.Abs(c - color) < limit)
+                if (c == 0)
+                    return false;
+
+                if (Math.Abs(c - p.neighborColor) < limit)
                 {
 
-                    if (xMin > x)
-                        xMin = x;
+                    if (xMin > p.x)
+                        xMin = p.x;
 
-                    if (xMax < x)
-                        xMax = x;
+                    if (xMax < p.x)
+                        xMax = p.x;
 
-                    if (yMin > y)
-                        yMin = y;
+                    if (yMin > p.y)
+                        yMin = p.y;
 
-                    if (yMax < y)
-                        yMax = y;
+                    if (yMax < p.y)
+                        yMax = p.y;
 
-                    SetPixel(x, y, -1);
-                    bool edge = Fill(c, x + 1, y, depth + 1) | Fill(c, x - 1, y, depth + 1) | Fill(c, x, y - 1, depth + 1) | Fill(c, x, y + 1, depth + 1);
+                    SetPixel(p.x, p.y, -1);
+
+                    pointsToCheck.Enqueue(new PointInfo(p.x + 1, p.y, c));
+                    pointsToCheck.Enqueue(new PointInfo(p.x - 1, p.y, c));
+                    pointsToCheck.Enqueue(new PointInfo(p.x, p.y + 1, c));
+                    pointsToCheck.Enqueue(new PointInfo(p.x, p.y - 1, c));
                     return true;
                 }
                 else
@@ -130,6 +151,20 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         {
 
             image[(width - 1) - x, y] = value;
+        }
+    }
+
+    struct PointInfo
+    {
+        public int x;
+        public int y;
+        public int neighborColor;
+
+        public PointInfo(int x, int y, int nColor)
+        {
+            this.x = x;
+            this.y = y;
+            neighborColor = nColor;
         }
     }
 }
