@@ -16,6 +16,7 @@ using Forms = System.Windows.Forms;
 using Draw = System.Drawing;
 using KinectHelper =  Coding4Fun.Kinect.WinForm;
 using BallOnTiltablePlate.MoritzUehling.Kinect;
+using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 
 namespace BallOnTiltablePlate.MoritzUehling.UI
 {
@@ -88,17 +89,21 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
             int[,] oldMap = new int[xres,yres];
             #region Rechteck
-            Draw.Rectangle rect = manager.GetPoints(image, depthMap, rectPoint, (int)(5 * limitSlider.Value));
-            
+            Mathematics.LineEquation[] eqs = manager.GetPoints(image, depthMap, rectPoint, (int)(5 * limitSlider.Value));
+
+
+            image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
+
             Draw.Graphics g = Draw.Graphics.FromImage(image);
 
-            if (rect.Width != 1)
+            if (eqs != null)
             {
-                g.DrawRectangle(new Draw.Pen(Draw.Color.Red), rect);
+                Draw.Point p1 = new Draw.Point(0, (int)eqs[0].c); //m * 0 + c = c
+                Draw.Point p2 = new Draw.Point(xres, (int)(eqs[0].m * xres + eqs[0].c));
+                g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Green), 1), p1, p2);
             }
             #endregion
 
-            image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
 
             kinectBox.Image = image;
         }

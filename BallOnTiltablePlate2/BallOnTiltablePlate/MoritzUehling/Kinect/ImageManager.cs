@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Diagnostics;
+
+using Windows = System.Windows;
+using Timo = BallOnTiltablePlate.TimoSchmetzer.Utilities;
+
+
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
     class OldImageManager
@@ -27,7 +32,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         int[,] image;
 
-        public Rectangle GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
+        public Timo.Mathematics.LineEquation[] GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
         {
             //b = bitmap;
             int step = limit;
@@ -37,6 +42,11 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             xMax = int.MinValue;
             yMin = int.MaxValue;
             yMax = int.MinValue;
+
+            Timo.Mathematics.LineEquation[] returnVal = null;
+
+            if (point.X == 0 && point.Y == 0)
+                return returnVal;
 
             image = data;
 
@@ -55,7 +65,26 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
             #region kanten finden...
 
-            //Linke kante...
+            returnVal = new Timo.Mathematics.LineEquation[1];
+
+            #region Links
+            List<Windows.Point> points = new List<Windows.Point>();
+            for (int y = yMin; y <= yMax; y++)
+            {
+                for (int x = xMin; xMin <= xMax; x++)
+                {
+                    if (GetPixel(x, y) == -1)
+                    {
+                        points.Add(new Windows.Point(x, y));
+                        break;
+                    }
+                }
+            }
+            #endregion
+
+
+            
+            returnVal[0] = Timo.Mathematics.GetLineEquation(points.ToArray());
 
             #endregion
 
@@ -63,9 +92,9 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             watch.Stop();
 
             Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
-           
 
-            return new Rectangle(xMin, yMin, xMax - xMin, (yMax - yMin));
+
+            return returnVal;
         }
 
         Color green = Color.FromArgb(200, 255, 0, 255);
