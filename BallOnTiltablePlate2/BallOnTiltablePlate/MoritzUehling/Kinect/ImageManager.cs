@@ -11,9 +11,9 @@ using Timo = BallOnTiltablePlate.TimoSchmetzer.Utilities;
 
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
-    class OldImageManager
+    class ImageManager
     {
-        public OldImageManager(int width, int height)
+        public ImageManager(int width, int height)
         {
             this.width = width;
             this.height = height;
@@ -32,7 +32,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         int[,] image;
 
-        public Timo.Mathematics.LineEquation[] GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
+        public Rectangle GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
         {
             //b = bitmap;
             int step = limit;
@@ -46,13 +46,10 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             Timo.Mathematics.LineEquation[] returnVal = null;
 
             if (point.X == 0 && point.Y == 0)
-                return returnVal;
+                return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
 
             image = data;
 
-            Stopwatch watch = new Stopwatch();
-
-            watch.Start();
             #region Füllen
             pointsToCheck.Enqueue(new PointInfo(point.X, point.Y, GetPixel(point.X, point.Y)));
 
@@ -65,37 +62,87 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
             #region kanten finden...
 
-            returnVal = new Timo.Mathematics.LineEquation[1];
+            returnVal = new Timo.Mathematics.LineEquation[4];
 
-            #region Links
-            List<Windows.Point> points = new List<Windows.Point>();
-            for (int y = yMin; y <= yMax; y++)
+            if (xMax > 0 && xMin > 0)
             {
-                for (int x = xMin; xMin <= xMax; x++)
+                #region Oben
+                List<Windows.Point> points = new List<Windows.Point>();
+                for (int x = xMin + 10; x <= xMax - 10; x++)
                 {
-                    if (GetPixel(x, y) == -1)
+                    for (int y = yMin; y <= yMax; y++)
                     {
-                        points.Add(new Windows.Point(x, y));
-                        break;
+                        if (GetPixel(x, y) == -1)
+                        {
+                            points.Add(new Windows.Point(x, y));
+                            break;
+                        }
                     }
                 }
+                returnVal[0] = Timo.Mathematics.GetLineEquation(points.ToArray());
+                #endregion
+
+                #region Rechts
+                points.Clear();
+                for (int y = yMin + 10; y <= yMax - 10; y++)
+                {
+                    for (int x = xMax; x >= xMin; x--)
+                    {
+                        if (GetPixel(x, y) == -1)
+                        {
+                            points.Add(new Windows.Point(x, y));
+                            break;
+                        }
+                    }
+                }
+                returnVal[1] = Timo.Mathematics.GetLineEquation(points.ToArray());
+                #endregion
+
+                #region Unten
+                points.Clear();
+                for (int x = xMin + 10; x <= xMax - 10; x++)
+                {
+                    for (int y = yMax; y >= yMin; y--)
+                    {
+                        if (GetPixel(x, y) == -1)
+                        {
+                            points.Add(new Windows.Point(x, y));
+                            break;
+                        }
+                    }
+                }
+                returnVal[2] = Timo.Mathematics.GetLineEquation(points.ToArray());
+                #endregion
+
+                #region Links
+                points.Clear();
+                for (int y = yMin + 10; y <= yMax - 10; y++)
+                {
+                    for (int x = xMin; x <= xMax; x++)
+                    {
+                        if (GetPixel(x, y) == -1)
+                        {
+                            points.Add(new Windows.Point(x, y));
+                            break;
+                        }
+                    }
+                }
+                returnVal[3] = Timo.Mathematics.GetLineEquation(points.ToArray());
+                #endregion
+
+                #region Schnittpunkte finden
+                Rectangle rect = new Rectangle(CalcIntersect(returnVal[0], returnVal[3]), CalcIntersect(returnVal[0], returnVal[1]), CalcIntersect(returnVal[1], returnVal[2]), CalcIntersect(returnVal[2], returnVal[3]));
+                #endregion
+
+                return rect;
+
             }
-            #endregion
-
-
-            
-            returnVal[0] = Timo.Mathematics.GetLineEquation(points.ToArray());
 
             #endregion
 
-
-            watch.Stop();
-
-            Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
-
-
-            return returnVal;
+            return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
         }
+        
 
         Color green = Color.FromArgb(200, 255, 0, 255);
         private bool Fill(PointInfo p)
@@ -181,19 +228,38 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
             image[(width - 1) - x, y] = value;
         }
-    }
 
-    struct PointInfo
-    {
-        public int x;
-        public int y;
-        public int neighborColor;
-
-        public PointInfo(int x, int y, int nColor)
+        private Point CalcIntersect(Timo.Mathematics.LineEquation eq1, Timo.Mathematics.LineEquation eq2)
         {
-            this.x = x;
-            this.y = y;
-            neighborColor = nColor;
+            double x = (eq2.c - eq1.c) / (eq1.m - eq2.m);
+            int y = (int)(eq1.m * x + eq1.c);
+            return new Point((int)x, y);
+
+        }
+
+        struct PointInfo
+        {
+            public int x;
+            public int y;
+            public int neighborColor;
+
+            public PointInfo(int x, int y, int nColor)
+            {
+                this.x = x;
+                this.y = y;
+                neighborColor = nColor;
+            }
         }
     }
+
+    struct Rectangle
+    {
+        public Point[] points;
+
+        public Rectangle(Point tl, Point tr, Point br, Point bl)
+        {
+            points = new Point[] { tl, tr, br, bl };
+        }
+    }
+
 }

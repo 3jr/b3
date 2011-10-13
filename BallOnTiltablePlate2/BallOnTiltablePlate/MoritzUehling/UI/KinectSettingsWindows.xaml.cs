@@ -17,6 +17,8 @@ using Draw = System.Drawing;
 using KinectHelper =  Coding4Fun.Kinect.WinForm;
 using BallOnTiltablePlate.MoritzUehling.Kinect;
 using BallOnTiltablePlate.TimoSchmetzer.Utilities;
+using System.Diagnostics;
+using Manager = BallOnTiltablePlate.MoritzUehling.Kinect;
 
 namespace BallOnTiltablePlate.MoritzUehling.UI
 {
@@ -34,7 +36,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         
         int angle = Camera.ElevationMinimum;
 
-        OldImageManager manager;
+        ImageManager manager;
 
         int xres = 320;
         int yres = 240;
@@ -71,7 +73,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             kinectImage.Child = kinectBox;
             #endregion
 
-            manager = new OldImageManager(xres, yres);
+            manager = new ImageManager(xres, yres);
 
             depthMap = new int[xres, yres];
 
@@ -81,31 +83,49 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             rectPoint.X = (int)(e.X * (xres / (float)kinectBox.Width));
             rectPoint.Y = (int)(e.Y * (yres / (float)kinectBox.Height));
         }
-        
-        
+
+
         void nui_DepthFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
             FillImageMap(e.ImageFrame);
 
-            int[,] oldMap = new int[xres,yres];
+            int[,] oldMap = new int[xres, yres];
             #region Rechteck
-            Mathematics.LineEquation[] eqs = manager.GetPoints(image, depthMap, rectPoint, (int)(5 * limitSlider.Value));
+            Manager.Rectangle rect = manager.GetPoints(image, depthMap, rectPoint, (int)(5 * limitSlider.Value));
 
-
+            FillImageMap(e.ImageFrame);
             image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
 
             Draw.Graphics g = Draw.Graphics.FromImage(image);
 
-            if (eqs != null)
+
+            for (int i = 0; i < 4; i++)
             {
-                Draw.Point p1 = new Draw.Point(0, (int)eqs[0].c); //m * 0 + c = c
-                Draw.Point p2 = new Draw.Point(xres, (int)(eqs[0].m * xres + eqs[0].c));
-                g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Green), 1), p1, p2);
+                Draw.Point p1 = rect.points[i];
+                Draw.Point p2 = rect.points[(i + 1) % 4];
+                g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Red), 1), p1, p2);
             }
             #endregion
 
 
             kinectBox.Image = image;
+            image.SetPixel(rectPoint.X, rectPoint.Y, Draw.Color.Magenta);
+
+            watch.Stop();
+            Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
+
+        }
+
+        private int CalcIntersectX(Mathematics.LineEquation eq, int value)
+        {
+            //mx + c =  n      | -c
+            //mx  =  n - c  | /m
+            //x   = (n-c)/m
+
+            return (int)((value - eq.c) / eq.m);
         }
 
         private void FillImageMap(ImageFrame imageFrame)
