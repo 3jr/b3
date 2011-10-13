@@ -32,7 +32,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         int[,] image;
 
-        public Rectangle GetPoints(Bitmap bitmap, int[,] data, Point point, int limit)
+        public Rectangle GetPoints(int[,] data, Point point, int limit)
         {
             //b = bitmap;
             int step = limit;
@@ -142,7 +142,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
             return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
         }
-        
+
 
         Color green = Color.FromArgb(200, 255, 0, 255);
         private bool Fill(PointInfo p)
@@ -252,7 +252,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         }
     }
 
-    struct Rectangle
+    public struct Rectangle
     {
         public Point[] points;
 

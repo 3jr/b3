@@ -27,12 +27,14 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
     /// </summary>
     public partial class KinectSettingsWindows : UserControl
     {
-        public KinectSettingsWindows()
+        public KinectSettingsWindows(KinectCameraInput input)
         {
+            this.input = input;
             InitializeComponent();
         }
         //Kinect Runtime
-        Runtime nui = new Runtime();
+
+        KinectCameraInput input;
         
         int angle = Camera.ElevationMinimum;
 
@@ -44,22 +46,13 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         Forms.PictureBox kinectBox = new Forms.PictureBox();
         Draw.Bitmap image;
 
-        int[,] depthMap;
 
-        Draw.Point rectPoint;
+        public Draw.Point rectPoint;
         public void Init(object sender, RoutedEventArgs e)
         {
-            //UseDepthAndPlayerIndex and UseSkeletalTracking
-            nui.Initialize(RuntimeOptions.UseDepthAndPlayerIndex);
+            
 
-            //register for event
-            nui.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(nui_DepthFrameReady);
-
-            //DepthAndPlayerIndex ImageType
-            nui.DepthStream.Open(ImageStreamType.Depth, 2, ImageResolution.Resolution320x240,
-                ImageType.DepthAndPlayerIndex);
-
-            angleSlider.Value = ((double)(nui.NuiCamera.ElevationAngle - Camera.ElevationMinimum) * 10.0) / (double)(Camera.ElevationMaximum - Camera.ElevationMinimum);
+            angleSlider.Value = ((double)(input.Kinect.NuiCamera.ElevationAngle - Camera.ElevationMinimum) * 10.0) / (double)(Camera.ElevationMaximum - Camera.ElevationMinimum);
 
             rectPoint = new Draw.Point(0, 0);
 
@@ -73,9 +66,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             kinectImage.Child = kinectBox;
             #endregion
 
-            manager = new ImageManager(xres, yres);
-
-            depthMap = new int[xres, yres];
 
         }
         void kinectBox_MouseDown(object sender, Forms.MouseEventArgs e)
@@ -85,18 +75,9 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         }
 
 
-        void nui_DepthFrameReady(object sender, ImageFrameReadyEventArgs e)
+        public void Kinect_DepthFrameReady()
         {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-
-            FillImageMap(e.ImageFrame);
-
-            int[,] oldMap = new int[xres, yres];
             #region Rechteck
-            Manager.Rectangle rect = manager.GetPoints(image, depthMap, rectPoint, (int)(5 * limitSlider.Value));
-
-            FillImageMap(e.ImageFrame);
             image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
 
             Draw.Graphics g = Draw.Graphics.FromImage(image);
@@ -104,52 +85,16 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
             for (int i = 0; i < 4; i++)
             {
-                Draw.Point p1 = rect.points[i];
-                Draw.Point p2 = rect.points[(i + 1) % 4];
+                Draw.Point p1 = input.PlateArea.points[i];
+                Draw.Point p2 = input.PlateArea.points[(i + 1) % 4];
                 g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Red), 1), p1, p2);
             }
             #endregion
 
-
-            kinectBox.Image = image;
             image.SetPixel(rectPoint.X, rectPoint.Y, Draw.Color.Magenta);
 
-            watch.Stop();
-            Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
+            kinectBox.Image = image;
 
-        }
-
-        private int CalcIntersectX(Mathematics.LineEquation eq, int value)
-        {
-            //mx + c =  n      | -c
-            //mx  =  n - c  | /m
-            //x   = (n-c)/m
-
-            return (int)((value - eq.c) / eq.m);
-        }
-
-        private void FillImageMap(ImageFrame imageFrame)
-        {
-            int height = yres;
-            int width = xres;
-
-            //Depth data for each pixel
-            Byte[] depthData = imageFrame.Image.Bits;
-
-            var depthIndex = 0;
-            for (var y = 0; y < height; y++)
-            {
-                var heightOffset = y * width;
-
-                for (var x = 0; x < width; x++)
-                {
-
-                    depthMap[x, y] = GetDistanceWithPlayerIndex(depthData[depthIndex], depthData[depthIndex + 1]);
-
-                    //jump two bytes at a time
-                    depthIndex += 2;
-                }
-            }
         }
 
         private byte[] GenerateImage()
@@ -182,9 +127,9 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
                     byte color = 0;
                     #region To byte[] clor
-                    if (depthMap[x, y] >= 0)
+                    if (input.KinectDepthMap[x, y] >= 0)
                     {
-                        color = (byte)(depthMap[x, y] / (10 * minSlider.Value));
+                        color = (byte)(input.KinectDepthMap[x, y] / (10 * minSlider.Value));
                         colorFrame[index + RedIndex] = color;
                         colorFrame[index + GreenIndex] = color;
                         colorFrame[index + BlueIndex] = color;
@@ -205,12 +150,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             return colorFrame;
         }
 
-        private int GetDistanceWithPlayerIndex(byte firstFrame, byte secondFrame)
-        {
-            //offset by 3 in first byte to get value after player index
-            int distance = (int)(firstFrame >> 3 | secondFrame << 5);
-            return distance;
-        }
         
         private void minSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -218,7 +157,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            nui.NuiCamera.ElevationAngle = Camera.ElevationMinimum + (int)((angleSlider.Value / 10) * (Camera.ElevationMaximum - Camera.ElevationMinimum));
+            input.Kinect.NuiCamera.ElevationAngle = Camera.ElevationMinimum + (int)((angleSlider.Value / 10) * (Camera.ElevationMaximum - Camera.ElevationMinimum));
         }
     }
 }
