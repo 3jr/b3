@@ -190,7 +190,17 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         public static Vector3D HangabtriebskraftBerechnen(double g, Vector Tilt, bool IsRad)
         {
             if (!IsRad)
-            { Tilt.X = Mathematics.RadToDeg(Tilt.X); Tilt.Y = Mathematics.RadToDeg(Tilt.Y); }
+            { Tilt.X = Mathematics.DegToRad(Tilt.X); Tilt.Y = Mathematics.DegToRad(Tilt.Y); }
+            return HangabtriebskraftBerechnen(g, Tilt);
+        }
+
+        /// <summary>
+        /// Hangabtriebskraft berechnen. Keine gute Uebersetzung fuer Hangabtribskraft gefunden.
+        /// </summary>
+        /// <param name="Tilt">Tilt is given in Rad.</param>
+        /// <returns>Hangabtriebskraft</returns>
+        public static Vector3D HangabtriebskraftBerechnen(double g, Vector Tilt)
+        {
             double alphax = Tilt.X;
             double alphay = Tilt.Y;
             //Acceleration = G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
@@ -363,7 +373,17 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         public static Vector3D CalcNormalisizedNormalVector(Vector Tilt, bool IsRad)
         {
             if (!IsRad)
-            { Tilt.X = RadToDeg(Tilt.X); Tilt.Y = RadToDeg(Tilt.Y); }
+            { Tilt.X = DegToRad(Tilt.X); Tilt.Y = DegToRad(Tilt.Y); }
+            return CalcNormalisizedNormalVector(Tilt);
+        }
+
+        /// <summary>
+        /// Returns the Normal Vector of a plane with the specified turnations around the axis.
+        /// </summary>
+        /// <param name="Tilt">Rotation given in Rad</param>
+        /// <returns>Normalisized Normal Vector</returns>
+        public static Vector3D CalcNormalisizedNormalVector(Vector Tilt)
+        {
             double alphax = Tilt.X;
             double alphay = Tilt.Y;
             //Maple created code.
