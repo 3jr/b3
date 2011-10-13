@@ -77,23 +77,22 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         {
             FillImageMap(e.ImageFrame);
 
-            int[,] oldMap = new int[xres, yres];
-
-            plateArea = manager.GetPoints(depthMap, settingsWindow.rectPoint, (int)(5 * 2));
+            ProcessPlate();
 
             FillImageMap(e.ImageFrame);
 
             settingsWindow.Kinect_DepthFrameReady();
         }
+        #endregion
 
-        private int CalcIntersectX(Mathematics.LineEquation eq, int value)
+        #region KinectHelpers
+        private int GetDistanceWithPlayerIndex(byte firstFrame, byte secondFrame)
         {
-            //mx + c =  n      | -c
-            //mx  =  n - c  | /m
-            //x   = (n-c)/m
-
-            return (int)((value - eq.c) / eq.m);
+            //offset by 3 in first byte to get value after player index
+            int distance = (int)(firstFrame >> 3 | secondFrame << 5);
+            return distance;
         }
+
 
         private void FillImageMap(ImageFrame imageFrame)
         {
@@ -118,14 +117,13 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
                 }
             }
         }
+
         #endregion
 
-        #region KinectHelpers
-        private int GetDistanceWithPlayerIndex(byte firstFrame, byte secondFrame)
+        #region Process
+        public void ProcessPlate()
         {
-            //offset by 3 in first byte to get value after player index
-            int distance = (int)(firstFrame >> 3 | secondFrame << 5);
-            return distance;
+            plateArea = manager.GetPoints(depthMap, settingsWindow.rectPoint, (int)(5 * 2));
         }
         #endregion
     }

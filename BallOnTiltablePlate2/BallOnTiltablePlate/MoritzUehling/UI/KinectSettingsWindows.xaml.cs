@@ -150,11 +150,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
             return colorFrame;
         }
 
-        
-        private void minSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-        }
-
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             input.Kinect.NuiCamera.ElevationAngle = Camera.ElevationMinimum + (int)((angleSlider.Value / 10) * (Camera.ElevationMaximum - Camera.ElevationMinimum));
