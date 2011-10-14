@@ -214,6 +214,20 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
     }
     public static class Mathematics
     {
+        /// <summary>
+        /// Points mustn'b be on a line
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static Vector3D PointLayerRepresentationToNormalizizedNormalVector(Vector3D a, Vector3D b, Vector3D c)
+        {
+            Vector3D Vec = Vector3D.CrossProduct(b - a, c - a);
+            Vec.Normalize();
+            return Vec;
+        }
+
         public struct LineEquation
         {
             //f(x) = m*x+c
