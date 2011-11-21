@@ -17,7 +17,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestPreprocessor.xaml
     /// </summary>
-    [BallOnPlateItemInfo("_Jan", "Rapp", "Test", "1.1")]
+    [BallOnPlateItemInfo(" Jan", "Rapp", "Test", "1.0")]
     public partial class TestPreprocessor : ContentControl, IPreprocessor, IPreprocessorIO<IBallInput, IPlateOutput>
     {
         #region Base

@@ -1,36 +1,48 @@
-﻿<GroupBox x:Class="BallOnTiltablePlate.JanRapp.Controls.SettingSaver"
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Controls.SettingSaver"
           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          d:DesignHeight="263"
-          d:DesignWidth="486.503"
-          Header="{DynamicResource HeaderForSettingSave}"
-          mc:Ignorable="d">
-    <GroupBox.Resources>
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+          mc:Ignorable="d" Height="39" d:DesignWidth="290" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
         <RoutedCommand x:Key="SaveCmd">
             <RoutedCommand.InputGestures>
                 <KeyGesture>Control+S</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
-        <StackPanel x:Key="HeaderForSettingSave" Orientation="Horizontal">
-            <ContentControl />
-            <ComboBox SelectionChanged="box_SelectionChanged"
-                      Width="200"
-                      Height="23"
-                      Margin="8"
-                      IsEditable="True"
-                      ToolTip="Used to select (and load) previously saved configuartions or to enter a name for a new configuartion(Ctrl+S or 'Save' Button to save)." />
-            <Button Command="{StaticResource SaveCmd}"
-                    Margin="8"
-                    Content="Save"
-                    Padding="8,1"
-                    ToolTip="Saves the current Values set in the chiled controls associated with the name (Ctrl+S (from anywhere within))" />
-        </StackPanel>
-    </GroupBox.Resources>
-    <GroupBox.CommandBindings>
+        <RoutedCommand x:Key="LoadCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+L</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
         <CommandBinding CanExecute="SaveCmd_CanExecute"
                         Command="{StaticResource SaveCmd}"
                         Executed="SaveCmd_Executed" />
-    </GroupBox.CommandBindings>
-</GroupBox>
+        <CommandBinding Command="{StaticResource LoadCmd}"
+                        Executed="LoadCmd_Executed" />
+    </UserControl.CommandBindings>
+    <Grid>
+        <ComboBox x:Name="InputComboBox"
+            SelectionChanged="box_SelectionChanged"
+                      Margin="8,8,112,8"
+                      IsEditable="True"
+                      ToolTip="Used to select (and load) previously saved configuartions or to enter a name for a new configuartion(Ctrl+S or 'Save' Button to save)."/>
+        <Button Command="{StaticResource SaveCmd}"
+                HorizontalAlignment="Right"
+                    Width="46"
+                    Margin="8"
+                    Content="Save"
+                    Padding="8,1"
+                    ToolTip="Saves the current Values set in the chiled controls associated with a name (Ctrl+S (from anywhere within))" />
+        <Button Command="{StaticResource LoadCmd}"
+                HorizontalAlignment="Right"
+                    Width="46"
+                    Margin="0,8,60,8"
+                    Content="Load"
+                    Padding="8,1"
+                    ToolTip="Loads the current values set in the child controls associated with the name (Ctrl+L (from anywhere within))" />
+
+    </Grid>
+</UserControl>

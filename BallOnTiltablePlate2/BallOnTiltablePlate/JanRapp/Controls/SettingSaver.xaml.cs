@@ -11,36 +11,29 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO;
+using IO = System.IO;
+using System.Xml.Linq;
 
 namespace BallOnTiltablePlate.JanRapp.Controls
 {
     /// <summary>
     /// Interaction logic for SettingSaver.xaml
     /// </summary>
-    public partial class SettingSaver : GroupBox
+    public partial class SettingSaver : UserControl, IDisposable
     {
-        private StackPanel ObliHeader
-        {
-            get
-            {
-                return (StackPanel)this.Resources["HeaderForSettingSave"];
-            }
-        }
+        private Panel backing_Field_for_containingPanel;
+        const string RootSaveName = "RootSave";
+        IO.FileSystemWatcher fsw;
 
-        private ContentControl PlaceHolder
+        private Panel ContainingPanel
         {
             get
             {
-                return (ContentControl)ObliHeader.Children[0];
+                return backing_Field_for_containingPanel;
             }
-        }
-
-        private ComboBox InputBox
-        {
-            get
+            set 
             {
-                return (ComboBox)ObliHeader.Children[1];
+                backing_Field_for_containingPanel = value;
             }
         }
 
@@ -49,53 +42,250 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             InitializeComponent();
         }
 
-        protected override void OnHeaderChanged(object oldHeader, object newHeader)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //PlaceHolder.Content = newHeader;
-            //Header = ObliHeader;
+            if (this.Parent is Panel)
+            {
+                backing_Field_for_containingPanel = (Panel)this.Parent;
+                backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["SaveCmd"], SaveCmd_Executed, SaveCmd_CanExecute));
+                backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["LoadCmd"], LoadCmd_Executed, LoadCmd_CanExecute));
+            }
+            else
+            {
+                throw new InvalidOperationException("SaveSettings Controll must be a Child in a Panel");
+            }
+            UpdateInputList();
 
-            //base.OnHeaderChanged(oldHeader, ObliHeader);
+            try
+            {
+                fsw = new IO.FileSystemWatcher(GetSaveFolder(), "*B3SettingSave");
+                fsw.BeginInit();
+                fsw.Created += new IO.FileSystemEventHandler(fsw_Events);
+                fsw.Changed += new IO.FileSystemEventHandler(fsw_Events);
+                fsw.Renamed += new IO.RenamedEventHandler(fsw_Renamed);
+                fsw.Deleted += new IO.FileSystemEventHandler(fsw_Events);
+                fsw.EndInit();
+            }
+            catch (System.Security.SecurityException)
+            {
+                // Just don't do file watching if you don't have the permittions.
+            }
         }
 
+        void fsw_Renamed(object sender, IO.RenamedEventArgs e)
+        {
+            InputComboBox.ItemsSource = IO.Directory.EnumerateFiles(GetSaveFolder()).Select( p => IO.Path.GetFileName(p));
+        }
+
+        void fsw_Events(object sender, IO.FileSystemEventArgs e)
+        {
+            InputComboBox.ItemsSource = IO.Directory.EnumerateFiles(GetSaveFolder()).Select(p => IO.Path.GetFileName(p));
+            
+        }
+
+        private void UpdateInputList()
+        {
+        }
+
+        #region Helper
+        private string GetSaveFolder()
+        {
+            FrameworkElement current = (FrameworkElement)this.Parent;
+            IEnumerable<BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI> items;
+            while (true)
+            {
+                items = BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI.AllBPItems.Where(i => i.Instance == current);
+                if (items.Count() > 0)
+                    break;
+
+                current = (FrameworkElement)current.Parent;
+                if (current == null)
+                    throw new InvalidOperationException("SettingsSaver must be used in the context of an IBallOnPlateItem of the BallOnTiltablePlate2 Project with the JanRapp.MainApp.MainWindow as Application.Current.MainWindow and BPItems must be loaded");
+            }
+
+            var item = items.First();
+
+            return IO.Path.Combine(GlobalSettings.ItemSettingsFolder(item.Info), "SettingSaver");
+        }
+
+        IEnumerable<FrameworkElement> GetControllsToSave()
+        {
+            return GetControllsToSaveRec(this.ContainingPanel);
+        }
+
+        Panel GetToLowerPanelRec(object element)
+        {
+            if (element is Panel)
+            {
+                return (Panel)element;
+            }
+            else if (element is ContentControl)
+            {
+                return GetToLowerPanelRec(((ContentControl)element).Content);
+            }
+            return null;
+        }
+
+        IEnumerable<FrameworkElement> GetControllsToSaveRec(Panel root)
+        {
+            if (root != null)
+                foreach (object item in root.Children)
+                {
+                    FrameworkElement fe = item as FrameworkElement;
+                    if (fe != null && !string.IsNullOrWhiteSpace(fe.Name))
+                        yield return fe;
+                    
+                    Panel panel = GetToLowerPanelRec(item);
+                    if (panel != null)
+                        foreach (var innerItem in GetControllsToSaveRec(panel))
+                            yield return innerItem;
+                }
+        }
+        #endregion
+
+        #region Comands and Events
         private void SaveCmd_Executed(object target, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            if(File.Exists(GetSaveFolder()))
+
+            if (InputComboBox.Text.IndexOfAny(IO.Path.GetInvalidFileNameChars()) != -1)
             {
+                MessageBox.Show("Name must consist of valid file name characters");
                 return;
             }
+
+            string saveFolder = GetSaveFolder();
+            string path = IO.Path.Combine(saveFolder, InputComboBox.Text);
+
+            IO.Directory.CreateDirectory(saveFolder);
+            XElement root = new XElement(RootSaveName);
+
+            foreach (var child in GetControllsToSave())
+            {
+                FrameworkElement element = child as FrameworkElement;
+                if (element != null && !string.IsNullOrWhiteSpace(element.Name))
+                {
+                    XElement elementNode = null;
+                    string properties = (string)element.GetValue(SettingSaver.PropertysToSaveProperty);
+                    if (!string.IsNullOrWhiteSpace(properties))
+                        foreach (string pPath in properties.Split(','))
+                        {
+                            var value = element.GetType().GetProperty(pPath).GetValue(element, null);
+                            if (elementNode == null)
+                                elementNode = new XElement(element.Name);
+                            elementNode.Add(new XElement(pPath, value));
+                        }
+                    if (elementNode != null)
+                        root.Add(elementNode);
+                }
+            }
+
+            try
+            {
+                using (IO.FileStream stream = IO.File.Open(path, IO.FileMode.Create))
+                {
+                    XDocument doc = new XDocument();
+                    doc.Add(root);
+                    doc.Save(stream);
+                }
+            }
+            catch (IO.IOException IoEx)
+            {
+                MessageBox.Show("Cannot do save or open File: Exeption:" + IoEx.Message);
+            }
+
+            UpdateInputList();
         }
 
         private void SaveCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = false;
 
-            if (string.IsNullOrWhiteSpace(InputBox.Text))
-            {}
-            else if (InputBox.Text.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1)
-            {
-                MessageBox.Show("Name must consist of valid file name characters");
-            }
+            if (string.IsNullOrWhiteSpace(InputComboBox.Text))
+            { }
             else
                 e.CanExecute = true;
         }
 
-        private string GetSaveFolder()
+        private void LoadCmd_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            string path = IO.Path.Combine(GetSaveFolder(), InputComboBox.Text);
 
-            FrameworkElement current = (FrameworkElement)this.Parent;
-
-            while(BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI.AllBPItems.Any(i => i.Instance == current))
+            XDocument doc = null;
+            using (IO.FileStream stream = IO.File.Open(path, IO.FileMode.Open))
             {
-                current = (FrameworkElement)current.Parent;
+                doc = XDocument.Load(stream);
             }
 
-            throw new NotImplementedException();
+            GetControllsToSave().Join(doc.Element(RootSaveName).Elements(), c => c.Name, x => x.Name.LocalName, (c, x) =>
+                {
+                    string properties = (string)c.GetValue(SettingSaver.PropertysToSaveProperty);
+
+                    if (string.IsNullOrWhiteSpace(properties))
+                        return 0;
+
+                    foreach (string prop in properties.Split(','))
+                    {
+                        //Just converting in the correct Type then assigne the values to the respective property.
+                        var Rprop = c.GetType().GetProperty(prop);
+                        string XMLContent = x.Element(prop).Value;
+                        var converter = System.ComponentModel.TypeDescriptor.GetConverter(Rprop.PropertyType);
+                        object convertedValue = converter.ConvertFromString(XMLContent);
+                        object[] empty = new object[0];
+                        Rprop.SetValue(c, convertedValue, empty);
+                    }
+
+                    return 0;
+                }).ToArray(); //To enforce imediate execution.
+        }
+
+        private void LoadCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = false;
+            if (string.IsNullOrWhiteSpace(InputComboBox.Text))
+            { }
+            else if (!IO.File.Exists(IO.Path.Combine(GetSaveFolder(), InputComboBox.Text)))
+            { }
+            else
+                e.CanExecute = true;
         }
 
         private void box_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            e.Handled = true;
+            InputComboBox.Text = InputComboBox.SelectedItem.ToString();
+            var cmd = ((RoutedCommand)this.Resources["LoadCmd"]);
+            if (cmd.CanExecute(null, (IInputElement)sender))
+                cmd.Execute(null, (IInputElement)sender);
+        } 
+        #endregion
 
+        #region DependencyProperties
+        public static string GetPropertysToSave(DependencyObject obj)
+        {
+            return (string)obj.GetValue(PropertysToSaveProperty);
+        }
+
+        public static void SetPropertysToSave(DependencyObject obj, string value)
+        {
+            obj.SetValue(PropertysToSaveProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for PropertysToSave.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PropertysToSaveProperty =
+            DependencyProperty.RegisterAttached("PropertysToSave", typeof(string), typeof(SettingSaver), new PropertyMetadata()); 
+        #endregion
+
+        public void Dispose()
+        {
+            if(fsw != null)
+            fsw.Dispose();
+        }
+
+        ~SettingSaver()
+        {
+            if(fsw != null)
+            fsw.Dispose();
         }
     }
 }

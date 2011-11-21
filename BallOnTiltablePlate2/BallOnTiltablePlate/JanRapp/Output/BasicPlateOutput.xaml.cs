@@ -30,12 +30,19 @@ namespace BallOnTiltablePlate.JanRapp.Output
         public BasicPlateOutput()
         {
             InitializeComponent();
-            port = new SerialPort("COM5");
+
+            //Runtime nui = new Runtime();
+            //nui.Initialize(RuntimeOptions.UseDepth);
+            //nui.DepthStream.(ImageType.Depth);
         }
 
-        public void SetTilt(Vector tilt)
+        public void SetTilt(System.Windows.Vector tilt)
         {
-            throw new NotImplementedException();
+            port = new SerialPort("COM5");
+            byte[] buffer = new byte[] { 0 };
+            port.Open();
+            port.Write(buffer, 0, 1);
+            port.Close();
         }
     }
 }

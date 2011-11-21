@@ -18,14 +18,14 @@
 	</UserControl.CommandBindings>
     <WrapPanel Orientation="Vertical">
 		<controls:Visualizer3D Height="300" Width="300" x:Name="Visualizer3DCtrl" Margin="8"/>
-		<Grid>
+		<Grid x:Name="C1">
             <Button Command="{StaticResource ToogleRunningCmd}" x:Name="ToogelRunningBtn" Content="Start" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Control+T"/>
 			<Label x:Name="FpsLbl" Content="_FPS:" Margin="56.786,8,0,8" HorizontalAlignment="Left" Target="{Binding ElementName=FpsSlider}" d:LayoutOverrides="Height"/>
 			<Slider x:Name="FpsSlider" Margin="94,8,8,8" d:LayoutOverrides="Height" MinWidth="140" Minimum=".1" Maximum="60" LargeChange="5" SmallChange="1" ValueChanged="FpsSlider_ValueChanged" AutoToolTipPlacement="BottomRight" Value="20"/>
 		</Grid>
         <Expander Header="Variables" Margin="8">
             <StackPanel Orientation="Horizontal" Margin="8">
-                <StackPanel>
+                <StackPanel Name="Variables">
                     <Label HorizontalAlignment="Right" Content="_Tilt:" Target="{Binding ElementName=TiltVecBox, Mode=OneWay}"/>
                     <Label HorizontalAlignment="Right" Content="_DesiredTilt" Target="{Binding ElementName=DesiredTiltVecBox}"/>
                     <Label HorizontalAlignment="Right" Content="_Position:" Target="{Binding ElementName=PositionVecBox, Mode=OneWay}"/>
@@ -41,13 +41,14 @@
                 </StackPanel>
             </StackPanel>
         </Expander>
-        <Expander Header="Constants" Margin="8">
-            <StackPanel Margin="8" HorizontalAlignment="Left">
+        <Expander Header="Constants" Margin="8" >
+            <StackPanel Name="Constants" Margin="8" HorizontalAlignment="Left">
         		<controls:DoubleBox x:Name="GravityDoubleBox" Text="Gravity:" HorizontalAlignment="Right" Value="-9.81" Margin="0" SmallChange=".1" LargeChange="1"/>
         		<controls:DoubleBox x:Name="HitAttenuationFactorDoubleBox" Text="Attenuation Factor at Hit" HorizontalAlignment="Right" Value="0.8" Margin="0,2,0,0"/>
         		<controls:DoubleBox x:Name="AbsoluteHitAttenuationDoubleBox" Text="Absolute Attenuation at Hit" HorizontalAlignment="Right" Value="1" Margin="0,2,0,0"/>
                 <controls:DoubleBox x:Name="PlateVelocityDoubleBox" Text="Plate Velocity" HorizontalAlignment="Right" Value="5" Margin="0,2,0,0"/>
         	</StackPanel>
         </Expander>
+        <controls:SettingSaver/>
     </WrapPanel>
 </UserControl>

@@ -1,8 +1,12 @@
 ﻿<Application x:Class="BallOnTiltablePlate.JanRapp.MainApp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              StartupUri="/BallOnTiltablePlate2;component/JanRapp/MainApp/MainWindow.xaml">
     <Application.Resources>
-
+        <Style TargetType="controls:DoubleBox">
+            <Setter Property="controls:SettingSaver.PropertysToSave" 
+                    Value="Value"/>
+        </Style>
     </Application.Resources>
 </Application>

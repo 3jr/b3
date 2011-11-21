@@ -17,7 +17,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestOutput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("_Jan", "Rapp", "Test", "1.1")]
+    [BallOnPlateItemInfo(" Jan", "Rapp", "Test", "1.0")]
     public partial class TestOutput : UserControl, IPlateOutput
     {
         #region Base

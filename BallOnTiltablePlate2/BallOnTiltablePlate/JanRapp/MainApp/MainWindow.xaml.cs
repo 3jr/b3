@@ -121,7 +121,10 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             IBallOnPlateItem instance = item.Instance;
 
             if (windows.ContainsKey(instance))
+            {
+                windows[instance].Show();
                 windows[instance].Focus();
+            }
             else
             {
                 string name = metaData.Item2;

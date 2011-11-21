@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Linq;
 using System.Windows.Media.Media3D;
 
 namespace BallOnTiltablePlate
@@ -92,11 +93,24 @@ namespace BallOnTiltablePlate
         readonly string itemName;
         readonly Version version;
 
-        // This is a positional argument
-        public BallOnPlateItemInfoAttribute(string auhtorFirstName, string auhtorLastName, string itemName, string version)
+        const string validChars = "QWERTYUIOPASDFGHJKLZXCVBNM ";
+        bool IsStringValid(string s)
         {
-            this.authorFirstName = auhtorFirstName;
-            this.authorLastName = auhtorLastName;
+            return s.ToUpper().All(c => validChars.Any(v => v == c));
+        }
+
+        // This is a positional argument
+        public BallOnPlateItemInfoAttribute(string authorFirstName, string authorLastName, string itemName, string version)
+        {
+            if (!IsStringValid(authorFirstName))
+                throw new ArgumentException("authorFirstName must only contain [a-z] characters");
+            if (!IsStringValid(authorLastName))
+                throw new ArgumentException("auhtorLastName must only contain [a-z] characters");
+            if (!IsStringValid(itemName))
+                throw new ArgumentException("itemName must only contain [a-z] characters");
+
+            this.authorFirstName = authorFirstName;
+            this.authorLastName = authorLastName;
             this.itemName = itemName;
             this.version = System.Version.Parse(version);
         }
@@ -119,6 +133,11 @@ namespace BallOnTiltablePlate
         public Version Version
         {
             get { return version; }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2}", authorFirstName, authorLastName, itemName);
         }
     }
 }

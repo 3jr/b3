@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace BallOnTiltablePlate
 {
@@ -9,9 +10,10 @@ namespace BallOnTiltablePlate
     {
         public static double PlateSize;
 
-        internal static string ItemSettingsFolder(IBallOnPlateItem item)
+        internal static string ItemSettingsFolder(BallOnPlateItemInfoAttribute itemInfo)
         {
-            throw new NotImplementedException();
+            return Path.Combine(Environment.CurrentDirectory, "ItemSettings",
+                string.Format("{0}_{1}_{2}", itemInfo.AuthorFirstName, itemInfo.AuthorLastName, itemInfo.ItemName));
         }
     }
 }
