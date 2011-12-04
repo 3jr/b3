@@ -186,6 +186,37 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.Vectors
         {
             return (radian / Math.PI) * 180.0;
         }
+
+        public static QuaternionRotation3D CombineSimutaniousRotationsAroundXAndYAxis(Vector rotationAroundXAndYAxis)
+        {
+            var result = new QuaternionRotation3D();
+            CombineSimutaniousRotationsAroundXAndYAxis(rotationAroundXAndYAxis, ref result);
+            return result;
+        }
+
+        public static void CombineSimutaniousRotationsAroundXAndYAxis(Vector rotationAroundXAndYAxis, ref QuaternionRotation3D result)
+        {
+            
+            if (rotationAroundXAndYAxis == null) throw new ArgumentNullException("rotationAroundXAndYAxis");
+            if (result == null) throw new ArgumentNullException("result");
+
+            Vector3D firstAxisForXRotation = new Vector3D(1.0,0.0,0.0);
+            Vector3D secoundAxisForYRotation = new Vector3D(0, Math.Sin(rotationAroundXAndYAxis.X), Math.Cos(rotationAroundXAndYAxis.X));
+            double xAngle = (rotationAroundXAndYAxis.X);
+            double yAngle = Math.Sin(Math.Acos(rotationAroundXAndYAxis.Y));
+
+            Quaternion fistRotation = new Quaternion(firstAxisForXRotation, RadToDeg(xAngle));
+            Quaternion secoundRotaion = new Quaternion(secoundAxisForYRotation, RadToDeg(yAngle));
+
+            Quaternion resultQuaternion = secoundRotaion * fistRotation;
+
+            if (resultQuaternion != result.Quaternion)
+            {
+                if (result.IsFrozen) throw new ArgumentException("result may not be Frozen and has to be changed to fulfill the requirements for this Function");
+
+                result.Quaternion = resultQuaternion;
+            }
+        }
     }
 }
 

@@ -11,12 +11,10 @@
              mc:Ignorable="d"
              d:DesignHeight="451" d:DesignWidth="582" Background="#FF1D1D1D" >
     <UserControl.Resources>
-        <System:Double x:Key="RotationOfCamera">49</System:Double>
+        <System:Double x:Key="RotationOfCamera">-150</System:Double>
         <System:Double x:Key="AngleOfCamera">35</System:Double>
         <System:Double x:Key="DistanceOfCamera">-6.2</System:Double>
         <System:Double x:Key="BallSize">0.05</System:Double>
-        <System:Double x:Key="PlateTiltX">2</System:Double>
-        <System:Double x:Key="PlateTiltY">0</System:Double>
         <System:Double x:Key="BallPositionX">0.2</System:Double>
         <System:Double x:Key="BallPositionY">0.2</System:Double>
         <System:Double x:Key="BallPositionZ">0.5</System:Double>
@@ -152,22 +150,19 @@
                 </local:Sphere3D.Transform>
             </local:Sphere3D> 
             <local:Plate3D x:Name="PlateModel">
-                <ModelVisual3D.Transform>
+                <local:Plate3D.Transform>
                     <Transform3DGroup>
-                        <RotateTransform3D>
+                        <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                        <ScaleTransform3D ScaleZ="1" ScaleY="1" ScaleX="1"/>
+                        <RotateTransform3D d:EulerAngles="44,45,0">
                             <RotateTransform3D.Rotation>
-                                <!--<AxisAngleRotation3D Axis="1,0,0" Angle="{Binding Tilt, Converter={StaticResource VectorToDoubleSplitterConverterToDeg}, ConverterParameter='Y', Mode=OneWay}"/>-->
-                                <AxisAngleRotation3D Axis="1,0,0" Angle="{DynamicResource PlateTiltY}"/>
+                                <QuaternionRotation3D x:Name="PlateRotation"/>
                             </RotateTransform3D.Rotation>
                         </RotateTransform3D>
-                        <RotateTransform3D>
-                            <RotateTransform3D.Rotation>
-                                <!--<AxisAngleRotation3D Axis="0,-1,0" Angle="{Binding Tilt, Converter={StaticResource VectorToDoubleSplitterConverterToDeg}, ConverterParameter='X', Mode=OneWay}"/>-->
-                                <AxisAngleRotation3D Axis="0,-1,0" Angle="{DynamicResource PlateTiltX}"/>
-                            </RotateTransform3D.Rotation>
-                        </RotateTransform3D>
+                        <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                        <TranslateTransform3D OffsetZ="0"/>
                     </Transform3DGroup>
-                </ModelVisual3D.Transform>
+                </local:Plate3D.Transform>
                 <local:Plate3D.Material>
                     <DiffuseMaterial>
                         <DiffuseMaterial.Brush>

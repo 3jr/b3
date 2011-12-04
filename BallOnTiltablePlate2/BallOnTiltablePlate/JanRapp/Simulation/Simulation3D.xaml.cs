@@ -166,7 +166,7 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
 
         private void TiltVecBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
         {
-            Visualizer3DCtrl.PlateTilt = new Vector(Utilities.Vectors.MathUtil.RadToDeg(e.NewValue.X), Utilities.Vectors.MathUtil.RadToDeg(e.NewValue.Y));
+            Visualizer3DCtrl.PlateTilt = new Vector(e.NewValue.X, e.NewValue.Y);
         }
 
         private void PositionVecBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector3D> e)

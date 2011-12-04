@@ -46,8 +46,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             set
             {
-                PlateTiltX = value.X;
-                PlateTiltY = value.Y;
+                JanRapp.Utilities.Vectors.MathUtil.CombineSimutaniousRotationsAroundXAndYAxis(value, ref PlateRotation);
             }
         }
 
@@ -62,21 +61,21 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         #region Input Details
-        public double PlateTiltX
-        {
-            get
-            { return (double)this.Resources["PlateTiltX"]; }
-            set
-            { this.Resources["PlateTiltX"] = value; }
-        }
+        //public double PlateTiltX
+        //{
+        //    get
+        //    { return (double)this.Resources["PlateTiltX"]; }
+        //    set
+        //    { this.Resources["PlateTiltX"] = value; }
+        //}
 
-        public double PlateTiltY
-        {
-            get
-            { return (double)this.Resources["PlateTiltY"]; }
-            set
-            { this.Resources["PlateTiltY"] = value; }
-        }
+        //public double PlateTiltY
+        //{
+        //    get
+        //    { return (double)this.Resources["PlateTiltY"]; }
+        //    set
+        //    { this.Resources["PlateTiltY"] = value; }
+        //}
 
         public double BallPositionX
         {
@@ -155,18 +154,18 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                     this.Width = Clamp(this.Width + delta.X, 20, double.MaxValue);
                     this.Height = Clamp(this.Height + delta.Y, 20, double.MaxValue);
                     break;
-                case MoveState.TiltX:
-                    this.PlateTilt = new Vector(Clamp(this.PlateTiltX + delta.Y * 0.005, -maxtilt, maxtilt), this.PlateTiltY);
-                    break;
-                case MoveState.TiltY:
-                    this.PlateTilt = new Vector(this.PlateTiltX,Clamp(this.PlateTiltY + delta.Y * 0.005, -maxtilt, maxtilt));
-                    break;
-                case MoveState.TiltXI:
-                    this.PlateTilt = new Vector(Clamp(this.PlateTiltX - delta.Y * 0.005, -maxtilt, maxtilt), this.PlateTiltY);
-                    break;
-                case MoveState.TiltYI:
-                    this.PlateTilt = new Vector(this.PlateTiltX,Clamp(this.PlateTiltY - delta.Y * 0.005, -maxtilt, maxtilt));
-                    break;
+                //case MoveState.TiltX:
+                //    this.PlateTilt = new Vector(Clamp(this.PlateTiltX + delta.Y * 0.005, -maxtilt, maxtilt), this.PlateTiltY);
+                //    break;
+                //case MoveState.TiltY:
+                //    this.PlateTilt = new Vector(this.PlateTiltX,Clamp(this.PlateTiltY + delta.Y * 0.005, -maxtilt, maxtilt));
+                //    break;
+                //case MoveState.TiltXI:
+                //    this.PlateTilt = new Vector(Clamp(this.PlateTiltX - delta.Y * 0.005, -maxtilt, maxtilt), this.PlateTiltY);
+                //    break;
+                //case MoveState.TiltYI:
+                //    this.PlateTilt = new Vector(this.PlateTiltX,Clamp(this.PlateTiltY - delta.Y * 0.005, -maxtilt, maxtilt));
+                //    break;
                 default:
                     break;
             }
