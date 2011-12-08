@@ -31,6 +31,8 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         {
             this.input = input;
             InitializeComponent();
+
+			Init();
         }
         //Kinect Runtime
 
@@ -48,13 +50,15 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
 
         public Draw.Point rectPoint;
-        public void Init(object sender, RoutedEventArgs e)
+        public void Init()
         {
             
 
             angleSlider.Value = ((double)(input.Kinect.NuiCamera.ElevationAngle - Camera.ElevationMinimum) * 10.0) / (double)(Camera.ElevationMaximum - Camera.ElevationMinimum);
 
             rectPoint = new Draw.Point(0, 0);
+
+            input.DataRecived += new EventHandler<BallInputEventArgs>(input_DataRecived);
 
             #region InitBitmap
             
@@ -68,6 +72,12 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
 
         }
+
+        void input_DataRecived(object sender, BallInputEventArgs e)
+        {
+            UpdateUI();
+        }
+
         void kinectBox_MouseDown(object sender, Forms.MouseEventArgs e)
         {
             rectPoint.X = (int)(e.X * (xres / (float)kinectBox.Width));
@@ -75,7 +85,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         }
 
 
-        public void Kinect_DepthFrameReady()
+        public void UpdateUI()
         {
             #region Rechteck
             image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);

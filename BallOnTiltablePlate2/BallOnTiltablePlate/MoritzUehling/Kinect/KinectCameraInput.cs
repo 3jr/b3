@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Research.Kinect;
 using BallOnTiltablePlate.MoritzUehling.UI;
-using Microsoft.Research.Kinect.Nui;
 using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 using Manager = BallOnTiltablePlate.MoritzUehling.Kinect;
+using System.Diagnostics;
+using Microsoft.Research.Kinect.Nui;
 
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
@@ -60,16 +62,24 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         public void InitKinect()
         {
-            //UseDepthAndPlayerIndex and UseSkeletalTracking
-            Kinect.Initialize(RuntimeOptions.UseDepthAndPlayerIndex);
+            try
+            {
+                nui = new Runtime(0);
 
-            //register for event
-            Kinect.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(Kinect_DepthFrameReady);
+                //UseDepthAndPlayerIndex and UseSkeletalTracking
+                Kinect.Initialize(RuntimeOptions.UseDepthAndPlayerIndex);
 
-            //DepthAndPlayerIndex ImageType
-            Kinect.DepthStream.Open(ImageStreamType.Depth, 2, ImageResolution.Resolution320x240, ImageType.DepthAndPlayerIndex);
+                //register for event
+                Kinect.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(Kinect_DepthFrameReady);
 
-            depthMap = new int[xres, yres];
+                //DepthAndPlayerIndex ImageType
+                Kinect.DepthStream.Open(ImageStreamType.Depth, 2, ImageResolution.Resolution320x240, ImageType.DepthAndPlayerIndex);
+
+                depthMap = new int[xres, yres];
+            }
+            catch
+            {
+            }
         }
 
         #region Kinect Working stuff
@@ -77,11 +87,17 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         {
             FillImageMap(e.ImageFrame);
 
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            
             ProcessPlate();
 
-            FillImageMap(e.ImageFrame);
+            watch.Stop();
+            Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
 
-            settingsWindow.Kinect_DepthFrameReady();
+            //FillImageMap(e.ImageFrame);
+
+            DataRecived.Invoke(this, new BallInputEventArgs());            
         }
         #endregion
 
