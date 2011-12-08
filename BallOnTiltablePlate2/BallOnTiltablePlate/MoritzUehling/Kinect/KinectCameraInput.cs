@@ -36,7 +36,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         #region Variables
         //Kinect
-        Runtime nui = new Runtime();
+		Runtime nui;
         Rectangle plateArea;
 
         ImageManager manager;
@@ -64,7 +64,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         {
             try
             {
-                nui = new Runtime(0);
+				nui = Microsoft.Research.Kinect.Nui.Runtime.Kinects[0];
 
                 //UseDepthAndPlayerIndex and UseSkeletalTracking
                 Kinect.Initialize(RuntimeOptions.UseDepthAndPlayerIndex);
@@ -95,9 +95,9 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             watch.Stop();
             Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
 
-            //FillImageMap(e.ImageFrame);
+            FillImageMap(e.ImageFrame);
 
-            DataRecived.Invoke(this, new BallInputEventArgs());            
+			//DataRecived(this, new BallInputEventArgs());    
         }
         #endregion
 

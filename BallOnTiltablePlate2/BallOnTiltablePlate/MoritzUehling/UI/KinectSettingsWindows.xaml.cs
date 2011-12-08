@@ -19,6 +19,7 @@ using BallOnTiltablePlate.MoritzUehling.Kinect;
 using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 using System.Diagnostics;
 using Manager = BallOnTiltablePlate.MoritzUehling.Kinect;
+using System.Windows.Threading;
 
 namespace BallOnTiltablePlate.MoritzUehling.UI
 {
@@ -48,6 +49,8 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         Forms.PictureBox kinectBox = new Forms.PictureBox();
         Draw.Bitmap image;
 
+		DispatcherTimer timer = new DispatcherTimer();
+
 
         public Draw.Point rectPoint;
         public void Init()
@@ -58,7 +61,10 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
             rectPoint = new Draw.Point(0, 0);
 
-            input.DataRecived += new EventHandler<BallInputEventArgs>(input_DataRecived);
+            //input.DataRecived += new EventHandler<BallInputEventArgs>(input_DataRecived);
+			timer.Interval = new TimeSpan(0, 0, 0, 0, 30);
+			timer.Tick += new EventHandler(timer_Tick);
+			timer.Start();
 
             #region InitBitmap
             
@@ -72,6 +78,11 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
 
         }
+
+		void timer_Tick(object sender, EventArgs e)
+		{
+			UpdateUI();
+		}
 
         void input_DataRecived(object sender, BallInputEventArgs e)
         {
@@ -87,24 +98,28 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
         public void UpdateUI()
         {
-            #region Rechteck
-            image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
+			try
+			{
+				#region Rechteck
+				image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
 
-            Draw.Graphics g = Draw.Graphics.FromImage(image);
+				Draw.Graphics g = Draw.Graphics.FromImage(image);
 
 
-            for (int i = 0; i < 4; i++)
-            {
-                Draw.Point p1 = input.PlateArea.points[i];
-                Draw.Point p2 = input.PlateArea.points[(i + 1) % 4];
-                g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Red), 1), p1, p2);
-            }
-            #endregion
+				for (int i = 0; i < 4; i++)
+				{
+					Draw.Point p1 = input.PlateArea.points[i];
+					Draw.Point p2 = input.PlateArea.points[(i + 1) % 4];
+					g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Red), 1), p1, p2);
+				}
+				#endregion
 
-            image.SetPixel(rectPoint.X, rectPoint.Y, Draw.Color.Magenta);
+				image.SetPixel(rectPoint.X, rectPoint.Y, Draw.Color.Magenta);
 
-            kinectBox.Image = image;
-
+				kinectBox.Image = image;
+			}
+			catch (Exception exc)
+			{ }
         }
 
         private byte[] GenerateImage()
