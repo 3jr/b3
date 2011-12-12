@@ -43,8 +43,6 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             yMin = int.MaxValue;
             yMax = int.MinValue;
 
-            Timo.Mathematics.LineEquation[] returnVal = null;
-
             if (point.X == 0 && point.Y == 0)
                 return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
 
@@ -61,78 +59,39 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             #endregion
 
             #region kanten finden...
-
-            returnVal = new Timo.Mathematics.LineEquation[4];
-
             if (xMax > 0 && xMin > 0)
-            {
-                #region Oben
-                List<Windows.Point> points = new List<Windows.Point>();
-                for (int x = xMin + 10; x <= xMax - 10; x++)
-                {
-                    for (int y = yMin; y <= yMax; y++)
-                    {
-                        if (GetPixel(x, y) == -1)
-                        {
-                            points.Add(new Windows.Point(x, y));
-                            break;
-                        }
-                    }
-                }
-                returnVal[0] = Timo.Mathematics.GetLineEquation(points.ToArray());
-                #endregion
+			{
+				Point middle = new Point((xMin + xMax) / 2, (yMax + yMin) / 2);
 
-                #region Rechts
-                points.Clear();
-                for (int y = yMin + 10; y <= yMax - 10; y++)
-                {
-                    for (int x = xMax; x >= xMin; x--)
-                    {
-                        if (GetPixel(x, y) == -1)
-                        {
-                            points.Add(new Windows.Point(x, y));
-                            break;
-                        }
-                    }
-                }
-                returnVal[1] = Timo.Mathematics.GetLineEquation(points.ToArray());
-                #endregion
+				#region Oben
+				int actualMax = -1;
+				Point edge1 = new Point(0, 0);
 
-                #region Unten
-                points.Clear();
-                for (int x = xMin + 10; x <= xMax - 10; x++)
-                {
-                    for (int y = yMax; y >= yMin; y--)
-                    {
-                        if (GetPixel(x, y) == -1)
-                        {
-                            points.Add(new Windows.Point(x, y));
-                            break;
-                        }
-                    }
-                }
-                returnVal[2] = Timo.Mathematics.GetLineEquation(points.ToArray());
-                #endregion
+				for (int x = xMin; x <= xMax; x++)
+				{
+					for (int y = yMin; y <= yMax; y++)
+					{
+						if (GetPixel(x, y) == -1)
+						{
+							if (distanceSqr(middle, new Point(x, y)) > actualMax)
+							{
+								actualMax = distanceSqr(middle, new Point(x, y));
+								edge1 = new Point(x, y);
+							}
+							break;
+						}
+					}
+				}
+				#endregion
 
-                #region Links
-                points.Clear();
-                for (int y = yMin + 10; y <= yMax - 10; y++)
-                {
-                    for (int x = xMin; x <= xMax; x++)
-                    {
-                        if (GetPixel(x, y) == -1)
-                        {
-                            points.Add(new Windows.Point(x, y));
-                            break;
-                        }
-                    }
-                }
-                returnVal[3] = Timo.Mathematics.GetLineEquation(points.ToArray());
-                #endregion
 
-                #region Schnittpunkte finden
-                Rectangle rect = new Rectangle(CalcIntersect(returnVal[0], returnVal[3]), CalcIntersect(returnVal[0], returnVal[1]), CalcIntersect(returnVal[1], returnVal[2]), CalcIntersect(returnVal[2], returnVal[3]));
-                #endregion
+				#region Rechteck erstellen
+				//Rectangle rect = new Rectangle(CalcIntersect(returnVal[0], returnVal[3]), CalcIntersect(returnVal[0], returnVal[1]), CalcIntersect(returnVal[1], returnVal[2]), CalcIntersect(returnVal[2], returnVal[3]));
+				
+                
+
+				Rectangle rect = new Rectangle(edge1, new Point(middle.X + 2, middle.Y - 2), new Point(middle.X + 2, middle.Y + 2), new Point(middle.X - 2, middle.Y + 2));
+				#endregion
 
                 return rect;
 
@@ -142,6 +101,12 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
             return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
         }
+
+
+		private int distanceSqr(Point p1, Point p2)
+		{
+			return (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
+		}
 
 
         Color green = Color.FromArgb(200, 255, 0, 255);

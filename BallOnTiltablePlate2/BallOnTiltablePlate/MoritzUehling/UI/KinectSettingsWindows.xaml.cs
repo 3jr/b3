@@ -110,7 +110,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 				{
 					Draw.Point p1 = input.PlateArea.points[i];
 					Draw.Point p2 = input.PlateArea.points[(i + 1) % 4];
-					g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Red), 1), p1, p2);
+					g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Green), 1), p1, p2);
 				}
 				#endregion
 

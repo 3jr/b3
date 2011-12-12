@@ -131,6 +131,8 @@
     <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
     <Compile Include="MoritzUehling\Kinect\ImageManager.cs" />
+    <Compile Include="MoritzUehling\Kinect\KinectCamaraInput.v02.cs" />
+    <Compile Include="MoritzUehling\Kinect\ImageManager.v02.cs" />
     <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
       <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
     </Compile>

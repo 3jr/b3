@@ -11,7 +11,7 @@ using Microsoft.Research.Kinect.Nui;
 
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
-    [BallOnPlateItemInfo("Moritz", "Uehling", "Kinect Cam Input", "0.2")]
+    [BallOnPlateItemInfo("Moritz", "Uehling", "Kinect Cam Input", "0.3")]
     public class KinectCameraInput : IBallInput
     {
         #region Managing Stuff
@@ -95,7 +95,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             watch.Stop();
             Debug.WriteLine(watch.Elapsed.TotalMilliseconds);
 
-            FillImageMap(e.ImageFrame);
+            //FillImageMap(e.ImageFrame);
 
 			//DataRecived(this, new BallInputEventArgs());    
         }
