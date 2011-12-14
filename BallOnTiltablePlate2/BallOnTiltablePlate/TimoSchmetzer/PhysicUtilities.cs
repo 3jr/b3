@@ -203,7 +203,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         {
             double alphax = Tilt.X;
             double alphay = Tilt.Y;
-            //Acceleration = G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
+            //AccelerationForce= G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
             //Maple created code.
             Vector3D cg = new Vector3D();
             cg.X = g * Math.Cos(alphax) * Math.Pow(Math.Cos(alphay), 0.2e1) * Math.Sin(alphax);
