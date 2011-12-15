@@ -18,6 +18,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
     /// </summary>
     public class Physics3D
     {
+        [Obsolete("Please use RunSimulation in PhysicSimulation3D.",false)]
         public void RunPhysics(IPhysicsState state, double elapsedSeconds)
         {
             //Temporary Redicect
@@ -89,39 +90,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                     CalcMovement(state, elapsedSeconds - nextHit);
                 }
             }
-            #endregion
-
-            #region OldCode
-            //if (double.IsInfinity(nextHit))
-            //{
-            //    if (state.Gravity < 0)
-            //    {
-            //        //Ball rollt auf Platte (kein Hit)
-            //        //Bei gravitation muss der Ball auf der Platte rollen
-            //        CalcMovement(state, elapsedSeconds, BallState.RollOnPlate);
-            //    }
-            //    else
-            //    {
-            //        //Bei Gravity 0 oder pos kann der Ball nicht auf der Platte rollen
-            //        //Bei den Gravitationen muss der Ball nicht auf der Platte sein um
-            //        //nicht irgendwann einen Hit zu Verursachen.
-            //        CalcMovement(state, elapsedSeconds, BallState.InAir);
-            //    }
-            //}
-            ////Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
-            //else if (nextHit > elapsedSeconds)
-            //    CalcMovement(state, elapsedSeconds, BallState.InAir);
-            //else
-            //{
-            //    //Hit in diesem Update.
-            //    CalcMovement(state, nextHit, BallState.InAir);
-            //    if (Utilities.Physics.IsHit(state))
-            //    {
-            //        state = Utilities.Physics.Reflect(state);
-            //    }
-            //    CalcMovement(state, elapsedSeconds - nextHit, BallState.InAir);
-
-            //}
             #endregion
 
             #region Debugout
