@@ -12,7 +12,7 @@ using BallOnTiltablePlate.JanRapp.Simulation;
 
 namespace BallOnTiltablePlate.TimoSchmetzer
 {
-    class PhysicSimulation3D
+    public class PhysicSimulation3D
     {
         #region info
         public String Author = "Timo Schmetzer";
@@ -20,7 +20,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer
         public String Comment = "Numerical Simulation";
         #endregion
 
-        public void RunSimulation(IPhysicsState state, double elapsedSeconds)
+        public static void RunSimulation(IPhysicsState state, double elapsedSeconds)
         { 
             
         }

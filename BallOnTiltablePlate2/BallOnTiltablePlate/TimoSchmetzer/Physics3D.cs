@@ -14,52 +14,67 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
 {
     /// <summary>
     /// Class, that does Physics cacultations.
-    /// Statringvalues must be written in the provided public Fields.
-    /// Results can be obtained after execution of the RunPhysics Method out of the public fields.
     /// </summary>
     public class Physics3D
     {
-        #region info
-        public String Author = "Timo Schmetzer";
-        public Version Version = new Version(0, 5);
-        public String Comment = "Pre-Beta. Plate must'nt be turned while Ball is on plate.";
-        #endregion
-
+        public void RunPhysics(IPhysicsState state, double elapsedSeconds)
+        {
+            //Temporary Redicect
+            PhysicSimulation3D.RunSimulation(state, elapsedSeconds);
+        }
+      
         /// <summary>
         /// Calculates the New State of the Ball given by the current IPhysicsState.
         /// </summary>
         /// <param name="current">Current Physics State</param>
         /// <param name="elapsedSeconds">Seconds to elapse</param>
         /// <returns>State after elapsedSeconds</returns>
-        public void RunPhysics(IPhysicsState current, double elapsedSeconds)
+        public void CalcPhysics(PhysicsState state, double elapsedSeconds)
         {
             //Sinnlose aufrufe vermeiden
             if (elapsedSeconds == 0) { return; }
-            #region Debugout
-//            System.Diagnostics.Debug.Print(
-//                "sp:" + current.Position.ToString() + "\t v:" + current.Velocity.ToString() + "\t acc:" + current.Acceleration.ToString()
-//                + "\t ntop:" + Utilities.Physics.CalcNextHit(current) + "\t n:" + Utilities.Mathematics.CalcNormalisizedNormalVector(current.Tilt, true).ToString() +
-//                "\t els:" + elapsedSeconds);
-            #endregion
-            bool CentrifugalSpecificCalcNeeded = false;
-            #region Test
-            //CentrifugalSpecificCalcNeeded = current.AngleVelocity() != new Vector(0,0) ? true : false;
-            //When the plate is not moved the calculation is never needed, but you cannot be sure that the next state
-            //comes from the Same Simulation so other Methods (independend of the IPhysicsstate) before must be found.
-            #endregion Test
-            if (CentrifugalSpecificCalcNeeded)
+
+            //Beschleunigung zur Hit-Berechnug setzen
+            Vector3D G = new Vector3D(0, 0, state.Gravity);
+            state.Acceleration = G;
+            double nextHit = Utilities.Physics.CalcNextHit(state);
+
+            BallState bs;
+
+            if (double.IsInfinity(nextHit))
             {
-                //TODO: heruntergehende Platte: integration ueber hangabtriebskraft
-                //TODO: Beschleunigung der Platte auf Ball uebertragen und integrieren
-                //beschleungung orthagonal zur Platte
-                //TODO: Prinzipien in 3D anwenden.
-                //TODO: Hit Mit bewegterPlatte
-                throw new NotImplementedException(); 
+                if (state.Gravity < 0)
+                {
+                    //Ball rollt auf Platte (kein Hit)
+                    //Bei gravitation muss der Ball auf der Platte rollen
+                    CalcMovement(state, elapsedSeconds, BallState.RollOnPlate);
+                }
+                else
+                {
+                    //Bei Gravity 0 oder pos kann der Ball nicht auf der Platte rollen
+                    //Bei den Gravitationen muss der Ball nicht auf der Platte sein um
+                    //nicht irgendwann einen Hit zu Verursachen.
+                    CalcMovement(state, elapsedSeconds, BallState.InAir);
+                }
             }
+            //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
+            else if (nextHit > elapsedSeconds)
+                CalcMovement(state, elapsedSeconds, BallState.InAir);
             else
-            { 
-                DoOrdinaryCalculation(current, elapsedSeconds);
+            {
+                //Hit in diesem Update.
+                CalcMovement(state, nextHit, BallState.InAir);
+                if (Utilities.Physics.IsHit(state))
+                {
+                    state = Utilities.Physics.Reflect(state);
+                }
+                CalcMovement(state, elapsedSeconds - nextHit, BallState.InAir);
+
             }
+
+            #region Debugout
+            //System.Diagnostics.Debug.Print();
+            #endregion
         }
 
         /// <summary>
@@ -69,16 +84,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         private enum BallState
         {
             InAir = 0,
-            OnPlate = 1,
-            DownPlate = 2
+            RollOnPlate = 1
         };
+
         /// <summary>
         /// Berechnet, wie kugel sich weiterbewegt unter der annahme das der BallState dabei stets der gleiche bleibt.
         /// fuer verschiedene BallStates Methode mehrmals (mit den jew. Ballstates) aufrufen
-        /// Zeit wird um elapsedSeconds erhoet.
-        /// Keine Hit/Cenetrifugal berechnung.
         /// </summary>
-        private void CalcMovement(IPhysicsState state, double ElapsedSeconds, BallState Ballstate)
+        private void CalcMovement(PhysicsState state, double ElapsedSeconds, BallState Ballstate)
         {
             Vector3D G = new Vector3D(0, 0, state.Gravity);
             //Beschleunigung berechnen
@@ -87,8 +100,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                 case BallState.InAir:
                     state.Acceleration = G;
                     break;
-                case BallState.OnPlate:
-                    state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt, true);
+                case BallState.RollOnPlate:
+                    state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
                     break;
                 default:
                     throw new SystemException("Sorry. This shouldn't happen.");
@@ -96,68 +109,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             //Bewegungsgleichung
             state.Position += state.Velocity * ElapsedSeconds + 0.5 * state.Acceleration * ElapsedSeconds * ElapsedSeconds;
             state.Velocity += state.Acceleration * ElapsedSeconds;
-            //Wenn auf Platte - Exakt setzen
-            if (Ballstate == BallState.OnPlate)
-            {
-                //Exakt auf Platte setzen
-                Vector3D n = Utilities.Mathematics.CalcNormalisizedNormalVector(state.Tilt, true);
-                double PlateZ = (-state.Position.X * n.X - state.Position.Y * n.Y) / (n.Z);
-                state.Position = new Point3D(state.Position.X, state.Position.Y, PlateZ);
-            }
-        }
-        /// <summary>
-        /// Ordinary Calculation (if Plate not Moved)
-        /// </summary>
-        private void DoOrdinaryCalculation(IPhysicsState state, double ElapsedSeconds)
-        {
-            //Beschleunigung zur Hit-Berechnug setzen
-            Vector3D G = new Vector3D(0, 0, state.Gravity);
-            state.Acceleration = G;
-            double nextHit = Utilities.Physics.CalcNextHit(state);
-
-            if (double.IsInfinity(nextHit))
-            {
-                if (state.Gravity < 0)
-                {
-                    //Ball rollt auf Platte (kein Hit)
-                    //Bei gravitation muss der Ball auf der Platte rollen
-                    CalcMovement(state, ElapsedSeconds, BallState.OnPlate);
-                }
-                else
-                { 
-                    //Bei Gravity 0 oder pos kann der Ball nicht auf der Platte rollen
-                    //Bei den Gravitationen muss der Ball nicht auf der Platte sein um
-                    //nicht irgendwann einen Hit zu Verursachen.
-                    CalcMovement(state, ElapsedSeconds, BallState.InAir);
-                }
-            }
-            //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
-            else if (nextHit > ElapsedSeconds)
-                CalcMovement(state, ElapsedSeconds, BallState.InAir);
-            else
-            {
-                //Hit in diesem Update.
-                CalcMovement(state, nextHit, BallState.InAir);
-                //Exakt auf Platte setzen
-                Vector3D n = Utilities.Mathematics.CalcNormalisizedNormalVector(state.Tilt, true);
-                double PlateZ = (-state.Position.X * n.X - state.Position.Y * n.Y) / (n.Z);
-                new Point3D(state.Position.X, state.Position.Y, PlateZ);
-                state = Utilities.Physics.Reflect(state);
-                RunPhysics(state, ElapsedSeconds - nextHit);
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="ElapsedSeconds"></param>
-        private void DoMovingPlateCalculation(IPhysicsState state, double ElapsedSeconds)
-        {
-            Vector3D G = new Vector3D(0, 0, state.Gravity);
-            state.Acceleration = G;
-            double nextHit = Utilities.Physics.CalcNextHit(state);
-
-            //state.Tilt += state.AngleVelocity() * ElapsedSeconds;
         }
     }
 }
