@@ -31,15 +31,16 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         public double HitAttenuationFactor; // = 1;
 
         /// <summary>
-        /// AngleVelocity the plate is turned with
-        /// </summary>
-        public Vector PlateVelocity;
-
-        /// <summary>
         /// Absolute Velocity Reduction on a hit.
         /// Absolute Geschwindigkeitsreduktion bei Aufprall
         /// </summary>
         public double AbsoluteAbsorbtion; //= 0.08;
+
+        /// <summary>
+        /// Factor, with which the Force on the Ball at a turnation of the Plate
+        /// is scaled. To be Found experimentally.
+        /// </summary>
+        public double CentrifugalFactor;
 
         #endregion
 
@@ -67,6 +68,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// Enthaellt die Beschleunigung [des Balls] als Vector3D.
         /// </summary>
         public Vector3D Acceleration;
+
+        /// <summary>
+        /// AngleVelocity the plate is turned with
+        /// </summary>
+        public Vector PlateVelocity;
+
         #endregion
     }
 }

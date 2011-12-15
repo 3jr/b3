@@ -20,9 +20,51 @@ namespace BallOnTiltablePlate.TimoSchmetzer
         public String Comment = "Numerical Simulation";
         #endregion
 
-        public static void RunSimulation(IPhysicsState state, double elapsedSeconds)
-        { 
-            
+        public static void RunSimulation(IPhysicsState Istate, double elapsedSeconds)
+        {
+            #region calccalltimes
+            double tcallx = (Istate.DesiredTilt.X - Istate.Tilt.X) / (Istate.PlateVelocity.X);
+            double tcally = (Istate.DesiredTilt.Y - Istate.Tilt.Y) / (Istate.PlateVelocity.Y);
+            tcallx = tcallx > elapsedSeconds ? elapsedSeconds : tcallx;
+            tcally = tcally > elapsedSeconds ? elapsedSeconds : tcally;
+            #endregion
+            #region createstate
+            Physics.PhysicsState state = new Physics.PhysicsState();
+            state.AbsoluteAbsorbtion = Istate.AbsoluteAbsorbtion;
+            state.Acceleration = Istate.Acceleration;
+            state.CentrifugalFactor = 0.05;
+            state.Gravity = Istate.Gravity;
+            state.HitAttenuationFactor = Istate.HitAttenuationFactor;
+            state.Position = Istate.Position;
+            state.Tilt = Istate.Tilt;
+            state.Velocity = Istate.Velocity;
+            #endregion
+            #region createcalcs
+            if (tcallx >= tcally)
+            {
+                state.PlateVelocity = new Vector(Istate.PlateVelocity.X, Istate.PlateVelocity.Y);
+                Physics.Physics3D.CalcPhysics(state, tcally);
+                state.PlateVelocity = new Vector(Istate.PlateVelocity.X, 0);
+                Physics.Physics3D.CalcPhysics(state, tcallx - tcally);
+                state.PlateVelocity = new Vector(0, 0);
+                Physics.Physics3D.CalcPhysics(state, elapsedSeconds - tcallx);
+            }
+            else
+            {
+                state.PlateVelocity = new Vector(Istate.PlateVelocity.X, Istate.PlateVelocity.Y);
+                Physics.Physics3D.CalcPhysics(state, tcallx);
+                state.PlateVelocity = new Vector(0, Istate.PlateVelocity.Y);
+                Physics.Physics3D.CalcPhysics(state, tcally - tcallx);
+                state.PlateVelocity = new Vector(0, 0);
+                Physics.Physics3D.CalcPhysics(state, elapsedSeconds - tcally);
+            }
+            #endregion
+            #region writeresultstoIstate
+            Istate.Acceleration = state.Acceleration;
+            Istate.Position = state.Position;
+            Istate.Velocity = state.Velocity;
+            Istate.Tilt = state.Tilt;
+            #endregion
         }
     }
 }
