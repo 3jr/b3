@@ -39,7 +39,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         Point lastPressedMousePosition;
         MoveState move;
-        double maxtilt = Math.PI / 4;
+        //double maxtilt = Math.PI / 4;
 
         #region Resourc Property
         public Vector PlateTilt
