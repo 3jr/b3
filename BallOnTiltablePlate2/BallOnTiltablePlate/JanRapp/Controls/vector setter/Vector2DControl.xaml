@@ -16,7 +16,7 @@
         </Style>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
-        <local:DoubleBox x:Name="Xud" ValueChanged="X_ValueChanged" Value="0" Text=" X:"/>
+        <local:DoubleBox x:Name="Xud" ValueChanged="X_ValueChanged" Value="0" Text=" X:" SmallChange="{Binding SmallChange}" LargeChange="{Binding LargeChange}"/>
         <local:DoubleBox x:Name="Yud" ValueChanged="Y_ValueChanged" Value="0" Text=" Y:"/>
     </StackPanel>
 </UserControl>

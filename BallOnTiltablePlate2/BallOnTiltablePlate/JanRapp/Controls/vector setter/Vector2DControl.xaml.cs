@@ -32,9 +32,35 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         public static readonly DependencyProperty ValueProperty = 
     DependencyProperty.Register("Value", typeof(Vector), typeof(Vector2DControl), new UIPropertyMetadata(new PropertyChangedCallback(OnUriChanged)));
 
+        public double SmallChange
+        {
+            get { return (double)GetValue(SmallChangeProperty); }
+            set { SetValue(SmallChangeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SmallChange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SmallChangeProperty =
+            DependencyProperty.Register("SmallChange", typeof(double), typeof(Vector2DControl), new UIPropertyMetadata(0.1));
+
+
+
+        public double LangeChange
+        {
+            get { return (double)GetValue(LangeChangeProperty); }
+            set { SetValue(LangeChangeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for LangeChange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LangeChangeProperty =
+            DependencyProperty.Register("LangeChange", typeof(double), typeof(Vector2DControl), new UIPropertyMetadata(0.5));
+
+
+
         public Vector2DControl()
         {
             InitializeComponent();
+
+            //Xud.SetBinding(DoubleBox.SmallChangeProperty, new Binding(){ Source = Vector2DControl.SmallChangeProperty, 
         }
 
         private static void OnUriChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) 

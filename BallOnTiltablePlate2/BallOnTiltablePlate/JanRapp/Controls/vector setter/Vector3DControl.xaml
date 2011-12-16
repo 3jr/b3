@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <System:Double x:Key="Increment">.05</System:Double>
         <Style TargetType="local:DoubleBox">
-            <Setter Property="SmallChange" Value=".05"/>
+            <Setter Property="SmallChange" Value="{Binding SmallChange}"/>
             <!--<Setter Property="FormatString" Value="F2"/>-->
             <Setter Property="Value" Value="0.00"/>
         </Style>
