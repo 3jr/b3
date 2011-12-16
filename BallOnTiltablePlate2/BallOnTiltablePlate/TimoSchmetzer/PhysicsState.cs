@@ -16,7 +16,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
     /// Represents a physical state of the plate.
     /// Used in Physics3D/Physical Utilities
     /// </summary>
-    public struct PhysicsState
+    public class PhysicsState
     {
         #region Constats
         /// <summary>

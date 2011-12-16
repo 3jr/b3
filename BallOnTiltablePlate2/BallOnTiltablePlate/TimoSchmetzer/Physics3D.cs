@@ -52,9 +52,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             }
             else
             {
-                if (Math.Abs(state.Position.Z - Mathematics.HightofPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))) < 0.01)
+                if (Math.Abs(state.Position.Z - Mathematics.HightofPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))) > 0.01)
                 {
-                    bs = BallState.RollOnPlate;
+                    bs = BallState.InAir;
                 }
                 else
                 {
@@ -93,7 +93,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #endregion
 
             #region Debugout
-            //System.Diagnostics.Debug.Print();
+            System.Diagnostics.Debug.Print(state.Position.ToString());
             #endregion
         }
 
