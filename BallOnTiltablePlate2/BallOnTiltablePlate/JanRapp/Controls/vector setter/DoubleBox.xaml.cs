@@ -210,5 +210,10 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             DecreaseValue();
         }
+
+        private void txtBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            txtBox.SelectAll();
+        }
     }
 }
