@@ -24,7 +24,6 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
     public partial class Simulation3D : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, IPhysicsState
     {
         DispatcherTimer timer;
-        TimoSchmetzer.Physics.Physics3D physics = new TimoSchmetzer.Physics.Physics3D();
         DateTime lastUpdateTime;
 
         public Simulation3D()
@@ -38,7 +37,7 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         void timer_Tick(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
-            physics.RunPhysics(this, (now - lastUpdateTime).TotalSeconds);
+            TimoSchmetzer.PhysicSimulation3D.RunSimulation(this, (now - lastUpdateTime).TotalSeconds);
             lastUpdateTime = now;
         }
 
@@ -79,7 +78,12 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
 
         public Vector PlateVelocity
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                double d = (double)PlateVelocityDoubleBox.GetValue(Controls.DoubleBox.ValueProperty);
+
+                return new Vector(d, d);
+            }
         }
 
         public Vector DesiredTilt

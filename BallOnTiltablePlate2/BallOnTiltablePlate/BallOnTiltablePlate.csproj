@@ -271,6 +271,7 @@
     <Folder Include="MoritzUehling\Lib\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Microsoft.Research.Kinect.dll" />
     <Content Include="Resources\openCV\Coding4Fun.Kinect.WinForm.dll" />
     <Content Include="Resources\openCV\cudart32_40_17.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
