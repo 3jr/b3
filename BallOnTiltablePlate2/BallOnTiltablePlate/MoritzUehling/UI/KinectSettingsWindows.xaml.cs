@@ -43,8 +43,8 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
         ImageManager manager;
 
-        int xres = 320;
-        int yres = 240;
+        int xres = 640;
+        int yres = 480;
 
         Forms.PictureBox kinectBox = new Forms.PictureBox();
         Draw.Bitmap image;
@@ -61,11 +61,8 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
             rectPoint = new Draw.Point(0, 0);
 
-            //input.DataRecived += new EventHandler<BallInputEventArgs>(input_DataRecived);
-			timer.Interval = new TimeSpan(0, 0, 0, 0, 30);
-			timer.Tick += new EventHandler(timer_Tick);
-			timer.Start();
-
+            input.DataRecived += new EventHandler<BallInputEventArgs>(input_DataRecived);
+			
             #region InitBitmap
             
             kinectBox = new Forms.PictureBox();
@@ -96,30 +93,46 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
         }
 
 
+		int maxSkip = 24;
+		int skip = 200;
         public void UpdateUI()
         {
-			try
+			skip++;
+			if (skip > maxSkip)
 			{
-				#region Rechteck
-				image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
-
-				Draw.Graphics g = Draw.Graphics.FromImage(image);
-
-
-				for (int i = 0; i < 4; i++)
+				try
 				{
-					Draw.Point p1 = input.PlateArea.points[i];
-					Draw.Point p2 = input.PlateArea.points[(i + 1) % 4];
-					g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Green), 1), p1, p2);
+					#region Rechteck
+					Stopwatch watch = new Stopwatch();
+					watch.Start();
+					image = KinectHelper.BitmapExtensions.ToBitmap(GenerateImage(), xres, yres);
+					watch.Stop();
+
+					Debug.Write(watch.Elapsed);
+
+
+					Draw.Graphics g = Draw.Graphics.FromImage(image);
+
+
+					for (int i = 0; i < 4; i++)
+					{
+						Draw.Point p1 = input.PlateArea.points[i];
+						Draw.Point p2 = input.PlateArea.points[(i + 1) % 4];
+						g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Green), 1), p1, p2);
+					}
+					#endregion
+
+					image.SetPixel(rectPoint.X, rectPoint.Y, Draw.Color.Magenta);
+
+					kinectBox.Image = image;
 				}
-				#endregion
+				catch (Exception exc)
+				{
+					MessageBox.Show(exc.ToString());
+				}
 
-				image.SetPixel(rectPoint.X, rectPoint.Y, Draw.Color.Magenta);
-
-				kinectBox.Image = image;
+				skip = 0;
 			}
-			catch (Exception exc)
-			{ }
         }
 
         private byte[] GenerateImage()
@@ -154,7 +167,7 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
                     #region To byte[] clor
                     if (input.KinectDepthMap[x, y] >= 0)
                     {
-                        color = (byte)(input.KinectDepthMap[x, y] / (10 * minSlider.Value));
+                        color = (byte)(input.KinectDepthMap[x, y] / (minSlider.Value));
                         colorFrame[index + RedIndex] = color;
                         colorFrame[index + GreenIndex] = color;
                         colorFrame[index + BlueIndex] = color;
@@ -171,7 +184,6 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
                     depthIndex += 2;
                 }
             }
-
             return colorFrame;
         }
 

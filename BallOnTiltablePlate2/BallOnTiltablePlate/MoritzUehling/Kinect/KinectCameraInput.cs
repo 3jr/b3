@@ -43,7 +43,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         //Depth Data Map
         int[,] depthMap;
-        int xres = 320, yres = 240;
+        int xres = 640, yres = 480;
         #endregion
 
         #region Properties
@@ -67,13 +67,13 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 				nui = Microsoft.Research.Kinect.Nui.Runtime.Kinects[0];
 
                 //UseDepthAndPlayerIndex and UseSkeletalTracking
-                Kinect.Initialize(RuntimeOptions.UseDepthAndPlayerIndex);
+                Kinect.Initialize(RuntimeOptions.UseDepth);
 
                 //register for event
                 Kinect.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(Kinect_DepthFrameReady);
 
                 //DepthAndPlayerIndex ImageType
-                Kinect.DepthStream.Open(ImageStreamType.Depth, 2, ImageResolution.Resolution320x240, ImageType.DepthAndPlayerIndex);
+                Kinect.DepthStream.Open(ImageStreamType.Depth, 2, ImageResolution.Resolution640x480, ImageType.Depth);
 
                 depthMap = new int[xres, yres];
             }
@@ -97,15 +97,16 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
             //FillImageMap(e.ImageFrame);
 
-			//DataRecived(this, new BallInputEventArgs());    
+			DataRecived(this, new BallInputEventArgs());    
         }
         #endregion
 
         #region KinectHelpers
-        private int GetDistanceWithPlayerIndex(byte firstFrame, byte secondFrame)
+        private int GetDistance(int x, int y, PlanarImage p)
         {
-            //offset by 3 in first byte to get value after player index
-            int distance = (int)(firstFrame >> 3 | secondFrame << 5);
+			int n = (y * xres + x) * 2;
+			int distance = (p.Bits[n + 0] | p.Bits[n + 1] << 8);
+
             return distance;
         }
 
@@ -125,8 +126,10 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
                 for (var x = 0; x < width; x++)
                 {
-
-                    depthMap[x, y] = GetDistanceWithPlayerIndex(depthData[depthIndex], depthData[depthIndex + 1]);
+					if (x > 0 && y > 0 && x + 1 < width && y + 1 < height)
+					{
+						depthMap[x, y] = GetDistance(x, y, imageFrame.Image);
+					}
 
                     //jump two bytes at a time
                     depthIndex += 2;
@@ -139,7 +142,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         #region Process
         public void ProcessPlate()
         {
-            plateArea = manager.GetPoints(depthMap, settingsWindow.rectPoint, (int)(5 * 2));
+            plateArea = manager.GetPoints(depthMap, settingsWindow.rectPoint, (int)(settingsWindow.limitSlider.Value));
         }
         #endregion
     }

@@ -20,10 +20,10 @@
 
 
         <Label Content="Contrast: " Grid.Row="1" Height="28" HorizontalAlignment="Left" Margin="0,45,0,0" Name="label1" VerticalAlignment="Top" />
-        <Slider Height="25" Margin="50,0,12,30" Name="minSlider" VerticalAlignment="Bottom"  SelectionEnd="1" Value="0.8" Grid.Row="1" />
+        <Slider Height="25" Margin="50,0,12,30" Name="minSlider" VerticalAlignment="Bottom" Value="3" Grid.Row="1" Maximum="10" Minimum="1" />
 
 
         <Label Content="Limit:" Grid.Row="1" Height="28" HorizontalAlignment="Left" Margin="0,72,0,0" Name="label2" VerticalAlignment="Top" />
-        <Slider Height="25" Margin="50,0,12,0" Name="limitSlider" SelectionEnd="1" Value="2" VerticalAlignment="Bottom" Grid.Row="1" />
+        <Slider Height="25" Margin="50,0,12,0" Name="limitSlider" SelectionEnd="1" Value="8" VerticalAlignment="Bottom" Grid.Row="1" />
     </Grid>
 </UserControl>

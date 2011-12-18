@@ -46,7 +46,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             if (point.X == 0 && point.Y == 0)
                 return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
 
-            image = data;
+            image = (int[,])data.Clone();
 
             #region Füllen
             pointsToCheck.Enqueue(new PointInfo(point.X, point.Y, GetPixel(point.X, point.Y)));
@@ -58,48 +58,30 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
             #endregion
 
-            #region kanten finden...
+            #region Ball finden...
             if (xMax > 0 && xMin > 0)
 			{
-				Point middle = new Point((xMin + xMax) / 2, (yMax + yMin) / 2);
-
-				#region Oben
-				int actualMax = -1;
-				Point edge1 = new Point(0, 0);
-
-				for (int x = xMin; x <= xMax; x++)
-				{
-					for (int y = yMin; y <= yMax; y++)
-					{
-						if (GetPixel(x, y) == -1)
-						{
-							if (distanceSqr(middle, new Point(x, y)) > actualMax)
-							{
-								actualMax = distanceSqr(middle, new Point(x, y));
-								edge1 = new Point(x, y);
-							}
-							break;
-						}
-					}
-				}
-				#endregion
-
 
 				#region Rechteck erstellen
 				//Rectangle rect = new Rectangle(CalcIntersect(returnVal[0], returnVal[3]), CalcIntersect(returnVal[0], returnVal[1]), CalcIntersect(returnVal[1], returnVal[2]), CalcIntersect(returnVal[2], returnVal[3]));
-				
-                
 
-				Rectangle rect = new Rectangle(edge1, new Point(middle.X + 2, middle.Y - 2), new Point(middle.X + 2, middle.Y + 2), new Point(middle.X - 2, middle.Y + 2));
+
+				Point middle = new Point((xMin + xMax) / 2, (yMax + yMin) / 2);
+
+				Rectangle rect = new Rectangle(new Point(middle.X - 5, middle.Y - 5), new Point(middle.X + 5, middle.Y - 5), new Point(middle.X + 5, middle.Y + 5), new Point(middle.X - 5, middle.Y + 5));
+
+
+				image = data;// (int[,])data.Clone();
+				rect.points[0] = FindBall(data);
+
+
 				#endregion
 
                 return rect;
 
             }
-
             #endregion
-
-            return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
+			return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
         }
 
 
@@ -108,6 +90,34 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 			return (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
 		}
 
+
+		private Point FindBall(int[,] data)
+		{
+			limit -= 2;
+
+			for (int x = xMin; x < xMax; x += 3)
+			{
+				for (int y = yMin; y < yMax; y += 3)
+				{
+					pointsToCheck.Enqueue(new PointInfo(x, y, GetPixel(x, y)));
+
+					int filled = 0;
+
+					while (pointsToCheck.Count != 0)
+					{
+						filled++;
+						Fill(pointsToCheck.Dequeue());
+					}
+
+					if (filled > 10)
+					{
+						return new Point(x, y);
+					}
+				}
+			}
+
+			return new Point(0, 0);
+		}
 
         Color green = Color.FromArgb(200, 255, 0, 255);
         private bool Fill(PointInfo p)
