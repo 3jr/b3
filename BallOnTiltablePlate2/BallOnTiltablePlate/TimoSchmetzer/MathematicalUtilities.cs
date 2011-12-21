@@ -213,17 +213,16 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <returns></returns>
         public static Point3D PlateCoordinatesToEucidean3DCoordinates(Vector PlateCoordinate, Vector Tilt)
         {
+            throw new NotImplementedException("Not finished yet");
             Vector3D Euclidean = new Vector3D();
-            Vector3D eX = new Vector3D(1, 0, Math.Tan(Tilt.X));
-            eX.Normalize();
-            Vector3D eY = new Vector3D(0, 1, Math.Tan(Tilt.Y));
-            eY.Normalize();
+            Vector3D eX = new Vector3D(Math.Cos(Tilt.X), 0, Math.Sin(Tilt.X));
+            Vector3D eY = new Vector3D(0, Math.Cos(Tilt.Y), Math.Sin(Tilt.Y));
             Euclidean = eX * PlateCoordinate.X + eY * PlateCoordinate.Y;
             return (Point3D)Euclidean;
         }
 
         /// <summary>
-        /// Calcs Plate Edges of a 1x1 plate
+        /// Calcs Plate Edges of a 2x2 plate
         /// </summary>
         /// <param name="Tilt">Tilt of the plate</param>
         /// <returns></returns>

@@ -25,6 +25,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer
             #region calccalltimes
             double tcallx = (Istate.DesiredTilt.X - Istate.Tilt.X) / (Istate.PlateVelocity.X);
             double tcally = (Istate.DesiredTilt.Y - Istate.Tilt.Y) / (Istate.PlateVelocity.Y);
+            double signx = Math.Sign(tcallx); 
+            double signy = Math.Sign(tcally); 
+            tcallx = Math.Abs(tcallx);
+            tcally = Math.Abs(tcally);
             tcallx = tcallx > elapsedSeconds ? elapsedSeconds : tcallx;
             tcally = tcally > elapsedSeconds ? elapsedSeconds : tcally;
             #endregion
@@ -42,18 +46,18 @@ namespace BallOnTiltablePlate.TimoSchmetzer
             #region createcalcs
             if (tcallx >= tcally)
             {
-                state.PlateVelocity = new Vector(Istate.PlateVelocity.X, Istate.PlateVelocity.Y);
+                state.PlateVelocity = new Vector(signx*Istate.PlateVelocity.X, signy*Istate.PlateVelocity.Y);
                 Physics.Physics3D.CalcPhysics(state, tcally);
-                state.PlateVelocity = new Vector(Istate.PlateVelocity.X, 0);
+                state.PlateVelocity = new Vector(signx*Istate.PlateVelocity.X, 0);
                 Physics.Physics3D.CalcPhysics(state, tcallx - tcally);
                 state.PlateVelocity = new Vector(0, 0);
                 Physics.Physics3D.CalcPhysics(state, elapsedSeconds - tcallx);
             }
             else
             {
-                state.PlateVelocity = new Vector(Istate.PlateVelocity.X, Istate.PlateVelocity.Y);
+                state.PlateVelocity = new Vector(signx * Istate.PlateVelocity.X, signy * Istate.PlateVelocity.Y);
                 Physics.Physics3D.CalcPhysics(state, tcallx);
-                state.PlateVelocity = new Vector(0, Istate.PlateVelocity.Y);
+                state.PlateVelocity = new Vector(0, signy * Istate.PlateVelocity.Y);
                 Physics.Physics3D.CalcPhysics(state, tcally - tcallx);
                 state.PlateVelocity = new Vector(0, 0);
                 Physics.Physics3D.CalcPhysics(state, elapsedSeconds - tcally);

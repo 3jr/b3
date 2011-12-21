@@ -93,7 +93,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #endregion
 
             #region Debugout
-            System.Diagnostics.Debug.Print(state.Position.ToString());
+            //System.Diagnostics.Debug.Print(state.Tilt.ToString());
             #endregion
         }
 
