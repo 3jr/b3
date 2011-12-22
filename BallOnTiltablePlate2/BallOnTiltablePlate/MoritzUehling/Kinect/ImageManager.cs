@@ -7,7 +7,12 @@ using System.Diagnostics;
 
 using Windows = System.Windows;
 using Timo = BallOnTiltablePlate.TimoSchmetzer.Utilities;
+using System.Windows.Media.Media3D;
 
+
+//METHODEN:
+//PointsOnLayerToNormalizizedNormalVector(a,b,c)
+//HightOfPlate(point(a,b), PointsOnLayerToNormalizizedNormalVector(a,b,c))
 
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
@@ -46,8 +51,8 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             if (point.X == 0 && point.Y == 0)
                 return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
 
-            image = (int[,])data.Clone();
-
+            //image = (int[,])data.Clone();
+            image = data;
             #region Füllen
             pointsToCheck.Enqueue(new PointInfo(point.X, point.Y, GetPixel(point.X, point.Y)));
 
@@ -57,30 +62,30 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             }
 
             #endregion
+            
+            //#region Ball finden...
+            //if (xMax > 0 && xMin > 0)
+            //{
 
-            #region Ball finden...
-            if (xMax > 0 && xMin > 0)
-			{
-
-				#region Rechteck erstellen
-				//Rectangle rect = new Rectangle(CalcIntersect(returnVal[0], returnVal[3]), CalcIntersect(returnVal[0], returnVal[1]), CalcIntersect(returnVal[1], returnVal[2]), CalcIntersect(returnVal[2], returnVal[3]));
-
-
-				Point middle = new Point((xMin + xMax) / 2, (yMax + yMin) / 2);
-
-				Rectangle rect = new Rectangle(new Point(middle.X - 5, middle.Y - 5), new Point(middle.X + 5, middle.Y - 5), new Point(middle.X + 5, middle.Y + 5), new Point(middle.X - 5, middle.Y + 5));
+            //    #region Rechteck erstellen
+            //    //Rectangle rect = new Rectangle(CalcIntersect(returnVal[0], returnVal[3]), CalcIntersect(returnVal[0], returnVal[1]), CalcIntersect(returnVal[1], returnVal[2]), CalcIntersect(returnVal[2], returnVal[3]));
 
 
-				image = data;// (int[,])data.Clone();
-				rect.points[0] = FindBall(data);
+            //    Point middle = new Point((xMin + xMax) / 2, (yMax + yMin) / 2);
+
+            //    Rectangle rect = new Rectangle(new Point(middle.X - 5, middle.Y - 5), new Point(middle.X + 5, middle.Y - 5), new Point(middle.X + 5, middle.Y + 5), new Point(middle.X - 5, middle.Y + 5));
 
 
-				#endregion
+            //    image = data;// (int[,])data.Clone();
+            //    rect.points[0] = FindBall(data);
 
-                return rect;
 
-            }
-            #endregion
+            //    #endregion
+
+            //    return rect;
+
+            //}
+            //#endregion
 			return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
         }
 

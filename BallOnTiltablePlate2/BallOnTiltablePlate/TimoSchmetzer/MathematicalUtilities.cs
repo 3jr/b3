@@ -183,7 +183,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <param name="Position">coordinates</param>
         /// <param name="NormalVector">NormalVector of the Plate</param>
         /// <returns>hight of Plate</returns>
-        public static double HightofPlate(Point Position, Vector3D NormalVector)
+        public static double HightOfPlate(Point Position, Vector3D NormalVector)
         {
             Vector3D n = NormalVector;
             double PlateZ = (-Position.X * n.X - Position.Y * n.Y) / (n.Z);
