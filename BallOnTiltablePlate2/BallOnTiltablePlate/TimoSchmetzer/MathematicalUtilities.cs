@@ -190,12 +190,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             return PlateZ;
         }
 
-        [Obsolete("tmpredirect",false)]
-        public static double HightofPlate(Point Position, Vector3D NormalVector)
-        {
-            return (HightOfPlate(Position, NormalVector));
-        }
-
         /// <summary>
         /// Calculastes the Normalized Normal Vector of a 
         /// Points mustn'b be on a line

@@ -35,7 +35,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         public static bool IsHit(PhysicsState state)
         { 
             //Test on Plate, test would hit
-            return (Math.Abs(state.Position.Z-Mathematics.HightofPlate(new Point(state.Position.X, state.Position.Y),Mathematics.CalcNormalVector(state.Tilt)))<0.01)
+            return (Math.Abs(state.Position.Z-Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y),Mathematics.CalcNormalVector(state.Tilt)))<0.01)
                 && WouldHit(state) ;
         }
 
