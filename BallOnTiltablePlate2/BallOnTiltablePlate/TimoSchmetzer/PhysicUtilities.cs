@@ -24,7 +24,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         {  
             Vector3D n = Mathematics.CalcNormalVector(state.Tilt);
             double angle = Mathematics.AngleBetwennVectors(n, state.Velocity);
-            return !(angle < Mathematics.DegToRad(92.5) && angle > Mathematics.DegToRad(88.5));
+            return (angle > Mathematics.DegToRad(92.5) || angle < Mathematics.DegToRad(88.5));
         }
 
         /// <summary>

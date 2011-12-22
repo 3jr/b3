@@ -66,9 +66,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #region CalcMovement
             if (bs == BallState.RollOnPlate)
             {
-                state.Acceleration =
-                    Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt)
-                    + state.CentrifugalFactor*state.PlateVelocity.Length*Utilities.Mathematics.CalcNormalVector(state.Tilt);
+                state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
+                double deltahight = Mathematics.HightofPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))
+                    - Mathematics.HightofPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt - elapsedSeconds*state.PlateVelocity));
+                if (deltahight > 0)
+                {
+                    state.Acceleration += state.CentrifugalFactor * deltahight * Mathematics.CalcNormalVector(state.Tilt); 
+                }
                 CalcMovement(state, elapsedSeconds);
             }
             if (bs == BallState.InAir)
