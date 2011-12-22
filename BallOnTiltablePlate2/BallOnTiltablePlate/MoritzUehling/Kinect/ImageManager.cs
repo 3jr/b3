@@ -37,7 +37,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         int[,] image;
 
-        public Rectangle GetPoints(int[,] data, Point point, int limit)
+		public Vector3D GetBall(int[,] data, Point p1, Point p2, Point p3, int limit)
         {
             //b = bitmap;
             int step = limit;
@@ -48,45 +48,20 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
             yMin = int.MaxValue;
             yMax = int.MinValue;
 
-            if (point.X == 0 && point.Y == 0)
-                return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
+			if (p1.X == 0 && p1.Y == 0)
+				return new Vector3D();
 
-            //image = (int[,])data.Clone();
             image = data;
             #region Füllen
-            pointsToCheck.Enqueue(new PointInfo(point.X, point.Y, GetPixel(point.X, point.Y)));
+			//pointsToCheck.Enqueue(new PointInfo(point.X, point.Y, GetPixel(point.X, point.Y)));
 
-            while (pointsToCheck.Count != 0)
-            {
-                Fill(pointsToCheck.Dequeue());
-            }
+			//while (pointsToCheck.Count != 0)
+			//{
+			//    Fill(pointsToCheck.Dequeue());
+			//}
 
             #endregion
-            
-            //#region Ball finden...
-            //if (xMax > 0 && xMin > 0)
-            //{
-
-            //    #region Rechteck erstellen
-            //    //Rectangle rect = new Rectangle(CalcIntersect(returnVal[0], returnVal[3]), CalcIntersect(returnVal[0], returnVal[1]), CalcIntersect(returnVal[1], returnVal[2]), CalcIntersect(returnVal[2], returnVal[3]));
-
-
-            //    Point middle = new Point((xMin + xMax) / 2, (yMax + yMin) / 2);
-
-            //    Rectangle rect = new Rectangle(new Point(middle.X - 5, middle.Y - 5), new Point(middle.X + 5, middle.Y - 5), new Point(middle.X + 5, middle.Y + 5), new Point(middle.X - 5, middle.Y + 5));
-
-
-            //    image = data;// (int[,])data.Clone();
-            //    rect.points[0] = FindBall(data);
-
-
-            //    #endregion
-
-            //    return rect;
-
-            //}
-            //#endregion
-			return new Rectangle(Point.Empty, Point.Empty, Point.Empty, Point.Empty);
+			return new Vector3D();
         }
 
 

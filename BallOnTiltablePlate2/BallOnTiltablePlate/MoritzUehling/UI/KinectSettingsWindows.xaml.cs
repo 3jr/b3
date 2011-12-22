@@ -52,14 +52,18 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 		DispatcherTimer timer = new DispatcherTimer();
 
 
-        public Draw.Point rectPoint;
+		public Draw.Point Point1, Point2, Point3;
+
+
         public void Init()
         {
             
 
             angleSlider.Value = ((double)(input.Kinect.NuiCamera.ElevationAngle - Camera.ElevationMinimum) * 10.0) / (double)(Camera.ElevationMaximum - Camera.ElevationMinimum);
 
-            rectPoint = new Draw.Point(0, 0);
+            Point1 = new Draw.Point(0, 0);
+			Point2 = new Draw.Point(0, 0);
+			Point3 = new Draw.Point(0, 0);
 
             input.DataRecived += new EventHandler<BallInputEventArgs>(input_DataRecived);
 			
@@ -88,8 +92,23 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 
         void kinectBox_MouseDown(object sender, Forms.MouseEventArgs e)
         {
-            rectPoint.X = (int)(e.X * (xres / (float)kinectBox.Width));
-            rectPoint.Y = (int)(e.Y * (yres / (float)kinectBox.Height));
+			if (e.Button == Forms.MouseButtons.Left)
+			{
+				Point1.X = (int)(e.X * (xres / (float)kinectBox.Width));
+				Point1.Y = (int)(e.Y * (yres / (float)kinectBox.Height));
+			}
+
+			if (e.Button == Forms.MouseButtons.Middle)
+			{
+				Point2.X = (int)(e.X * (xres / (float)kinectBox.Width));
+				Point2.Y = (int)(e.Y * (yres / (float)kinectBox.Height));
+			}
+
+			if (e.Button == Forms.MouseButtons.Right)
+			{
+				Point3.X = (int)(e.X * (xres / (float)kinectBox.Width));
+				Point3.Y = (int)(e.Y * (yres / (float)kinectBox.Height));
+			}
         }
 
 
@@ -114,15 +133,11 @@ namespace BallOnTiltablePlate.MoritzUehling.UI
 					Draw.Graphics g = Draw.Graphics.FromImage(image);
 
 
-					for (int i = 0; i < 4; i++)
-					{
-						Draw.Point p1 = input.PlateArea.points[i];
-						Draw.Point p2 = input.PlateArea.points[(i + 1) % 4];
-						g.DrawLine(new Draw.Pen(new Draw.SolidBrush(Draw.Color.Green), 1), p1, p2);
-					}
 					#endregion
 
-					image.SetPixel(rectPoint.X, rectPoint.Y, Draw.Color.Magenta);
+					image.SetPixel(Point1.X, Point1.Y, Draw.Color.Magenta);
+					image.SetPixel(Point2.X, Point2.Y, Draw.Color.Magenta);
+					image.SetPixel(Point3.X, Point3.Y, Draw.Color.Magenta);
 
 					kinectBox.Image = image;
 				}

@@ -8,6 +8,8 @@ using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 using Manager = BallOnTiltablePlate.MoritzUehling.Kinect;
 using System.Diagnostics;
 using Microsoft.Research.Kinect.Nui;
+using System.Drawing;
+using System.Windows.Media.Media3D;
 
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
@@ -38,6 +40,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         //Kinect
 		Runtime nui;
         Rectangle plateArea;
+		Vector3D Ball;
 
         ImageManager manager;
 
@@ -48,7 +51,6 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
 
         #region Properties
         public Runtime Kinect { get { return nui; } }
-        public Rectangle PlateArea { get { return plateArea; } }
         public int[,] KinectDepthMap { get { return depthMap; } }
         #endregion
 
@@ -142,7 +144,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Kinect
         #region Process
         public void ProcessPlate()
         {
-            plateArea = manager.GetPoints(depthMap, settingsWindow.rectPoint, (int)(settingsWindow.limitSlider.Value));
+            Ball = manager.GetBall(depthMap, settingsWindow.Point1, settingsWindow.Point2, settingsWindow.Point3, (int)(settingsWindow.limitSlider.Value));
         }
         #endregion
     }
