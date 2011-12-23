@@ -13,7 +13,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
 {
     public static class Mathematics
     {
-        
+
         #region LinearRegression
 
         public struct LineEquation
@@ -63,7 +63,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             return new double[] { (-b + Math.Sqrt((b * b) - (4 * a * c))) / (2 * a), (-b - Math.Sqrt((b * b) - (4 * a * c))) / (2 * a) };
         }
         #endregion
-        
+
         #region Transformations
         /// <summary>
         /// Spiegelt einen Vektor an einer (im Ursprung residenten) Ebene mit Hilfe der Householdertransformation
@@ -284,8 +284,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <param name="b">Vector3D</param>
         /// <returns>Angle [Rad]</returns>
         public static double AngleBetwennVectors(Vector3D a, Vector3D b)
-        { 
-            return Math.Acos((Vector3D.DotProduct(a,b))/(a.Length*b.Length));
+        {
+            return Math.Acos((Vector3D.DotProduct(a, b)) / (a.Length * b.Length));
         }
 
         #endregion
@@ -313,5 +313,82 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         }
 
         #endregion
+
+        #region Matrix
+        /// <summary>
+        /// Represents a 3x3 Matrix.
+        /// Indexes starting at 0.
+        /// Does some standard math operators.
+        /// </summary>
+        public class Matrix3x3
+        {
+            double[,] data;
+
+            public Matrix3x3(double[,] MatrixData)
+            {
+                Array.Copy(MatrixData, data, data.Length);
+            }
+
+            public Matrix3x3(Matrix3x3 matrix)
+            {
+                Array.Copy(matrix.data, this.data, this.data.Length);
+            }
+
+            public Matrix3x3(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22)
+            {
+                data[0, 0] = m00;
+                data[0, 1] = m01;
+                data[0, 2] = m02;
+                data[1, 0] = m10;
+                data[1, 1] = m11;
+                data[1, 2] = m12;
+                data[2, 0] = m20;
+                data[2, 1] = m21;
+                data[2, 2] = m22;
+            }
+
+            public double this[int indexi, int indexj]
+            {
+                get { return data[indexi, indexj]; }
+                set { data[indexi, indexj] = value; }
+            }
+
+            public static Matrix3x3 operator +(Matrix3x3 arg0, Matrix3x3 arg1)
+            {
+                return new Matrix3x3(arg0[0, 0] + arg1[0, 0], arg0[0, 1] + arg1[0, 1], arg0[0, 2] + arg1[0, 2],
+                    arg0[1, 0] + arg1[1, 0], arg0[1, 1] + arg1[1, 1], arg0[1, 2] + arg1[1, 2],
+                    arg0[2, 0] + arg1[2, 0], arg0[2, 1] + arg1[2, 1], arg0[2, 2] + arg1[2, 2]);
+            }
+
+            public static Matrix3x3 operator *(double arg0,Matrix3x3 arg1)
+            {
+                return new Matrix3x3(arg0* arg1[0, 0], arg0 * arg1[0, 1], arg0 * arg1[0, 2],
+                    arg0* arg1[1, 0], arg0* arg1[1, 1], arg0* arg1[1, 2],
+                    arg0* arg1[2, 0], arg0* arg1[2, 1], arg0* arg1[2, 2]);
+            }
+
+            public static Matrix3x3 operator *(Matrix3x3 arg0, Matrix3x3 arg1)
+            {
+                return new Matrix3x3(
+                    arg0[0, 0] * arg1[0, 0] + arg0[0, 1] * arg1[1, 0] + arg0[0, 2] * arg1[2, 0], arg0[0, 0] * arg1[0, 1] + arg0[0, 1] * arg1[1, 1] + arg0[0, 2] * arg1[2, 1], arg0[0, 0] * arg1[0, 2] + arg0[0, 1] * arg1[1, 2] + arg0[0, 2] * arg1[2, 2],
+                    arg0[1, 0] * arg1[0, 0] + arg0[1, 1] * arg1[1, 0] + arg0[1, 2] * arg1[2, 0], arg0[1, 0] * arg1[0, 1] + arg0[1, 1] * arg1[1, 1] + arg0[1, 2] * arg1[2, 1], arg0[1, 0] * arg1[0, 2] + arg0[1, 1] * arg1[1, 2] + arg0[1, 2] * arg1[2, 2],
+                    arg0[2, 0] * arg1[0, 0] + arg0[2, 1] * arg1[1, 0] + arg0[2, 2] * arg1[2, 0], arg0[2, 0] * arg1[0, 1] + arg0[2, 1] * arg1[1, 1] + arg0[2, 2] * arg1[2, 1], arg0[2, 0] * arg1[0, 2] + arg0[2, 1] * arg1[1, 2] + arg0[2, 2] * arg1[2, 2]);
+            }
+
+            public static Vector3D operator *(Matrix3x3 arg0, Vector3D arg1)
+            {
+                return new Vector3D(arg0[0, 0] * arg1.X + arg0[0, 1] * arg1.Y + arg0[0, 2] * arg1.Z,
+                    arg0[1, 0] * arg1.X + arg0[1, 1] * arg1.Y + arg0[1, 2] * arg1.Z,
+                    arg0[2, 0] * arg1.X + arg0[2, 1] * arg1.Y + arg0[2, 2] * arg1.Z);
+            }
+
+            public static Point3D operator *(Matrix3x3 arg0, Point3D arg1)
+            {
+                return new Point3D(arg0[0, 0] * arg1.X + arg0[0, 1] * arg1.Y + arg0[0, 2] * arg1.Z,
+                    arg0[1, 0] * arg1.X + arg0[1, 1] * arg1.Y + arg0[1, 2] * arg1.Z,
+                    arg0[2, 0] * arg1.X + arg0[2, 1] * arg1.Y + arg0[2, 2] * arg1.Z);
+            }
+        }
+        #endregion
+        }
     }
-}
