@@ -98,6 +98,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
 
             #region Debugout
             //System.Diagnostics.Debug.Print(state.Tilt.ToString());
+            state.Position = Mathematics.PlateCoordinatesToEucidean3DCoordinates(new Vector(1, 1), state.Tilt);
             #endregion
         }
 
