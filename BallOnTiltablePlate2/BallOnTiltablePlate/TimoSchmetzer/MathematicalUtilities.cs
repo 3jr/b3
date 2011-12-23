@@ -390,5 +390,16 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             }
         }
         #endregion
+
+        #region Transformations
+        public Point3D RotateTransform(Vector3D axis, double rad, Point3D OriginalPoint)
+        {
+            axis.Normalize();
+            Matrix3x3 R = new Matrix3x3(Math.Cos(rad) + (axis.X * axis.X) * (1 - Math.Cos(rad)), axis.X * axis.Y * (1 - Math.Cos(rad)) - axis.Z * Math.Sin(rad), axis.X * axis.Z * (1 - Math.Cos(rad)) + axis.Y * Math.Sin(rad),
+                                    axis.X * axis.Y * (1 - Math.Cos(rad)) + axis.Z * Math.Sin(rad), Math.Cos(rad) + axis.Y * axis.Y * (1 - Math.Cos(rad)), axis.Z * axis.Y * (1 - Math.Cos(rad)) - axis.X * Math.Sin(rad),
+                                    axis.X * axis.Z * (1 - Math.Cos(rad)) - axis.Y * Math.Sin(rad), axis.Z * axis.Y * (1 - Math.Cos(rad)) + axis.X * Math.Sin(rad), Math.Cos(rad) + (axis.Z * axis.Z) * (1 - Math.Cos(rad)));
+            return R * OriginalPoint;
         }
+        #endregion
+    }
     }
