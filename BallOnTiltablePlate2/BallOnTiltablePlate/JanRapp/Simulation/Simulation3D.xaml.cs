@@ -208,6 +208,15 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         {
             timer.Interval = new TimeSpan((long)(1000000 / FpsSlider.Value));
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            TiltVecBox.Value = new Vector(0.0, 0.0);
+            DesiredTiltVecBox.Value = new Vector(0.0, 0.0);
+            PositionVecBox.Value = new Vector3D(0.0, 0.0, 0.0);
+            VelocityVecBox.Value = new Vector3D(0.0, 0.0, 0.0);
+            AccelerationVecBox.Value = new Vector3D(0.0, 0.0, 0.0);
+        }
     }
 
     public interface IPhysicsState

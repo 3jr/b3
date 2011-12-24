@@ -6,17 +6,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BallOnTiltablePlate.JanRapp.Controls" 
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" d:DesignHeight="54.667" d:DesignWidth="405">
+             mc:Ignorable="d" d:DesignHeight="48.667" d:DesignWidth="198">
     <UserControl.Resources>
-        <System:Double x:Key="Increment">.05</System:Double>
         <Style TargetType="local:DoubleBox">
-            <Setter Property="SmallChange" Value=".001"/>
-            <!--<Setter Property="FormatString" Value="F4"/>-->
-            <Setter Property="Value" Value="0"/>
+            <Setter Property="SmallChange" 
+                    Value="{Binding SmallChange, RelativeSource={RelativeSource AncestorType=local:Vector2DControl}}"/> 
+            <Setter Property="RegularChange" 
+                    Value="{Binding RegularChange, RelativeSource={RelativeSource AncestorType=local:Vector2DControl}}"/>
+            <Setter Property="LargeChange" 
+                    Value="{Binding LargeChange, RelativeSource={RelativeSource AncestorType=local:Vector2DControl}}"/>
+            <Setter Property="Value" Value="0.00"/>
         </Style>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
-        <local:DoubleBox x:Name="Xud" ValueChanged="X_ValueChanged" Value="0" Text=" X:" SmallChange="{Binding SmallChange}" LargeChange="{Binding LargeChange}"/>
-        <local:DoubleBox x:Name="Yud" ValueChanged="Y_ValueChanged" Value="0" Text=" Y:"/>
+        <local:DoubleBox 
+            x:Name="Xud" ValueChanged="X_ValueChanged" Value="0" Text=" X:"
+            />
+        <local:DoubleBox 
+            x:Name="Yud" ValueChanged="Y_ValueChanged" Value="0" Text=" Y:"
+            />
     </StackPanel>
 </UserControl>

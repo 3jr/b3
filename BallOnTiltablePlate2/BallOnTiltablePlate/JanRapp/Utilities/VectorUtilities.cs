@@ -203,12 +203,12 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.Vectors
             Vector3D firstAxisForXRotation = new Vector3D(1.0,0.0,0.0);
             Vector3D secoundAxisForYRotation = new Vector3D(0, Math.Cos(rotationAroundXAndYAxis.X), Math.Sin(rotationAroundXAndYAxis.X));
             double xAngle = (rotationAroundXAndYAxis.X);
-            double yAngle = (rotationAroundXAndYAxis.Y);
+            double yAngle = Math.Cos(rotationAroundXAndYAxis.X) * (rotationAroundXAndYAxis.Y);
 
-            Quaternion fistRotation = new Quaternion(firstAxisForXRotation, RadToDeg(xAngle));
+            Quaternion firstRotation = new Quaternion(firstAxisForXRotation, RadToDeg(xAngle));
             Quaternion secoundRotaion = new Quaternion(secoundAxisForYRotation, RadToDeg(yAngle));
 
-            Quaternion resultQuaternion = secoundRotaion * fistRotation;
+            Quaternion resultQuaternion = firstRotation * secoundRotaion;
 
             if (resultQuaternion != result.Quaternion)
             {

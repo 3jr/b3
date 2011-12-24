@@ -25,6 +25,24 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         const string RootSaveName = "RootSave";
         IO.FileSystemWatcher fsw;
 
+        #region Attached Properties
+
+        public static string GetPropertysToSave(DependencyObject obj)
+        {
+            return (string)obj.GetValue(PropertysToSaveProperty);
+        }
+
+        public static void SetPropertysToSave(DependencyObject obj, string value)
+        {
+            obj.SetValue(PropertysToSaveProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for PropertysToSave.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PropertysToSaveProperty =
+            DependencyProperty.RegisterAttached("PropertysToSave", typeof(string), typeof(SettingSaver), new PropertyMetadata());
+
+        #endregion Attached Properties
+
         private Panel ContainingPanel
         {
             get
@@ -54,6 +72,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             {
                 throw new InvalidOperationException("SaveSettings Controll must be a Child in a Panel");
             }
+
             UpdateInputList();
 
             try
@@ -74,20 +93,21 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         void fsw_Renamed(object sender, IO.RenamedEventArgs e)
         {
-            InputComboBox.ItemsSource = IO.Directory.EnumerateFiles(GetSaveFolder()).Select( p => IO.Path.GetFileName(p));
+            UpdateInputList();
         }
 
         void fsw_Events(object sender, IO.FileSystemEventArgs e)
         {
-            InputComboBox.ItemsSource = IO.Directory.EnumerateFiles(GetSaveFolder()).Select(p => IO.Path.GetFileName(p));
-            
+            UpdateInputList();
         }
 
         private void UpdateInputList()
         {
+            InputComboBox.ItemsSource = IO.Directory.EnumerateFiles(GetSaveFolder()).Select(p => IO.Path.GetFileName(p));
         }
 
         #region Helper
+
         private string GetSaveFolder()
         {
             FrameworkElement current = (FrameworkElement)this.Parent;
@@ -141,9 +161,11 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                             yield return innerItem;
                 }
         }
+
         #endregion
 
-        #region Comands and Events
+        #region Events
+
         private void SaveCmd_Executed(object target, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
@@ -257,35 +279,24 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             var cmd = ((RoutedCommand)this.Resources["LoadCmd"]);
             if (cmd.CanExecute(null, (IInputElement)sender))
                 cmd.Execute(null, (IInputElement)sender);
-        } 
-        #endregion
-
-        #region DependencyProperties
-        public static string GetPropertysToSave(DependencyObject obj)
-        {
-            return (string)obj.GetValue(PropertysToSaveProperty);
         }
 
-        public static void SetPropertysToSave(DependencyObject obj, string value)
-        {
-            obj.SetValue(PropertysToSaveProperty, value);
-        }
+        #endregion Events
 
-        // Using a DependencyProperty as the backing store for PropertysToSave.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PropertysToSaveProperty =
-            DependencyProperty.RegisterAttached("PropertysToSave", typeof(string), typeof(SettingSaver), new PropertyMetadata()); 
-        #endregion
+        #region Dispose
 
         public void Dispose()
         {
             if(fsw != null)
             fsw.Dispose();
         }
-
-        ~SettingSaver()
+        
+	    ~SettingSaver()
         {
             if(fsw != null)
             fsw.Dispose();
         }
+
+        #endregion Dispode
     }
 }

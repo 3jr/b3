@@ -15,9 +15,9 @@
         <System:Double x:Key="AngleOfCamera">35</System:Double>
         <System:Double x:Key="DistanceOfCamera">-6.2</System:Double>
         <System:Double x:Key="BallSize">0.05</System:Double>
-        <System:Double x:Key="BallPositionX">0.2</System:Double>
-        <System:Double x:Key="BallPositionY">0.2</System:Double>
-        <System:Double x:Key="BallPositionZ">0.5</System:Double>
+        <System:Double x:Key="BallPositionX">0.0</System:Double>
+        <System:Double x:Key="BallPositionY">0.0</System:Double>
+        <System:Double x:Key="BallPositionZ">0.0</System:Double>
         <util:VectorToDoubleSplitterConverterToDeg x:Key="VectorToDoubleSplitterConverterToDeg"/>
         <util:Point3DToDoubleSplitterConverter x:Key="Point3DToDoubleSplitterConverter"/>
     </UserControl.Resources>
@@ -44,6 +44,40 @@
                     </PerspectiveCamera.Transform>
                 </PerspectiveCamera>
             </Viewport3D.Camera>
+            <local:Plate3D x:Name="PlateModel">
+                <local:Plate3D.Transform>
+                    <RotateTransform3D>
+                        <RotateTransform3D.Rotation>
+                            <QuaternionRotation3D x:Name="PlateRotation"/>
+                        </RotateTransform3D.Rotation>
+                    </RotateTransform3D>
+                </local:Plate3D.Transform>
+                <local:Plate3D.Material>
+                    <DiffuseMaterial>
+                        <DiffuseMaterial.Brush>
+                            <ImageBrush ImageSource=".\Shapes\PlateTextureBlackAxies.png"/>
+                        </DiffuseMaterial.Brush>
+                    </DiffuseMaterial>
+                </local:Plate3D.Material>
+                <local:Plate3D.BackMaterial>
+                    <DiffuseMaterial Color="Black" Brush="Black"/>
+                </local:Plate3D.BackMaterial>
+            </local:Plate3D>
+            <local:Sphere3D x:Name="BallModel">
+                <local:Sphere3D.Transform>
+                    <Transform3DGroup>
+                        <ScaleTransform3D ScaleX="{DynamicResource BallSize}" ScaleY="{DynamicResource BallSize}" ScaleZ="{DynamicResource BallSize}"/>
+                        <!--<TranslateTransform3D 
+                            OffsetX="{Binding Position, Converter={StaticResource Point3DToDoubleSplitterConverter}, ConverterParameter='X', Mode=OneWay}" 
+                            OffsetY="{Binding Position, Converter={StaticResource Point3DToDoubleSplitterConverter}, ConverterParameter='Y', Mode=OneWay}" 
+                            OffsetZ="{Binding Position, Converter={StaticResource Point3DToDoubleSplitterConverter}, ConverterParameter='Z', Mode=OneWay}"/>-->
+                        <TranslateTransform3D
+                            OffsetX="{DynamicResource BallPositionX}"
+                            OffsetY="{DynamicResource BallPositionY}"
+                            OffsetZ="{DynamicResource BallPositionZ}"/>
+                    </Transform3DGroup>
+                </local:Sphere3D.Transform>
+            </local:Sphere3D> 
             <!--<ContainerUIElement3D x:Name="TiltControlX"
                                   MouseDown="TiltControlX_MouseDown">
                 <ContainerUIElement3D.Transform>
@@ -134,46 +168,6 @@
                     </local:Cylinder3D.Transform>
                 </local:Cylinder3D>
             </ContainerUIElement3D>-->
-            <local:Sphere3D x:Name="BallModel">
-                <local:Sphere3D.Transform>
-                    <Transform3DGroup>
-                        <ScaleTransform3D ScaleX="{DynamicResource BallSize}" ScaleY="{DynamicResource BallSize}" ScaleZ="{DynamicResource BallSize}"/>
-                        <!--<TranslateTransform3D 
-                            OffsetX="{Binding Position, Converter={StaticResource Point3DToDoubleSplitterConverter}, ConverterParameter='X', Mode=OneWay}" 
-                            OffsetY="{Binding Position, Converter={StaticResource Point3DToDoubleSplitterConverter}, ConverterParameter='Y', Mode=OneWay}" 
-                            OffsetZ="{Binding Position, Converter={StaticResource Point3DToDoubleSplitterConverter}, ConverterParameter='Z', Mode=OneWay}"/>-->
-                        <TranslateTransform3D
-                            OffsetX="{DynamicResource BallPositionX}"
-                            OffsetY="{DynamicResource BallPositionY}"
-                            OffsetZ="{DynamicResource BallPositionZ}"/>
-                    </Transform3DGroup>
-                </local:Sphere3D.Transform>
-            </local:Sphere3D> 
-            <local:Plate3D x:Name="PlateModel">
-                <local:Plate3D.Transform>
-                    <Transform3DGroup>
-                        <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
-                        <ScaleTransform3D ScaleZ="1" ScaleY="1" ScaleX="1"/>
-                        <RotateTransform3D d:EulerAngles="44,45,0">
-                            <RotateTransform3D.Rotation>
-                                <QuaternionRotation3D x:Name="PlateRotation"/>
-                            </RotateTransform3D.Rotation>
-                        </RotateTransform3D>
-                        <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
-                        <TranslateTransform3D OffsetZ="0"/>
-                    </Transform3DGroup>
-                </local:Plate3D.Transform>
-                <local:Plate3D.Material>
-                    <DiffuseMaterial>
-                        <DiffuseMaterial.Brush>
-                            <ImageBrush ImageSource=".\Shapes\PlateTextureBlackAxies.png"/>
-                        </DiffuseMaterial.Brush>
-                    </DiffuseMaterial>
-                </local:Plate3D.Material>
-                <local:Plate3D.BackMaterial>
-                    <DiffuseMaterial Color="Black" Brush="Black"/>
-                </local:Plate3D.BackMaterial>
-            </local:Plate3D>
             <ContainerUIElement3D IsEnabled="False" IsHitTestVisible="False" Visibility="Visible">
             <ModelVisual3D x:Name="StandModel">
                 <ModelVisual3D.Content>

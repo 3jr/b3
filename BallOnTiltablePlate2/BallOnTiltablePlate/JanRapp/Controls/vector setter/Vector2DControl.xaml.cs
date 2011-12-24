@@ -22,6 +22,10 @@ namespace BallOnTiltablePlate.JanRapp.Controls
     {
         public event RoutedPropertyChangedEventHandler<Vector> ValueChanged;
 
+        #region Properties
+
+        #region Value
+
         public Vector Value
         {
             get { return (Vector)GetValue(ValueProperty); }
@@ -29,8 +33,23 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         // Using a DependencyProperty as the backing store for Value.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ValueProperty = 
-    DependencyProperty.Register("Value", typeof(Vector), typeof(Vector2DControl), new UIPropertyMetadata(new PropertyChangedCallback(OnUriChanged)));
+        public static readonly DependencyProperty ValueProperty =
+    DependencyProperty.Register("Value", typeof(Vector), typeof(Vector2DControl), new UIPropertyMetadata(new PropertyChangedCallback(OnValueChanged)));
+
+        private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Vector2DControl instance = (Vector2DControl)d;
+            Vector v = (Vector)e.NewValue;
+            instance.Xud.Value = v.X;
+            instance.Yud.Value = v.Y;
+
+            if (instance.ValueChanged != null)
+                instance.ValueChanged(instance, new RoutedPropertyChangedEventArgs<Vector>((Vector)e.OldValue, (Vector)e.NewValue));
+        }
+
+        #endregion Value
+
+        #region SmallChange
 
         public double SmallChange
         {
@@ -40,46 +59,43 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         // Using a DependencyProperty as the backing store for SmallChange.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SmallChangeProperty =
-            DependencyProperty.Register("SmallChange", typeof(double), typeof(Vector2DControl), new UIPropertyMetadata(0.1));
+    DependencyProperty.Register("SmallChange", typeof(double), typeof(Vector2DControl), new UIPropertyMetadata(0.01));
 
+        #endregion SmallChange
 
+        #region RegularChange
 
-        public double LangeChange
+        public double RegularChange
         {
-            get { return (double)GetValue(LangeChangeProperty); }
-            set { SetValue(LangeChangeProperty, value); }
+            get { return (double)GetValue(RegularChangeProperty); }
+            set { SetValue(RegularChangeProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for LangeChange.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty LangeChangeProperty =
-            DependencyProperty.Register("LangeChange", typeof(double), typeof(Vector2DControl), new UIPropertyMetadata(0.5));
+        // Using a DependencyProperty as the backing store for RegularChange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RegularChangeProperty =
+    DependencyProperty.Register("RegularChange", typeof(double), typeof(Vector2DControl), new UIPropertyMetadata(0.10));
 
+        #endregion RegularChange
 
+        #region LargeChange
+
+        public double LargeChange
+        {
+            get { return (double)GetValue(LargeChangeProperty); }
+            set { SetValue(LargeChangeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for LargeChange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LargeChangeProperty =
+    DependencyProperty.Register("LargeChange", typeof(double), typeof(Vector2DControl), new UIPropertyMetadata(1.00));
+
+        #endregion LargeChange 
+
+        #endregion Properties
 
         public Vector2DControl()
         {
             InitializeComponent();
-
-            //Xud.SetBinding(DoubleBox.SmallChangeProperty, new Binding(){ Source = Vector2DControl.SmallChangeProperty, 
-        }
-
-        private static void OnUriChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) 
-        {
-            Vector2DControl c = (Vector2DControl)d;
-            Vector v = (Vector)e.NewValue;
-            c.Xud.Value = v.X;
-            c.Yud.Value = v.Y;
-        }
-
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (e.Property == ValueProperty)
-            {
-                if(ValueChanged != null)
-                    ValueChanged(this, new RoutedPropertyChangedEventArgs<Vector>((Vector)e.OldValue, (Vector)e.NewValue));
-            }
-
-            base.OnPropertyChanged(e);
         }
 
         private void X_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -22,6 +22,10 @@ namespace BallOnTiltablePlate.JanRapp.Controls
     {
         public event RoutedPropertyChangedEventHandler<double> ValueChanged;
 
+        #region Properties
+
+        #region Text
+
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
@@ -29,9 +33,18 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TextProperty = 
-    DependencyProperty.Register("Text", typeof(string), typeof(DoubleBox), new UIPropertyMetadata(string.Empty));
+        public static readonly DependencyProperty TextProperty =
+    DependencyProperty.Register("Text", typeof(string), typeof(DoubleBox), new UIPropertyMetadata(string.Empty, TextPropertyChanged));
 
+        private static void TextPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            DoubleBox instance = (DoubleBox)d;
+
+            instance.lbl.Content = (string)e.NewValue;
+        }
+        #endregion Text
+
+        #region Value
 
         public double Value
         {
@@ -40,29 +53,25 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         // Using a DependencyProperty as the backing store for Value.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ValueProperty = 
-    DependencyProperty.Register("Value", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(0.0));
+        public static readonly DependencyProperty ValueProperty =
+    DependencyProperty.Register("Value", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(0.0, ValuePropertyChanged));
 
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        private static void ValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if(e.Property == ValueProperty && e.NewValue != e.OldValue)
-            {
-                txtBox.Text = Value.ToString();
-                if ((double)e.NewValue > this.Maximum)
-                    Value = this.Maximum;
-                if ((double)e.NewValue < this.Minimum)
-                    Value = this.Minimum;
-                Debug.Assert(e.OldValue != e.NewValue);
-                if(ValueChanged != null)
-                    ValueChanged(this, new RoutedPropertyChangedEventArgs<double>((double)e.OldValue,(double)e.NewValue));
-            }
-            else if(e.Property == TextProperty)
-            {
-                this.lbl.Content = this.Text;
-            }
-            base.OnPropertyChanged(e);
+            DoubleBox instance = (DoubleBox)d;
+
+            instance.txtBox.Text = instance.Value.ToString();
+            if ((double)e.NewValue > instance.Maximum)
+                instance.Value = instance.Maximum;
+            if ((double)e.NewValue < instance.Minimum)
+                instance.Value = instance.Minimum;
+            if(instance.ValueChanged != null)
+                instance.ValueChanged(instance, new RoutedPropertyChangedEventArgs<double>((double)e.OldValue, (double)e.NewValue));
         }
 
+	    #endregion Value
+
+        #region SmallChange
 
         public double SmallChange
         {
@@ -71,10 +80,26 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         // Using a DependencyProperty as the backing store for SmallChange.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SmallChangeProperty = 
-    DependencyProperty.Register("SmallChange", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(.1));
+        public static readonly DependencyProperty SmallChangeProperty =
+    DependencyProperty.Register("SmallChange", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(.01));
 
+        #endregion SmallChange
 
+        #region RegularChange
+
+        public double RegularChange
+        {
+            get { return (double)GetValue(RegularChangeProperty); }
+            set { SetValue(RegularChangeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for RegularChange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RegularChangeProperty =
+    DependencyProperty.Register("RegularChange", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(.1));
+
+        #endregion RegularChange
+
+        #region LargeChange
 
         public double LargeChange
         {
@@ -83,11 +108,13 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         // Using a DependencyProperty as the backing store for LargeChange.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty LargeChangeProperty = 
+        public static readonly DependencyProperty LargeChangeProperty =
     DependencyProperty.Register("LargeChange", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(1.0));
 
+        #endregion LargeChange
 
-
+        #region Minimum
+        
         public double Minimum
         {
             get { return (double)GetValue(MinimumProperty); }
@@ -95,10 +122,12 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         // Using a DependencyProperty as the backing store for Minimum.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MinimumProperty = 
+        public static readonly DependencyProperty MinimumProperty =
     DependencyProperty.Register("Minimum", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(double.MinValue));
 
+        #endregion
 
+        #region Maximum
 
         public double Maximum
         {
@@ -107,14 +136,25 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         // Using a DependencyProperty as the backing store for Maximum.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MaximumProperty = 
+        public static readonly DependencyProperty MaximumProperty =
     DependencyProperty.Register("Maximum", typeof(double), typeof(DoubleBox), new UIPropertyMetadata(double.MaxValue));
+        
+        #endregion
 
+        #endregion
 
+        #region Helper
         
         private double GetAmoutOfChange()
         {
-            return (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) ? SmallChange : LargeChange;
+            ModifierKeys intrestingModifiers = Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control);
+
+            if (intrestingModifiers == ModifierKeys.Shift)
+                return LargeChange;
+            if (intrestingModifiers == ModifierKeys.Control)
+                return SmallChange;
+
+            return RegularChange;
         }
 
         private void IncreaseValue()
@@ -127,6 +167,32 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             Value = Value - GetAmoutOfChange();
         }
 
+        private void IncreaseValue(double howOften)
+        {
+            Value = Value + GetAmoutOfChange() * howOften;
+        }
+
+        private void DecreaseValue(double howOften)
+        {
+            Value = Value - GetAmoutOfChange() * howOften;
+        }
+
+        private void UpdateTextBox()
+        {
+            UpdateValue();
+            txtBox.Text = Value.ToString();
+        }
+
+        private void UpdateValue()
+        {
+            double result;
+            if (Double.TryParse(txtBox.Text, out result))
+                Value = result;
+            else if (string.IsNullOrWhiteSpace(txtBox.Text))
+                Value = 0;
+        }
+
+        #endregion Helper
 
         public DoubleBox()
         {
@@ -135,70 +201,16 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             txtBox.Text = Value.ToString();
         }
 
-        bool mouseDown;
-        Point lastMousePos;
-
-        private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
+        #region Events
+		
+        private void txtBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            mouseDown = this.CaptureMouse();
-            lastMousePos = e.GetPosition(this);
-        }
-
-        private void UserControl_MouseMove(object sender, MouseEventArgs e)
-        {
-            if(mouseDown)
-            {
-                Point mousePos = e.GetPosition(this);
-                Vector vector = mousePos - lastMousePos;
-                double distance= vector.Length;
-
-                double distanceForOneIncrease = 4;
-
-                if (distance > distanceForOneIncrease)
-                {
-                    double angle = Math.Atan2(vector.Y, vector.X);
-                    if (angle < Math.PI/4 && angle > -Math.PI*3/4)
-                        IncreaseValue();
-                    else
-                        DecreaseValue();
-
-                    vector.Normalize();
-                    lastMousePos += vector * distanceForOneIncrease;
-                }
-            }
-        }
-
-        private void UserControl_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            this.ReleaseMouseCapture();
-            this.mouseDown = false;
-        }
-
-        private void UserControl_LostMouseCapture(object sender, MouseEventArgs e)
-        {
-            this.mouseDown = false;
-        }
-
-        private void txtBox_TextChanged(object sender, RoutedEventArgs e)
-        {
-            try
-            { 
-                double result = Convert.ToDouble(txtBox.Text);
-                if (Value != result)
-                {
-                    double old = Value;
-                    Value = result;
-                }
-            }
-            catch(Exception)
-            {
-                //Ignore Exeption, the Text gets set to Value when the Textbox loses it's Keybord Focus
-            }
+            UpdateValue();
         }
 
         private void txtBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            txtBox.Text = Value.ToString();
+            UpdateTextBox();
         }
 
         private void IncreaseValueCmdExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -211,9 +223,122 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             DecreaseValue();
         }
 
-        private void txtBox_GotFocus(object sender, RoutedEventArgs e)
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Up:
+                    {
+                        IncreaseValue();
+                        e.Handled = true;
+                        break;
+                    }
+                case Key.Down:
+                    {
+                        DecreaseValue();
+                        e.Handled = true;
+                        break;
+                    }
+                case Key.Enter:
+                    {
+                        UpdateTextBox();
+                        break;
+                    }
+            }
+
+            base.OnPreviewKeyDown(e);
+        }
+
+        protected override void OnPreviewMouseWheel(MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+                IncreaseValue();
+            if (e.Delta < 0)
+                DecreaseValue();
+
+            base.OnPreviewMouseWheel(e);
+        }
+
+        protected override void OnPreviewGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
         {
             txtBox.SelectAll();
+
+            Debug.WriteLine("DoubleBox Got Keybord Focus Preview");
+
+            base.OnPreviewGotKeyboardFocus(e);
         }
+
+        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            txtBox.SelectAll();
+
+            Debug.WriteLine("DoubleBox Got Keybord Focus");
+
+            base.OnGotKeyboardFocus(e);
+        }
+
+        protected override void OnAccessKey(AccessKeyEventArgs e)
+        {
+            txtBox.Focus();
+
+            base.OnAccessKey(e);
+        }
+
+        #region MouseDragToChagneValue
+
+        bool mouseDown;
+        Point lastMousePos;
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            //mouseDown = this.CaptureMouse();
+            lastMousePos = e.GetPosition(this);
+
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                Point mousePos = e.GetPosition(this);
+                Vector vector = mousePos - lastMousePos;
+                double distance = vector.Length;
+
+                double distanceForOneIncrease = 4;
+
+                if (distance > distanceForOneIncrease)
+                {
+                    double angle = Math.Atan2(vector.Y, vector.X);
+                    if (angle < Math.PI / 4 && angle > -Math.PI * 3 / 4)
+                        IncreaseValue();
+                    else
+                        DecreaseValue();
+
+                    vector.Normalize();
+                    lastMousePos += vector * distanceForOneIncrease;
+                }
+            }
+
+            base.OnMouseMove(e);
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            //this.ReleaseMouseCapture();
+            this.mouseDown = false;
+
+            base.OnMouseUp(e);
+        }
+
+        protected override void OnLostMouseCapture(MouseEventArgs e)
+        {
+            this.mouseDown = false;
+            base.OnLostMouseCapture(e);
+        }
+
+        #endregion MouseDragToChagneValue
+
+	    #endregion Events
     }
 }

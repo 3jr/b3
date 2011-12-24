@@ -12,6 +12,24 @@
 				<KeyGesture>Control+T</KeyGesture>
 			</RoutedCommand.InputGestures>
 		</RoutedCommand>
+        <Style TargetType="controls:DoubleBox">
+            <Setter Property="SmallChange" Value="0.001"/>
+            <Setter Property="RegularChange" Value="0.01"/>
+            <Setter Property="LargeChange" Value="0.1"/>
+            <Setter Property="Value" Value="0.00"/>
+        </Style>
+        <Style TargetType="controls:Vector2DControl">
+            <Setter Property="SmallChange" Value="0.001"/>
+            <Setter Property="RegularChange" Value="0.01"/>
+            <Setter Property="LargeChange" Value="0.1"/>
+            <Setter Property="Value" Value="0,0"/>
+        </Style>
+        <Style TargetType="controls:Vector3DControl">
+            <Setter Property="SmallChange" Value="0.001"/>
+            <Setter Property="RegularChange" Value="0.01"/>
+            <Setter Property="LargeChange" Value="0.1"/>
+            <Setter Property="Value" Value="0,0,0"/>
+        </Style>
     </UserControl.Resources>
 	<UserControl.CommandBindings>
         <CommandBinding Command="{StaticResource ToogleRunningCmd}" Executed="CommandBinding_Executed"/>
@@ -33,11 +51,18 @@
                     <Label HorizontalAlignment="Right" Content="_Acceleration:" Target="{Binding ElementName=AccelerationVecBox, Mode=OneWay}"/>
                 </StackPanel>
                 <StackPanel>
-                    <controls:Vector2DControl x:Name="TiltVecBox" ValueChanged="TiltVecBox_ValueChanged" Margin="0,2,0,0"/>
-                    <controls:Vector2DControl x:Name="DesiredTiltVecBox" Margin="0,2,0,0"/> 
+                    <controls:Vector2DControl
+                        x:Name="TiltVecBox" ValueChanged="TiltVecBox_ValueChanged" Margin="0,2,0,0"
+                        SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                        />
+                    <controls:Vector2DControl
+                        x:Name="DesiredTiltVecBox" Margin="0,2,0,0"
+                        SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                        />
                     <controls:Vector3DControl x:Name="PositionVecBox" ValueChanged="PositionVecBox_ValueChanged" Margin="0,2,0,0" />
                     <controls:Vector3DControl x:Name="VelocityVecBox" Margin="0,2,0,0"/>
                     <controls:Vector3DControl x:Name="AccelerationVecBox" Margin="0,2,0,0"/>
+                    <Button Content="ResetToZero" Margin="8" Click="Button_Click"/>
                 </StackPanel>
             </StackPanel>
         </Expander>
