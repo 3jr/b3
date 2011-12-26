@@ -90,15 +90,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                 {
                     //Hit in diesem Update.
                     CalcMovement(state, nextHit);
-                    state = Utilities.Physics.Reflect(state);
-                    CalcMovement(state, elapsedSeconds - nextHit);
+                     state = Utilities.Physics.Reflect(state);
+                    CalcPhysics(state, elapsedSeconds - nextHit);
                 }
             }
             #endregion
 
             #region Debugout
-            //System.Diagnostics.Debug.Print(state.Tilt.ToString());
-            state.Position = Mathematics.PlateCoordinatesToEucidean3DCoordinates(new Vector(1, 1), state.Tilt);
+            //System.Diagnostics.Debug.Print(state.Position.Z+"\t"+state.Velocity.Z+"\t"+state.Acceleration.Z+"\t"+bs);
             #endregion
         }
 

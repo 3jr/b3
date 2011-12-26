@@ -132,11 +132,21 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
 
         public static Point3D RotateTransform(Vector3D axis, double rad, Point3D OriginalPoint)
         {
+            Matrix3x3 R = RotateTransformationMatrix(axis, rad);
+            return R * OriginalPoint;
+        }
+
+        public static Point3D ApplyTransformationMatrix(Matrix3x3 TransformationMatrix, Point3D OriginalPoint)
+        {
+            return TransformationMatrix * OriginalPoint;
+        }
+
+        public static Matrix3x3 RotateTransformationMatrix(Vector3D axis, double rad)
+        {
             axis.Normalize();
-            Matrix3x3 R = new Matrix3x3(Math.Cos(rad) + (axis.X * axis.X) * (1 - Math.Cos(rad)), axis.X * axis.Y * (1 - Math.Cos(rad)) - axis.Z * Math.Sin(rad), axis.X * axis.Z * (1 - Math.Cos(rad)) + axis.Y * Math.Sin(rad),
+            return new Matrix3x3(Math.Cos(rad) + (axis.X * axis.X) * (1 - Math.Cos(rad)), axis.X * axis.Y * (1 - Math.Cos(rad)) - axis.Z * Math.Sin(rad), axis.X * axis.Z * (1 - Math.Cos(rad)) + axis.Y * Math.Sin(rad),
                                     axis.X * axis.Y * (1 - Math.Cos(rad)) + axis.Z * Math.Sin(rad), Math.Cos(rad) + axis.Y * axis.Y * (1 - Math.Cos(rad)), axis.Z * axis.Y * (1 - Math.Cos(rad)) - axis.X * Math.Sin(rad),
                                     axis.X * axis.Z * (1 - Math.Cos(rad)) - axis.Y * Math.Sin(rad), axis.Z * axis.Y * (1 - Math.Cos(rad)) + axis.X * Math.Sin(rad), Math.Cos(rad) + (axis.Z * axis.Z) * (1 - Math.Cos(rad)));
-            return R * OriginalPoint;
         }
         #endregion
 
@@ -151,9 +161,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         public static Vector3D CalcNormalVector(Vector Tilt)
         {
             Vector3D NormalVector = new Vector3D();
-            NormalVector.X = -Math.Tan(Tilt.X);
-            NormalVector.Y = -Math.Tan(Tilt.Y);
-            NormalVector.Z = 1;
+            Vector3D a = (Vector3D)PlateCoordinatesToEucidean3DCoordinates(new Vector(0,1),Tilt);
+            Vector3D b = (Vector3D)PlateCoordinatesToEucidean3DCoordinates(new Vector(1,0),Tilt);
+            NormalVector = Vector3D.CrossProduct(a, b);
             return NormalVector;
         }
 
@@ -222,15 +232,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <returns></returns>
         public static Point3D PlateCoordinatesToEucidean3DCoordinates(Vector PlateCoordinate, Vector Tilt)
         {
-            Point3D p = new Point3D(Tilt.X, Tilt.Y, 0);
-            p = Mathematics.RotateTransform(new Vector3D(1, 0, 0), Tilt.X, p);
-            p = Mathematics.RotateTransform(new Vector3D(0, Math.Cos(Tilt.X), Math.Sin(Tilt.X)), Tilt.Y, p);
+            Point3D p = new Point3D(PlateCoordinate.X, PlateCoordinate.Y, 0);
+            Matrix3x3 T = RotateTransformationMatrix(new Vector3D(1, 0, 0), Tilt.X) * RotateTransformationMatrix(new Vector3D(0, Math.Cos(Tilt.X), Math.Sin(Tilt.X)), Math.Cos(Tilt.X) * Tilt.Y);
+            p = T * p;
             return p;
-            //Vector3D Euclidean = new Vector3D();
-            //Vector3D eX = new Vector3D(Math.Cos(Tilt.X), 0, Math.Sin(Tilt.X));
-            //Vector3D eY = new Vector3D(0, Math.Cos(Tilt.Y), Math.Sin(Tilt.Y));
-            //Euclidean = eX * PlateCoordinate.X + eY * PlateCoordinate.Y;
-            //return (Point3D)Euclidean;
         }
 
         /// <summary>
