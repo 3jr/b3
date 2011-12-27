@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Research.Kinect.Nui;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp
 {
@@ -26,6 +27,14 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         private void LegthOfPlate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             ;
+        }
+
+        private void SetPhysikalKinectAngle_Click(object sender, RoutedEventArgs e)
+        {
+            Runtime nui = Runtime.Kinects[0];
+            nui.Initialize(RuntimeOptions.UseColor);
+            nui.NuiCamera.ElevationAngle = (int)PhysikalKinectAngle.Value;
+            nui.Uninitialize();
         }
     }
 }

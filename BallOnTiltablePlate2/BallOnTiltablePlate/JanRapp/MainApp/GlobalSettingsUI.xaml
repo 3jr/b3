@@ -8,13 +8,31 @@
         <my:DoubleBox x:Name="PlateSize"
                       Height="24"
                       Margin="12,12,0,0"
-                      HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       Text="Width and Length of Plate (in Meters): "
                       ValueChanged="LegthOfPlate_ValueChanged" 
                       Minimum=".01"
-                      LargeChange=".1"
+                      LargeChange=".5"
+                      RegularChange=".1"
                       SmallChange=".01"
-                      Value="{Binding PlateSize, ElementName=GlobalSettings}"/>
+                      Value="{Binding PlateSize, ElementName=GlobalSettings}"
+                      />
+        <my:DoubleBox x:Name="PhysikalKinectAngle"
+                      Text="Angle of Kinect [-40, 40]: "
+                      Margin="12,36,0,0"
+                      VerticalAlignment="Top"
+                      Minimum="-27"
+                      Maximum="27" 
+                      LargeChange="5"
+                      RegularChange="2"
+                      SmallChange="1"
+                      />
+        <Button x:Name="SetPhysikalKinectAngle"
+                Content="Set Angle"
+                Click="SetPhysikalKinectAngle_Click" 
+                Margin="237,35,84,0" 
+                Height="25" 
+                VerticalAlignment="Top"
+                />
     </Grid>
 </UserControl>
