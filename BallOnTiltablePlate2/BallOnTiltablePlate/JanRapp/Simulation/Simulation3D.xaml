@@ -71,7 +71,7 @@
         		<controls:DoubleBox x:Name="GravityDoubleBox" Text="Gravity:" HorizontalAlignment="Right" Value="-9.81" Margin="0" SmallChange=".1" LargeChange="1"/>
         		<controls:DoubleBox x:Name="HitAttenuationFactorDoubleBox" Text="Attenuation Factor at Hit" HorizontalAlignment="Right" Value="0.8" Margin="0,2,0,0"/>
         		<controls:DoubleBox x:Name="AbsoluteHitAttenuationDoubleBox" Text="Absolute Attenuation at Hit" HorizontalAlignment="Right" Value="1" Margin="0,2,0,0"/>
-                <controls:DoubleBox x:Name="PlateVelocityDoubleBox" Text="Plate Velocity" HorizontalAlignment="Right" Value="5" Margin="0,2,0,0"/>
+                <controls:DoubleBox x:Name="PlateVelocityDoubleBox" Text="Plate Velocity" HorizontalAlignment="Right" Value="0.08725" Margin="0,2,0,0"/>
         	</StackPanel>
         </Expander>
         <!--<controls:SettingSaver/>-->
