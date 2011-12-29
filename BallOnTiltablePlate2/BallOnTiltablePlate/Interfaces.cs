@@ -93,7 +93,7 @@ namespace BallOnTiltablePlate
         readonly string itemName;
         readonly Version version;
 
-        const string validChars = "QWERTYUIOPASDFGHJKLZXCVBNM ";
+        const string validChars = "QWERTYUIOPASDFGHJKLZXCVBNM 1234567890";
         bool IsStringValid(string s)
         {
             return s.ToUpper().All(c => validChars.Any(v => v == c));

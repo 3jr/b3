@@ -108,6 +108,9 @@
     <Compile Include="JanRapp\MainApp\GlobalSettingsUI.xaml.cs">
       <DependentUpon>GlobalSettingsUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\MainApp\Helper\BasicBalance.xaml.cs">
+      <DependentUpon>BasicBalance.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\MainApp\Helper\TestInput.xaml.cs">
       <DependentUpon>TestInput.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,9 @@
     </Compile>
     <Compile Include="JanRapp\MainApp\Helper\TestPreprocessor.xaml.cs">
       <DependentUpon>TestPreprocessor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\MainApp\Helper\TestPreprocessor3D.xaml.cs">
+      <DependentUpon>TestPreprocessor3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Output\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
@@ -168,6 +174,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\MainApp\Helper\BasicBalance.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\MainApp\Helper\TestInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -182,6 +191,9 @@
     </Page>
     <Page Include="JanRapp\MainApp\Helper\TestPreprocessor.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\MainApp\Helper\TestPreprocessor3D.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\MainApp\MainWindow.xaml">

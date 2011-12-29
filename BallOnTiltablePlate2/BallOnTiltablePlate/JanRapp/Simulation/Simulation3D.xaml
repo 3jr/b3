@@ -59,7 +59,6 @@
                 <controls:Vector3DControl x:Name="VelocityVecBox" Margin="0,2,0,0"/>
                 <Label Content="_Acceleration:" Target="{Binding ElementName=AccelerationVecBox}"/>
                 <controls:Vector3DControl x:Name="AccelerationVecBox" Margin="0,2,0,0"/>
-                <Button Content="ResetToZero" Margin="8" Click="Button_Click"/>
             </StackPanel>
         </Expander>
         <Expander Header="_Constants" Margin="8" >

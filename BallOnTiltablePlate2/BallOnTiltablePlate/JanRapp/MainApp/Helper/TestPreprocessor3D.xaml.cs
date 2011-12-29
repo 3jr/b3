@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
     /// <summary>
-    /// Interaction logic for TestPreprocessor.xaml
+    /// Interaction logic for TestPreprocessor3D.xaml
     /// </summary>
-    [BallOnPlateItemInfo(" Jan", "Rapp", "Test", "1.0")]
-    public partial class TestPreprocessor : UserControl, IPreprocessor, IPreprocessorIO<IBallInput, IPlateOutput>
+    [BallOnPlateItemInfo(" Jan", "Rapp", "Test3D", "1.0")]
+    partial class TestPreprocessor3D : UserControl, IPreprocessor, IPreprocessorIO<IBallInput, IPlateOutput>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -27,7 +27,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         }
         #endregion
 
-        public TestPreprocessor()
+        public TestPreprocessor3D()
         {
             InitializeComponent();
         }
