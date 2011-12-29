@@ -15,7 +15,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
     public static class Physics
     {
         /// <summary>
-        /// Indicates wheter the Ball, if being on the plate, would hit (true) or roll (false).
+        /// Indicates wheter the Ball, being on the plate, would hit (true) or roll (false).
         /// Gibt zurueck ob, wenn der Ball auf der Platte waere er auftreffen wuerde(true) oder Rollen wuerde(false)
         /// </summary>
         /// <param name="state">The state for which to calc</param>
@@ -25,18 +25,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             Vector3D n = Mathematics.CalcNormalVector(state.Tilt);
             double angle = Mathematics.AngleBetwennVectors(n, state.Velocity);
             return (angle > Mathematics.DegToRad(100) || angle < Mathematics.DegToRad(80));
-        }
-
-        /// <summary>
-        /// Indicates, Wheter the ball hits
-        /// </summary>
-        /// <param name="state"></param>
-        /// <returns>true if hit , false if not</returns>
-        public static bool IsHit(PhysicsState state)
-        { 
-            //Test on Plate, test would hit
-            return (Math.Abs(state.Position.Z-Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y),Mathematics.CalcNormalVector(state.Tilt)))<0.01)
-                && WouldHit(state) ;
         }
 
         /// <summary>
