@@ -16,7 +16,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
     /// <summary>
     /// Class, that does Physics cacultations.
     /// </summary>
-    public class Physics3D
+    public class PhysicsOnPlate
     {
         /// <summary>
         /// Calculates the New State of the Ball given by the current IPhysicsState.
@@ -37,67 +37,11 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             state.Tilt += elapsedSeconds * state.PlateVelocity;
             #endregion
 
-            #region CalcBallstate
-            BallState bs;
-            if (Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))) > 0.01)
-            {
-                bs = BallState.InAir;
-            }
-            else
-            {
-                if (Utilities.Physics.WouldHit(state))
-                {
-                    bs = BallState.InAir;
-                }
-                else
-                {
-                    bs = BallState.RollOnPlate;
-                }
-            }
-            #endregion
-
             #region CalcMovement
-            if (bs == BallState.RollOnPlate)
-            {
-                #region PutOnPlate
-                //Ball auf Platte setzten (sonst faengt Ball bei winkelgeschw. != 0 zu huepfen an, da er allmaelich von der Platte abkommt)
                 state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));
-                #endregion
-
                 state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
-                #region 'centrifugal' calc
-                {
-                    double deltahight = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))
-                    - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt - elapsedSeconds * state.PlateVelocity));
-                    if (deltahight > 0)
-                    {
-                        state.Acceleration += state.CentrifugalFactor * deltahight * Mathematics.CalcNormalVector(state.Tilt);
-                    }
-
-                }
-                #endregion
                 CalcMovement(state, elapsedSeconds);
-
-            }
-            if (bs == BallState.InAir)
-            {
-                //Beschleunigung zur Hit-Berechnug setzen
-                state.Acceleration = G;
-                double nextHit = Utilities.Physics.CalcNextHit(state);
-
-                if (nextHit > elapsedSeconds)
-                {
-                    //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
-                    CalcMovement(state, elapsedSeconds);
-                }
-                else
-                {
-                    //Hit in diesem Update.
-                    CalcMovement(state, nextHit);
-                     state = Utilities.Physics.Reflect(state);
-                    CalcPhysics(state, elapsedSeconds - nextHit);
-                }
-            }
+                state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));
             #endregion
 
             #region Debugout
@@ -110,16 +54,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             //     + "\t" + state.PlateVelocity.Y + "\t" + Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
             #endregion
         }
-
-        /// <summary>
-        /// Represents the Status of the Ball.
-        /// Enum, die Ausdruekten soll, in welchen Zustand sich der Ball befindet.
-        /// </summary>
-        private enum BallState
-        {
-            InAir = 0,
-            RollOnPlate = 1
-        };
 
         /// <summary>
         /// Calculates Movement using s = 0.5att + v0t + s0, v= ...

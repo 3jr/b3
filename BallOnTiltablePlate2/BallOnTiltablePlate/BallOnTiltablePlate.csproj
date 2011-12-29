@@ -144,6 +144,8 @@
     </Compile>
     <Compile Include="TimoSchmetzer\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\PhysicSimulation3D.cs" />
+    <Compile Include="TimoSchmetzer\PhysicSimulationOnPlate.cs" />
+    <Compile Include="TimoSchmetzer\PhysicsOnPlate.cs" />
     <Compile Include="TimoSchmetzer\PhysicsState.cs" />
     <Compile Include="TimoSchmetzer\Test.cs" />
     <Compile Include="TimoSchmetzer\PhysicUtilities.cs" />
