@@ -203,8 +203,10 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                     if (!string.IsNullOrWhiteSpace(properties))
                         foreach (string propertyPath in properties.Split(','))
                         {
-                            var value = element.GetType().GetProperty(propertyPath).GetValue(element, null);
-                            elementNode.Value.Add(new XElement(propertyPath, value));
+                            var property = element.GetType().GetProperty(propertyPath);
+                            var value = property.GetValue(element, null);
+                            var converter = System.ComponentModel.TypeDescriptor.GetConverter(property.PropertyType);
+                            elementNode.Value.Add(new XElement(propertyPath, converter.ConvertToInvariantString(value)));
                         }
                     if (elementNode.IsValueCreated)
                         root.Add(elementNode.Value);
@@ -256,7 +258,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                     var Rprop = c.GetType().GetProperty(prop);
                     string XMLContent = x.Element(prop).Value;
                     var converter = System.ComponentModel.TypeDescriptor.GetConverter(Rprop.PropertyType);
-                    object convertedValue = converter.ConvertFromString(XMLContent);
+                    object convertedValue = converter.ConvertFromInvariantString(XMLContent);
                     object[] empty = new object[0];
                     Rprop.SetValue(c, convertedValue, empty);
                 }
