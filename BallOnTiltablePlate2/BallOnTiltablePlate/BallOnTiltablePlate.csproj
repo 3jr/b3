@@ -144,14 +144,14 @@
     <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
       <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\MathematicalUtilities.cs" />
-    <Compile Include="TimoSchmetzer\PhysicSimulation3D.cs" />
-    <Compile Include="TimoSchmetzer\PhysicSimulationOnPlate.cs" />
-    <Compile Include="TimoSchmetzer\PhysicsOnPlate.cs" />
-    <Compile Include="TimoSchmetzer\PhysicsState.cs" />
-    <Compile Include="TimoSchmetzer\Test.cs" />
-    <Compile Include="TimoSchmetzer\PhysicUtilities.cs" />
-    <Compile Include="TimoSchmetzer\Physics3D.cs" />
+    <Compile Include="TimoSchmetzer\General\MathematicalUtilities.cs" />
+    <Compile Include="TimoSchmetzer\Physics3D\PhysicSimulation3D.cs" />
+    <Compile Include="TimoSchmetzer\PhysicsOnPlate\PhysicSimulationOnPlate.cs" />
+    <Compile Include="TimoSchmetzer\PhysicsOnPlate\PhysicsOnPlate.cs" />
+    <Compile Include="TimoSchmetzer\General\PhysicsState.cs" />
+    <Compile Include="TimoSchmetzer\General\Test.cs" />
+    <Compile Include="TimoSchmetzer\General\PhysicUtilities.cs" />
+    <Compile Include="TimoSchmetzer\Physics3D\Physics3D.cs" />
     <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
     <Compile Include="JanRapp\Utilities\WindowCustomizer.cs" />
     <Page Include="JanRapp\Controls\SettingSaver.xaml">
