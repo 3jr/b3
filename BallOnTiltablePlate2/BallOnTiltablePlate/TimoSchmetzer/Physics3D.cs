@@ -18,13 +18,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
     /// </summary>
     public class Physics3D
     {
-        [Obsolete("Please use RunSimulation in PhysicSimulation3D.",false)]
-        public void RunPhysics(IPhysicsState state, double elapsedSeconds)
-        {
-            //Temporary Redicect
-            PhysicSimulation3D.RunSimulation(state, elapsedSeconds);
-        }
-
         /// <summary>
         /// Calculates the New State of the Ball given by the current IPhysicsState.
         /// </summary>
@@ -46,13 +39,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
 
             #region CalcBallstate
             BallState bs;
-            if (Utilities.Physics.IsHit(state))
+            if (Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))) > 0.01)
             {
                 bs = BallState.InAir;
             }
             else
             {
-                if (Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))) > 0.01)
+                if (Utilities.Physics.WouldHit(state))
                 {
                     bs = BallState.InAir;
                 }
@@ -69,6 +62,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                 state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
                 double deltahight = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))
                     - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt - elapsedSeconds*state.PlateVelocity));
+                state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));//Ball auf Platte setzten (sonst faengt Ball bei winkelgeschw. != 0 zu huepfen an, da er allmaelich von der Platte abkommt)
                 if (deltahight > 0)
                 {
                     state.Acceleration += state.CentrifugalFactor * deltahight * Mathematics.CalcNormalVector(state.Tilt); 
@@ -97,10 +91,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #endregion
 
             #region Debugout
-            //System.Diagnostics.Debug.Print(state.Position.X+"\t"+state.Position.Y+"\t"+state.Position.Z+"\t"+
+            //(Nr.)	PositionX	PositionY	PositionZ	VelociyX	VelocityY	VelocityZ	AccelerationX	AccelerationY	AccelerationZ	BallState	AngleBetweenVec	elapsedSec	TiltX	TiltY	PlateVelX	PlateVelY   DeltaZBallPlate
+            //System.Diagnostics.Debug.Print(state.Position.X + "\t" + state.Position.Y + "\t" + state.Position.Z + "\t" +
             //    state.Velocity.X + "\t" + state.Velocity.Y + "\t" + state.Velocity.Z + "\t"
             //    + state.Acceleration.X + "\t" + state.Acceleration.Y + "\t" + state.Acceleration.Z + "\t" + bs
-            //    + "\t" + BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.AngleBetwennVectors(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.CalcNormalVector(state.Tilt), state.Velocity));
+            //    + "\t" + BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.AngleBetwennVectors(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.CalcNormalVector(state.Tilt), state.Velocity)
+            //    + "\t" + elapsedSeconds + "\t" + state.Tilt.X + "\t" + state.Tilt.Y + "\t" +state.PlateVelocity.X
+            //     + "\t" + state.PlateVelocity.Y + "\t" + Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
             #endregion
         }
 
