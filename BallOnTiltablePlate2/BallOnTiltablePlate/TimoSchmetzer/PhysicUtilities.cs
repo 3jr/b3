@@ -20,7 +20,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// </summary>
         /// <param name="state">The state for which to calc</param>
         /// <returns>See summary.</returns>
-        private static bool WouldHit(PhysicsState state) 
+        public static bool WouldHit(PhysicsState state) 
         {  
             Vector3D n = Mathematics.CalcNormalVector(state.Tilt);
             double angle = Mathematics.AngleBetwennVectors(n, state.Velocity);
