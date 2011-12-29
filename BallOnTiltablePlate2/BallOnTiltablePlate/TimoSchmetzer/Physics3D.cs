@@ -60,13 +60,21 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             if (bs == BallState.RollOnPlate)
             {
                 state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
-                double deltahight = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))
-                    - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt - elapsedSeconds*state.PlateVelocity));
-                state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));//Ball auf Platte setzten (sonst faengt Ball bei winkelgeschw. != 0 zu huepfen an, da er allmaelich von der Platte abkommt)
-                if (deltahight > 0)
+                #region PutOnPlate
+                //Ball auf Platte setzten (sonst faengt Ball bei winkelgeschw. != 0 zu huepfen an, da er allmaelich von der Platte abkommt)
+                state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));
+                #endregion
+                #region 'centrifugal' calc
                 {
-                    state.Acceleration += state.CentrifugalFactor * deltahight * Mathematics.CalcNormalVector(state.Tilt); 
+                    double deltahight = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))
+                    - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt - elapsedSeconds * state.PlateVelocity));
+                    if (deltahight > 0)
+                    {
+                        state.Acceleration += state.CentrifugalFactor * deltahight * Mathematics.CalcNormalVector(state.Tilt);
+                    }
+
                 }
+                #endregion
                 CalcMovement(state, elapsedSeconds);
             }
             if (bs == BallState.InAir)
