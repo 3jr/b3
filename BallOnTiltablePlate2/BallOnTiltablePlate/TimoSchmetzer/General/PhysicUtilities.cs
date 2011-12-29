@@ -138,5 +138,15 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             AccelerationForce = G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
             return AccelerationForce;
         }
+
+        /// <summary>
+        /// Calculates Movement using s = 0.5att + v0t + s0, v= ...
+        /// </summary>
+        public static void CalcMovement(PhysicsState state, double ElapsedSeconds)
+        {
+            //Bewegungsgleichung
+            state.Position += state.Velocity * ElapsedSeconds + 0.5 * state.Acceleration * ElapsedSeconds * ElapsedSeconds;
+            state.Velocity += state.Acceleration * ElapsedSeconds;
+        }
     }
 }

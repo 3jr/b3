@@ -14,7 +14,7 @@ using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 namespace BallOnTiltablePlate.TimoSchmetzer.Physics
 {
     /// <summary>
-    /// Class, that does Physics cacultations.
+    /// Class, that does Physics cacultations assuming Ball is always on Plate.
     /// </summary>
     public class PhysicsOnPlate
     {
@@ -40,7 +40,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #region CalcMovement
                 state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));
                 state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
-                CalcMovement(state, elapsedSeconds);
+                Utilities.Physics.CalcMovement(state, elapsedSeconds);
                 state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));
             #endregion
 
@@ -53,16 +53,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             //    + "\t" + elapsedSeconds + "\t" + state.Tilt.X + "\t" + state.Tilt.Y + "\t" + state.PlateVelocity.X
             //     + "\t" + state.PlateVelocity.Y + "\t" + Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
             #endregion
-        }
-
-        /// <summary>
-        /// Calculates Movement using s = 0.5att + v0t + s0, v= ...
-        /// </summary>
-        private static void CalcMovement(PhysicsState state, double ElapsedSeconds)
-        {
-            //Bewegungsgleichung
-            state.Position += state.Velocity * ElapsedSeconds + 0.5 * state.Acceleration * ElapsedSeconds * ElapsedSeconds;
-            state.Velocity += state.Acceleration * ElapsedSeconds;
         }
     }
 }

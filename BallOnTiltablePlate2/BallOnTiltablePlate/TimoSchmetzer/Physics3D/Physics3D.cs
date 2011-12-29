@@ -76,7 +76,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
 
                 }
                 #endregion
-                CalcMovement(state, elapsedSeconds);
+                Utilities.Physics.CalcMovement(state, elapsedSeconds);
 
             }
             if (bs == BallState.InAir)
@@ -88,12 +88,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                 if (nextHit > elapsedSeconds)
                 {
                     //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
-                    CalcMovement(state, elapsedSeconds);
+                    Utilities.Physics.CalcMovement(state, elapsedSeconds);
                 }
                 else
                 {
                     //Hit in diesem Update.
-                    CalcMovement(state, nextHit);
+                    Utilities.Physics.CalcMovement(state, nextHit);
                      state = Utilities.Physics.Reflect(state);
                     CalcPhysics(state, elapsedSeconds - nextHit);
                 }
@@ -121,14 +121,5 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             RollOnPlate = 1
         };
 
-        /// <summary>
-        /// Calculates Movement using s = 0.5att + v0t + s0, v= ...
-        /// </summary>
-        private static void CalcMovement(PhysicsState state, double ElapsedSeconds)
-        {
-            //Bewegungsgleichung
-            state.Position += state.Velocity * ElapsedSeconds + 0.5 * state.Acceleration * ElapsedSeconds * ElapsedSeconds;
-            state.Velocity += state.Acceleration * ElapsedSeconds;
-        }
     }
 }
