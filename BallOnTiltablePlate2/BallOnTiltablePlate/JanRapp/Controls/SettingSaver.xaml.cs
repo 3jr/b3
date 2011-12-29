@@ -63,6 +63,8 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            IO.Directory.CreateDirectory(GetSaveFolder());
+
             if (this.Parent is Panel)
             {
                 backing_Field_for_containingPanel = (Panel)this.Parent;
