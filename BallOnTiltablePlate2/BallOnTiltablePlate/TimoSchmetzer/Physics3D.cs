@@ -97,7 +97,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #endregion
 
             #region Debugout
-            //System.Diagnostics.Debug.Print(state.Position.Z+"\t"+state.Velocity.Z+"\t"+state.Acceleration.Z+"\t"+bs);
+            //System.Diagnostics.Debug.Print(state.Position.X+"\t"+state.Position.Y+"\t"+state.Position.Z+"\t"+
+            //    state.Velocity.X + "\t" + state.Velocity.Y + "\t" + state.Velocity.Z + "\t"
+            //    + state.Acceleration.X + "\t" + state.Acceleration.Y + "\t" + state.Acceleration.Z + "\t" + bs
+            //    + "\t" + BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.AngleBetwennVectors(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.CalcNormalVector(state.Tilt), state.Velocity));
             #endregion
         }
 
