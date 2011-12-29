@@ -107,5 +107,21 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             Value = new Vector(Value.X, e.NewValue);
         }
+
+        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            Keyboard.Focus(Xud);
+
+            System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in Vector2DControl");
+
+            base.OnGotKeyboardFocus(e);
+        }
+
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            Xud.Focus();
+
+            base.OnGotFocus(e);
+        }
     }
 }

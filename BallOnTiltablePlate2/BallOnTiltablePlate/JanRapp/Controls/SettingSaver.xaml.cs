@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IO = System.IO;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace BallOnTiltablePlate.JanRapp.Controls
 {
@@ -67,6 +68,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 backing_Field_for_containingPanel = (Panel)this.Parent;
                 backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["SaveCmd"], SaveCmd_Executed, SaveCmd_CanExecute));
                 backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["LoadCmd"], LoadCmd_Executed, LoadCmd_CanExecute));
+                backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["FocusOnSettingSaver"], FocusOnSettingSaver_Executed));
             }
             else
             {
@@ -101,12 +103,12 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             UpdateInputList();
         }
 
+        #region Helper
+
         private void UpdateInputList()
         {
             InputComboBox.ItemsSource = IO.Directory.EnumerateFiles(GetSaveFolder()).Select(p => IO.Path.GetFileName(p));
         }
-
-        #region Helper
 
         private string GetSaveFolder()
         {
@@ -114,7 +116,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             IEnumerable<BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI> items;
             while (true)
             {
-                items = BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI.AllBPItems.Where(i => i.Instance == current);
+                items = BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI.AllInitializedBPItems.Where(i => i.Instance == current);
                 if (items.Count() > 0)
                     break;
 
@@ -162,14 +164,21 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 }
         }
 
-        #endregion
+        #endregion Helper
 
-        #region Events
-
-        private void SaveCmd_Executed(object target, ExecutedRoutedEventArgs e)
+        #region Save and Load
+        bool SaveCmd_CanExecute()
         {
-            e.Handled = true;
+            if (string.IsNullOrWhiteSpace(InputComboBox.Text))
+            { }
+            else
+                return true;
 
+            return false;
+        }
+
+        void SaveCmd_Executed()
+        {
             if (InputComboBox.Text.IndexOfAny(IO.Path.GetInvalidFileNameChars()) != -1)
             {
                 MessageBox.Show("Name must consist of valid file name characters");
@@ -187,29 +196,24 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 FrameworkElement element = child as FrameworkElement;
                 if (element != null && !string.IsNullOrWhiteSpace(element.Name))
                 {
-                    XElement elementNode = null;
+                    Lazy<XElement> elementNode = new Lazy<XElement>(() => new XElement(element.Name));
                     string properties = (string)element.GetValue(SettingSaver.PropertysToSaveProperty);
                     if (!string.IsNullOrWhiteSpace(properties))
-                        foreach (string pPath in properties.Split(','))
+                        foreach (string propertyPath in properties.Split(','))
                         {
-                            var value = element.GetType().GetProperty(pPath).GetValue(element, null);
-                            if (elementNode == null)
-                                elementNode = new XElement(element.Name);
-                            elementNode.Add(new XElement(pPath, value));
+                            var value = element.GetType().GetProperty(propertyPath).GetValue(element, null);
+                            elementNode.Value.Add(new XElement(propertyPath, value));
                         }
-                    if (elementNode != null)
-                        root.Add(elementNode);
+                    if (elementNode.IsValueCreated)
+                        root.Add(elementNode.Value);
                 }
             }
 
             try
             {
-                using (IO.FileStream stream = IO.File.Open(path, IO.FileMode.Create))
-                {
-                    XDocument doc = new XDocument();
-                    doc.Add(root);
-                    doc.Save(stream);
-                }
+                XDocument doc = new XDocument();
+                doc.Add(root);
+                doc.Save(path);
             }
             catch (IO.IOException IoEx)
             {
@@ -219,66 +223,101 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             UpdateInputList();
         }
 
-        private void SaveCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        bool LoadCmd_CanExecute()
         {
-            e.CanExecute = false;
-
-            if (string.IsNullOrWhiteSpace(InputComboBox.Text))
-            { }
-            else
-                e.CanExecute = true;
-        }
-
-        private void LoadCmd_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            string path = IO.Path.Combine(GetSaveFolder(), InputComboBox.Text);
-
-            XDocument doc = null;
-            using (IO.FileStream stream = IO.File.Open(path, IO.FileMode.Open))
-            {
-                doc = XDocument.Load(stream);
-            }
-
-            GetControllsToSave().Join(doc.Element(RootSaveName).Elements(), c => c.Name, x => x.Name.LocalName, (c, x) =>
-                {
-                    string properties = (string)c.GetValue(SettingSaver.PropertysToSaveProperty);
-
-                    if (string.IsNullOrWhiteSpace(properties))
-                        return 0;
-
-                    foreach (string prop in properties.Split(','))
-                    {
-                        //Just converting in the correct Type then assigne the values to the respective property.
-                        var Rprop = c.GetType().GetProperty(prop);
-                        string XMLContent = x.Element(prop).Value;
-                        var converter = System.ComponentModel.TypeDescriptor.GetConverter(Rprop.PropertyType);
-                        object convertedValue = converter.ConvertFromString(XMLContent);
-                        object[] empty = new object[0];
-                        Rprop.SetValue(c, convertedValue, empty);
-                    }
-
-                    return 0;
-                }).ToArray(); //To enforce imediate execution.
-        }
-
-        private void LoadCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = false;
             if (string.IsNullOrWhiteSpace(InputComboBox.Text))
             { }
             else if (!IO.File.Exists(IO.Path.Combine(GetSaveFolder(), InputComboBox.Text)))
             { }
             else
-                e.CanExecute = true;
+                return true;
+
+            return false;
         }
 
-        private void box_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        void LoadCmd_Executed()
+        {
+            string path = IO.Path.Combine(GetSaveFolder(), InputComboBox.Text);
+
+            XDocument doc = XDocument.Load(path);
+
+            GetControllsToSave().Join(doc.Element(RootSaveName).Elements(), c => c.Name, x => x.Name.LocalName, (c, x) =>
+            {
+                string properties = (string)c.GetValue(SettingSaver.PropertysToSaveProperty);
+
+                if (string.IsNullOrWhiteSpace(properties))
+                    return 0;
+
+                foreach (string prop in properties.Split(','))
+                {
+                    //Just converting in the correct Type then assigne the values to the respective property.
+                    var Rprop = c.GetType().GetProperty(prop);
+                    string XMLContent = x.Element(prop).Value;
+                    var converter = System.ComponentModel.TypeDescriptor.GetConverter(Rprop.PropertyType);
+                    object convertedValue = converter.ConvertFromString(XMLContent);
+                    object[] empty = new object[0];
+                    Rprop.SetValue(c, convertedValue, empty);
+                }
+
+                return 0;
+            }).ToArray(); //To enforce imediate execution.
+        } 
+        #endregion Save and Load
+
+        #region Events
+
+        private void SaveCmd_Executed(object target, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            InputComboBox.Text = InputComboBox.SelectedItem.ToString();
-            var cmd = ((RoutedCommand)this.Resources["LoadCmd"]);
-            if (cmd.CanExecute(null, (IInputElement)sender))
-                cmd.Execute(null, (IInputElement)sender);
+
+            SaveCmd_Executed();
+        }
+
+        private void SaveCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            e.CanExecute = SaveCmd_CanExecute();
+        }
+
+        private void LoadCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            LoadCmd_Executed();
+        }
+
+        private void LoadCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            e.CanExecute = LoadCmd_CanExecute();
+        }
+
+        private void FocusOnSettingSaver_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            InputComboBox.Focus();
+        }
+        
+        private void box_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //if (e.AddedItems.Count == 1)
+            //{
+            //    e.Handled = true;
+
+            //    Debug.WriteLine("   You selected \"" + e.AddedItems[0].ToString() + "\".");
+
+            //    e.Handled = true;
+            //    InputComboBox.Text = e.AddedItems[0].ToString();
+            //    if (LoadCmd_CanExecute())
+            //        LoadCmd_Executed();
+            //}
+            //else if (e.AddedItems.Count > 0)
+            //{
+            //    throw new InvalidOperationException("I want to know how this happend, I thougt that in a ComboBox only one Item can be selected");
+            //}
         }
 
         #endregion Events

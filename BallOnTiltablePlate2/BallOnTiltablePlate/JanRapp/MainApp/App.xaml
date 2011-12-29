@@ -4,7 +4,15 @@
              xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              StartupUri="/BallOnTiltablePlate2;component/JanRapp/MainApp/MainWindow.xaml">
     <Application.Resources>
-        <Style TargetType="controls:DoubleBox">
+        <Style TargetType="controls:DoubleBox" x:Key="DoubleBoxBaseStyle">
+            <Setter Property="controls:SettingSaver.PropertysToSave" 
+                    Value="Value"/>
+        </Style>
+        <Style TargetType="controls:Vector2DControl" x:Key="Vector2DControlBaseStyle">
+            <Setter Property="controls:SettingSaver.PropertysToSave" 
+                    Value="Value"/>
+        </Style>
+        <Style TargetType="controls:Vector3DControl" x:Key="Vector3DControlBaseStyle">
             <Setter Property="controls:SettingSaver.PropertysToSave" 
                     Value="Value"/>
         </Style>

@@ -27,7 +27,13 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             this.Info = (BallOnPlateItemInfoAttribute)Attribute.GetCustomAttribute(
                 type, typeof(BallOnPlateItemInfoAttribute));
             this.instance = new Lazy<IBallOnPlateItem>(
-                () => (IBallOnPlateItem)Activator.CreateInstance(type));
+                delegate
+                {
+                    var createdInstance = (IBallOnPlateItem)Activator.CreateInstance(type); 
+                    AllInitializedBPItemsList.Add(this); 
+                    return createdInstance;
+                }
+            );
         }
 
         public override string ToString()
@@ -39,6 +45,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         #region Staic Init
         public static IEnumerable<object> PopulateJugglerLists { get; private set; }
         public static IEnumerable<BPItemUI> AllBPItems { get; private set; }
+        public static IEnumerable<BPItemUI> AllInitializedBPItems { get { return AllInitializedBPItemsList; } }
+        static List<BPItemUI> AllInitializedBPItemsList = new List<BPItemUI>();
+
 
         static BPItemUI()
         {

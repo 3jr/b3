@@ -24,15 +24,15 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="44"/>
-            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="18"/>
         </Grid.ColumnDefinitions>
         <Label x:Name="lbl" HorizontalAlignment="Left" Target="{Binding txtBox}" Grid.RowSpan="2" Padding="3" Content="{Binding Text, RelativeSource={RelativeSource AncestorType=local:DoubleBox}}"/>
         <TextBox x:Name="txtBox"  TextChanged="txtBox_TextChanged" LostKeyboardFocus="txtBox_LostKeyboardFocus" Margin="0" Grid.RowSpan="2" Grid.Column="1"  />
-        <RepeatButton x:Name="UpBtn" Command="{StaticResource IncreaseValue}" Margin="0,0,0,0.001" d:LayoutOverrides="Width" Grid.Column="2" BorderBrush="{x:Null}">
-            <Path Data="M0,10 L30,10 15,0 z" Fill="#FF222A43" Width="20" Height="6" Stretch="Fill"/>
+        <RepeatButton x:Name="UpBtn" Command="{StaticResource IncreaseValue}" d:LayoutOverrides="Width" Grid.Column="2" BorderBrush="{x:Null}">
+            <Path Data="M0,10 L30,10 15,0 z" Fill="#FF222A43" Width="11.917" Height="6" Stretch="Fill"/>
         </RepeatButton>
         <RepeatButton x:Name="DownBtn" Command="{StaticResource DecreaseValue}" Margin="0" d:LayoutOverrides="Width" Grid.Column="2" Grid.Row="1" Padding="0,1" RenderTransformOrigin="0.5,0.5" BorderBrush="{x:Null}">
-            <Path Data="M0,0 L30,0 15,10 z" Fill="#FF222A43" Height="6" Stretch="Fill" Width="20"/>
+            <Path Data="M0,0 L30,0 15,10 z" Fill="#FF222A43" Height="6" Stretch="Fill" Width="12.083"/>
         </RepeatButton>
     </Grid>
 </UserControl>

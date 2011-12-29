@@ -263,18 +263,24 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             txtBox.SelectAll();
 
-            Debug.WriteLine("DoubleBox Got Keybord Focus Preview");
-
             base.OnPreviewGotKeyboardFocus(e);
         }
 
         protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
         {
+            Keyboard.Focus(txtBox);
             txtBox.SelectAll();
 
-            Debug.WriteLine("DoubleBox Got Keybord Focus");
+            System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in DoubleBox");
 
             base.OnGotKeyboardFocus(e);
+        }
+
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            txtBox.Focus();
+
+            base.OnGotFocus(e);
         }
 
         protected override void OnAccessKey(AccessKeyEventArgs e)

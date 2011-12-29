@@ -12,19 +12,19 @@
 				<KeyGesture>Control+T</KeyGesture>
 			</RoutedCommand.InputGestures>
 		</RoutedCommand>
-        <Style TargetType="controls:DoubleBox">
+        <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource DoubleBoxBaseStyle}">
             <Setter Property="SmallChange" Value="0.001"/>
             <Setter Property="RegularChange" Value="0.01"/>
             <Setter Property="LargeChange" Value="0.1"/>
             <Setter Property="Value" Value="0.00"/>
         </Style>
-        <Style TargetType="controls:Vector2DControl">
+        <Style TargetType="controls:Vector2DControl" BasedOn="{StaticResource Vector2DControlBaseStyle}">
             <Setter Property="SmallChange" Value="0.001"/>
             <Setter Property="RegularChange" Value="0.01"/>
             <Setter Property="LargeChange" Value="0.1"/>
             <Setter Property="Value" Value="0,0"/>
         </Style>
-        <Style TargetType="controls:Vector3DControl">
+        <Style TargetType="controls:Vector3DControl" BasedOn="{StaticResource Vector3DControlBaseStyle}">
             <Setter Property="SmallChange" Value="0.001"/>
             <Setter Property="RegularChange" Value="0.01"/>
             <Setter Property="LargeChange" Value="0.1"/>
@@ -41,39 +41,35 @@
 			<Label x:Name="FpsLbl" Content="_FPS:" Margin="56.786,8,0,8" HorizontalAlignment="Left" Target="{Binding ElementName=FpsSlider}" d:LayoutOverrides="Height"/>
 			<Slider x:Name="FpsSlider" Margin="94,8,8,8" d:LayoutOverrides="Height" MinWidth="140" Minimum=".1" Maximum="60" LargeChange="5" SmallChange="1" ValueChanged="FpsSlider_ValueChanged" AutoToolTipPlacement="BottomRight" Value="20"/>
 		</Grid>
-        <Expander Header="Variables" Margin="8">
-            <StackPanel Orientation="Horizontal" Margin="8">
-                <StackPanel Name="Variables">
-                    <Label HorizontalAlignment="Right" Content="_Tilt:" Target="{Binding ElementName=TiltVecBox, Mode=OneWay}"/>
-                    <Label HorizontalAlignment="Right" Content="_DesiredTilt" Target="{Binding ElementName=DesiredTiltVecBox}"/>
-                    <Label HorizontalAlignment="Right" Content="_Position:" Target="{Binding ElementName=PositionVecBox, Mode=OneWay}"/>
-                    <Label HorizontalAlignment="Right" Content="_Velocity:" Target="{Binding ElementName=VelocityVecBox, Mode=OneWay}"/>
-                    <Label HorizontalAlignment="Right" Content="_Acceleration:" Target="{Binding ElementName=AccelerationVecBox, Mode=OneWay}"/>
-                </StackPanel>
-                <StackPanel>
-                    <controls:Vector2DControl
-                        x:Name="TiltVecBox" ValueChanged="TiltVecBox_ValueChanged" Margin="0,2,0,0"
-                        SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
-                        />
-                    <controls:Vector2DControl
-                        x:Name="DesiredTiltVecBox" Margin="0,2,0,0"
-                        SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
-                        />
-                    <controls:Vector3DControl x:Name="PositionVecBox" ValueChanged="PositionVecBox_ValueChanged" Margin="0,2,0,0" />
-                    <controls:Vector3DControl x:Name="VelocityVecBox" Margin="0,2,0,0"/>
-                    <controls:Vector3DControl x:Name="AccelerationVecBox" Margin="0,2,0,0"/>
-                    <Button Content="ResetToZero" Margin="8" Click="Button_Click"/>
-                </StackPanel>
+        <Expander Header="Varia_bles" Margin="8">
+            <StackPanel>
+                <Label Content="_Tilt:" Target="{Binding ElementName=TiltVecBox}"/>
+                <controls:Vector2DControl
+                    x:Name="TiltVecBox" ValueChanged="TiltVecBox_ValueChanged" Margin="0,2,0,0"
+                    SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                    />
+                <Label Content="_DesiredTilt:" Target="{Binding ElementName=DesiredTiltVecBox}"/>
+                <controls:Vector2DControl
+                    x:Name="DesiredTiltVecBox" Margin="0,2,0,0"
+                    SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                    />
+                <Label Content="_Position:" Target="{Binding ElementName=PositionVecBox}"/>
+                <controls:Vector3DControl x:Name="PositionVecBox" ValueChanged="PositionVecBox_ValueChanged" Margin="0,2,0,0" />
+                <Label Content="_Velocity:" Target="{Binding ElementName=VelocityVecBox}"/>
+                <controls:Vector3DControl x:Name="VelocityVecBox" Margin="0,2,0,0"/>
+                <Label Content="_Acceleration:" Target="{Binding ElementName=AccelerationVecBox}"/>
+                <controls:Vector3DControl x:Name="AccelerationVecBox" Margin="0,2,0,0"/>
+                <Button Content="ResetToZero" Margin="8" Click="Button_Click"/>
             </StackPanel>
         </Expander>
-        <Expander Header="Constants" Margin="8" >
-            <StackPanel Name="Constants" Margin="8" HorizontalAlignment="Left">
-        		<controls:DoubleBox x:Name="GravityDoubleBox" Text="Gravity:" HorizontalAlignment="Right" Value="-9.81" Margin="0" SmallChange=".1" LargeChange="1"/>
-        		<controls:DoubleBox x:Name="HitAttenuationFactorDoubleBox" Text="Attenuation Factor at Hit" HorizontalAlignment="Right" Value="0.8" Margin="0,2,0,0"/>
-        		<controls:DoubleBox x:Name="AbsoluteHitAttenuationDoubleBox" Text="Absolute Attenuation at Hit" HorizontalAlignment="Right" Value="1" Margin="0,2,0,0"/>
-                <controls:DoubleBox x:Name="PlateVelocityDoubleBox" Text="Plate Velocity" HorizontalAlignment="Right" Value="0.08725" Margin="0,2,0,0"/>
+        <Expander Header="_Constants" Margin="8" >
+            <StackPanel Margin="8">
+        		<controls:DoubleBox x:Name="GravityDoubleBox" Text="_Gravity:" HorizontalAlignment="Right" Value="-9.81" Margin="0" SmallChange=".1" LargeChange="1"/>
+        		<controls:DoubleBox x:Name="HitAttenuationFactorDoubleBox" Text="Attenuation Factor at _Hit" HorizontalAlignment="Right" Value="0.8" Margin="0,2,0,0"/>
+        		<controls:DoubleBox x:Name="AbsoluteHitAttenuationDoubleBox" Text="Ab_solute Attenuation at Hit" HorizontalAlignment="Right" Value="1" Margin="0,2,0,0"/>
+                <controls:DoubleBox x:Name="PlateVelocityDoubleBox" Text="P_late Velocity" HorizontalAlignment="Right" Value="0.08725" Margin="0,2,0,0"/>
         	</StackPanel>
         </Expander>
-        <!--<controls:SettingSaver/>-->
+        <controls:SettingSaver/>
     </WrapPanel>
 </UserControl>

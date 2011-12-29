@@ -15,34 +15,42 @@
                 <KeyGesture>Control+L</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
+        <RoutedCommand x:Key="FocusOnSettingSaver">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+F</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
     </UserControl.Resources>
     <UserControl.CommandBindings>
-        <CommandBinding CanExecute="SaveCmd_CanExecute"
-                        Command="{StaticResource SaveCmd}"
+        <CommandBinding Command="{StaticResource SaveCmd}"
+                        CanExecute="SaveCmd_CanExecute"
                         Executed="SaveCmd_Executed" />
         <CommandBinding Command="{StaticResource LoadCmd}"
+                        CanExecute="LoadCmd_CanExecute"
                         Executed="LoadCmd_Executed" />
+        <CommandBinding Command="{StaticResource FocusOnSettingSaver}"
+                        Executed="FocusOnSettingSaver_Executed"/>
     </UserControl.CommandBindings>
     <Grid>
         <ComboBox x:Name="InputComboBox"
-            SelectionChanged="box_SelectionChanged"
-                      Margin="8,8,112,8"
-                      IsEditable="True"
-                      ToolTip="Used to select (and load) previously saved configuartions or to enter a name for a new configuartion(Ctrl+S or 'Save' Button to save)."/>
+                  SelectionChanged="box_SelectionChanged"
+                  Margin="8,8,112,8"
+                  IsEditable="True"
+                  MinWidth="80"
+                  ToolTip="Used to select (and load) previously saved configuartions or to enter a name for a new configuartion(Ctrl+S or 'Save' Button to save)."/>
         <Button Command="{StaticResource SaveCmd}"
                 HorizontalAlignment="Right"
-                    Width="46"
-                    Margin="8"
-                    Content="Save"
-                    Padding="8,1"
-                    ToolTip="Saves the current Values set in the chiled controls associated with a name (Ctrl+S (from anywhere within))" />
+                Width="46"
+                Margin="8"
+                Content="Save"
+                Padding="8,1"
+                ToolTip="Saves the current Values set in the chiled controls associated with a name (Ctrl+S (from anywhere within))" />
         <Button Command="{StaticResource LoadCmd}"
                 HorizontalAlignment="Right"
-                    Width="46"
-                    Margin="0,8,60,8"
-                    Content="Load"
-                    Padding="8,1"
-                    ToolTip="Loads the current values set in the child controls associated with the name (Ctrl+L (from anywhere within))" />
-
+                Width="46"
+                Margin="0,8,60,8"
+                Content="Load"
+                Padding="8,1"
+                ToolTip="Loads the current values set in the child controls associated with the name (Ctrl+L (from anywhere within))" />
     </Grid>
 </UserControl>
