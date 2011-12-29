@@ -60,6 +60,8 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             DoubleBox instance = (DoubleBox)d;
 
+            System.Diagnostics.Debug.WriteLine(instance.Name + " changes from (" + e.OldValue + ") to (" + e.NewValue + ").");
+
             instance.txtBox.Text = instance.Value.ToString();
             if ((double)e.NewValue > instance.Maximum)
                 instance.Value = instance.Maximum;
@@ -271,7 +273,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             Keyboard.Focus(txtBox);
             txtBox.SelectAll();
 
-            System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in DoubleBox");
+            //System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in DoubleBox");
 
             base.OnGotKeyboardFocus(e);
         }

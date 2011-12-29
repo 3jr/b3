@@ -24,17 +24,17 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             InitializeComponent();
         }
 
-        private void LegthOfPlate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            ;
-        }
-
-        private void SetPhysikalKinectAngle_Click(object sender, RoutedEventArgs e)
+        private void SetPhysicalKinectAngle_Click(object sender, RoutedEventArgs e)
         {
             Runtime nui = Runtime.Kinects[0];
             nui.Initialize(RuntimeOptions.UseColor);
-            nui.NuiCamera.ElevationAngle = (int)PhysikalKinectAngle.Value;
+            nui.NuiCamera.ElevationAngle = (int)PhysicalKinectAngle.Value;
             nui.Uninitialize();
+        }
+
+        private void JuggelerUpdateRate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            GlobalSettings.UpdateIntervallOfAlgorithm = TimeSpan.FromSeconds(60 / JuggelerUpdateRate.Value);
         }
     }
 }

@@ -118,7 +118,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             Keyboard.Focus(Xud);
 
-            System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in Vector3DControl");
+            //System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in Vector3DControl");
 
             base.OnGotKeyboardFocus(e);
         }

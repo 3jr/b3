@@ -6,6 +6,7 @@ using System.Windows.Interop;
 using System.Linq;
 using System.Collections.Generic;
 using BallOnTiltablePlate;
+using System.Windows.Threading;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp
 {
@@ -14,9 +15,14 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
     /// </summary>
     internal partial class MainWindow : Window
     {
+        DispatcherTimer timer;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            timer = new DispatcherTimer() { Interval = GlobalSettings.UpdateIntervallOfAlgorithm };
+            timer.Tick += new EventHandler(timer_Tick);
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -34,6 +40,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             };
         }
 
+        dynamic inputInstance;
+        dynamic juggelerInstance;
         private void Lists_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (AlgorithmList == null ||
@@ -42,44 +50,48 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                 OutputList == null)
                 return; //Not yet Initialiced
 
-            if (PreprocessorList.SelectedItem != null)
-            {
-                dynamic item = ((Helper.BPItemUI)PreprocessorList.SelectedValue).Instance;
+            //XAML makes sure that there are only possible combinatons of items!!!!
+            
+            if (inputInstance != null)
+                inputInstance.Stop();
 
-                if (InputList.SelectedItem != null)
-                {
-                    dynamic input = ((Helper.BPItemUI)InputList.SelectedValue).Instance;
-                    item.Input = input;
-                }
-
-                if (OutputList.SelectedItem != null)
-                {
-                    dynamic output = ((Helper.BPItemUI)OutputList.SelectedValue).Instance;
-                    item.Output = output;
-                }
-            }
-
-            if (AlgorithmList.SelectedItem != null ||
-               PreprocessorList.SelectedItem != null ||
-               InputList.SelectedItem != null ||
+            if (AlgorithmList.SelectedItem != null &&
+               PreprocessorList.SelectedItem != null &&
+               InputList.SelectedItem != null &&
                OutputList.SelectedItem != null)
             {
-                Start();
+                Helper.PreprocessorItemUI preprocessorItem = (Helper.PreprocessorItemUI)PreprocessorList.SelectedValue;
+                dynamic preprocessorInstance = preprocessorItem.Instance;
+
+                inputInstance = ((Helper.BPItemUI)InputList.SelectedValue).Instance;
+                preprocessorInstance.Input = inputInstance;
+
+                dynamic outputInstance = ((Helper.BPItemUI)OutputList.SelectedValue).Instance;
+                preprocessorInstance.Output = outputInstance;
+                
+
+                Helper.JugglerItemUI juggeler = (Helper.JugglerItemUI)AlgorithmList.SelectedValue;
+                juggelerInstance = juggeler.Instance;
+
+                juggelerInstance.IO = preprocessorInstance;
+
+
+                timer.Start();
+                inputInstance.Start();
             }
             else
             {
-                Stop();
+                timer.Stop();
             }
         }
 
-        private void Start()
+        void timer_Tick(object sender, EventArgs e)
         {
-        }
+            timer.Interval = GlobalSettings.UpdateIntervallOfAlgorithm;
 
-        private void Stop()
-        {
+            juggelerInstance.Update();
         }
-
+        
         private void GlobalSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
             if (globalSettingsWindow == null)

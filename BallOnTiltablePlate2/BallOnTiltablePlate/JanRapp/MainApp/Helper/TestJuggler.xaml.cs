@@ -17,7 +17,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestJuggler.xaml
     /// </summary>
-    [BallOnPlateItemInfo(" Jan", "Rapp", "Test", "1.0")]
+    [BallOnPlateItemInfo(" Jan", "Rapp", "TestJuggler", "1.0")]
     public partial class TestJuggler : UserControl, IJuggler<IPreprocessor>
     {
         #region Base

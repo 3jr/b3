@@ -5,20 +5,19 @@
         Width="393"
         Height="336">
     <Grid>
-        <my:DoubleBox x:Name="PlateSize"
+        <my:DoubleBox x:Name="Plate_Size"
                       Height="24"
                       Margin="12,12,0,0"
                       VerticalAlignment="Top"
                       Text="Width and Length of Plate (in Meters): "
-                      ValueChanged="LegthOfPlate_ValueChanged" 
                       Minimum=".01"
                       LargeChange=".5"
                       RegularChange=".1"
                       SmallChange=".01"
                       Value="{Binding PlateSize, ElementName=GlobalSettings}"
                       />
-        <my:DoubleBox x:Name="PhysikalKinectAngle"
-                      Text="Angle of Kinect [-40, 40]: "
+        <my:DoubleBox x:Name="PhysicalKinectAngle"
+                      Text="_Angle of Kinect [-40, 40]: "
                       Margin="12,36,0,0"
                       VerticalAlignment="Top"
                       Minimum="-27"
@@ -27,12 +26,23 @@
                       RegularChange="2"
                       SmallChange="1"
                       />
-        <Button x:Name="SetPhysikalKinectAngle"
-                Content="Set Angle"
-                Click="SetPhysikalKinectAngle_Click" 
+        <Button x:Name="SetPhysicalKinectAngle"
+                Content="Se_t Angle"
+                Click="SetPhysicalKinectAngle_Click" 
                 Margin="237,35,84,0" 
                 Height="25" 
                 VerticalAlignment="Top"
                 />
+        <my:DoubleBox x:Name="JuggelerUpdateRate"
+                      Text="Set _Updates per Second for Juggeler: "
+                      Margin="12,64,0,0"
+                      VerticalAlignment="Top"
+                      Minimum=".0001"
+                      LargeChange="10"
+                      RegularChange="2"
+                      SmallChange=".1"
+                      ValueChanged="JuggelerUpdateRate_ValueChanged"
+                      Value="30"
+                      />
     </Grid>
 </UserControl>

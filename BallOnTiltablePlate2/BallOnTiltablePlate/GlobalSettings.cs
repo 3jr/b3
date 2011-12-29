@@ -8,7 +8,9 @@ namespace BallOnTiltablePlate
 {
     static class GlobalSettings
     {
-        public static double PlateSize;
+        public static TimeSpan UpdateIntervallOfAlgorithm { get; set; }
+
+        public static double PlateSize {get; set;}
 
         internal static string ItemSettingsFolder(BallOnPlateItemInfoAttribute itemInfo)
         {

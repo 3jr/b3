@@ -20,13 +20,13 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
     /// <summary>
     /// Interaction logic for Simulation3D.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo", "Schmetzer", "Simulation", "0.1")]
-    public partial class Simulation3D : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, IPhysicsState
+    public partial class SimulationBase : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, IPhysicsState
     {
         DispatcherTimer timer;
         DateTime lastUpdateTime;
+        bool stopped = true;
 
-        public Simulation3D()
+        public SimulationBase()
         {
             timer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
             InitializeComponent();
@@ -37,16 +37,26 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         void timer_Tick(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
-            TimoSchmetzer.PhysicSimulation3D.RunSimulation(this, (now - lastUpdateTime).TotalSeconds);
+            Update((now - lastUpdateTime).TotalSeconds);
             lastUpdateTime = now;
+        }
+
+        public virtual void Update(double deltaSeconds)
+        {
         }
 
         public void Start()
         {
+            stopped = false;
+            ToogelRunningBtn.IsEnabled = true;
         }
 
         public void Stop()
         {
+            stopped = true;
+            timer.Stop();
+            ToogelRunningBtn.Content = "Start";
+            ToogelRunningBtn.IsEnabled = false;
         }
 
         public void SetTilt(Vector tilt)

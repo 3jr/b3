@@ -17,7 +17,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for BasicBalance.xaml
     /// </summary>
-    [BallOnPlateItemInfo(" Jan", "Rapp", "Test", "1.0")]
+    [BallOnPlateItemInfo("Jan", "Rapp", "BasicBalance", "1.0")]
     public partial class BasicBalance : UserControl, IJuggler<TestPreprocessor>
     {
         #region Base

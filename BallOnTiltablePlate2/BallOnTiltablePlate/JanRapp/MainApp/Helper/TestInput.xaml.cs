@@ -20,7 +20,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestInput.xaml
     /// </summary>
-    [BallOnPlateItemInfo(" Jan", "Rapp", "Test", "1.0")]
+    [BallOnPlateItemInfo(" Jan", "Rapp", "TestInput", "1.0")]
     public partial class TestInput : UserControl, IBallInput3D
     {
         #region Base

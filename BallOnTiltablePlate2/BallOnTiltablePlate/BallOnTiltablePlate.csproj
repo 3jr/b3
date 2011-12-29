@@ -129,9 +129,11 @@
     <Compile Include="JanRapp\Output\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Simulation\Simulation3D.xaml.cs">
-      <DependentUpon>Simulation3D.xaml</DependentUpon>
+    <Compile Include="JanRapp\Simulation\Simulation3D.cs" />
+    <Compile Include="JanRapp\Simulation\SimulationBase.xaml.cs">
+      <DependentUpon>SimulationBase.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Simulation\SimulationOnPlate.cs" />
     <Compile Include="JanRapp\Try\Program.cs" />
     <Compile Include="JanRapp\Try\Tests.cs" />
     <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
@@ -215,7 +217,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Simulation\Simulation3D.xaml">
+    <Page Include="JanRapp\Simulation\SimulationBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
