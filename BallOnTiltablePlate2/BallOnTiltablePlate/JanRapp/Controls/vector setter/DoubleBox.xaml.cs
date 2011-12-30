@@ -60,7 +60,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             DoubleBox instance = (DoubleBox)d;
 
-            System.Diagnostics.Debug.WriteLine(instance.Name + " changes from (" + e.OldValue + ") to (" + e.NewValue + ").");
+            //System.Diagnostics.Debug.WriteLine(instance.Name + " changes from (" + e.OldValue + ") to (" + e.NewValue + ").");
 
             instance.txtBox.Text = instance.Value.ToString();
             if ((double)e.NewValue > instance.Maximum)

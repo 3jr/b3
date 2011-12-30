@@ -3,9 +3,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
-    </Grid>
+             d:DesignHeight="528" d:DesignWidth="317.5">
+    <UserControl.Resources>
+        <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource DoubleBoxBaseStyle}">
+            <Setter Property="SmallChange" Value="0.01"/>
+            <Setter Property="RegularChange" Value="1"/>
+            <Setter Property="LargeChange" Value="10"/>
+        </Style>
+        <RoutedCommand x:Key="ToggleConnectCmd" >
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+C</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="TransmitDataCmd" >
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+T</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ToggleConnectCmd}"
+                        CanExecute="ToggleConnectCmd_CanExecute"
+                        Executed="ToggleConnectCmd_Executed"/>
+        <CommandBinding Command="{StaticResource TransmitDataCmd}"
+                        Executed="TransmitDataCmd_Executed"
+                        CanExecute="TransmitDataCmd_CanExecute"/>
+    </UserControl.CommandBindings>
+    <StackPanel>
+        <Button x:Name="ToggleConntectButton" Content="Connect" Command="{StaticResource ToggleConnectCmd}" ToolTip="Ctrl+C"/>
+        <StackPanel Orientation="Horizontal">
+            <Label Content="SerialPortNumber:  _COM" />
+            <TextBox x:Name="SerialPortNumber" Text="5" Width="25" />
+        </StackPanel>
+        <controls:DoubleBox x:Name="TiltAngleX" Text="TiltAngle _X: " ValueChanged="Angle_ValueChanged" 
+                    SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                    />
+        <controls:DoubleBox x:Name="TiltAngleY" Text="TiltAngle _Y: " ValueChanged="Angle_ValueChanged"
+                    SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                    />
+        <CheckBox x:Name="TransmitImmediately" Content="Transmit _Immediately"/>
+        <Button Content="Transmit Now" Command="{StaticResource TransmitDataCmd}" ToolTip="Ctrl+T"/>
+        <Expander Header="Motor Offsets">
+            <StackPanel>
+                <controls:DoubleBox x:Name="OffsetXRegular0"  Text="X Regular   (_0): "  ValueChanged="Offset_ValueChanged"/>
+                <controls:DoubleBox x:Name="OffsetXInverted1" Text="X Inverted  (_1): "  ValueChanged="Offset_ValueChanged"/>
+                <controls:DoubleBox x:Name="OffsetYRegular2"  Text="Y Regular   (_2): "  ValueChanged="Offset_ValueChanged"/>
+                <controls:DoubleBox x:Name="OffsetYInverted3" Text="Y Inverted  (_3): "  ValueChanged="Offset_ValueChanged"/>
+                <controls:DoubleBox x:Name="ValuePerAngle" Text="Value _Per Angle: "  ValueChanged="Offset_ValueChanged"/>
+                <controls:DoubleBox x:Name="ZeroDegreeValue" Text="_ZeroDegreeValue: " ValueChanged="Offset_ValueChanged" LargeChange="500" RegularChange="20" SmallChange="1"/>
+            </StackPanel>
+        </Expander>
+        <controls:SettingSaver/>
+        <TextBlock>Recived:</TextBlock>
+        <TextBlock x:Name="RecivedLog" />
+    </StackPanel>
 </UserControl>

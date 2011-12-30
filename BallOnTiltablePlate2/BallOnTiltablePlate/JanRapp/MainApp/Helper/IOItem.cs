@@ -101,8 +101,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
             try
             {
+                if (Attribute.GetCustomAttribute(type, typeof(BallOnPlateItemInfoAttribute)) == null)
+                    return false;
+
                 ErrorCode = 0;
-                Assert(Attribute.GetCustomAttribute(type, typeof(BallOnPlateItemInfoAttribute)) != null);
+
                 Assert(type.GetConstructor(Type.EmptyTypes) != null);
 
                 if (type.GetInterface("IJuggler`1") != null)

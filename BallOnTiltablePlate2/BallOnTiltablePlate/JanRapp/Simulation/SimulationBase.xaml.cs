@@ -34,10 +34,15 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
             timer.Tick += new EventHandler(timer_Tick);
         }
 
+        Point3D lastPosition = new Point3D();
         void timer_Tick(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
             Update((now - lastUpdateTime).TotalSeconds);
+            if (Position != lastPosition)
+                SendData((Vector3D)Position);
+
+            lastPosition = Position;
             lastUpdateTime = now;
         }
 
