@@ -65,13 +65,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                 #endregion
 
                 state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
-                #region 'centrifugal' calc
+                #region CalcPseudoConstainingForce
                 {
-                    double deltahight = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))
-                    - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt - elapsedSeconds * state.PlateVelocity));
-                    if (deltahight > 0)
+                    if (Utilities.Mathematics.IsDownPlate(state.Position,Utilities.Mathematics.CalcNormalVector(state.Tilt)))
                     {
-                        state.Acceleration += state.CentrifugalFactor * deltahight * Mathematics.CalcNormalVector(state.Tilt);
+                        state.Acceleration +=
+                            (2.0 * (Vector3D)Utilities.Mathematics.CalcFootOfPerpendicular(state.Position, Utilities.Mathematics.CalcNormalVector(state.Tilt)))
+                            / (elapsedSeconds * elapsedSeconds);
                     }
 
                 }

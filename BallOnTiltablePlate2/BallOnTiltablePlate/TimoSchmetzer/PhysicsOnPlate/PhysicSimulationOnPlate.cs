@@ -36,7 +36,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer
             Physics.PhysicsState state = new Physics.PhysicsState();
             state.AbsoluteAbsorbtion = Istate.AbsoluteAbsorbtion;
             state.Acceleration = Istate.Acceleration;
-            state.CentrifugalFactor = 0.05;
             state.Gravity = Istate.Gravity;
             state.HitAttenuationFactor = Istate.HitAttenuationFactor;
             state.Position = Istate.Position;

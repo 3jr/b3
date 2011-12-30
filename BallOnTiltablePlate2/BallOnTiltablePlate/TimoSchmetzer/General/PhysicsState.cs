@@ -36,12 +36,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// </summary>
         public double AbsoluteAbsorbtion; //= 0.08;
 
-        /// <summary>
-        /// Factor, with which the Force on the Ball at a turnation of the Plate
-        /// is scaled. To be Found experimentally.
-        /// </summary>
-        public double CentrifugalFactor;
-
         #endregion
 
         #region Status Properties
