@@ -140,6 +140,22 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         }
 
         /// <summary>
+        /// Same as Overload with Tilt but does not calc the Normal itself out of Tilt.
+        /// </summary>
+        /// <param name="g">Gravity</param>
+        /// <param name="Normal">Normal of Plate</param>
+        /// <returns>Hangabtriebskraft</returns>
+        public static Vector3D HangabtriebskraftBerechnen(double g, Vector3D Normal)
+        {
+            //AccelerationForce= G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
+            Vector3D AccelerationForce = new Vector3D();
+            Vector3D G = new Vector3D(0, 0, g);
+            Vector3D n = Normal;
+            AccelerationForce = G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
+            return AccelerationForce;
+        }
+
+        /// <summary>
         /// Calculates Movement using s = 0.5att + v0t + s0, v= ...
         /// </summary>
         public static void CalcMovement(PhysicsState state, double ElapsedSeconds)
