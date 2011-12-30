@@ -59,18 +59,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #region CalcMovement
             if (bs == BallState.RollOnPlate)
             {
-                #region PutOnPlate
-                //Ball auf Platte setzten (sonst faengt Ball bei winkelgeschw. != 0 zu huepfen an, da er allmaelich von der Platte abkommt)
-                state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));
-                #endregion
-
                 state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
                 #region CalcPseudoConstainingForce
                 {
                     if (Utilities.Mathematics.IsDownPlate(state.Position,Utilities.Mathematics.CalcNormalVector(state.Tilt)))
                     {
                         state.Acceleration +=
-                            (2.0 * (Vector3D)Utilities.Mathematics.CalcFootOfPerpendicular(state.Position, Utilities.Mathematics.CalcNormalVector(state.Tilt)))
+                            (2.0 * (Utilities.Mathematics.CalcFootOfPerpendicular(state.Position, Utilities.Mathematics.CalcNormalVector(state.Tilt))-state.Position))
                             / (elapsedSeconds * elapsedSeconds);
                     }
 
