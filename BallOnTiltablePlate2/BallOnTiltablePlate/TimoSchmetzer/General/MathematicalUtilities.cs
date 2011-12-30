@@ -259,7 +259,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <param name="p"></param>
         /// <param name="NormalVector"></param>
         /// <returns></returns>
-        public Point3D CalcFootOfPerpendicular(Point3D p, Vector3D NormalVector) 
+        public static Point3D CalcFootOfPerpendicular(Point3D p, Vector3D NormalVector) 
         {
             double t = -(NormalVector.X * p.X + NormalVector.Y * p.Y + NormalVector.Z * p.Z)
                 / (NormalVector.X * NormalVector.X + NormalVector.Y * NormalVector.Y + NormalVector.Z * NormalVector.Z);
