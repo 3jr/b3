@@ -253,6 +253,19 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             return Edges;
         }
 
+        /// <summary>
+        /// Fusspunkt berechnen, fuer Ebene der Form x*n = 0.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="NormalVector"></param>
+        /// <returns></returns>
+        public Point3D CalcFootOfPerpendicular(Point3D p, Vector3D NormalVector) 
+        {
+            double t = -(NormalVector.X * p.X + NormalVector.Y * p.Y + NormalVector.Z * p.Z)
+                / (NormalVector.X * NormalVector.X + NormalVector.Y * NormalVector.Y + NormalVector.Z * NormalVector.Z);
+            return p + t * NormalVector;
+        }
+
         #endregion
 
         #region Vectorcalcus
