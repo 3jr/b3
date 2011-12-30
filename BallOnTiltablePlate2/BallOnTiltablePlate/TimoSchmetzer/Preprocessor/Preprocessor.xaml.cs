@@ -38,8 +38,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
             //write new values
             _LastRecieveTime[0] = DateTime.Now;
             _LastRecievedPositions[0] = e.BallPosition3D;
+            #region Debug
             //Test
-            System.Diagnostics.Debug.Print(Position.ToString() + Velocity.ToString() + Acceleration.ToString()); 
+            //System.Diagnostics.Debug.Print("{" + Position.ToString() + "}" + "{" + Velocity.ToString() + "}" + "{" + Acceleration.ToString() + "}");
+            #endregion
         }
 
         private Vector3D[] _LastRecievedPositions = new Vector3D[]{new Vector3D(),new Vector3D()};//the two last captured positions
