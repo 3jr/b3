@@ -167,5 +167,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
             }
         }
 
+        public ValueSavePhyicsState Clone()
+        {
+            return (ValueSavePhyicsState)this.MemberwiseClone();
+        }
+
     }
 }

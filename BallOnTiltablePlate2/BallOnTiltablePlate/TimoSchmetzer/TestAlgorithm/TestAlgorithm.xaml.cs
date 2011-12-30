@@ -51,26 +51,26 @@ namespace BallOnTiltablePlate.TimoSchmetzer.TestAlgorithm
             double[] values = new double[] { -Math.PI / 32, -Math.PI / 64, Math.PI / 64, Math.PI / 32 };
             double bestdistance = DistanceToOrigin(s);
             foreach (double xtilt in values)
-            { 
-                ValueSavePhyicsState inputstate = s;
-                inputstate.DesiredTilt = new Vector(inputstate.DesiredTilt.X+xtilt, inputstate.DesiredTilt.Y);
+            {
+                ValueSavePhyicsState inputstate = s.Clone();
+                inputstate.DesiredTilt = new Vector(s.DesiredTilt.X + xtilt, s.DesiredTilt.Y);
                 double currentdistance = DistanceToOrigin(inputstate);
                 if (currentdistance < bestdistance)
                 {
                     bestdistance = currentdistance;
-                    TiltToSet.X = inputstate.DesiredTilt.X + xtilt;
+                    TiltToSet.X = s.DesiredTilt.X + xtilt;
                 }
             }
             bestdistance = DistanceToOrigin(s);
             foreach (double ytilt in values)
             {
-                ValueSavePhyicsState inputstate = s;
-                inputstate.DesiredTilt = new Vector(inputstate.DesiredTilt.X, inputstate.DesiredTilt.Y +ytilt);
+                ValueSavePhyicsState inputstate = s.Clone();
+                inputstate.DesiredTilt = new Vector(s.DesiredTilt.X, s.DesiredTilt.Y + ytilt);
                 double currentdistance = DistanceToOrigin(inputstate);
                 if (currentdistance < bestdistance)
                 {
                     bestdistance = currentdistance;
-                    TiltToSet.Y = inputstate.DesiredTilt.Y + ytilt;
+                    TiltToSet.Y = s.DesiredTilt.Y + ytilt;
                 }
             }
             _IO.Tilt = TiltToSet;
@@ -78,8 +78,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.TestAlgorithm
 
         private double DistanceToOrigin(ValueSavePhyicsState s)
         {
-            ValueSavePhyicsState inputs = s;
-            PhysicSimulationOnPlate.RunSimulation(inputs, 0.01);
+            ValueSavePhyicsState inputs = s.Clone();
+            PhysicSimulationOnPlate.RunSimulation(inputs, 1);
             return ((Vector3D)inputs.Position).Length;
         }
     }
