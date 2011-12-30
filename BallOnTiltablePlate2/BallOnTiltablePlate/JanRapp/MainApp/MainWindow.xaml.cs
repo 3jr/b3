@@ -15,13 +15,12 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
     /// </summary>
     internal partial class MainWindow : Window
     {
-        DispatcherTimer timer;
+        DispatcherTimer timer = new DispatcherTimer();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            timer = new DispatcherTimer() { Interval = GlobalSettings.UpdateIntervallOfAlgorithm };
             timer.Tick += new EventHandler(timer_Tick);
         }
 
@@ -64,16 +63,19 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                 dynamic preprocessorInstance = preprocessorItem.Instance;
 
                 inputInstance = ((Helper.BPItemUI)InputList.SelectedValue).Instance;
-                preprocessorInstance.Input = inputInstance;
+                //if(preprocessorInstance.GetType()..IsAssignableFrom(inputInstance.GetType()))
+                    preprocessorInstance.Input = inputInstance;
 
                 dynamic outputInstance = ((Helper.BPItemUI)OutputList.SelectedValue).Instance;
-                preprocessorInstance.Output = outputInstance;
+                //if (preprocessorInstance.Output.GetType().IsAssignableFrom(outputInstance.GetType()))
+                    preprocessorInstance.Output = outputInstance;
                 
 
                 Helper.JugglerItemUI juggeler = (Helper.JugglerItemUI)AlgorithmList.SelectedValue;
                 juggelerInstance = juggeler.Instance;
 
-                juggelerInstance.IO = preprocessorInstance;
+                //if (juggelerInstance.IO.GetType().IsAssignableFrom(preprocessorInstance.GetType()))
+                    juggelerInstance.IO = preprocessorInstance;
 
 
                 timer.Start();
@@ -87,7 +89,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         void timer_Tick(object sender, EventArgs e)
         {
-            timer.Interval = GlobalSettings.UpdateIntervallOfAlgorithm;
+            timer.Interval = TimeSpan.FromSeconds(60.0 / GlobalSettings.FPSOfAlgorithm);
 
             juggelerInstance.Update();
         }

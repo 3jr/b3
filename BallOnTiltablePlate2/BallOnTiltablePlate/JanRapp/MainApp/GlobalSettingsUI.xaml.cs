@@ -31,10 +31,5 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             nui.NuiCamera.ElevationAngle = (int)PhysicalKinectAngle.Value;
             nui.Uninitialize();
         }
-
-        private void JuggelerUpdateRate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            GlobalSettings.UpdateIntervallOfAlgorithm = TimeSpan.FromSeconds(60 / JuggelerUpdateRate.Value);
-        }
     }
 }

@@ -41,8 +41,7 @@
                       LargeChange="10"
                       RegularChange="2"
                       SmallChange=".1"
-                      ValueChanged="JuggelerUpdateRate_ValueChanged"
-                      Value="30"
+                      Value="{Binding FPSOfAlgorithm, ElementName=GlobalSettings}"
                       />
     </Grid>
 </UserControl>

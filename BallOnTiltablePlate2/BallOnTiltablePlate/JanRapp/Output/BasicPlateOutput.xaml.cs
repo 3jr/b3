@@ -64,18 +64,17 @@ namespace BallOnTiltablePlate.JanRapp.Output
                 values[2] = (System.UInt16)((TiltAngleY.Value * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYRegular2.Value);
                 values[3] = (System.UInt16)((TiltAngleY.Value * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYInverted3.Value);
 
-                byte[] sendBuffer = new byte[25];
-                sendBuffer[0] = 0xF0; //Tells the Chip that the next 8 bytes are the 4 values
+                byte[] sendBuffer = new byte[24];
 
-                for (int i = 0, j = 1; i < values.Length ; i++, j += 2)
+                for (int i = 0, j = 0; i < values.Length ; i++)
                 {
                     byte[] array = BitConverter.GetBytes(values[i]);
-                    sendBuffer[j + 0] = array[1];
-                    sendBuffer[j + 1] = array[0];
-                    sendBuffer[j + 2] = array[1];
-                    sendBuffer[j + 3] = array[0];
-                    sendBuffer[j + 4] = array[1];
-                    sendBuffer[j + 5] = array[0];
+                    sendBuffer[j++] = array[1];
+                    sendBuffer[j++] = array[0];
+                    sendBuffer[j++] = array[1];
+                    sendBuffer[j++] = array[0];
+                    sendBuffer[j++] = array[1];
+                    sendBuffer[j++] = array[0];
                 }
 
                 System.Diagnostics.Debug.WriteLine("New Transmittion Started");

@@ -60,7 +60,7 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         {
             stopped = true;
             timer.Stop();
-            ToogelRunningBtn.Content = "Start";
+            ToogelRunningBtn.Content = "Play";
             ToogelRunningBtn.IsEnabled = false;
         }
 
@@ -79,13 +79,13 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
             if (timer.IsEnabled)
             {
                 timer.Stop();
-                ToogelRunningBtn.Content = "Start";
+                ToogelRunningBtn.Content = "Play";
             }
             else
             {
                 lastUpdateTime = DateTime.Now;
                 timer.Start();
-                ToogelRunningBtn.Content = "Stop";
+                ToogelRunningBtn.Content = "Pause";
             }
         }
 
