@@ -19,7 +19,7 @@ namespace BallOnTiltablePlate.JanRapp.Output
     /// Interaction logic for BasicPlateOutput.xaml
     /// </summary>
     [BallOnPlateItemInfo("Jan","Rapp","BasicPlateOutput", "1.0")]
-    public partial class BasicPlateOutput : UserControl, IPlateOutput
+    public partial class BasicPlateOutput : UserControl, IPlateOutput, IDisposable
     {
         public FrameworkElement SettingsUI
         {
@@ -64,6 +64,12 @@ namespace BallOnTiltablePlate.JanRapp.Output
                 values[2] = (System.UInt16)((TiltAngleY.Value * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYRegular2.Value);
                 values[3] = (System.UInt16)((TiltAngleY.Value * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYInverted3.Value);
 
+                RecivedLog.Text =
+                    values[0].ToString() + Environment.NewLine +
+                    values[1].ToString() + Environment.NewLine +
+                    values[2].ToString() + Environment.NewLine +
+                    values[3].ToString();
+
                 byte[] sendBuffer = new byte[24];
 
                 for (int i = 0, j = 0; i < values.Length ; i++)
@@ -80,9 +86,7 @@ namespace BallOnTiltablePlate.JanRapp.Output
                 System.Diagnostics.Debug.WriteLine("New Transmittion Started");
                 for (int i = 0; i < sendBuffer.Length; i++ )
                 {
-                    System.Threading.Thread.Sleep(50);
-
-                    port.Write(sendBuffer, i, 1);
+                    ////port.Write(sendBuffer, i, 1);
                 }
             }
         }
@@ -135,6 +139,18 @@ namespace BallOnTiltablePlate.JanRapp.Output
         {
             if (port.IsOpen)
                 e.CanExecute = true;
+        }
+
+        public void Dispose()
+        {
+            this.port.Dispose();
+
+            GC.SuppressFinalize(this);
+        }
+
+        ~BasicPlateOutput()
+        {
+            Dispose();
         }
     }
 }

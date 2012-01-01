@@ -39,59 +39,95 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             };
         }
 
-        dynamic inputInstance;
-        dynamic juggelerInstance;
-        private void Lists_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void AlgorithmList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (AlgorithmList == null ||
-                PreprocessorList == null ||
-                InputList == null ||
-                OutputList == null)
-                return; //Not yet Initialiced
+            PreprocessorList.ItemsSource = ((dynamic)AlgorithmList.SelectedItem).DataContext.Preprocessors;
 
-            //XAML makes sure that there are only possible combinatons of items!!!!
-            
-            if (inputInstance != null)
-                inputInstance.Stop();
-
-            if (AlgorithmList.SelectedItem != null &&
-               PreprocessorList.SelectedItem != null &&
-               InputList.SelectedItem != null &&
-               OutputList.SelectedItem != null)
+            if (AlgorithmList.SelectedValue != null && PreprocessorList.SelectedValue != null)
             {
-                Helper.PreprocessorItemUI preprocessorItem = (Helper.PreprocessorItemUI)PreprocessorList.SelectedValue;
-                dynamic preprocessorInstance = preprocessorItem.Instance;
+                dynamic juggelerInstance = AlgorithmList.SelectedValue;
+                juggelerInstance.IO = (dynamic)PreprocessorList.SelectedValue;
+            }
 
-                inputInstance = ((Helper.BPItemUI)InputList.SelectedValue).Instance;
-                //if(preprocessorInstance.GetType()..IsAssignableFrom(inputInstance.GetType()))
-                    preprocessorInstance.Input = inputInstance;
+            ListItemStartStop(e.NewValue, e.OldValue);
+        }
 
-                dynamic outputInstance = ((Helper.BPItemUI)OutputList.SelectedValue).Instance;
-                //if (preprocessorInstance.Output.GetType().IsAssignableFrom(outputInstance.GetType()))
-                    preprocessorInstance.Output = outputInstance;
-                
+        private void PreprocessorList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            InputList.ItemsSource = ((dynamic)PreprocessorList.SelectedItem).DataContext.Inputs;
+            OutputList.ItemsSource = ((dynamic)PreprocessorList.SelectedItem).DataContext.Outputs;
 
-                Helper.JugglerItemUI juggeler = (Helper.JugglerItemUI)AlgorithmList.SelectedValue;
-                juggelerInstance = juggeler.Instance;
+            if (PreprocessorList.SelectedValue != null)
+            {
+                dynamic preprocessorInstance = PreprocessorList.SelectedValue;
+                if (InputList.SelectedValue != null)
+                    preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                if (OutputList.SelectedValue != null)
+                    preprocessorInstance.Output = (dynamic)OutputList.SelectedValue;
 
-                //if (juggelerInstance.IO.GetType().IsAssignableFrom(preprocessorInstance.GetType()))
-                    juggelerInstance.IO = preprocessorInstance;
+                dynamic juggelerInstance = AlgorithmList.SelectedValue;
+                juggelerInstance.IO = (dynamic)preprocessorInstance;
+            }
 
+            ListItemStartStop(e.NewValue, e.OldValue);
+        }
 
+        private void InputList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {   
+            //Actually that is done in ListItemStartStop, but for now it is only valid for Input.
+            if (e.NewValue != e.OldValue)
+            {
+                if(e.OldValue != null)
+                    ((dynamic)e.OldValue).DataContext.Instance.Stop();
+                if (e.NewValue != null)
+                    ((dynamic)e.NewValue).DataContext.Instance.Start();
+            }
+
+            if (InputList.SelectedValue != null)
+            {
+                dynamic preprocessorInstance = PreprocessorList.SelectedValue;
+                preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+            }
+
+            ListItemStartStop(e.NewValue, e.OldValue);
+        }
+
+        private void OutputList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (OutputList.SelectedValue != null)
+            {
+                dynamic preprocessorItem = PreprocessorList.SelectedValue;
+                preprocessorItem.Output = (dynamic)OutputList.SelectedValue;
+            }
+
+            ListItemStartStop(e.NewValue, e.OldValue);
+        }
+
+        void ListItemStartStop(object newValue, object oldValue)
+        {
+            //When all Items get Start Stop Methods!!!!
+            //if (newValue != oldValue)
+            //{
+            //    if (oldValue != null)
+            //        ((dynamic)oldValue).DataContext.Instance.Stop();
+            //    if (newValue != null)
+            //        ((dynamic)newValue).DataContext.Instance.Start();
+            //}
+
+            if (AlgorithmList.SelectedValue != null &&
+                PreprocessorList.SelectedValue != null &&
+                InputList.SelectedValue != null &&
+                OutputList.SelectedValue != null)
                 timer.Start();
-                inputInstance.Start();
-            }
             else
-            {
                 timer.Stop();
-            }
         }
 
         void timer_Tick(object sender, EventArgs e)
         {
             timer.Interval = TimeSpan.FromSeconds(60.0 / GlobalSettings.FPSOfAlgorithm);
 
-            juggelerInstance.Update();
+            ((dynamic)AlgorithmList.SelectedValue).Update();
         }
         
         private void GlobalSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
@@ -118,10 +154,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             if (metaData.Item1.SelectedItem == null)
                 return;
 
-            var item = (Helper.BPItemUI)metaData.Item1.SelectedValue;
-            if (item == null)
-                return;
-            IBallOnPlateItem instance = item.Instance;
+            var instance = (IBallOnPlateItem)metaData.Item1.SelectedValue;
             if (instance.SettingsUI == null)
                 return;
 
@@ -131,8 +164,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         private void SettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
             var metaData = settingsCmdMetadata[e.Command];
-            var item = (Helper.BPItemUI)metaData.Item1.SelectedValue;
-            IBallOnPlateItem instance = item.Instance;
+            IBallOnPlateItem instance = (IBallOnPlateItem)metaData.Item1.SelectedValue;
 
             if (windows.ContainsKey(instance))
             {
@@ -143,7 +175,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             {
                 string name = metaData.Item2;
                 SettingsWindow win = new SettingsWindow(instance.SettingsUI, this,
-                    string.Format("{0} Settings: {1}", name, item.ToString()));
+                    string.Format("{0} Settings: {1}", name, metaData.Item1.SelectedItem.ToString()));
                 windows.Add(instance, win);
                 win.Show();
             }
@@ -170,6 +202,14 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
             this.Title = title;
             this.Content = ui;
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+                this.Owner.Focus();
+
+            base.OnKeyUp(e);
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

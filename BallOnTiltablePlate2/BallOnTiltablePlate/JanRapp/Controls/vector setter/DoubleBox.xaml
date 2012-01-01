@@ -5,7 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
-             mc:Ignorable="d" Height="24">
+             mc:Ignorable="d" Height="24" 
+             FocusManager.IsFocusScope="True"
+             Focusable="True"
+             FocusManager.FocusedElement="{Binding txtBox}">
     <UserControl.Resources>
         <RoutedCommand x:Key="IncreaseValue">
         </RoutedCommand>

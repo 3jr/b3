@@ -145,6 +145,14 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         #endregion
 
+ 
+        public DoubleBox()
+        {
+            InitializeComponent();
+
+            txtBox.Text = Value.ToString();
+        }
+        
         #region Helper
         
         private double GetAmoutOfChange()
@@ -196,23 +204,11 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         #endregion Helper
 
-        public DoubleBox()
-        {
-            InitializeComponent();
-
-            txtBox.Text = Value.ToString();
-        }
-
         #region Events
 		
         private void txtBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateValue();
-        }
-
-        private void txtBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            UpdateTextBox();
         }
 
         private void IncreaseValueCmdExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -261,35 +257,44 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             base.OnPreviewMouseWheel(e);
         }
 
+        private void txtBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            UpdateTextBox();
+        }
+
         protected override void OnPreviewGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
         {
-            txtBox.SelectAll();
-
+            
             base.OnPreviewGotKeyboardFocus(e);
         }
 
         protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
         {
-            Keyboard.Focus(txtBox);
+            txtBox.Focus();
             txtBox.SelectAll();
 
-            //System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in DoubleBox");
+            System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in DoubleBox");
 
+            e.Handled = true;
             base.OnGotKeyboardFocus(e);
         }
 
         protected override void OnGotFocus(RoutedEventArgs e)
         {
-            txtBox.Focus();
-
             base.OnGotFocus(e);
         }
 
         protected override void OnAccessKey(AccessKeyEventArgs e)
         {
-            txtBox.Focus();
-
             base.OnAccessKey(e);
+        }
+
+        protected override void OnIsKeyboardFocusWithinChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (IsKeyboardFocusWithin)
+                txtBox.Focus();
+
+            base.OnIsKeyboardFocusWithinChanged(e);
         }
 
         #region MouseDragToChagneValue

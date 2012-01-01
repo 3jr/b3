@@ -56,7 +56,6 @@
             </StackPanel>
         </Expander>
         <controls:SettingSaver/>
-        <TextBlock>Recived:</TextBlock>
         <TextBlock x:Name="RecivedLog" />
     </StackPanel>
 </UserControl>

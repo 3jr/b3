@@ -89,8 +89,8 @@
         <TreeView x:Name="AlgorithmList"
                   Margin="7,0" 
                   ItemsSource="{x:Static helper:BPItemUI.PopulateJugglerLists}"
-                  SelectedValuePath="DataContext"
-                  SelectedItemChanged="Lists_SelectionChanged"
+                  SelectedValuePath="DataContext.Instance"
+                  SelectedItemChanged="AlgorithmList_SelectionChanged"
                   />
         <Grid Margin="7">
             <Button x:Name="PreprocessorSettingButton"
@@ -109,10 +109,8 @@
         </Grid>
         <TreeView x:Name="PreprocessorList"
                  Margin="7,0"
-                 ItemsSource="{Binding SelectedItem.DataContext.Preprocessors,
-                                       ElementName=AlgorithmList}"
-                  SelectedValuePath="DataContext"
-                  SelectedItemChanged="Lists_SelectionChanged"
+                  SelectedValuePath="DataContext.Instance"
+                  SelectedItemChanged="PreprocessorList_SelectionChanged"
                  />
         <Grid Margin="7">
             <Button x:Name="InputSettingButton"
@@ -130,10 +128,8 @@
         </Grid>
         <TreeView x:Name="InputList"
                  Margin="7,0"
-                 ItemsSource="{Binding ElementName=PreprocessorList,
-                                       Path=SelectedItem.DataContext.Inputs}"
-                 SelectedValuePath="DataContext"
-                 SelectedItemChanged="Lists_SelectionChanged"
+                 SelectedValuePath="DataContext.Instance"
+                 SelectedItemChanged="InputList_SelectionChanged"
                  />
         <Grid Margin="7">
             <Button x:Name="OutputSettingButton"
@@ -151,10 +147,8 @@
         </Grid>
         <TreeView x:Name="OutputList"
                  Margin="7,0"
-                 ItemsSource="{Binding ElementName=PreprocessorList,
-                                       Path=SelectedItem.DataContext.Outputs}"
-                  SelectedValuePath="DataContext"
-                  SelectedItemChanged="Lists_SelectionChanged"
+                  SelectedValuePath="DataContext.Instance"
+                  SelectedItemChanged="OutputList_SelectionChanged"
                  />
     </StackPanel>
 </Window>

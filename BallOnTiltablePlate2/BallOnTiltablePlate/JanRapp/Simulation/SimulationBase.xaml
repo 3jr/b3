@@ -32,7 +32,7 @@
         </Style>
     </UserControl.Resources>
 	<UserControl.CommandBindings>
-        <CommandBinding Command="{StaticResource ToogleRunningCmd}" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{StaticResource ToogleRunningCmd}" Executed="ToogleRunningCmd_Executed" CanExecute="ToogleRunningCmd_CanExecute"/>
 	</UserControl.CommandBindings>
     <WrapPanel Orientation="Vertical">
 		<controls:Visualizer3D Height="300" Width="300" x:Name="Visualizer3DCtrl" Margin="8"/>
@@ -64,9 +64,9 @@
         <Expander Header="_Constants" Margin="8" >
             <StackPanel Margin="8">
         		<controls:DoubleBox x:Name="GravityDoubleBox" Text="_Gravity:" HorizontalAlignment="Right" Value="-9.81" Margin="0" SmallChange=".1" LargeChange="1"/>
-        		<controls:DoubleBox x:Name="HitAttenuationFactorDoubleBox" Text="Attenuation Factor at _Hit" HorizontalAlignment="Right" Value="0.8" Margin="0,2,0,0"/>
-        		<controls:DoubleBox x:Name="AbsoluteHitAttenuationDoubleBox" Text="Ab_solute Attenuation at Hit" HorizontalAlignment="Right" Value="1" Margin="0,2,0,0"/>
-                <controls:DoubleBox x:Name="PlateVelocityDoubleBox" Text="P_late Velocity" HorizontalAlignment="Right" Value="0.08725" Margin="0,2,0,0"/>
+        		<controls:DoubleBox x:Name="HitAttenuationFactorDoubleBox" Text="Attenuation Factor at _Hit:" HorizontalAlignment="Right" Value="0.8" Margin="0,2,0,0"/>
+        		<controls:DoubleBox x:Name="AbsoluteHitAttenuationDoubleBox" Text="Ab_solute Attenuation at Hit:" HorizontalAlignment="Right" Value="1" Margin="0,2,0,0"/>
+                <controls:DoubleBox x:Name="PlateVelocityDoubleBox" Text="P_late Velocity:" HorizontalAlignment="Right" Value="0.08725" Margin="0,2,0,0"/>
         	</StackPanel>
         </Expander>
         <controls:SettingSaver/>

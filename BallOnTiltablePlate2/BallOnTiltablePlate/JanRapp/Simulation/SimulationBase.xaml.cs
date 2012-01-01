@@ -39,6 +39,7 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
         {
             DateTime now = DateTime.Now;
             Update((now - lastUpdateTime).TotalSeconds);
+
             if (Position != lastPosition)
                 SendData((Vector3D)Position);
 
@@ -74,7 +75,7 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
             get { return this; }
         }
 
-        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void ToogleRunningCmd_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             if (timer.IsEnabled)
             {
@@ -87,6 +88,12 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
                 timer.Start();
                 ToogelRunningBtn.Content = "Pause";
             }
+        }
+
+        private void ToogleRunningCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (!stopped)
+                e.CanExecute = true;
         }
 
         #region IPhysicsState
