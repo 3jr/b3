@@ -273,7 +273,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             txtBox.Focus();
             txtBox.SelectAll();
 
-            System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in DoubleBox");
+            //System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in DoubleBox");
 
             e.Handled = true;
             base.OnGotKeyboardFocus(e);

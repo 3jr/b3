@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Controls.RectangleSelector2"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <system:Double x:Key="LeftX">100</system:Double>
+        <system:Double x:Key="TopY">100</system:Double>
+        <system:Double x:Key="RightX">200</system:Double>
+        <system:Double x:Key="BottomY">200</system:Double>
+        <Style TargetType="ResizeGrip">
+            <EventSetter Event="MouseDown" Handler="ResizeGrip_MouseDown"/>
+            <EventSetter Event="MouseUp" Handler="ResizeGrip_MouseUp"/>
+            <EventSetter Event="LostMouseCapture" Handler="ResizeGrip_LostMouseCapture"/>
+        </Style>
+    </UserControl.Resources>
+    <Canvas x:Name="TheCanvas">
+        <Image x:Name="mainImage"/>
+        <ResizeGrip  x:Name="TopLeftBoundry" Canvas.Left="{DynamicResource LeftX}" Canvas.Top="{DynamicResource TopY}">
+            <ResizeGrip.RenderTransform>
+                <RotateTransform Angle="180"/>
+            </ResizeGrip.RenderTransform>
+        </ResizeGrip>
+        <ResizeGrip  x:Name="TopRightBoundry" Canvas.Left="{DynamicResource RightX}" Canvas.Top="{DynamicResource TopY}">
+            <ResizeGrip.RenderTransform>
+                <TransformGroup>
+                    <RotateTransform Angle="-90"/>
+                </TransformGroup>
+            </ResizeGrip.RenderTransform>
+        </ResizeGrip>
+        <ResizeGrip  x:Name="BottomLeftBoundry" Canvas.Left="{DynamicResource LeftX}" Canvas.Top="{DynamicResource BottomY}">
+            <ResizeGrip.RenderTransform>
+                <RotateTransform Angle="90"/>
+            </ResizeGrip.RenderTransform>
+        </ResizeGrip>
+        <ResizeGrip  x:Name="BottomRightBoundry" Canvas.Left="{DynamicResource RightX}" Canvas.Top="{DynamicResource BottomY}"/>
+        <Rectangle x:Name="TheRectange" Stroke="CornflowerBlue"/>
+    </Canvas>
+</UserControl>

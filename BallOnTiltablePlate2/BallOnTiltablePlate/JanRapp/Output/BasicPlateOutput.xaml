@@ -22,6 +22,11 @@
                 <KeyGesture>Control+T</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
+        <RoutedCommand x:Key="ResetMicroControlerCmd" >
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+R</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
     </UserControl.Resources>
     <UserControl.CommandBindings>
         <CommandBinding Command="{StaticResource ToggleConnectCmd}"
@@ -29,6 +34,9 @@
                         Executed="ToggleConnectCmd_Executed"/>
         <CommandBinding Command="{StaticResource TransmitDataCmd}"
                         Executed="TransmitDataCmd_Executed"
+                        CanExecute="TransmitDataCmd_CanExecute"/>
+        <CommandBinding Command="{StaticResource ResetMicroControlerCmd}"
+                        Executed="ResetMicroControlerCmd_Executed"
                         CanExecute="TransmitDataCmd_CanExecute"/>
     </UserControl.CommandBindings>
     <StackPanel>
@@ -45,6 +53,7 @@
                     />
         <CheckBox x:Name="TransmitImmediately" Content="Transmit _Immediately"/>
         <Button Content="Transmit Now" Command="{StaticResource TransmitDataCmd}" ToolTip="Ctrl+T"/>
+        <Button Content="Reset MicroControler" Command="{StaticResource ResetMicroControlerCmd}" ToolTip="Ctrl+R"/>
         <Expander Header="Motor Offsets">
             <StackPanel>
                 <controls:DoubleBox x:Name="OffsetXRegular0"  Text="X Regular   (_0): "  ValueChanged="Offset_ValueChanged"/>

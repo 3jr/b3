@@ -75,6 +75,10 @@ namespace BallOnTiltablePlate.JanRapp.Output
                 for (int i = 0, j = 0; i < values.Length ; i++)
                 {
                     byte[] array = BitConverter.GetBytes(values[i]);
+                    if (array[0] == 0)
+                        array[0] = 1;
+                    if (array[1] == 0)
+                        array[1] = 1; //sending a null byte resets the microcontroller
                     sendBuffer[j++] = array[1];
                     sendBuffer[j++] = array[0];
                     sendBuffer[j++] = array[1];
@@ -86,7 +90,7 @@ namespace BallOnTiltablePlate.JanRapp.Output
                 System.Diagnostics.Debug.WriteLine("New Transmittion Started");
                 for (int i = 0; i < sendBuffer.Length; i++ )
                 {
-                    ////port.Write(sendBuffer, i, 1);
+                    port.Write(sendBuffer, i, 1);
                 }
             }
         }
@@ -151,6 +155,11 @@ namespace BallOnTiltablePlate.JanRapp.Output
         ~BasicPlateOutput()
         {
             Dispose();
+        }
+
+        private void ResetMicroControlerCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            port.Write(new byte[] {0}, 0, 1);
         }
     }
 }

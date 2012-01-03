@@ -84,7 +84,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Input\ImageProcessing.cs" />
+    <Compile Include="Input\KinectInput.xaml.cs">
+      <DependentUpon>KinectInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces.cs" />
+    <Compile Include="JanRapp\Controls\RectangeSelector.xaml.cs">
+      <DependentUpon>RectangeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Controls\RectangleSelector2.xaml.cs">
+      <DependentUpon>RectangleSelector2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Controls\SettingSaver.xaml.cs">
       <DependentUpon>SettingSaver.xaml</DependentUpon>
     </Compile>
@@ -163,6 +173,15 @@
     <Compile Include="TimoSchmetzer\TestAlgorithm\TestAlgorithm.xaml.cs">
       <DependentUpon>TestAlgorithm.xaml</DependentUpon>
     </Compile>
+    <Page Include="Input\KinectInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Controls\RectangeSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Controls\RectangleSelector2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Controls\SettingSaver.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -309,7 +328,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Microsoft.Research.Kinect.dll" />
-    <Content Include="Resources\openCV\Coding4Fun.Kinect.WinForm.dll" />
     <Content Include="Resources\openCV\cudart32_40_17.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
