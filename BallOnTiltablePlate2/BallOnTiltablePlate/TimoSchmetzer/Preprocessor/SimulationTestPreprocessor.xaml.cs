@@ -25,7 +25,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
         #region Base
         public System.Windows.FrameworkElement SettingsUI
         {
-            get { return this; }
+            get { return null; }
         }
         #endregion
 
