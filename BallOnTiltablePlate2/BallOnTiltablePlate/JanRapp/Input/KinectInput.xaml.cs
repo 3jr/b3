@@ -13,7 +13,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Research.Kinect.Nui;
-using Coding4Fun.Kinect.WPF;
+using Coding4Fun.Kinect.Wpf;
 
 namespace BallOnTiltablePlate.Input
 {
@@ -32,13 +32,27 @@ namespace BallOnTiltablePlate.Input
 
             kinect = Runtime.Kinects[0];
             kinect.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(kinect_DepthFrameReady);
-            processor = new ImageProcessing(1, 1, 479, 639);
+            processor = new ImageProcessing(1, 1, 640, 480);
        }
 
         void kinect_DepthFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
-            ClipSelector.Image.Source = e.ImageFrame
-            e.ImageFrame.Image
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+            
+            //ClipSelector.Image.Source = e.ImageFrame.ToBitmapSource();
+            byte[] bits = e.ImageFrame.Image.Bits;
+            for (int i = 1; i < 614400 - 1; i+=2)
+			{
+                bits[i] = (byte)(bits[i] << 4);
+			}// maybe faster and more accurate with pointers
+
+            ClipSelector.Image.Source = BitmapSource.Create(640, 480, 96.0, 96.0, PixelFormats.Gray16 , null, bits, 640 * 2);
+                                      //BitmapSource.Create(image.Width, image.Height, 96, 96, PixelFormats.Bgr32, null, ColoredBytes, image.Width * PixelFormats.Bgr32.BitsPerPixel / 8);
+
+            System.Diagnostics.Debug.WriteLine("ImageFrame.ToBitmapSource() took:" + stopwatch.ElapsedMilliseconds);
+
+            System.Diagnostics.Debug.WriteLine(processor.Average(e.ImageFrame.Image));
         } 
 
         public void Start()
@@ -77,7 +91,7 @@ namespace BallOnTiltablePlate.Input
         private void SendData(Vector3D vec)
         {
             var args = new BallInputEventArgs3D() { BallPosition3D = vec };
-            args.BallPosition = new Vector(vec.X, vec.Y);
+            args.BallPosition = new System.Windows.Vector(vec.X, vec.Y);
 
             if (DataRecived != null)
                 DataRecived(this, args);

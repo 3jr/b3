@@ -3,47 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640">
     <Grid>
-        <Grid.Resources>
-            <Thickness x:Key="CutArea" >110,120</Thickness>
-            <Style TargetType="ResizeGrip">
-                <EventSetter Event="MouseDown" Handler="ResizeGrip_MouseDown"/>
-                <EventSetter Event="MouseUp" Handler="ResizeGrip_MouseUp"/>
-            </Style>
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100" x:Name="Top"/>
-            <RowDefinition Height="*" x:Name="MiddleRow"/>
-            <RowDefinition Height="100" x:Name="Bottom"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" x:Name="Left"/>
-            <ColumnDefinition Width="*" x:Name="MiddleColumn"/>
-            <ColumnDefinition Width="100" x:Name="Right"/>
-        </Grid.ColumnDefinitions>
-        <Image x:Name="mainImage" Grid.ColumnSpan="3" Grid.RowSpan="3" d:LayoutOverrides="Margin" />
-        <ResizeGrip  x:Name="TopLeftBoundry"
-                        VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Grid.Column="1" Grid.Row="1" Height="17" Width="17" d:LayoutOverrides="Margin">
-            <ResizeGrip.RenderTransform>
-                    <RotateTransform Angle="180"/>
-            </ResizeGrip.RenderTransform>
-        </ResizeGrip>
-        <ResizeGrip  x:Name="TopRightBoundry"
-                        VerticalAlignment="Top" HorizontalAlignment="Right" RenderTransformOrigin="0.5,0.5" Grid.Column="1" Grid.Row="1" Height="17" Width="17" d:LayoutOverrides="Margin" >
-            <ResizeGrip.RenderTransform>
-                <TransformGroup>
-                    <RotateTransform Angle="-90"/>
-                </TransformGroup>
-            </ResizeGrip.RenderTransform>
-        </ResizeGrip>
-        <ResizeGrip  x:Name="BottomLeftBoundry"
-                        VerticalAlignment="Bottom" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Grid.Column="1" Grid.Row="1" Height="17" Width="17" d:LayoutOverrides="Margin">
-            <ResizeGrip.RenderTransform>
-                <RotateTransform Angle="90"/>
-            </ResizeGrip.RenderTransform>
-        </ResizeGrip>
-        <ResizeGrip  x:Name="BottomRightBoundry" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Height="17" Width="17" d:LayoutOverrides="Margin"/>
+        <controls:PointSelector x:Name="TopLeft" ></controls:PointSelector>
+        <controls:PointSelector x:Name="TopRight" ></controls:PointSelector>
+        <controls:PointSelector x:Name="BottomLeft" ></controls:PointSelector>
+        <controls:PointSelector x:Name="BottomRight" ></controls:PointSelector>
     </Grid>
 </UserControl>

@@ -48,7 +48,14 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Coding4Fun.Kinect.WinForm, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Coding4Fun.Kinect.WinForm, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\Coding4Fun.Kinect.WinForm.dll</HintPath>
+    </Reference>
+    <Reference Include="Coding4Fun.Kinect.Wpf, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\Coding4Fun.Kinect.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Emgu.CV, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
     <Reference Include="Emgu.CV.DebuggerVisualizers.VS2010, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
     <Reference Include="Emgu.CV.GPU, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
@@ -84,8 +91,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Input\ImageProcessing.cs" />
-    <Compile Include="Input\KinectInput.xaml.cs">
+    <Compile Include="JanRapp\Controls\PointSelector.xaml.cs">
+      <DependentUpon>PointSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Input\ImageProcessing.cs" />
+    <Compile Include="JanRapp\Input\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces.cs" />
@@ -173,7 +183,10 @@
     <Compile Include="TimoSchmetzer\TestAlgorithm\TestAlgorithm.xaml.cs">
       <DependentUpon>TestAlgorithm.xaml</DependentUpon>
     </Compile>
-    <Page Include="Input\KinectInput.xaml">
+    <Page Include="JanRapp\Controls\PointSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Input\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Controls\RectangeSelector.xaml">

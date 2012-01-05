@@ -125,7 +125,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         void timer_Tick(object sender, EventArgs e)
         {
-            timer.Interval = TimeSpan.FromSeconds(60.0 / GlobalSettings.FPSOfAlgorithm);
+            timer.Interval = TimeSpan.FromSeconds(60.0 / GlobalSettings.Instance.FPSOfAlgorithm);
 
             ((dynamic)AlgorithmList.SelectedValue).Update();
         }

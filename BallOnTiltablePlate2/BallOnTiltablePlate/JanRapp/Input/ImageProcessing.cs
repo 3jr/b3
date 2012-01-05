@@ -99,13 +99,13 @@ namespace BallOnTiltablePlate.Input
             return result;
         }
 
-        public Vector Average(PlanarImage frame)
+        public System.Windows.Vector Average(PlanarImage frame)
         {
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
-            double averageX;
-            double averageY;
+            long averageX = 0;
+            long averageY = 0;
 
             byte[] depthData = frame.Bits;
 
@@ -122,7 +122,7 @@ namespace BallOnTiltablePlate.Input
                 {
                     dept = depthData[j++] | depthData[j++] << 8;
                     int delta = dept - lastdept;
-                    averageX = delta / lenghtOfResult;
+                    averageX += delta;
                     lastdept = dept;
                 }
                 j += widthOfData - widthOfResult * 2;//2 bytes per pixel
@@ -137,26 +137,16 @@ namespace BallOnTiltablePlate.Input
                     dept = depthData[j] | depthData[j + 1] << 8;
                     j += widthOfData;
                     int delta = dept - lastdept;
-                    averageY = delta / lenghtOfResult;
+                    averageY += delta;
                     lastdept = dept;
                 }
-                j = yTop * widthOfData + x * 2; //2 bytes per pixel
+                j = yTop * widthOfData + (x + xLeft) * 2; //2 bytes per pixel
             }
 
-            System.Diagnostics.Debug.WriteLine("Differentiate over depth took:" + stopwatch.ElapsedMilliseconds);
+            System.Diagnostics.Debug.WriteLine("Average over depth took:" + stopwatch.ElapsedMilliseconds);
             stopwatch.Restart();
 
-            for (int x = 0; x < widthOfResult; x++)
-            {
-                for (int y = 0; y < heigthOfResult; y++)
-                {
-                    result[x, y, 2] = (sbyte)Math.Sqrt(result[x, y, 0] * result[x, y, 0] + result[x, y, 1] * result[x, y, 1]);
-                }
-            }
-
-            System.Diagnostics.Debug.WriteLine("Vector Length over depth took:" + stopwatch.ElapsedMilliseconds);
-
-            return new Vector(averageX, averageY);
+            return new System.Windows.Vector((double)averageX / lenghtOfResult, (double)averageY / lenghtOfResult);
         }
 
 

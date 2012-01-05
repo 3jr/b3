@@ -48,7 +48,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         public Image Image
         {
-            get { return Image; }
+            get { return mainImage; }
         }
 
         public RectangleSelector2()

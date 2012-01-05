@@ -5,9 +5,10 @@
              xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="679" d:DesignWidth="753">
+             d:DesignHeight="1071" d:DesignWidth="795">
     <Grid>
         <controls:RectangleSelector2 x:Name="ClipSelector" Width="640" Height="480" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,25,0,0"/>
         <Button Content="Set New Clip" Click="SetNewClip_Click" Margin="25,509,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="111"/>
+        <controls:PointSelector Margin="8,570,0,0" HorizontalAlignment="Left" Width="550" Height="323" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

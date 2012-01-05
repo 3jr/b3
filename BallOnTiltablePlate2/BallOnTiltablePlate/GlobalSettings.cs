@@ -6,17 +6,24 @@ using System.IO;
 
 namespace BallOnTiltablePlate
 {
-    static class GlobalSettings
+    class GlobalSettings
     {
         static GlobalSettings()
+        {
+            Instance = new GlobalSettings();
+        }
+
+        public GlobalSettings()
         {
             FPSOfAlgorithm = 20;
             PlateSize = .5;
         }
 
-        public static double FPSOfAlgorithm { get; set; }
+        public static GlobalSettings Instance { get; private set; }
 
-        public static double PlateSize { get; set;}
+        public double FPSOfAlgorithm { get; set; }
+
+        public double PlateSize { get; set;}
 
         internal static string ItemSettingsFolder(BallOnPlateItemInfoAttribute itemInfo)
         {
