@@ -233,7 +233,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         public static Point3D PlateCoordinatesToEucidean3DCoordinates(Vector PlateCoordinate, Vector Tilt)
         {
             Point3D p = new Point3D(PlateCoordinate.X, PlateCoordinate.Y, 0);
-            Matrix3x3 T = RotateTransformationMatrix(new Vector3D(1, 0, 0), Tilt.X) * RotateTransformationMatrix(new Vector3D(0, Math.Cos(Tilt.X), Math.Sin(Tilt.X)), Math.Cos(Tilt.X) * Tilt.Y);
+            Matrix3x3 T = RotateTransformationMatrix(new Vector3D(1, 0, 0), -Tilt.Y) * RotateTransformationMatrix(new Vector3D(0, Math.Cos(Tilt.Y), Math.Sin(Tilt.Y)), Math.Cos(Tilt.Y) * Tilt.X);
             p = T * p;
             return p;
         }

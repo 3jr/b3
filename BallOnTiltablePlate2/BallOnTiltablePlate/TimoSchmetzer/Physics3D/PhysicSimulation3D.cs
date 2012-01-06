@@ -22,6 +22,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer
 
         public static void RunSimulation(IPhysicsState Istate, double elapsedSeconds)
         {
+#if DEBUG
+            elapsedSeconds = elapsedSeconds > 0.015625 ? 0.015625 : elapsedSeconds;
+#endif
             #region calccalltimes
             double tcallx = (Istate.DesiredTilt.X - Istate.Tilt.X) / (Istate.PlateVelocity.X);
             double tcally = (Istate.DesiredTilt.Y - Istate.Tilt.Y) / (Istate.PlateVelocity.Y);
