@@ -17,7 +17,7 @@ using Coding4Fun.Kinect.Wpf;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace BallOnTiltablePlate.Input
+namespace BallOnTiltablePlate.JanRapp.Input
 {
     /// <summary>
     /// Interaction logic for KinectInput.xaml
@@ -43,16 +43,19 @@ namespace BallOnTiltablePlate.Input
         {
             InitializeComponent();
 
-            kinect = Runtime.Kinects[0];
-            kinect.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(kinect_DepthFrameReady);
-
-            ShowThread("Constructor");
-
-            //computaionTask = new Task<ImageProcessing.Output>(DoMainComputaionAsync);
-            computaionTask.ContinueWith(DisplayComputation, TaskScheduler.FromCurrentSynchronizationContext());
-
-            computaionTask.Start();
+            if (Runtime.Kinects.Count == 0)
+            {
+                MessageBox.Show("Kinect not (properly) connected. Restart");
+                this.IsEnabled = false;
+            }
+            else
+            {
+                kinect = Runtime.Kinects[0];
+                kinect.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(kinect_DepthFrameReady);
+            }
         }
+
+
 
         ImageProcessing.Input processorInput;
 
@@ -67,6 +70,9 @@ namespace BallOnTiltablePlate.Input
             {
                 
                 var state = new ImageProcessing.Input(e.ImageFrame.Image.Bits, 640, ToIntRect(ClipSelector.Value), 0, ImageProcessing.Requests.None);
+                computaionTask = new Task<ImageProcessing.Output>(DoMainComputaionAsync, state);
+                computaionTask.ContinueWith(DisplayComputation, TaskScheduler.FromCurrentSynchronizationContext());
+
                 computaionTask.Start();
             }
 
@@ -97,11 +103,24 @@ namespace BallOnTiltablePlate.Input
             System.Diagnostics.Debug.WriteLine("ImageFrame.ToBitmapSource() took:" + stopwatch.ElapsedMilliseconds);
         }
 
-        //ImageProcessing.Output DoMainComputaionAsync()
-        //{
+        ImageProcessing.Output DoMainComputaionAsync(object state)
+        {
+            ImageProcessing.Input input = (ImageProcessing.Input)state;
 
-        //    return null;
-        //}
+            byte[] deptArr;
+            byte[] deltaX;
+            byte[] deltaY;
+            byte[] anormalX;
+            byte[] anormalY;
+            byte[] hightAnormalties;
+
+            var average = ImageProcessing.Average(input.twoByteDepthBits, input.depthHorizontalResulotion, input.clip);
+
+            var ballPosition = BallPosition.BallPositionFast(input.twoByteDepthBits, input.depthHorizontalResulotion, average, input.tolerance, input.clip,
+                 out deptArr, out deltaX, out deltaY, out anormalX, out anormalY, out hightAnormalties, 1);
+
+            return new ImageProcessing.Output(PrettyPictureOfDepthData.PrettyPicture(input.twoByteDepthBits), deltaX, deltaY, anormalX, anormalY, hightAnormalties, ballPosition, average, input.clip);
+        }
 
         void DisplayComputation(Task<ImageProcessing.Output> task)
         {
@@ -145,10 +164,7 @@ namespace BallOnTiltablePlate.Input
         }
 
         #region Base
-        public System.Windows.FrameworkElement SettingsUI
-        {
-            get { return this; }
-        }
+        public System.Windows.FrameworkElement SettingsUI { get; private set; }
         #endregion
 
         #region Event

@@ -175,7 +175,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             {
                 string name = metaData.Item2;
                 SettingsWindow win = new SettingsWindow(instance.SettingsUI, this,
-                    string.Format("{0} Settings: {1}", name, metaData.Item1.SelectedItem.ToString()));
+                    string.Format("{0} Settings: {1}", name, ((FrameworkElement)metaData.Item1.SelectedItem).DataContext.ToString()));
                 windows.Add(instance, win);
                 win.Show();
             }

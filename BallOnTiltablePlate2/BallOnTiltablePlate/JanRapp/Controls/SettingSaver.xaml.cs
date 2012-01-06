@@ -74,6 +74,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["SaveCmd"], SaveCmd_Executed, SaveCmd_CanExecute));
                 backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["LoadCmd"], LoadCmd_Executed, LoadCmd_CanExecute));
                 backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["FocusOnSettingSaver"], FocusOnSettingSaver_Executed));
+                backing_Field_for_containingPanel.CommandBindings.Add(new CommandBinding((ICommand)this.Resources["LoadDefaultCmd"], LoadDefaultCmd_Executed, LoadDefaultCmd_CanExecute));
             }
             else
             {

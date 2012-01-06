@@ -9,16 +9,14 @@ namespace BallOnTiltablePlate.JanRapp.Input
     static class BallPosition
     {
         //Most Code is the same as next Method !!!UPDATE!!!
-        static Vector BallPositionFast(Microsoft.Research.Kinect.Nui.PlanarImage frame, Vector average, float tolerance, Int32Rect clip)
+        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip)
         {
             int left = clip.X;
             int top = clip.Y;
             int width = clip.Width;
             int height = clip.Height;
             int length = width * height;
-            byte[] depthData = frame.Bits;
-            if (frame.BytesPerPixel != 2) throw new ArgumentException("frame.BytesPerPixel must be 2");
-            int widthOfData = frame.Width * 2;// two bytes per pixel
+            int widthOfData = depthHorizontalResulotion * 2;// two bytes per pixel
             float averageX = (float)(average.X);
             float averageY = (float)(average.Y);
             int topLeftCornerOfResultInDepthData = (left * 2 + top * widthOfData); //2 bytes per pixel
@@ -60,10 +58,10 @@ namespace BallOnTiltablePlate.JanRapp.Input
         }
 
         //two changes and differend signatur to Mehtod above
-        static Vector BallPositionFast(Microsoft.Research.Kinect.Nui.PlanarImage frame, Vector average, float tolerance, Int32Rect clip, out byte[] ballPoints)
+        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip, out byte[] hightAnormalties)
         {
             /////////////////////////////////////////////////////
-            ballPoints = new byte[clip.Width * clip.Height]; ////
+            hightAnormalties = new byte[clip.Width * clip.Height]; ////
             /////////////////////////////////////////////////////
 
             int left = clip.X;
@@ -71,9 +69,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
             int width = clip.Width;
             int height = clip.Height;
             int length = width * height;
-            byte[] depthData = frame.Bits;
-            if (frame.BytesPerPixel != 2) throw new ArgumentException("frame.BytesPerPixel must be 2");
-            int widthOfData = frame.Width * 2;// two bytes per pixel
+            int widthOfData = depthHorizontalResulotion * 2;// two bytes per pixel
             float averageX = (float)(average.X);
             float averageY = (float)(average.Y);
             int topLeftCornerOfResultInDepthData = (left * 2 + top * widthOfData); //2 bytes per pixel
@@ -107,7 +103,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
                         ballY += y;
                         ballPointsCount++;
                         /////////////////////////////////////
-                        ballPoints[x + y * width] = 255; ////
+                        hightAnormalties[x + y * width] = 255; ////
                         /////////////////////////////////////
                     }
                 }
@@ -118,11 +114,11 @@ namespace BallOnTiltablePlate.JanRapp.Input
         }
 
         //two changes and differend signatur to Mehtod above
-        static Vector BallPositionFast(Microsoft.Research.Kinect.Nui.PlanarImage frame, Vector average, float tolerance, Int32Rect clip
-            , out byte[] deptArr, out byte[] deltaXArr, out byte[] deltaYArr, out byte[] anormalXArr, out byte[] anormalYArr, out byte[] ballPointsArr, int visibilytyMultiplier)
+        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip
+            , out byte[] deptArr, out byte[] deltaXArr, out byte[] deltaYArr, out byte[] anormalXArr, out byte[] anormalYArr, out byte[] hightAnormaltiesArr, int visibilytyMultiplier)
         {
             ////////////////////////////////////////////////////////
-            ballPointsArr = new byte[clip.Width * clip.Height]; ////
+            hightAnormaltiesArr = new byte[clip.Width * clip.Height]; ////
                                                                 ////
             deptArr     = new byte[clip.Width * clip.Height];   ////
             deltaXArr   = new byte[clip.Width * clip.Height];   ////
@@ -136,9 +132,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
             int width = clip.Width;
             int height = clip.Height;
             int length = width * height;
-            byte[] depthData = frame.Bits;
-            if (frame.BytesPerPixel != 2) throw new ArgumentException("frame.BytesPerPixel must be 2");
-            int widthOfData = frame.Width * 2;// two bytes per pixel
+            int widthOfData = depthHorizontalResulotion * 2;// two bytes per pixel
             float averageX = (float)(average.X);
             float averageY = (float)(average.Y);
             int topLeftCornerOfResultInDepthData = (left * 2 + top * widthOfData); //2 bytes per pixel
@@ -172,7 +166,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
                         ballY += y;
                         ballPointsCount++;
                         ////////////////////////////////////////
-                        ballPointsArr[x + y * width] = 255; ////
+                        hightAnormaltiesArr[x + y * width] = 255; ////
                         ////////////////////////////////////////
                     }
                     /////////////////////////////////////////////////////////////////////////////////
