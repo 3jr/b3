@@ -97,7 +97,8 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 // Just don't do file watching if you don't have the permittions.
             }
 
-            LoadCmd_Executed(fileNameOfDefault);
+            if(LoadCmd_CanExecute(fileNameOfDefault))
+                LoadCmd_Executed(fileNameOfDefault);
         }
 
         void fsw_Renamed(object sender, IO.RenamedEventArgs e)
@@ -234,11 +235,11 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             UpdateInputList();
         }
 
-        bool LoadCmd_CanExecute()
+        bool LoadCmd_CanExecute(string savedSettigs)
         {
-            if (string.IsNullOrWhiteSpace(InputComboBox.Text))
+            if (string.IsNullOrWhiteSpace(savedSettigs))
             { }
-            else if (!IO.File.Exists(IO.Path.Combine(GetSaveFolder(), InputComboBox.Text)))
+            else if (!IO.File.Exists(IO.Path.Combine(GetSaveFolder(), savedSettigs)))
             { }
             else
                 return true;
@@ -303,7 +304,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             e.Handled = true;
 
-            e.CanExecute = LoadCmd_CanExecute();
+            e.CanExecute = LoadCmd_CanExecute(InputComboBox.Text);
         }
 
         private void FocusOnSettingSaver_Executed(object sender, ExecutedRoutedEventArgs e)

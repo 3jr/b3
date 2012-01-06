@@ -49,9 +49,9 @@ namespace BallOnTiltablePlate.Input
             ShowThread("Constructor");
 
             //computaionTask = new Task<ImageProcessing.Output>(DoMainComputaionAsync);
-            //computaionTask.ContinueWith(DisplayComputation, TaskScheduler.FromCurrentSynchronizationContext());
+            computaionTask.ContinueWith(DisplayComputation, TaskScheduler.FromCurrentSynchronizationContext());
 
-            //computaionTask.Start();
+            computaionTask.Start();
         }
 
         ImageProcessing.Input processorInput;
@@ -65,7 +65,8 @@ namespace BallOnTiltablePlate.Input
 
             if (computaionTask.IsCompleted)
             {
-                //computaionTask.AsyncState = new ImageProcessing.Input(e.ImageFrame.Image.Bits, 640, ClipSelector.Value, 0, ImageProcessing.Requests.None);
+                
+                var state = new ImageProcessing.Input(e.ImageFrame.Image.Bits, 640, ToIntRect(ClipSelector.Value), 0, ImageProcessing.Requests.None);
                 computaionTask.Start();
             }
 
@@ -114,6 +115,10 @@ namespace BallOnTiltablePlate.Input
 
         }
 
+        Int32Rect ToIntRect(Rect rect)
+        {
+            return new Int32Rect((int)rect.Left, (int)rect.Top, (int)rect.Width, (int)rect.Height);
+        }
 
         BitmapSource CreateMyStandartBitmapSource(byte[] data, int width, int height)
         {
