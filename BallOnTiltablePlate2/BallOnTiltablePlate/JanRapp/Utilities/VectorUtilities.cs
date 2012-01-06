@@ -200,15 +200,17 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.Vectors
             if (rotationAroundXAndYAxis == null) throw new ArgumentNullException("rotationAroundXAndYAxis");
             if (result == null) throw new ArgumentNullException("result");
 
-            Vector3D firstAxisForXRotation = new Vector3D(1.0,0.0,0.0);
-            Vector3D secoundAxisForYRotation = new Vector3D(0, Math.Cos(rotationAroundXAndYAxis.X), Math.Sin(rotationAroundXAndYAxis.X));
+            Vector3D firstAxisForXRotation = new Vector3D(0.0,1.0,0.0);
+            Vector3D secoundAxisForYRotation = new Vector3D(-Math.Cos(rotationAroundXAndYAxis.X), 0.0, Math.Sin(rotationAroundXAndYAxis.X));
             double xAngle = (rotationAroundXAndYAxis.X);
-            double yAngle = Math.Cos(rotationAroundXAndYAxis.X) * (rotationAroundXAndYAxis.Y);
+            double yAngle =
+                //Math.Asin(Math.Sin(rotationAroundXAndYAxis.Y) * Math.Cos(rotationAroundXAndYAxis.X));
+                (rotationAroundXAndYAxis.Y);
 
             Quaternion firstRotation = new Quaternion(firstAxisForXRotation, RadToDeg(xAngle));
             Quaternion secoundRotaion = new Quaternion(secoundAxisForYRotation, RadToDeg(yAngle));
 
-            Quaternion resultQuaternion = firstRotation * secoundRotaion;
+            Quaternion resultQuaternion = secoundRotaion* firstRotation;
 
             if (resultQuaternion != result.Quaternion)
             {

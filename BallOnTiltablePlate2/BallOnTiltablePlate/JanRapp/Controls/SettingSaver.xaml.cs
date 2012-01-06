@@ -25,6 +25,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         private Panel backing_Field_for_containingPanel;
         const string RootSaveName = "RootSave";
         IO.FileSystemWatcher fsw;
+        string fileNameOfDefault = "default";
 
         #region Attached Properties
 
@@ -44,13 +45,15 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         #endregion Attached Properties
 
+        #region Init
+        
         private Panel ContainingPanel
         {
             get
             {
                 return backing_Field_for_containingPanel;
             }
-            set 
+            set
             {
                 backing_Field_for_containingPanel = value;
             }
@@ -93,6 +96,8 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             {
                 // Just don't do file watching if you don't have the permittions.
             }
+
+            LoadCmd_Executed(fileNameOfDefault);
         }
 
         void fsw_Renamed(object sender, IO.RenamedEventArgs e)
@@ -104,6 +109,8 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             UpdateInputList();
         }
+
+        #endregion Init
 
         #region Helper
 
@@ -239,9 +246,9 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             return false;
         }
 
-        void LoadCmd_Executed()
+        void LoadCmd_Executed(string savedSettigs)
         {
-            string path = IO.Path.Combine(GetSaveFolder(), InputComboBox.Text);
+            string path = IO.Path.Combine(GetSaveFolder(), savedSettigs);
 
             XDocument doc = XDocument.Load(path);
 
@@ -266,6 +273,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 return 0;
             }).ToArray(); //To enforce imediate execution.
         } 
+
         #endregion Save and Load
 
         #region Events
@@ -288,7 +296,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             e.Handled = true;
 
-            LoadCmd_Executed();
+            LoadCmd_Executed(InputComboBox.Text);
         }
 
         private void LoadCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -322,6 +330,16 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             //{
             //    throw new InvalidOperationException("I want to know how this happend, I thougt that in a ComboBox only one Item can be selected");
             //}
+        }
+
+        private void LoadDefaultCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            LoadCmd_Executed(fileNameOfDefault);
+        }
+
+        private void LoadDefaultCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = IO.File.Exists(IO.Path.Combine(GetSaveFolder(), fileNameOfDefault));
         }
 
         #endregion Events

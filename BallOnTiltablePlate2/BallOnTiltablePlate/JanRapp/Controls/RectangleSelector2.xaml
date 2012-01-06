@@ -18,7 +18,6 @@
         </Style>
     </UserControl.Resources>
     <Canvas x:Name="TheCanvas">
-        <Image x:Name="mainImage"/>
         <ResizeGrip  x:Name="TopLeftBoundry" Canvas.Left="{DynamicResource LeftX}" Canvas.Top="{DynamicResource TopY}">
             <ResizeGrip.RenderTransform>
                 <RotateTransform Angle="180"/>

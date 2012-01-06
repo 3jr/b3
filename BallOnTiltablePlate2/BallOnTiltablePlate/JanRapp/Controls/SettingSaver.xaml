@@ -20,6 +20,11 @@
                 <KeyGesture>Control+F</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
+        <RoutedCommand x:Key="LoadDefaultCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+D</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
     </UserControl.Resources>
     <UserControl.CommandBindings>
         <CommandBinding Command="{StaticResource SaveCmd}"
@@ -30,6 +35,9 @@
                         Executed="LoadCmd_Executed" />
         <CommandBinding Command="{StaticResource FocusOnSettingSaver}"
                         Executed="FocusOnSettingSaver_Executed"/>
+        <CommandBinding Command="{StaticResource LoadDefaultCmd}"
+                        Executed="LoadDefaultCmd_Executed"
+                        CanExecute="LoadDefaultCmd_CanExecute"/>
     </UserControl.CommandBindings>
     <Grid>
         <ComboBox x:Name="InputComboBox"

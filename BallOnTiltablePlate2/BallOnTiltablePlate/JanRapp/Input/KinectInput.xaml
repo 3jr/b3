@@ -4,11 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="1071" d:DesignWidth="795">
+             mc:Ignorable="d" Width="656" Height="988" 
+             >
     <Grid>
-        <controls:RectangleSelector2 x:Name="ClipSelector" Width="640" Height="480" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,25,0,0"/>
-        <Button Content="Set New Clip" Click="SetNewClip_Click" Margin="25,509,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="111"/>
-        <controls:PointSelector Margin="8,570,0,0" HorizontalAlignment="Left" Width="550" Height="323" VerticalAlignment="Top"/>
+        <TabControl VerticalAlignment="Top" HorizontalAlignment="Left" Width="640" Height="500" Margin="8">
+            <TabItem Header="Horizontal">
+                <Image x:Name="HorizontalImage"/>
+            </TabItem>
+            <TabItem Header="Vertical">
+                <Image x:Name="VerticalImage"/>
+            </TabItem>
+            <TabItem Header="Ball">
+                <Image x:Name="BallImage"/>
+            </TabItem>
+        </TabControl>
+
+        <Grid Width="640" Height="480" Margin="8,500,8,8" HorizontalAlignment="Left">
+            <Image x:Name="OverAllImage"/>
+            <controls:RectangleSelector x:Name="ClipSelector" Value="212,143,100,100"/>
+        </Grid>
+
+
+        <StatusBar VerticalAlignment="Bottom">
+            <TextBlock x:Name="statusbarText" />
+        </StatusBar>
     </Grid>
 </UserControl>

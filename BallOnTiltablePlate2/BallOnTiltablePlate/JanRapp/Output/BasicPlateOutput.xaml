@@ -54,7 +54,7 @@
         <CheckBox x:Name="TransmitImmediately" Content="Transmit _Immediately"/>
         <Button Content="Transmit Now" Command="{StaticResource TransmitDataCmd}" ToolTip="Ctrl+T"/>
         <Button Content="Reset MicroControler" Command="{StaticResource ResetMicroControlerCmd}" ToolTip="Ctrl+R"/>
-        <Expander Header="Motor Offsets">
+        <Expander Header="Motor _Offsets">
             <StackPanel>
                 <controls:DoubleBox x:Name="OffsetXRegular0"  Text="X Regular   (_0): "  ValueChanged="Offset_ValueChanged"/>
                 <controls:DoubleBox x:Name="OffsetXInverted1" Text="X Inverted  (_1): "  ValueChanged="Offset_ValueChanged"/>

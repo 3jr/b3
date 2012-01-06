@@ -94,13 +94,14 @@
     <Compile Include="JanRapp\Controls\PointSelector.xaml.cs">
       <DependentUpon>PointSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Input\BallPositionFast.cs" />
     <Compile Include="JanRapp\Input\ImageProcessing.cs" />
     <Compile Include="JanRapp\Input\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces.cs" />
-    <Compile Include="JanRapp\Controls\RectangeSelector.xaml.cs">
-      <DependentUpon>RectangeSelector.xaml</DependentUpon>
+    <Compile Include="JanRapp\Controls\RectangleSelector.xaml.cs">
+      <DependentUpon>RectangleSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Controls\RectangleSelector2.xaml.cs">
       <DependentUpon>RectangleSelector2.xaml</DependentUpon>
@@ -125,6 +126,7 @@
       <DependentUpon>Visualizer3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="GlobalSettings.cs" />
+    <Compile Include="JanRapp\Input\PrettyPictureOfDepthData.cs" />
     <Compile Include="JanRapp\MainApp\GlobalSettingsUI.xaml.cs">
       <DependentUpon>GlobalSettingsUI.xaml</DependentUpon>
     </Compile>
@@ -189,7 +191,7 @@
     <Page Include="JanRapp\Input\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Controls\RectangeSelector.xaml">
+    <Page Include="JanRapp\Controls\RectangleSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Controls\RectangleSelector2.xaml">
@@ -340,6 +342,8 @@
     <Folder Include="MoritzUehling\Lib\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Coding4Fun.Kinect.WinForm.dll" />
+    <Content Include="Resources\Coding4Fun.Kinect.Wpf.dll" />
     <Content Include="Resources\Microsoft.Research.Kinect.dll" />
     <Content Include="Resources\openCV\cudart32_40_17.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

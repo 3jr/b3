@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Research.Kinect.Nui;
 using Coding4Fun.Kinect.Wpf;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace BallOnTiltablePlate.Input
 {
@@ -24,7 +26,18 @@ namespace BallOnTiltablePlate.Input
     public partial class KinectInput : UserControl, IBallInput3D
     {
         Runtime kinect;
-        ImageProcessing processor;
+        Task<ImageProcessing.Output> computaionTask;
+
+        static int ThreadName = 0;
+
+        public void ShowThread(string identifyer)
+        {
+            if (Thread.CurrentThread.Name == null)
+                Thread.CurrentThread.Name = ThreadName.ToString();
+            ThreadName++;
+
+            System.Diagnostics.Debug.WriteLine(identifyer + Thread.CurrentThread.Name);
+        }
 
         public KinectInput()
         {
@@ -32,33 +45,85 @@ namespace BallOnTiltablePlate.Input
 
             kinect = Runtime.Kinects[0];
             kinect.DepthFrameReady += new EventHandler<ImageFrameReadyEventArgs>(kinect_DepthFrameReady);
-            processor = new ImageProcessing(1, 1, 640, 480);
-       }
+
+            ShowThread("Constructor");
+
+            //computaionTask = new Task<ImageProcessing.Output>(DoMainComputaionAsync);
+            //computaionTask.ContinueWith(DisplayComputation, TaskScheduler.FromCurrentSynchronizationContext());
+
+            //computaionTask.Start();
+        }
+
+        ImageProcessing.Input processorInput;
 
         void kinect_DepthFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
-            
-            //ClipSelector.Image.Source = e.ImageFrame.ToBitmapSource();
+
+            //OverAllImage.Source = BitmapSource.Create(640, 480, 96.0, 96.0, PixelFormats.Gray8, null, ImageProcessing.PrettyPicture(e.ImageFrame.Image.Bits), 640);
+
+            if (computaionTask.IsCompleted)
+            {
+                //computaionTask.AsyncState = new ImageProcessing.Input(e.ImageFrame.Image.Bits, 640, ClipSelector.Value, 0, ImageProcessing.Requests.None);
+                computaionTask.Start();
+            }
+
+            //byte[] resultX;
+            //byte[] resultY;
+            //byte[] ballAllPos;
+            //System.Windows.Vector average;
+            //System.Windows.Vector ballPos;
+            //ImageProcessing.DeltaToAverage(e.ImageFrame.Image, ClipSelector.Value, 10, out resultX, out resultY, out average, out ballPos, out ballAllPos);
+
+
+            //HorizontalImage.Source = BitmapSource.Create((int)ClipSelector.Value.Width, (int)ClipSelector.Value.Height, 96, 96, PixelFormats.Gray8, null, resultX, (int)ClipSelector.Value.Width);
+            //VerticalImage.Source = BitmapSource.Create((int)ClipSelector.Value.Width, (int)ClipSelector.Value.Height, 96, 96, PixelFormats.Gray8, null, resultY, (int)ClipSelector.Value.Width);
+            //BallImage.Source = BitmapSource.Create((int)ClipSelector.Value.Width, (int)ClipSelector.Value.Height, 96, 96, PixelFormats.Gray8, null, ballAllPos, (int)ClipSelector.Value.Width);
+
+            //statusbarText.Text = string.Format("Color: {0:###} | Ball Position: {1:###.##}, {2:###.##} | Clip: {3} | Average: {4:###.##}, {5:###.##}", 0, ballPos.X, ballPos.Y, ClipSelector.Value.ToString(), average.X, average.Y);
+
+           //OverAllImage.Source = e.ImageFrame.ToBitmapSource();
             byte[] bits = e.ImageFrame.Image.Bits;
             for (int i = 1; i < 614400 - 1; i+=2)
 			{
                 bits[i] = (byte)(bits[i] << 4);
 			}// maybe faster and more accurate with pointers
 
-            ClipSelector.Image.Source = BitmapSource.Create(640, 480, 96.0, 96.0, PixelFormats.Gray16 , null, bits, 640 * 2);
+            OverAllImage.Source = BitmapSource.Create(640, 480, 96.0, 96.0, PixelFormats.Gray16 , null, bits, 640 * 2);
                                       //BitmapSource.Create(image.Width, image.Height, 96, 96, PixelFormats.Bgr32, null, ColoredBytes, image.Width * PixelFormats.Bgr32.BitsPerPixel / 8);
 
             System.Diagnostics.Debug.WriteLine("ImageFrame.ToBitmapSource() took:" + stopwatch.ElapsedMilliseconds);
+        }
 
-            System.Diagnostics.Debug.WriteLine(processor.Average(e.ImageFrame.Image));
-        } 
+        //ImageProcessing.Output DoMainComputaionAsync()
+        //{
+
+        //    return null;
+        //}
+
+        void DisplayComputation(Task<ImageProcessing.Output> task)
+        {
+            var output = task.Result;
+
+            if (output.regualar != null)
+                CreateMyStandartBitmapSource(output.regualar, 640, 480);
+            if(output.deltaX != null)
+                CreateMyStandartBitmapSource(output.regualar, 640, 480);
+
+
+        }
+
+
+        BitmapSource CreateMyStandartBitmapSource(byte[] data, int width, int height)
+        {
+            return BitmapSource.Create(width, height, 96.0, 96.0, PixelFormats.Gray8, null, data, width);
+        }
 
         public void Start()
         {
             kinect.Initialize(RuntimeOptions.UseDepth);
-            kinect.DepthStream.Open(ImageStreamType.Depth, 2, ImageResolution.Resolution640x480, ImageType.Depth);
+            kinect.DepthStream.Open(ImageStreamType.Depth, 3, ImageResolution.Resolution640x480, ImageType.Depth);
         }
 
         public void Stop()
@@ -66,9 +131,12 @@ namespace BallOnTiltablePlate.Input
             kinect.Uninitialize();
         }
 
-        private void SetNewClip_Click(object sender, RoutedEventArgs e)
+        protected override void OnPreviewMouseMove(MouseEventArgs e)
         {
-            processor.ChangeClip((int)ClipSelector.LeftX, (int)ClipSelector.TopY, (int)ClipSelector.RightX, (int)ClipSelector.BottomY);
+            Point pos = e.GetPosition(this);
+
+
+            base.OnMouseMove(e);
         }
 
         #region Base
@@ -99,5 +167,13 @@ namespace BallOnTiltablePlate.Input
                 DataRecived2D(this, args);
         }
         #endregion
+
+        public byte GetColorAt(int x, int y)
+        {
+            System.Drawing.Bitmap screenPixel = new System.Drawing.Bitmap(1, 1);
+            System.Drawing.Graphics gfx = System.Drawing.Graphics.FromImage((System.Drawing.Image)screenPixel);
+            gfx.CopyFromScreen(x, y, 0, 0, new System.Drawing.Size(1, 1));
+            return screenPixel.GetPixel(0, 0).B;
+        }
     }
 }

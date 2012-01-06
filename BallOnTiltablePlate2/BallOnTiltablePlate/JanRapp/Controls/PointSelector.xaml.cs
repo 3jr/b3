@@ -27,11 +27,13 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             Y = 2
         }
 
+        DraggingState state = DraggingState.None;
+
         #region Dependency Properties
 
         #region Value
 
-        public RoutedPropertyChangedEventHandler<Point> ValueChanged;
+        public event RoutedPropertyChangedEventHandler<Point> ValueChanged;
 
         public Point Value
         {
@@ -39,19 +41,24 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             set { SetValue(PointProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Point.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PointProperty =
-            DependencyProperty.Register("Value", typeof(Point), typeof(PointSelector), new UIPropertyMetadata(new Point(0,0), Value_PropertyChanged));
+            DependencyProperty.Register("Value", typeof(Point), typeof(PointSelector), new UIPropertyMetadata(new Point(10,10), Value_PropertyChanged));
 
         private static void Value_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             PointSelector instance = (PointSelector)sender;
-            
-            instance.ValueChanged(instance, new RoutedPropertyChangedEventArgs<Point>((Point)e.OldValue, (Point)e.NewValue));
+
+            if (!instance.IsLoaded)
+                return; //I deal with initializing in Loaded Event. Hope so at least.
+
+            bool anyChangeThrouCorrection = instance.ChangeAndCheckPoint((Point)e.NewValue);
+
+            if (!anyChangeThrouCorrection)
+                if(instance.ValueChanged != null)
+                    instance.ValueChanged(instance, new RoutedPropertyChangedEventArgs<Point>((Point)e.OldValue, (Point)e.NewValue));
         }
 
         #endregion Value
-
 
         #region SelectionBrush
 
@@ -68,12 +75,20 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         #endregion Dependency Properties
 
-        DraggingState state = DraggingState.None;
+        #region Init
 
         public PointSelector()
         {
             InitializeComponent();
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetUIX(CorrectX(Value.X));
+            SetUIY(CorrectY(Value.Y));
+        }
+
+        #endregion Init
 
         #region Events
 
@@ -94,13 +109,11 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             Point pos = e.GetPosition(this);
             if (state.HasFlag(DraggingState.X))
             {
-                LeftColumn.Width = new GridLength(pos.X, GridUnitType.Star);
-                RightColumn.Width = new GridLength(this.Width - pos.X, GridUnitType.Star);
+                ChangeAndCheckPointX(pos.X);
             }
             if(state.HasFlag(DraggingState.Y))
             {
-                TopRow.Height = new GridLength(pos.Y, GridUnitType.Star);
-                BottomRow.Height = new GridLength(this.Height - pos.Y, GridUnitType.Star);
+                ChangeAndCheckPointY(pos.Y);
             }
             base.OnMouseMove(e);
         }
@@ -118,41 +131,78 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             base.OnLostMouseCapture(e);
         }
 
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            ChangeAndCheckPoint(Value);
+
+            base.OnRenderSizeChanged(sizeInfo);
+        }
+
         #endregion Events
         
-        void ChangeAndCheckPoint(Point newValue)
+        bool ChangeAndCheckPoint(Point newValue)
         {
-            ChangeAndCheckPointX(newValue.X);
-            ChangeAndCheckPointY(newValue.Y);
-
+            return ChangeAndCheckPointX(newValue.X) | ChangeAndCheckPointY(newValue.Y);
         }
 
-        void ChangeAndCheckPointY(double y)
+        bool ChangeAndCheckPointX(double x)
         {
-            if (y < 0)
-                y = 0;
-            if (y > this.Height)
-                y = this.Height;
+            x = CorrectX(x);
 
-            TopRow.Height = new GridLength(y, GridUnitType.Star);
-            BottomRow.Height = new GridLength(this.Height - y, GridUnitType.Star);
+            if (x != Value.X)
+            {
+                SetUIX(x);
+
+                Value = new Point(x, Value.Y);
+                return true;
+            }
+            return false;
+       }
+
+        bool ChangeAndCheckPointY(double y)
+        {
+            y = CorrectY(y);
 
             if (y != Value.Y)
+            {
+                SetUIY(y);
+
                 Value = new Point(Value.X, y);
+                return true;
+            }
+            return false;
         }
 
-        void ChangeAndCheckPointX(double x)
+        double CorrectX(double x)
         {
             if (x < 0)
                 x = 0;
-            if (x > this.Width)
-                x = this.Width;
+            if (x > this.ActualWidth)
+                x = this.ActualWidth;
+            
+            return x;
+        }
 
-            LeftColumn.Width = new GridLength(x, GridUnitType.Star);
-            RightColumn.Width = new GridLength(this.Width - x, GridUnitType.Star);
+        double CorrectY(double y)
+        {
+            if (y < 0)
+                y = 0;
+            if (y > this.ActualHeight)
+                y = this.ActualHeight;
 
-            if (x != Value.X)
-                Value = new Point(x, Value.Y);
-       }
+            return y;
+        }
+
+        void SetUIX(double x)
+        {
+                LeftColumn.Width = new GridLength(x, GridUnitType.Star);
+                RightColumn.Width = new GridLength(this.ActualWidth - x, GridUnitType.Star);
+        }
+
+        void SetUIY(double y)
+        {
+            TopRow.Height = new GridLength(y, GridUnitType.Star);
+            BottomRow.Height = new GridLength(this.ActualHeight - y, GridUnitType.Star);
+        }
     }
 }

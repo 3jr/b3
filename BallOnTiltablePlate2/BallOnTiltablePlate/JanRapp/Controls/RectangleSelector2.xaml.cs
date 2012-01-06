@@ -46,11 +46,6 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             set { Resources["BottomY"] = value; }
         }
 
-        public Image Image
-        {
-            get { return mainImage; }
-        }
-
         public RectangleSelector2()
         {
             InitializeComponent();
