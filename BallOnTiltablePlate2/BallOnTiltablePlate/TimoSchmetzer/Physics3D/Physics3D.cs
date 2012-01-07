@@ -33,10 +33,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             Vector3D G = new Vector3D(0, 0, state.Gravity);
             #endregion
 
-            #region SetNEWAngle
-            state.Tilt += elapsedSeconds * state.PlateVelocity;
-            #endregion
-
             #region CalcBallstate
             BallState bs;
             if (Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))) > 0.01)
@@ -54,6 +50,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
                     bs = BallState.RollOnPlate;
                 }
             }
+            #endregion
+
+            #region SetNEWAngle
+            state.Tilt += elapsedSeconds * state.PlateVelocity;
             #endregion
 
             #region CalcMovement
