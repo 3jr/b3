@@ -151,6 +151,7 @@
     <Compile Include="JanRapp\Output\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Simulation\SimulationInAir.cs" />
     <Compile Include="JanRapp\Simulation\Simulation3D.cs" />
     <Compile Include="JanRapp\Simulation\SimulationBase.xaml.cs">
       <DependentUpon>SimulationBase.xaml</DependentUpon>
@@ -168,6 +169,8 @@
     </Compile>
     <Compile Include="TimoSchmetzer\General\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\Physics3D\PhysicSimulation3D.cs" />
+    <Compile Include="TimoSchmetzer\PhysicsInAir\PhysicsInAir.cs" />
+    <Compile Include="TimoSchmetzer\PhysicsInAir\PhysicSimulationInAir.cs" />
     <Compile Include="TimoSchmetzer\PhysicsOnPlate\PhysicSimulationOnPlate.cs" />
     <Compile Include="TimoSchmetzer\PhysicsOnPlate\PhysicsOnPlate.cs" />
     <Compile Include="TimoSchmetzer\General\PhysicsState.cs" />
