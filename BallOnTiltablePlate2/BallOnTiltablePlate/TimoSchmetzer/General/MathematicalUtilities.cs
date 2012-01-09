@@ -158,12 +158,27 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// </summary>
         /// <param name="Tilt">Rotation given in Rad</param>
         /// <returns>Normal Vector</returns>
+        public static Vector3D CalcNormalVectorSequentialTilt(Vector SequentialTilt)
+        {
+            Vector3D NormalVector = new Vector3D();
+            Vector3D a = (Vector3D)PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(0, 1), SequentialTilt);
+            Vector3D b = (Vector3D)PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(1, 0), SequentialTilt);
+            NormalVector = Vector3D.CrossProduct(a, b);
+            return NormalVector;
+        }
+
+        /// <summary>
+        /// Returns the Normal Vector of a plane with the specified turnations around the axis.
+        /// Vector is NOT NORMALIZED.
+        /// </summary>
+        /// <param name="Tilt">Rotation given in Rad</param>
+        /// <returns>Normal Vector</returns>
         public static Vector3D CalcNormalVector(Vector Tilt)
         {
             Vector3D NormalVector = new Vector3D();
-            Vector3D a = (Vector3D)PlateCoordinatesToEucidean3DCoordinates(new Vector(0,1),Tilt);
-            Vector3D b = (Vector3D)PlateCoordinatesToEucidean3DCoordinates(new Vector(1,0),Tilt);
-            NormalVector = Vector3D.CrossProduct(a, b);
+            NormalVector.X = -Math.Tan(Tilt.X);
+            NormalVector.Y = -Math.Tan(Tilt.Y);
+            NormalVector.Z = 1;
             return NormalVector;
         }
 
@@ -228,12 +243,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// Convert Point given by platecoordinates and plate tilt to Point3D.
         /// </summary>
         /// <param name="PlateCoordinate">Plate Coordinates</param>
-        /// <param name="Tilt">Tilt of the plate</param>
+        /// <param name="SequentialTilt">Tilt of the plate</param>
         /// <returns></returns>
-        public static Point3D PlateCoordinatesToEucidean3DCoordinates(Vector PlateCoordinate, Vector Tilt)
+        public static Point3D PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(Vector PlateCoordinate, Vector SequentialTilt)
         {
             Point3D p = new Point3D(PlateCoordinate.X, PlateCoordinate.Y, 0);
-            Matrix3x3 T = RotateTransformationMatrix(new Vector3D(1, 0, 0), -Tilt.Y) * RotateTransformationMatrix(new Vector3D(0, Math.Cos(Tilt.Y), Math.Sin(Tilt.Y)), Math.Cos(Tilt.Y) * Tilt.X);
+            Matrix3x3 T = RotateTransformationMatrix(new Vector3D(1, 0, 0), -SequentialTilt.Y) * RotateTransformationMatrix(new Vector3D(0, Math.Cos(SequentialTilt.Y), Math.Sin(SequentialTilt.Y)), Math.Cos(SequentialTilt.Y) * SequentialTilt.X);
             p = T * p;
             return p;
         }
@@ -241,15 +256,15 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <summary>
         /// Calcs Plate Edges of a 2x2 plate
         /// </summary>
-        /// <param name="Tilt">Tilt of the plate</param>
+        /// <param name="SequentialTilt">Tilt of the plate</param>
         /// <returns></returns>
-        public static Point3D[] CalcPlateEdges(Vector Tilt)
+        public static Point3D[] CalcPlateEdgesSequentialTilt(Vector SequentialTilt)
         {
             Point3D[] Edges = new Point3D[4];
-            Edges[0] = PlateCoordinatesToEucidean3DCoordinates(new Vector(-1, 1), Tilt);
-            Edges[1] = PlateCoordinatesToEucidean3DCoordinates(new Vector(-1, -1), Tilt);
-            Edges[2] = PlateCoordinatesToEucidean3DCoordinates(new Vector(1, -1), Tilt);
-            Edges[3] = PlateCoordinatesToEucidean3DCoordinates(new Vector(1, 1), Tilt);
+            Edges[0] = PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(-1, 1), SequentialTilt);
+            Edges[1] = PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(-1, -1), SequentialTilt);
+            Edges[2] = PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(1, -1), SequentialTilt);
+            Edges[3] = PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(1, 1), SequentialTilt);
             return Edges;
         }
 
