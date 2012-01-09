@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Windows.Media.Media3D;
+using BallOnTiltablePlate.JanRapp.Utilities;
 
 namespace BallOnTiltablePlate.JanRapp.Controls
 {
@@ -46,7 +47,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             set
             {
-                JanRapp.Utilities.Vectors.MathUtil.CombineSimutaniousRotationsAroundXAndYAxis(value, ref PlateRotation);
+                PlateRotation.Quaternion = TiltUtil.RotationForTilt(value.ToSequentailTilt());
             }
         }
 

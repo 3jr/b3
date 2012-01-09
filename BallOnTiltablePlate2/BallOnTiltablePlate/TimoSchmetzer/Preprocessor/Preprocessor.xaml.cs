@@ -30,6 +30,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
 
         public IBallInput3D Input { set { value.DataRecived += new EventHandler<BallInputEventArgs3D>(value_DataRecived); } }
 
+        public void Start()
+        {
+        }
+
+        public void Stop()
+        {
+        }
+
         void value_DataRecived(object sender, BallInputEventArgs3D e)
         { 
             if (_LastRecieveTime[0] == DateTime.Now)

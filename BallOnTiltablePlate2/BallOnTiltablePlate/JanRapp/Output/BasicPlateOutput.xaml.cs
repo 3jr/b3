@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Ports;
+using BallOnTiltablePlate.JanRapp.Utilities;
 
 namespace BallOnTiltablePlate.JanRapp.Output
 {
@@ -45,8 +46,31 @@ namespace BallOnTiltablePlate.JanRapp.Output
 
         public void SetTilt(System.Windows.Vector tilt)
         {
-            TiltAngleX.Value = tilt.X;
-            TiltAngleY.Value = tilt.Y;
+            if (double.IsNaN(tilt.X))
+                tilt.X = 0;
+            if (double.IsNaN(tilt.Y))
+                tilt.Y = 0;
+
+            if (tilt.X > Math.Abs(MaxTiltAngle.Value.X))
+                tilt.X = Math.Abs(MaxTiltAngle.Value.X);
+            if (tilt.Y > Math.Abs(MaxTiltAngle.Value.Y))
+                tilt.Y = Math.Abs(MaxTiltAngle.Value.Y);
+
+            if (tilt.X < -Math.Abs(MaxTiltAngle.Value.X))
+                tilt.X = -Math.Abs(MaxTiltAngle.Value.X);
+            if (tilt.Y < -Math.Abs(MaxTiltAngle.Value.Y))
+                tilt.Y = -Math.Abs(MaxTiltAngle.Value.Y);
+
+            TiltAngle.Value = tilt;
+            SendData(true);
+        }
+
+        public void Start()
+        {
+        }
+
+        public void Stop()
+        {
         }
 
         void SendData()
@@ -58,11 +82,13 @@ namespace BallOnTiltablePlate.JanRapp.Output
         {
             if (port.IsOpen && (TransmitImmediately.IsChecked == true || force))
             {
+                Vector sequentialTilt = TiltAngle.Value.ToSequentailTilt();
+
                 System.UInt16[] values = new System.UInt16[4];
-                values[0] = (System.UInt16)((TiltAngleX.Value * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetXRegular0.Value);
-                values[1] = (System.UInt16)((TiltAngleX.Value * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetXInverted1.Value);
-                values[2] = (System.UInt16)((TiltAngleY.Value * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYRegular2.Value);
-                values[3] = (System.UInt16)((TiltAngleY.Value * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYInverted3.Value);
+                values[0] = (System.UInt16)((sequentialTilt.X * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetXRegular0.Value);
+                values[1] = (System.UInt16)((sequentialTilt.X * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetXInverted1.Value);
+                values[2] = (System.UInt16)((sequentialTilt.Y * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYRegular2.Value);
+                values[3] = (System.UInt16)((sequentialTilt.Y * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYInverted3.Value);
 
                 RecivedLog.Text =
                     values[0].ToString() + Environment.NewLine +
@@ -129,7 +155,7 @@ namespace BallOnTiltablePlate.JanRapp.Output
             SendData();
         }
 
-        private void Angle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void Angle_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
         {
             SendData();
         }

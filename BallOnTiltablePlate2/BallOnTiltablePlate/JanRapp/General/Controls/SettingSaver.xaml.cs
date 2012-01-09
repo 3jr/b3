@@ -98,7 +98,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 // Just don't do file watching if you don't have the permittions.
             }
 
-            if(LoadCmd_CanExecute(fileNameOfDefault))
+            if (LoadCmd_CanExecute(fileNameOfDefault))
                 LoadCmd_Executed(fileNameOfDefault);
         }
 

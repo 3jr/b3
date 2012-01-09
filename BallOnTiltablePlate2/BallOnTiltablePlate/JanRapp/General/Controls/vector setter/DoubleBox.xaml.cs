@@ -67,7 +67,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
                 instance.Value = instance.Maximum;
             if ((double)e.NewValue < instance.Minimum)
                 instance.Value = instance.Minimum;
-            if(instance.ValueChanged != null)
+            if(instance.Value != (double)e.OldValue && instance.ValueChanged != null)
                 instance.ValueChanged(instance, new RoutedPropertyChangedEventArgs<double>((double)e.OldValue, (double)e.NewValue));
         }
 
@@ -143,8 +143,27 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         
         #endregion
 
-        #endregion
+        #region DigitsToRoundTo
 
+        public int DigitsToRoundTo
+        {
+            get { return (int)GetValue(DigitsToRoundToProperty); }
+            set { SetValue(DigitsToRoundToProperty, value); }
+        }
+
+        public static readonly DependencyProperty DigitsToRoundToProperty =
+            DependencyProperty.Register("DigitsToRoundTo", typeof(int), typeof(DoubleBox), new UIPropertyMetadata(int.MaxValue, DigitsToRoundTo_PropertyChanged));
+
+        private static void DigitsToRoundTo_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            DoubleBox instance = (DoubleBox)sender;
+
+            instance.Value = Math.Round(instance.Value, (int)e.NewValue);
+        }
+
+        #endregion DigitsToRoundTo
+        
+        #endregion
  
         public DoubleBox()
         {

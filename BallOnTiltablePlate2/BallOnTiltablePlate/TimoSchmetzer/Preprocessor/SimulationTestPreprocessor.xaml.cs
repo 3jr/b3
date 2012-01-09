@@ -37,6 +37,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
         public SimulationBase Input { private get; set; }
         public SimulationBase Output { private get; set; }
 
+        public void Start()
+        {
+        }
+
+        public void Stop()
+        {
+        }
+
         public ValueSavePhyicsState state
         {
             get

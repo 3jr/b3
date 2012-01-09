@@ -32,6 +32,14 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             InitializeComponent();
         }
 
+        public void Start()
+        {
+        }
+
+        public void Stop()
+        {
+        }
+
         public IPreprocessor IO
         {
             set {  }

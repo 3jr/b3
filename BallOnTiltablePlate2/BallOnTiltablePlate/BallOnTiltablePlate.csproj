@@ -87,65 +87,73 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="JanRapp\MainApp\App.xaml">
+    <ApplicationDefinition Include="JanRapp\General\MainApp\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="JanRapp\Controls\PointSelector.xaml.cs">
+    <Compile Include="JanRapp\General\Controls\PointSelector.xaml.cs">
       <DependentUpon>PointSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Input\BallPositionFast.cs" />
+    <Compile Include="JanRapp\General\Controls\vector setter\RectBox.xaml.cs">
+      <DependentUpon>RectBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\General\Utilities\TiltUtil.cs" />
+    <Compile Include="JanRapp\Input\Input1.0\BallPositionFast.cs" />
     <Compile Include="JanRapp\Input\ImageProcessing.cs" />
+    <Compile Include="JanRapp\Input\Input1.0\ImageProcessing.cs" />
+    <Compile Include="JanRapp\Input\Input1.0\KinectInput.xaml.cs">
+      <DependentUpon>KinectInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Input\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces.cs" />
-    <Compile Include="JanRapp\Controls\RectangleSelector.xaml.cs">
+    <Compile Include="JanRapp\General\Controls\RectangleSelector.xaml.cs">
       <DependentUpon>RectangleSelector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Controls\RectangleSelector2.xaml.cs">
+    <Compile Include="JanRapp\General\Controls\RectangleSelector2.xaml.cs">
       <DependentUpon>RectangleSelector2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Controls\SettingSaver.xaml.cs">
+    <Compile Include="JanRapp\General\Controls\SettingSaver.xaml.cs">
       <DependentUpon>SettingSaver.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Controls\vector setter\DoubleBox.xaml.cs">
+    <Compile Include="JanRapp\General\Controls\vector setter\DoubleBox.xaml.cs">
       <DependentUpon>DoubleBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Controls\vector setter\Vector2DControl.xaml.cs">
+    <Compile Include="JanRapp\General\Controls\vector setter\Vector2DControl.xaml.cs">
       <DependentUpon>Vector2DControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Controls\vector setter\Vector3DControl.xaml.cs">
+    <Compile Include="JanRapp\General\Controls\vector setter\Vector3DControl.xaml.cs">
       <DependentUpon>Vector3DControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Controls\Visualizer\Shapes\Cylinder3D.cs" />
-    <Compile Include="JanRapp\Controls\Visualizer\Shapes\Plate.cs" />
-    <Compile Include="JanRapp\Controls\Visualizer\Shapes\Primitive3D.cs" />
-    <Compile Include="JanRapp\Controls\Visualizer\Shapes\Sphere3D.cs" />
-    <Compile Include="JanRapp\Controls\Visualizer\Visualizer3D.xaml.cs">
+    <Compile Include="JanRapp\General\Controls\Visualizer\Shapes\Cylinder3D.cs" />
+    <Compile Include="JanRapp\General\Controls\Visualizer\Shapes\Plate.cs" />
+    <Compile Include="JanRapp\General\Controls\Visualizer\Shapes\Primitive3D.cs" />
+    <Compile Include="JanRapp\General\Controls\Visualizer\Shapes\Sphere3D.cs" />
+    <Compile Include="JanRapp\General\Controls\Visualizer\Visualizer3D.xaml.cs">
       <DependentUpon>Visualizer3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="JanRapp\Input\PrettyPictureOfDepthData.cs" />
-    <Compile Include="JanRapp\MainApp\GlobalSettingsUI.xaml.cs">
+    <Compile Include="JanRapp\General\MainApp\GlobalSettingsUI.xaml.cs">
       <DependentUpon>GlobalSettingsUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\MainApp\Helper\BasicBalance.xaml.cs">
+    <Compile Include="JanRapp\Juggler\BasicBalance.xaml.cs">
       <DependentUpon>BasicBalance.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\MainApp\Helper\TestInput.xaml.cs">
+    <Compile Include="JanRapp\General\MainApp\Helper\TestInput.xaml.cs">
       <DependentUpon>TestInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\MainApp\Helper\TestJuggler.xaml.cs">
+    <Compile Include="JanRapp\General\MainApp\Helper\TestJuggler.xaml.cs">
       <DependentUpon>TestJuggler.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\MainApp\Helper\TestOutput.xaml.cs">
+    <Compile Include="JanRapp\General\MainApp\Helper\TestOutput.xaml.cs">
       <DependentUpon>TestOutput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\MainApp\Helper\TestPreprocessor.xaml.cs">
+    <Compile Include="JanRapp\General\MainApp\Helper\TestPreprocessor.xaml.cs">
       <DependentUpon>TestPreprocessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\MainApp\Helper\TestPreprocessor3D.xaml.cs">
+    <Compile Include="JanRapp\General\MainApp\Helper\TestPreprocessor3D.xaml.cs">
       <DependentUpon>TestPreprocessor3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Output\BasicPlateOutput.xaml.cs">
@@ -157,9 +165,7 @@
       <DependentUpon>SimulationBase.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Simulation\SimulationOnPlate.cs" />
-    <Compile Include="JanRapp\Try\Program.cs" />
-    <Compile Include="JanRapp\Try\Tests.cs" />
-    <Compile Include="JanRapp\Utilities\WPFConverter.cs" />
+    <Compile Include="JanRapp\General\Utilities\WPFConverter.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
     <Compile Include="MoritzUehling\Kinect\ImageManager.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCamaraInput.v02.cs" />
@@ -177,8 +183,8 @@
     <Compile Include="TimoSchmetzer\General\Test.cs" />
     <Compile Include="TimoSchmetzer\General\PhysicUtilities.cs" />
     <Compile Include="TimoSchmetzer\Physics3D\Physics3D.cs" />
-    <Compile Include="JanRapp\Utilities\VectorUtilities.cs" />
-    <Compile Include="JanRapp\Utilities\WindowCustomizer.cs" />
+    <Compile Include="JanRapp\General\Utilities\VectorUtilities.cs" />
+    <Compile Include="JanRapp\General\Utilities\WindowCustomizer.cs" />
     <Compile Include="TimoSchmetzer\Preprocessor\Preprocessor.xaml.cs">
       <DependentUpon>Preprocessor.xaml</DependentUpon>
     </Compile>
@@ -188,74 +194,80 @@
     <Compile Include="TimoSchmetzer\TestAlgorithm\TestAlgorithm.xaml.cs">
       <DependentUpon>TestAlgorithm.xaml</DependentUpon>
     </Compile>
-    <Page Include="JanRapp\Controls\PointSelector.xaml">
+    <Page Include="JanRapp\General\Controls\PointSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\General\Controls\vector setter\RectBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Input\Input1.0\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Input\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Controls\RectangleSelector.xaml">
+    <Page Include="JanRapp\General\Controls\RectangleSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Controls\RectangleSelector2.xaml">
+    <Page Include="JanRapp\General\Controls\RectangleSelector2.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Controls\SettingSaver.xaml">
+    <Page Include="JanRapp\General\Controls\SettingSaver.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Controls\vector setter\DoubleBox.xaml">
+    <Page Include="JanRapp\General\Controls\vector setter\DoubleBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\Controls\vector setter\Vector2DControl.xaml">
+    <Page Include="JanRapp\General\Controls\vector setter\Vector2DControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\Controls\vector setter\Vector3DControl.xaml">
+    <Page Include="JanRapp\General\Controls\vector setter\Vector3DControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\Controls\Visualizer\Visualizer3D.xaml">
+    <Page Include="JanRapp\General\Controls\Visualizer\Visualizer3D.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\MainApp\GlobalSettingsUI.xaml">
+    <Page Include="JanRapp\General\MainApp\GlobalSettingsUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\MainApp\Helper\BasicBalance.xaml">
+    <Page Include="JanRapp\Juggler\BasicBalance.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\MainApp\Helper\TestInput.xaml">
+    <Page Include="JanRapp\General\MainApp\Helper\TestInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\MainApp\Helper\TestJuggler.xaml">
+    <Page Include="JanRapp\General\MainApp\Helper\TestJuggler.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\MainApp\Helper\TestOutput.xaml">
+    <Page Include="JanRapp\General\MainApp\Helper\TestOutput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\MainApp\Helper\TestPreprocessor.xaml">
+    <Page Include="JanRapp\General\MainApp\Helper\TestPreprocessor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\MainApp\Helper\TestPreprocessor3D.xaml">
+    <Page Include="JanRapp\General\MainApp\Helper\TestPreprocessor3D.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\MainApp\MainWindow.xaml">
+    <Page Include="JanRapp\General\MainApp\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="JanRapp\MainApp\App.xaml.cs">
+    <Compile Include="JanRapp\General\MainApp\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="JanRapp\MainApp\Helper\IOItem.cs" />
-    <Compile Include="JanRapp\MainApp\MainWindow.xaml.cs">
+    <Compile Include="JanRapp\General\MainApp\Helper\IOItem.cs" />
+    <Compile Include="JanRapp\General\MainApp\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -336,12 +348,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureBlackAxies.png" />
+    <Resource Include="JanRapp\General\Controls\Visualizer\Shapes\PlateTextureBlackAxies.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="JanRapp\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
+    <Resource Include="JanRapp\General\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="JanRapp\Preprocessor\" />
     <Folder Include="MoritzUehling\Lib\" />
   </ItemGroup>
   <ItemGroup>

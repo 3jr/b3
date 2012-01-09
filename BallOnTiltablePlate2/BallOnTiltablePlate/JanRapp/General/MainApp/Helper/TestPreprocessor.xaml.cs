@@ -32,6 +32,14 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             InitializeComponent();
         }
 
+        public void Start()
+        {
+        }
+
+        public void Stop()
+        {
+        }
+
         //Usually you would process the input and await output to than use the IO interfaces
 
         public IBallInput Input { get; set; }

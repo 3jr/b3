@@ -44,6 +44,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.TestAlgorithm
             }
         }
 
+        public void Start()
+        {
+        }
+
+        public void Stop()
+        {
+        }
+
         public void Update()
         {
             ValueSavePhyicsState s = _IO.state;

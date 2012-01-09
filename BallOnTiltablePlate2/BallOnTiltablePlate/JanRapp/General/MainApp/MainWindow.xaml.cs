@@ -39,80 +39,104 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             };
         }
 
+        bool jugglerChanging = false;
         private void AlgorithmList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            PreprocessorList.ItemsSource = ((dynamic)AlgorithmList.SelectedItem).DataContext.Preprocessors;
+            jugglerChanging = true;
+            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender,
+                () => {
+                PreprocessorList.ItemsSource = ((dynamic)AlgorithmList.SelectedItem).DataContext.Preprocessors;
 
-            if (AlgorithmList.SelectedValue != null && PreprocessorList.SelectedValue != null)
-            {
                 dynamic juggelerInstance = AlgorithmList.SelectedValue;
                 juggelerInstance.IO = (dynamic)PreprocessorList.SelectedValue;
-            }
-
-            ListItemStartStop(e.NewValue, e.OldValue);
+                }
+            );
+            jugglerChanging = false;
         }
 
+        bool preprocessorChanging = false;
         private void PreprocessorList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            InputList.ItemsSource = ((dynamic)PreprocessorList.SelectedItem).DataContext.Inputs;
-            OutputList.ItemsSource = ((dynamic)PreprocessorList.SelectedItem).DataContext.Outputs;
 
-            if (PreprocessorList.SelectedValue != null)
-            {
-                dynamic preprocessorInstance = PreprocessorList.SelectedValue;
-                if (InputList.SelectedValue != null)
-                    preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
-                if (OutputList.SelectedValue != null)
-                    preprocessorInstance.Output = (dynamic)OutputList.SelectedValue;
+            preprocessorChanging = true;
+            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender,
+                () => {
+                    Helper.PreprocessorItemUI item = ((Helper.PreprocessorItemUI)((FrameworkElement)PreprocessorList.SelectedItem).DataContext);
+                    InputList.ItemsSource = item.Inputs;
+                    OutputList.ItemsSource = item.Outputs;
 
-                dynamic juggelerInstance = AlgorithmList.SelectedValue;
-                juggelerInstance.IO = (dynamic)preprocessorInstance;
-            }
+                    dynamic preprocessorInstance = PreprocessorList.SelectedValue;
+                    if (InputList.SelectedValue != null)
+                        preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                    if (OutputList.SelectedValue != null)
+                        preprocessorInstance.Output = (dynamic)OutputList.SelectedValue;
 
-            ListItemStartStop(e.NewValue, e.OldValue);
+                    dynamic juggelerInstance = AlgorithmList.SelectedValue;
+                    //if (juggelerInstance.IO != preprocessorInstance)
+                        if(jugglerChanging)
+                            juggelerInstance.IO = (dynamic)preprocessorInstance;
+                        else
+                        {
+                            juggelerInstance.Stop();
+                            juggelerInstance.IO = (dynamic)preprocessorInstance;
+                            juggelerInstance.Start();
+                        }
+                }
+            );
+            preprocessorChanging = false;
         }
 
         private void InputList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {   
-            //Actually that is done in ListItemStartStop, but for now it is only valid for Input.
-            if (e.NewValue != e.OldValue)
-            {
-                if(e.OldValue != null)
-                    ((dynamic)e.OldValue).DataContext.Instance.Stop();
-                if (e.NewValue != null)
-                    ((dynamic)e.NewValue).DataContext.Instance.Start();
-            }
-
-            if (InputList.SelectedValue != null)
-            {
-                dynamic preprocessorInstance = PreprocessorList.SelectedValue;
-                preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
-            }
-
-            ListItemStartStop(e.NewValue, e.OldValue);
+        {  
+            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender,
+                () => {
+                    dynamic preprocessorInstance = PreprocessorList.SelectedValue;
+                    //if (preprocessorInstance.Input != OutputList.SelectedValue)
+                        if (preprocessorChanging)
+                            preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                        else
+                        {
+                            preprocessorInstance.Stop();
+                            preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                            preprocessorInstance.Start();
+                        }
+                }
+            );
         }
 
         private void OutputList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (OutputList.SelectedValue != null)
-            {
-                dynamic preprocessorItem = PreprocessorList.SelectedValue;
-                preprocessorItem.Output = (dynamic)OutputList.SelectedValue;
-            }
-
-            ListItemStartStop(e.NewValue, e.OldValue);
+            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender,
+                () => {
+                    dynamic preprocessorInstance = PreprocessorList.SelectedValue;
+                    //if (preprocessorInstance.Output != OutputList.SelectedValue)
+                        if (preprocessorChanging)
+                            preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                        else
+                        {
+                            preprocessorInstance.Stop();
+                            preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                            preprocessorInstance.Start();
+                        }
+                }
+            );
         }
 
-        void ListItemStartStop(object newValue, object oldValue)
+        void ControlListItems(object newValue, object oldValue, TreeView list, Action maintnace)
         {
-            //When all Items get Start Stop Methods!!!!
-            //if (newValue != oldValue)
-            //{
-            //    if (oldValue != null)
-            //        ((dynamic)oldValue).DataContext.Instance.Stop();
-            //    if (newValue != null)
-            //        ((dynamic)newValue).DataContext.Instance.Start();
-            //}
+            if (newValue == oldValue)
+                return;
+
+            if (oldValue != null)
+                ((Helper.BPItemUI)((FrameworkElement)oldValue).DataContext).Instance.Stop();
+
+
+            if (newValue != null)
+            {
+                maintnace();
+
+                ((IBallOnPlateItem)list.SelectedValue).Start();
+            }
 
             if (AlgorithmList.SelectedValue != null &&
                 PreprocessorList.SelectedValue != null &&
@@ -125,7 +149,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         void timer_Tick(object sender, EventArgs e)
         {
-            timer.Interval = TimeSpan.FromSeconds(60.0 / GlobalSettings.Instance.FPSOfAlgorithm);
+            timer.Interval = TimeSpan.FromSeconds(1 / GlobalSettings.Instance.FPSOfAlgorithm);
 
             ((dynamic)AlgorithmList.SelectedValue).Update();
         }

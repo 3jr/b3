@@ -14,8 +14,6 @@ namespace BallOnTiltablePlate
         : IBallOnPlateItem
     {
         event EventHandler<BallInputEventArgs> DataRecived;
-        void Start();
-        void Stop();
     }
 
     public class BallInputEventArgs3D : BallInputEventArgs
@@ -83,6 +81,8 @@ namespace BallOnTiltablePlate
     public interface IBallOnPlateItem
     {
         FrameworkElement SettingsUI { get; }
+        void Start();
+        void Stop();
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]

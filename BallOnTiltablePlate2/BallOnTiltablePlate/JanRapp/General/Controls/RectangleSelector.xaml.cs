@@ -40,11 +40,39 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             if (!instance.IsLoaded)
                 return; //Init is deald with in Loaded Event.
 
+            instance.TopLeft.Value = (Vector)instance.Value.TopLeft;
+            instance.BottomRight.Value = (Vector)instance.Value.BottomRight;
+
             if (instance.ValueChanged != null)
                 instance.ValueChanged(instance, new RoutedPropertyChangedEventArgs<Rect>((Rect)e.OldValue, (Rect)e.NewValue));
         }
 
         #endregion Value
+
+        public Rect ValueCoordinates
+        {
+            get
+            {
+                return GetValueFromSize(new Vector(this.ActualWidth, this.ActualHeight));
+            }
+
+            set
+            {
+                SetValueFromSize(value, new Vector(this.ActualWidth, this.ActualHeight));
+            }
+        }
+
+        public Rect GetValueFromSize(Vector customMaximumSize)
+        {
+            return new Rect(Value.Left * customMaximumSize.X, Value.Top * customMaximumSize.Y,
+                Value.Width * customMaximumSize.X, Value.Height * customMaximumSize.Y);
+        }
+
+        public void SetValueFromSize(Rect value, Vector customMaximumSize)
+        {
+            Value = new Rect(Value.Left * customMaximumSize.X, Value.Top * customMaximumSize.Y,
+                Value.Width * customMaximumSize.X, Value.Height * customMaximumSize.Y);
+        }
 
         #region SelectionBrush
 
@@ -66,41 +94,46 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            TopLeft.Value = CorrectTopLeft(TopLeft.Value);
-            BottomRight.Value = CorrectBottomRight(BottomRight.Value);
+            TopLeft.Value = CorrectTopLeft((Vector)Value.TopLeft);
+            BottomRight.Value = CorrectBottomRight((Vector)Value.BottomRight);
 
-            Value = new Rect(TopLeft.Value, BottomRight.Value);
+            UpdateValueFromPoints();
         }
 
-        void TopLeft_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Point> e)
+        void TopLeft_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
         {
             TopLeft.Value = CorrectTopLeft(TopLeft.Value);
 
-            Value = new Rect(TopLeft.Value, BottomRight.Value);
+            UpdateValueFromPoints();
         }
 
-        void BottomRight_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Point> e)
+        void BottomRight_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
         {
             BottomRight.Value = CorrectBottomRight(BottomRight.Value);
 
-            Value = new Rect(TopLeft.Value, BottomRight.Value);
+            UpdateValueFromPoints();
         }
 
-        Point CorrectTopLeft(Point topLeft)
+        private void UpdateValueFromPoints()
         {
-            if (topLeft.X > BottomRight.Value.X)
+            Value = new Rect((Point)TopLeft.Value, (Point)BottomRight.Value);
+        }
+
+        Vector CorrectTopLeft(Vector topLeft)
+        {
+            if (topLeft.X >= BottomRight.Value.X)
                 topLeft.X = BottomRight.Value.X;
-            if (topLeft.Y > BottomRight.Value.Y)
+            if (topLeft.Y >= BottomRight.Value.Y)
                 topLeft.Y = BottomRight.Value.Y;
 
             return topLeft;
         }
 
-        Point CorrectBottomRight(Point bottomRight)
+        Vector CorrectBottomRight(Vector bottomRight)
         {
-            if (bottomRight.X < TopLeft.Value.X)
+            if (bottomRight.X <= TopLeft.Value.X)
                 bottomRight.X = TopLeft.Value.X;
-            if (bottomRight.Y < TopLeft.Value.Y)
+            if (bottomRight.Y <= TopLeft.Value.Y)
                 bottomRight.Y = TopLeft.Value.Y;
 
             return bottomRight;

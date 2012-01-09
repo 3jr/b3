@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
     /// <summary>
-    /// Interaction logic for TestOutput.xaml
+    /// Interaction logic for TestPreprocessor3D.xaml
     /// </summary>
-    [BallOnPlateItemInfo(" Jan", "Rapp", "TestOutput", "1.0")]
-    public partial class TestOutput : UserControl, IPlateOutput
+    [BallOnPlateItemInfo(" Jan", "Rapp", "TestPreprocessor3D", "1.0")]
+    partial class TestPreprocessor3D : UserControl, IPreprocessor, IPreprocessorIO<IBallInput, IPlateOutput>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -27,18 +27,28 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         }
         #endregion
 
-        string history = "The Tilt was set to: ";
-
-        public TestOutput()
+        public TestPreprocessor3D()
         {
             InitializeComponent();
-            this.Content = history;
         }
 
-        public void SetTilt(Vector tilt)
+        public void Start()
         {
-            history += Environment.NewLine + tilt.ToString();
-            this.Content = history;
+        }
+
+        public void Stop()
+        {
+        }
+
+        //Usually you would process the input and await output to than use the IO interfaces
+
+        public IBallInput Input { get; set; }
+
+        public IPlateOutput Output { get; set; }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Output.SetTilt(vector2DControl1.Value);
         }
     }
 }

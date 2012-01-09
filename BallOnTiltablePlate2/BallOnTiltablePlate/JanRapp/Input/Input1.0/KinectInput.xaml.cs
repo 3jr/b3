@@ -15,20 +15,17 @@ using System.Windows.Shapes;
 using Kinect = Microsoft.Research.Kinect.Nui;
 using System.Threading.Tasks;
 using System.Threading;
-using Coding4Fun.Kinect.Wpf;
 
-namespace BallOnTiltablePlate.JanRapp.Input
+namespace BallOnTiltablePlate.JanRapp.Input0
 {
     /// <summary>
     /// Interaction logic for KinectInput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "KinectInput", "1.0")]
+    [BallOnPlateItemInfo("Jan", "Rapp", "KinectInput", "0.5")]
     public partial class KinectInput : UserControl, IBallInput
     {
         Kinect.Runtime kinect;
         Task<ImageProcessing.Output> computaionTask;
-        Dictionary<string, ImageProcessing.DisplayDescribtion> displays = 
-            new Dictionary<string,ImageProcessing.DisplayDescribtion>();
 
         public KinectInput()
         {
@@ -42,7 +39,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
             else
             {
                 kinect = Kinect.Runtime.Kinects[0];
-                kinect.DepthFrameReady += kinect_DepthFrameReady;
+                kinect.DepthFrameReady += new EventHandler<Kinect.ImageFrameReadyEventArgs>(kinect_DepthFrameReady);
             }
         }
 
@@ -53,64 +50,66 @@ namespace BallOnTiltablePlate.JanRapp.Input
 
             if (computaionTask == null || computaionTask.IsCompleted)
             {
-                Vector center = CenterSelector.GetValueFromSize(new Vector(640, 480));
-
-                DepthAtCenterDisplay.Text = e.ImageFrame.GetDistance((int)center.X, (int)center.Y).ToString();
                 
-                var state = Tuple.Create(
-                    e.ImageFrame.Image.Bits,
-                    640,
-                    CenterSelector.Value,
-                    (int)CenterDepthBox.Value,
-                    ToIntRect(ClipSelector.GetValueFromSize(new Vector(640,480))),
-                    (float)ToleranceDoubelBox.Value,
-                    (int)MinHeightAnormalities.Value
-                    );
-
+                var state = new ImageProcessing.Input(e.ImageFrame.Image.Bits, 640,
+                    ToIntRect(ClipSelector.GetValueFromSize(new Vector(640,480))), (float)ToleranceDoubelBox.Value,
+                    ImageProcessing.Requests.None, (int)MinHeightAnormalities.Value);
                 computaionTask = new Task<ImageProcessing.Output>(DoMainComputaionAsync, state);
                 computaionTask.ContinueWith(DisplayComputation, TaskScheduler.FromCurrentSynchronizationContext());
 
                 computaionTask.Start();
             }
 
-            System.Diagnostics.Debug.WriteLine("kinect_DepthFrameReady: " + stopwatch.ElapsedMilliseconds);
+            //System.Diagnostics.Debug.WriteLine("kinect_DepthFrameReady: " + stopwatch.ElapsedMilliseconds);
         }
 
         ImageProcessing.Output DoMainComputaionAsync(object state)
         {
-            var input = (Tuple<byte[], int, Vector, int, Int32Rect, float, int>)state;
-            byte[] twoByteDepthBits       = input.Item1;
-            int depthHorizontalResulotion = input.Item2;
-            Vector centerPosition         = input.Item3;
-            int centerDepth               = input.Item4;
-            Int32Rect clip                = input.Item5;
-            float tolerance               = input.Item6;
-            int minHightAnormalities      = input.Item7;
+            ImageProcessing.Input input = (ImageProcessing.Input)state;
 
+            byte[] deptArr;
+            byte[] deltaX;
+            byte[] deltaY;
+            byte[] anormalX;
+            byte[] anormalY;
+            byte[] hightAnormalties;
 
-            var ballPosition = ImageProcessing.BallPositionFast(twoByteDepthBits, depthHorizontalResulotion,
-                centerPosition, centerDepth,
-                tolerance, clip, minHightAnormalities, 64,
-                displays);
+            var average = ImageProcessing.Average(input.twoByteDepthBits, input.depthHorizontalResulotion, input.clip);
 
-            return new ImageProcessing.Output(displays, ballPosition, PrettyPictureOfDepthData.PrettyPicture(twoByteDepthBits));
+            var ballPosition = ImageProcessing.BallPositionFast(input.twoByteDepthBits, input.depthHorizontalResulotion, average, input.tolerance, input.clip, input.minHightAnormalities,
+                 out deptArr, out deltaX, out deltaY, out anormalX, out anormalY, out hightAnormalties, 64);
+
+            return new ImageProcessing.Output(ImageProcessing.PrettyPicture(input.twoByteDepthBits), deptArr, deltaX, deltaY, anormalX, anormalY, hightAnormalties, ballPosition, average, input.clip);
         }
 
         void DisplayComputation(Task<ImageProcessing.Output> task)
         {
             var output = task.Result;
 
-            BallSelector.ValueCoordinates = output.ballPosition
-                + (Vector)ClipSelector.ValueCoordinates.TopLeft;
+            if(!double.IsNaN(output.ballPosition.X))
+                SendData(output.ballPosition);
 
-            OverAllImage.Source = CreateMyStandartBitmapSource(output.prettyPicture, 640, 480);
+            AverageTextBox.Text = output.averageDelta.ToString();
+            BallPositionTextBox.Text = output.ballPosition.ToString();
+            ClipTextBox.Text = output.clip.ToString();
 
-            Vector ballPos = output.ballPosition
-                + (Vector)ClipSelector.ValueCoordinates.TopLeft
-                - CenterSelector.ValueCoordinates;
-            ballPos.Y = -ballPos.Y; //Y is upsidedown in regualar Math
+            BallSelector.ValueCoordinates = output.ballPosition + new System.Windows.Vector(output.clip.X, output.clip.Y);
+            BallSelector2.SetValueFromSize(output.ballPosition, new Vector(output.clip.Width, output.clip.Height));
 
-            BallPositionDisplay.Text = ballPos.ToString();
+            if (output.regualar != null)
+                OverAllImage.Source = CreateMyStandartBitmapSource(output.regualar, 640, 480);
+            if (output.depth != null)
+                DepthImage.Source = CreateMyStandartBitmapSource(output.depth, output.clip.Width, output.clip.Height);
+            if (output.deltaX != null)
+                DeltaXImage.Source = CreateMyStandartBitmapSource(output.deltaX, output.clip.Width, output.clip.Height);
+            if (output.deltaX != null)
+                DeltaYImage.Source = CreateMyStandartBitmapSource(output.deltaY, output.clip.Width, output.clip.Height);
+            if (output.anormalyX != null)
+                AnormalitiesXImage.Source = CreateMyStandartBitmapSource(output.anormalyX, output.clip.Width, output.clip.Height);
+            if (output.anormalyY != null)
+                AnormalitiesYImage.Source = CreateMyStandartBitmapSource(output.anormalyY, output.clip.Width, output.clip.Height);
+            if (output.hightAnormalys != null)
+                HeightAnormalitiesImage.Source = CreateMyStandartBitmapSource(output.hightAnormalys, output.clip.Width, output.clip.Height);
         }
 
         Int32Rect ToIntRect(Rect rect)
@@ -190,7 +189,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
                 byte[] pixels = new byte[4];
                 cb.CopyPixels(pixels, 4, 0);
 
-                HoveringColorDisplay.Text = pixels[0].ToString(); //should Be Green. I didn't use the beginning or end, since there is alpha somewhere;
+                HoveringColorTextBox.Text = pixels[0].ToString(); //should Be Green. I didn't use the beginning or end, since there is alpha somewhere;
             }
             catch (Exception)
             { 

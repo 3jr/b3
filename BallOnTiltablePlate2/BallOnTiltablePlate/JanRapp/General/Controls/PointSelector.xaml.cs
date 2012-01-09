@@ -33,16 +33,16 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         #region Value
 
-        public event RoutedPropertyChangedEventHandler<Point> ValueChanged;
+        public event RoutedPropertyChangedEventHandler<Vector> ValueChanged;
 
-        public Point Value
+        public Vector Value
         {
-            get { return (Point)GetValue(PointProperty); }
-            set { SetValue(PointProperty, value); }
+            get { return (Vector)GetValue(VectorProperty); }
+            set { SetValue(VectorProperty, value); }
         }
 
-        public static readonly DependencyProperty PointProperty =
-            DependencyProperty.Register("Value", typeof(Point), typeof(PointSelector), new UIPropertyMetadata(new Point(10,10), Value_PropertyChanged));
+        public static readonly DependencyProperty VectorProperty =
+            DependencyProperty.Register("Value", typeof(Vector), typeof(PointSelector), new UIPropertyMetadata(new Vector(.5,.5), Value_PropertyChanged));
 
         private static void Value_PropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
@@ -51,14 +51,40 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             if (!instance.IsLoaded)
                 return; //I deal with initializing in Loaded Event. Hope so at least.
 
-            bool anyChangeThrouCorrection = instance.ChangeAndCheckPoint((Point)e.NewValue);
+            Vector correctedValue = instance.CorrectVector((Vector)e.NewValue);
+            instance.SetUIVector(correctedValue);
 
-            if (!anyChangeThrouCorrection)
-                if(instance.ValueChanged != null)
-                    instance.ValueChanged(instance, new RoutedPropertyChangedEventArgs<Point>((Point)e.OldValue, (Point)e.NewValue));
+            if(correctedValue != instance.Value)
+                instance.Value = correctedValue;
+
+            if(correctedValue != (Vector)e.OldValue &&  instance.ValueChanged != null)
+                instance.ValueChanged(instance, new RoutedPropertyChangedEventArgs<Vector>((Vector)e.OldValue, (Vector)e.NewValue));
         }
 
         #endregion Value
+
+        public Vector ValueCoordinates
+        {
+            get 
+            {
+                return GetValueFromSize(new Vector(this.ActualWidth, this.ActualHeight)); 
+            }
+
+            set 
+            {
+                SetValueFromSize(value, new Vector(this.ActualWidth, this.ActualHeight));
+            }
+        }
+
+        public Vector GetValueFromSize(Vector customMaximumSize)
+        {
+                return new Vector(Value.X * customMaximumSize.X, Value.Y * customMaximumSize.Y); 
+        }
+
+        public void SetValueFromSize(Vector value, Vector customMaximumSize)
+        {
+                Value = new Vector(value.X / customMaximumSize.X, value.Y / customMaximumSize.Y);
+        }
 
         #region SelectionBrush
 
@@ -107,13 +133,14 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         protected override void OnMouseMove(MouseEventArgs e)
         {
             Point pos = e.GetPosition(this);
+            Vector value = new Vector(pos.X / this.ActualWidth, pos.Y / this.ActualHeight);
             if (state.HasFlag(DraggingState.X))
             {
-                ChangeAndCheckPointX(pos.X);
+                ChangeAndCheckVectorX(value.X);
             }
             if(state.HasFlag(DraggingState.Y))
             {
-                ChangeAndCheckPointY(pos.Y);
+                ChangeAndCheckVectorY(value.Y);
             }
             base.OnMouseMove(e);
         }
@@ -133,19 +160,14 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
-            ChangeAndCheckPoint(Value);
+            SetUIVector(Value);
 
             base.OnRenderSizeChanged(sizeInfo);
         }
 
         #endregion Events
         
-        bool ChangeAndCheckPoint(Point newValue)
-        {
-            return ChangeAndCheckPointX(newValue.X) | ChangeAndCheckPointY(newValue.Y);
-        }
-
-        bool ChangeAndCheckPointX(double x)
+        bool ChangeAndCheckVectorX(double x)
         {
             x = CorrectX(x);
 
@@ -153,13 +175,13 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             {
                 SetUIX(x);
 
-                Value = new Point(x, Value.Y);
+                Value = new Vector(x, Value.Y);
                 return true;
             }
             return false;
        }
 
-        bool ChangeAndCheckPointY(double y)
+        bool ChangeAndCheckVectorY(double y)
         {
             y = CorrectY(y);
 
@@ -167,18 +189,23 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             {
                 SetUIY(y);
 
-                Value = new Point(Value.X, y);
+                Value = new Vector(Value.X, y);
                 return true;
             }
             return false;
+        }
+
+        Vector CorrectVector(Vector newValue)
+        {
+            return new Vector(CorrectX(newValue.X), CorrectY(newValue.Y));
         }
 
         double CorrectX(double x)
         {
             if (x < 0)
                 x = 0;
-            if (x > this.ActualWidth)
-                x = this.ActualWidth;
+            if (x > 1)
+                x = 1;
             
             return x;
         }
@@ -187,22 +214,34 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             if (y < 0)
                 y = 0;
-            if (y > this.ActualHeight)
-                y = this.ActualHeight;
+            if (y > 1)
+                y = 1;
 
             return y;
         }
 
+        void SetUIVector(Vector value)
+        {
+            SetUIX(value.X);
+            SetUIY(value.Y);
+        }
+
         void SetUIX(double x)
         {
+            if (!double.IsNaN(x))
+            {
                 LeftColumn.Width = new GridLength(x, GridUnitType.Star);
-                RightColumn.Width = new GridLength(this.ActualWidth - x, GridUnitType.Star);
+                RightColumn.Width = new GridLength(1 - x, GridUnitType.Star);
+            }
         }
 
         void SetUIY(double y)
         {
-            TopRow.Height = new GridLength(y, GridUnitType.Star);
-            BottomRow.Height = new GridLength(this.ActualHeight - y, GridUnitType.Star);
+            if (!double.IsNaN(y))
+            {
+                TopRow.Height = new GridLength(y, GridUnitType.Star);
+                BottomRow.Height = new GridLength(1 - y, GridUnitType.Star);
+            }
         }
     }
 }

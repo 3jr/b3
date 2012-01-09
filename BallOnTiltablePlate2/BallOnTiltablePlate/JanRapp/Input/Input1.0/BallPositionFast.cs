@@ -9,8 +9,12 @@ namespace BallOnTiltablePlate.JanRapp.Input
     static class BallPosition
     {
         //Most Code is the same as next Method !!!UPDATE!!!
-        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip)
+        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip, int minHeightAnormalities
+            )
         {
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+
             int left = clip.X;
             int top = clip.Y;
             int width = clip.Width;
@@ -44,6 +48,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
                     float anormalX = deltaX - averageX;
                     float anormalY = deltaY - averageY;
                     float lenghtOfAnormal = anormalX * anormalX + anormalY * anormalY;
+                    previousRow[x] = dept;
                     if (lenghtOfAnormal > tolerance)
                     {
                         ballX += x;
@@ -54,15 +59,25 @@ namespace BallOnTiltablePlate.JanRapp.Input
                 j += widthOfData - width * 2; //still 2 bytes per regular pixel
             }
 
-            return new Vector(ballX / ballPointsCount, ballY / ballPointsCount);
+            System.Diagnostics.Debug.WriteLine("BallPositionFast: " + stopwatch.ElapsedMilliseconds);
+
+
+            if (ballPointsCount > minHeightAnormalities)
+                return new Vector(ballX / ballPointsCount, ballY / ballPointsCount);
+            else
+                return ImageProcessing.InvalidVector;
         }
 
         //two changes and differend signatur to Mehtod above
-        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip, out byte[] hightAnormalties)
+        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip, int minHeightAnormalities,
+            out byte[] hightAnormalties)
         {
             /////////////////////////////////////////////////////
             hightAnormalties = new byte[clip.Width * clip.Height]; ////
             /////////////////////////////////////////////////////
+
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
 
             int left = clip.X;
             int top = clip.Y;
@@ -97,6 +112,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
                     float anormalX = deltaX - averageX;
                     float anormalY = deltaY - averageY;
                     float lenghtOfAnormal = anormalX * anormalX + anormalY * anormalY;
+                    previousRow[x] = dept;
                     if (lenghtOfAnormal > tolerance)
                     {
                         ballX += x;
@@ -110,12 +126,17 @@ namespace BallOnTiltablePlate.JanRapp.Input
                 j += widthOfData - width * 2; //still 2 bytes per regular pixel
             }
 
-            return new Vector(ballX / ballPointsCount, ballY / ballPointsCount);
+            System.Diagnostics.Debug.WriteLine("BallPositionFast: " + stopwatch.ElapsedMilliseconds);
+
+            if (ballPointsCount > minHeightAnormalities)
+                return new Vector(ballX / ballPointsCount, ballY / ballPointsCount);
+            else
+                return ImageProcessing.InvalidVector;
         }
 
         //two changes and differend signatur to Mehtod above
-        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip
-            , out byte[] deptArr, out byte[] deltaXArr, out byte[] deltaYArr, out byte[] anormalXArr, out byte[] anormalYArr, out byte[] hightAnormaltiesArr, int visibilytyMultiplier)
+        public static Vector BallPositionFast(byte[] depthData, int depthHorizontalResulotion, Vector average, float tolerance, Int32Rect clip, int minHeightAnormalities,
+            out byte[] deptArr, out byte[] deltaXArr, out byte[] deltaYArr, out byte[] anormalXArr, out byte[] anormalYArr, out byte[] hightAnormaltiesArr, int visibilytyMultiplier)
         {
             ////////////////////////////////////////////////////////
             hightAnormaltiesArr = new byte[clip.Width * clip.Height]; ////
@@ -126,6 +147,11 @@ namespace BallOnTiltablePlate.JanRapp.Input
             anormalXArr = new byte[clip.Width * clip.Height];   ////
             anormalYArr = new byte[clip.Width * clip.Height];   ////
             ////////////////////////////////////////////////////////
+
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+
+            tolerance = tolerance * tolerance;
 
             int left = clip.X;
             int top = clip.Y;
@@ -141,9 +167,7 @@ namespace BallOnTiltablePlate.JanRapp.Input
             var previousRow = new int[width];//Lets Try ushort later!!!!!!
 
             int j = topLeftCornerOfResultInDepthData - widthOfData; //first previousRow is one above the topLeftCorner
-
-            //fill previousRow
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < width; i++)//fill previousRow
             {
                 previousRow[i] = depthData[j++] | depthData[j++] << 8;
             }
@@ -160,6 +184,8 @@ namespace BallOnTiltablePlate.JanRapp.Input
                     float anormalX = deltaX - averageX;
                     float anormalY = deltaY - averageY;
                     float lenghtOfAnormal = anormalX * anormalX + anormalY * anormalY;
+                    previousRow[x] = dept;
+                    lastDept = dept;
                     if (lenghtOfAnormal > tolerance)
                     {
                         ballX += x;
@@ -171,18 +197,23 @@ namespace BallOnTiltablePlate.JanRapp.Input
                     }
                     /////////////////////////////////////////////////////////////////////////////////
                     int index = x + y * width;                                                  /////
-                    deptArr[index] = (byte)dept;                                                /////
-                    deltaXArr[index] = (byte)(deltaX * visibilytyMultiplier + 127);             /////
-                    deltaYArr[index] = (byte)(deltaY * visibilytyMultiplier + 127);             /////
-                    anormalXArr[index] = (byte)(anormalX * visibilytyMultiplier + 127);         /////
-                    anormalYArr[index] = (byte)(anormalY * visibilytyMultiplier + 127);         /////
+                    deptArr[index] = (byte)((dept - 800) / 2);                                                /////
+                    deltaXArr[index] = (byte)Math.Abs(deltaX * visibilytyMultiplier);// + 127);             /////
+                    deltaYArr[index] = (byte)Math.Abs(deltaY * visibilytyMultiplier);// + 127);             /////
+                    anormalXArr[index] = (byte)Math.Abs(anormalX * visibilytyMultiplier);// + 127);         /////
+                    anormalYArr[index] = (byte)Math.Abs(anormalY * visibilytyMultiplier);// + 127);         /////
                     /////////////////////////////////////////////////////////////////////////////////
 
                 }
                 j += widthOfData - width * 2; //still 2 bytes per regular pixel
             }
 
-            return new Vector(ballX / ballPointsCount, ballY / ballPointsCount);
+            System.Diagnostics.Debug.WriteLine("BallPositionFast: " + stopwatch.ElapsedMilliseconds);
+
+            if (ballPointsCount > minHeightAnormalities)
+                return new Vector(ballX / ballPointsCount, ballY / ballPointsCount);
+            else
+                return ImageProcessing.InvalidVector;
         }
     }
 }

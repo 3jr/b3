@@ -5,14 +5,16 @@ using System.Text;
 using System.Windows.Media.Media3D;
 using System.Windows;
 
-namespace BallOnTiltablePlate.JanRapp.Utilities.Vectors
+namespace BallOnTiltablePlate.JanRapp.Utilities
 {
     //MathUtilities by http://www.vcskicks.com/3d_gdiplus_drawing.php
     //All gegrees are taken in Radian and Metods with Deg suffix take it in Degree.
     //Added calculateNormalVector
     //Used Extension Methods   Changed by Jan Rapp at 10:17 9/10/2011
-    public static class MathUtil
+    public static class TransformationUtil
     {
+        #region Rotation and Transformation of Points
+
         public static Point3D RotateXRad(this Point3D point3D, double degrees)
         {
             //Here we use Euler's matrix formula for rotating a 3D point x degrees around the x-axis
@@ -160,65 +162,7 @@ namespace BallOnTiltablePlate.JanRapp.Utilities.Vectors
             return points3D;
         }
 
-        /// <summary>
-        /// Berechnet den Normalenvektor der Platte
-        /// </summary>
-        /// <returns>Normalenvektror der Platte als Vector3D</returns>
-        public static Vector3D Get3DNormalizedVector(this Vector vec)
-        {
-            Vector3D a = (Vector3D)RotateYRad(
-                RotateXRad(new Point3D(-1, -1, 0), -(vec.Y)), -(vec.X));
-            Vector3D b = (Vector3D)RotateYRad(
-                RotateXRad(new Point3D(1, -1, 0), -(vec.Y)), -(vec.X));
-            Vector3D c = (Vector3D)RotateYRad(
-                RotateXRad(new Point3D(-1, 1, 0), -(-1)*(vec.Y)), -(vec.X));//g removed of: MathUtilities.RotateXRad(new Point3D(-1, 1, 0), -g(vec.Y)), -(vec.X));
-            Vector3D n = Vector3D.CrossProduct(b - a, c - a);
-            n.Normalize();
-            return n;
-        }
-
-        public static double DegToRad(double degrees)
-        {
-            return (Math.PI * degrees) / 180.0;
-        }
-
-        public static double RadToDeg(double radian)
-        {
-            return (radian / Math.PI) * 180.0;
-        }
-
-        public static QuaternionRotation3D CombineSimutaniousRotationsAroundXAndYAxis(Vector rotationAroundXAndYAxis)
-        {
-            var result = new QuaternionRotation3D();
-            CombineSimutaniousRotationsAroundXAndYAxis(rotationAroundXAndYAxis, ref result);
-            return result;
-        }
-
-        public static void CombineSimutaniousRotationsAroundXAndYAxis(Vector rotationAroundXAndYAxis, ref QuaternionRotation3D result)
-        {
-            
-            if (rotationAroundXAndYAxis == null) throw new ArgumentNullException("rotationAroundXAndYAxis");
-            if (result == null) throw new ArgumentNullException("result");
-
-            Vector3D firstAxisForXRotation = new Vector3D(0.0,1.0,0.0);
-            Vector3D secoundAxisForYRotation = new Vector3D(-Math.Cos(rotationAroundXAndYAxis.X), 0.0, Math.Sin(rotationAroundXAndYAxis.X));
-            double xAngle = (rotationAroundXAndYAxis.X);
-            double yAngle =
-                //Math.Asin(Math.Sin(rotationAroundXAndYAxis.Y) * Math.Cos(rotationAroundXAndYAxis.X));
-                (rotationAroundXAndYAxis.Y);
-
-            Quaternion firstRotation = new Quaternion(firstAxisForXRotation, RadToDeg(xAngle));
-            Quaternion secoundRotaion = new Quaternion(secoundAxisForYRotation, RadToDeg(yAngle));
-
-            Quaternion resultQuaternion = secoundRotaion* firstRotation;
-
-            if (resultQuaternion != result.Quaternion)
-            {
-                if (result.IsFrozen) throw new ArgumentException("result may not be Frozen and has to be changed to fulfill the requirements for this Function");
-
-                result.Quaternion = resultQuaternion;
-            }
-        }
+        #endregion Rotation and Transformation of Points
     }
 }
 

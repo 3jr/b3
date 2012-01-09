@@ -8,38 +8,43 @@
              >
     <UserControl.Resources>
         <Style TargetType="Image">
-            <Setter Property="Width" Value="200"/>
+            <Setter Property="Width" Value="300"/>
+            <EventSetter Event="PreviewMouseMove" Handler="Image_MouseMove"/>
+        </Style>
+        <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource DoubleBoxBaseStyle}">
         </Style>
     </UserControl.Resources>
     <WrapPanel Orientation="Vertical">
+        <controls:DoubleBox x:Name="ToleranceDoubelBox" Text="_Tolerance of Height Anormalities: " Value="10.0"/>
+        <controls:DoubleBox x:Name="MinHeightAnormalities" Text="Heigh Anormalities Thre_shold: " Value="15.0" SmallChange="1" RegularChange="2" LargeChange="5"/>
+        <controls:DoubleBox x:Name="CenterDepthBox" Text="Depth at _Center" Value="900" SmallChange="1" RegularChange="2" LargeChange="5"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Center: </TextBlock>
+            <controls:Vector2DControl x:Name="CenterPositionBox" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Area for Average: </TextBlock>
+            <controls:RectBox x:Name="ClipBox" Value="0.33125,0.2979177,0.3609375,0.4333323"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Size for 1,1 at tilt {0,0}: </TextBlock>
+            <controls:RectBox x:Name="OneSizeBox" />
+        </StackPanel>
+        <controls:SettingSaver/>
         <Expander Header="_Overall Image">
-             <Grid Width="640" Height="480" Margin="8" HorizontalAlignment="Left">
-                <Image x:Name="OverAllImage"/>
-                <controls:RectangleSelector x:Name="ClipSelector" SelectionBrush="Blue" Value="212,143,100,100"/>
-                <!--<controls:PointSelector x:Name="MiddleSelector" SelectionBrush="Red" Value="320,240"/>-->
+             <Grid Width="640" Height="480">
+                <Image x:Name="OverAllImage" Width="640" Height="480"/>
+                <controls:PointSelector x:Name="BallSelector" SelectionBrush="Cyan" Value="0.7,0.7" IsEnabled="False"/>
+                <controls:RectangleSelector x:Name="ClipSelector" SelectionBrush="#FF6695EB" Value="{Binding Value, ElementName=ClipBox}"/>
+                <controls:RectangleSelector x:Name="OneSizeSelector" Value="{Binding Value, ElementName=ClipBox}"/>
+                <controls:PointSelector x:Name="CenterSelector" SelectionBrush="#FF996A14" Value="{Binding Value, ElementName=CenterPositionBox}"/>
             </Grid>
         </Expander>
-        <Expander Header="_Delta Horizontal">
-            <Image x:Name="DeltaXImage"/>
-        </Expander>
-        <Expander Header="Delta Vertical">
-            <Image x:Name="DeltaYImage"/>
-        </Expander>
-        <Expander Header="_Anormalities Horizontal">
-            <Image x:Name="AnormalitiesXImage"/>
-        </Expander>
-        <Expander Header="Anormalities Vertical">
-            <Image x:Name="AnormalitiesYImage"/>
-        </Expander>
-        <Expander Header="Ball _Binary">
-                <Image x:Name="BallImage"/>
-        </Expander>
-        <controls:DoubleBox x:Name="ToleranceDoubelBox" Text="_Tolerance: "/>
-
-
-
-        <StatusBar VerticalAlignment="Bottom">
-            <TextBlock x:Name="statusbarText" />
-        </StatusBar>
+        <TextBlock Width="150" >Ball Position:</TextBlock>
+        <TextBox   Width="150" IsEnabled="False" x:Name="BallPositionDisplay"/>
+        <TextBlock Width="150" >Depth At Selected Center :</TextBlock>
+        <TextBox   Width="150" IsEnabled="False" x:Name="DepthAtCenterDisplay"/>
+        <TextBlock Width="150" >Hovering Color:</TextBlock>
+        <TextBox   Width="150"  IsEnabled="False" x:Name="HoveringColorDisplay"/>
     </WrapPanel>
 </UserControl>
