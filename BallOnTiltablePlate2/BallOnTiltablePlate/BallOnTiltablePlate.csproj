@@ -175,6 +175,8 @@
     <Compile Include="JanRapp\Simulation\SimulationOnPlate.cs" />
     <Compile Include="JanRapp\General\Utilities\WPFConverter.cs" />
     <Compile Include="MoritzUehling\Juggler\Circle.cs" />
+    <Compile Include="MoritzUehling\Juggler\Wifi.cs" />
+    <Compile Include="MoritzUehling\Juggler\WifiHelper.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
     <Compile Include="MoritzUehling\Kinect\ImageManager.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCamaraInput.v02.cs" />
