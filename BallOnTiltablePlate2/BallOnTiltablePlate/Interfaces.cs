@@ -5,11 +5,17 @@ using System.Windows.Media.Media3D;
 
 namespace BallOnTiltablePlate
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BallInputEventArgs : EventArgs
     {
         public Vector BallPosition { get; set; }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IBallInput
         : IBallOnPlateItem
     {
@@ -27,6 +33,9 @@ namespace BallOnTiltablePlate
         new event EventHandler<BallInputEventArgs3D> DataRecived;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IPlateOutput
         : IBallOnPlateItem
     {
@@ -54,10 +63,7 @@ namespace BallOnTiltablePlate
     /// For a Preprocessor the IPreprocessorIO Interface must be implemented, too!
     /// A derived Interface may never implement IPreprocessorIO!
     /// </summary>
-    public interface IPreprocessor
-    {
-
-    }
+    public interface IPreprocessor { }
 
     /// <summary>
     /// Common Interface for all Juggler Algorithms

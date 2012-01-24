@@ -6,7 +6,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BallOnTiltablePlate.JanRapp.Controls" 
              xmlns:System="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" d:DesignHeight="75" d:DesignWidth="277">
+             mc:Ignorable="d" d:DesignHeight="75" d:DesignWidth="277"
+             FocusManager.IsFocusScope="True"
+             FocusManager.FocusedElement="{Binding ElementName=Xud}">
     <UserControl.Resources>
         <Style TargetType="local:DoubleBox">
             <Setter Property="SmallChange"

@@ -30,6 +30,12 @@
             <Setter Property="LargeChange" Value="0.1"/>
             <Setter Property="Value" Value="0,0,0"/>
         </Style>
+        <Style TargetType="controls:RectBox" BasedOn="{StaticResource RectBoxBaseStyle}">
+            <Setter Property="SmallChange" Value="0.001"/>
+            <Setter Property="RegularChange" Value="0.01"/>
+            <Setter Property="LargeChange" Value="0.1"/>
+            <Setter Property="Value" Value="0,0,0,0"/>
+        </Style>
     </UserControl.Resources>
 	<UserControl.CommandBindings>
         <CommandBinding Command="{StaticResource ToogleRunningCmd}" Executed="ToogleRunningCmd_Executed" CanExecute="ToogleRunningCmd_CanExecute"/>

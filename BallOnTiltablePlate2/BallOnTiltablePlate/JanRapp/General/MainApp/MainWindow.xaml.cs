@@ -39,41 +39,40 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             };
         }
 
-        bool jugglerChanging = false;
+        bool jugglerStarted = false;
         private void AlgorithmList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            jugglerChanging = true;
-            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender,
+            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender, ref jugglerStarted,
                 () => {
                 PreprocessorList.ItemsSource = ((dynamic)AlgorithmList.SelectedItem).DataContext.Preprocessors;
 
-                dynamic juggelerInstance = AlgorithmList.SelectedValue;
-                juggelerInstance.IO = (dynamic)PreprocessorList.SelectedValue;
+                if (PreprocessorList.SelectedItem != null)
+                {
+                    dynamic juggelerInstance = AlgorithmList.SelectedValue;
+                    juggelerInstance.IO = (dynamic)PreprocessorList.SelectedValue;
+                }
                 }
             );
-            jugglerChanging = false;
         }
 
-        bool preprocessorChanging = false;
+        bool preprocessorStarted = false;
         private void PreprocessorList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
-            preprocessorChanging = true;
-            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender,
+            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender, ref preprocessorStarted,
                 () => {
                     Helper.PreprocessorItemUI item = ((Helper.PreprocessorItemUI)((FrameworkElement)PreprocessorList.SelectedItem).DataContext);
                     InputList.ItemsSource = item.Inputs;
                     OutputList.ItemsSource = item.Outputs;
 
                     dynamic preprocessorInstance = PreprocessorList.SelectedValue;
-                    if (InputList.SelectedValue != null)
+                    if (InputList.SelectedItem != null)
                         preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
-                    if (OutputList.SelectedValue != null)
+                    if (OutputList.SelectedItem != null)
                         preprocessorInstance.Output = (dynamic)OutputList.SelectedValue;
 
                     dynamic juggelerInstance = AlgorithmList.SelectedValue;
                     //if (juggelerInstance.IO != preprocessorInstance)
-                        if(jugglerChanging)
+                        if (!jugglerStarted)
                             juggelerInstance.IO = (dynamic)preprocessorInstance;
                         else
                         {
@@ -83,16 +82,16 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                         }
                 }
             );
-            preprocessorChanging = false;
         }
 
+        bool inputStarted = false;
         private void InputList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {  
-            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender,
+            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender, ref inputStarted,
                 () => {
                     dynamic preprocessorInstance = PreprocessorList.SelectedValue;
                     //if (preprocessorInstance.Input != OutputList.SelectedValue)
-                        if (preprocessorChanging)
+                        if (!preprocessorStarted)
                             preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
                         else
                         {
@@ -104,44 +103,46 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             );
         }
 
+        bool outputStarted = false;
         private void OutputList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender,
+            ControlListItems(e.NewValue, e.OldValue, (TreeView)sender, ref outputStarted,
                 () => {
                     dynamic preprocessorInstance = PreprocessorList.SelectedValue;
                     //if (preprocessorInstance.Output != OutputList.SelectedValue)
-                        if (preprocessorChanging)
+                        if (!preprocessorStarted)
                             preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
                         else
                         {
                             preprocessorInstance.Stop();
-                            preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                            preprocessorInstance.Output = (dynamic)OutputList.SelectedValue;
                             preprocessorInstance.Start();
                         }
                 }
             );
         }
 
-        void ControlListItems(object newValue, object oldValue, TreeView list, Action maintnace)
+        void ControlListItems(object newValue, object oldValue, TreeView list, ref bool started, Action maintnace)
         {
             if (newValue == oldValue)
                 return;
 
-            if (oldValue != null)
+            if (oldValue != null && started)
                 ((Helper.BPItemUI)((FrameworkElement)oldValue).DataContext).Instance.Stop();
 
-
+            started = false;
             if (newValue != null)
             {
                 maintnace();
 
                 ((IBallOnPlateItem)list.SelectedValue).Start();
+                started = true;
             }
 
-            if (AlgorithmList.SelectedValue != null &&
-                PreprocessorList.SelectedValue != null &&
-                InputList.SelectedValue != null &&
-                OutputList.SelectedValue != null)
+            if (AlgorithmList.SelectedItem != null &&
+                PreprocessorList.SelectedItem != null &&
+                InputList.SelectedItem != null &&
+                OutputList.SelectedItem != null)
                 timer.Start();
             else
                 timer.Stop();

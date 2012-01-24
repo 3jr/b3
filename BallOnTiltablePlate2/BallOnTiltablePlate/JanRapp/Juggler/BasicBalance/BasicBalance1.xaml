@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Juggler.BasicBalance"
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Juggler.BasicBalance1"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,6 +9,10 @@
     <StackPanel>
         <controls:DoubleBox x:Name="PositionFactor" Text="Position: " />
         <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity: " />
-        <controls:DoubleBox x:Name="AccelerationFactor" Text="Acceleration (not used): " />
+        <controls:DoubleBox x:Name="AccelerationFactor" Text="Acceleration: " />
+        <TextBlock x:Name="PositionDisplay" />
+        <TextBlock x:Name="VelocityDisplay" />
+        <TextBlock x:Name="AccelerationDisplay" />
+        <Button x:Name="ResetPrevData" Content="ResetPrevData" Click="ResetPrevData_Click"/>
     </StackPanel>
 </UserControl>

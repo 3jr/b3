@@ -95,9 +95,22 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         public static readonly DependencyProperty ColorProperty =
-            DependencyProperty.Register("SelectionBrush", typeof(Brush), typeof(PointSelector), new UIPropertyMetadata(Brushes.Black));
+            DependencyProperty.Register("SelectionBrush", typeof(Brush), typeof(PointSelector), new UIPropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 0,0,0))));
 
         #endregion SelectionBrush
+
+        #region SelectorIcon
+
+        public object SelectorIcon
+        {
+            get { return (object)GetValue(SelectorIconProperty); }
+            set { SetValue(SelectorIconProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectorIconProperty =
+            DependencyProperty.Register("SelectorIcon", typeof(object), typeof(PointSelector), new UIPropertyMetadata());
+
+        #endregion SelectorIcon
 
         #endregion Dependency Properties
 
@@ -106,6 +119,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         public PointSelector()
         {
             InitializeComponent();
+            SelectorIcon = new TextBlock() { Text = "Drag" };
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -128,6 +142,12 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             if (this.CaptureMouse())
                 this.state = DraggingState.Y;
+        }
+
+        private void XY_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (this.CaptureMouse())
+                this.state = DraggingState.X | DraggingState.Y;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)

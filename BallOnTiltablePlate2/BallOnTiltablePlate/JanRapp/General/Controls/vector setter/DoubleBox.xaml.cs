@@ -281,50 +281,21 @@ namespace BallOnTiltablePlate.JanRapp.Controls
             UpdateTextBox();
         }
 
-        protected override void OnPreviewGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        private void txtBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            
-            base.OnPreviewGotKeyboardFocus(e);
-        }
-
-        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
-        {
-            txtBox.Focus();
             txtBox.SelectAll();
-
-            //System.Diagnostics.Debug.WriteLine("OnGotKeyboardFocus in DoubleBox");
-
             e.Handled = true;
-            base.OnGotKeyboardFocus(e);
-        }
-
-        protected override void OnGotFocus(RoutedEventArgs e)
-        {
-            base.OnGotFocus(e);
-        }
-
-        protected override void OnAccessKey(AccessKeyEventArgs e)
-        {
-            base.OnAccessKey(e);
-        }
-
-        protected override void OnIsKeyboardFocusWithinChanged(DependencyPropertyChangedEventArgs e)
-        {
-            if (IsKeyboardFocusWithin)
-                txtBox.Focus();
-
-            base.OnIsKeyboardFocusWithinChanged(e);
         }
 
         #region MouseDragToChagneValue
 
         bool mouseDown;
-        Point lastMousePos;
+        double lastMousePosY;
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            //mouseDown = this.CaptureMouse();
-            lastMousePos = e.GetPosition(this);
+            mouseDown = this.CaptureMouse();
+            lastMousePosY = e.GetPosition(this).Y;
 
             base.OnMouseDown(e);
         }
@@ -333,22 +304,27 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             if (mouseDown)
             {
-                Point mousePos = e.GetPosition(this);
-                Vector vector = mousePos - lastMousePos;
-                double distance = vector.Length;
+                double mousePosY = e.GetPosition(this).Y;
+                double distanceY = mousePosY - lastMousePosY;
 
-                double distanceForOneIncrease = 4;
+                double distancePerIncrease = 4;
 
-                if (distance > distanceForOneIncrease)
+                while (Math.Abs(distanceY) > distancePerIncrease)
                 {
-                    double angle = Math.Atan2(vector.Y, vector.X);
-                    if (angle < Math.PI / 4 && angle > -Math.PI * 3 / 4)
+                    if (distanceY < -distancePerIncrease)
+                    {
                         IncreaseValue();
-                    else
-                        DecreaseValue();
+                        lastMousePosY -= distancePerIncrease;
+                        distanceY += distancePerIncrease;
+                    }
 
-                    vector.Normalize();
-                    lastMousePos += vector * distanceForOneIncrease;
+                    if (distanceY > distancePerIncrease)
+                    {
+                        DecreaseValue();
+                        lastMousePosY += distancePerIncrease;
+                        distanceY -= distancePerIncrease;
+                    }
+
                 }
             }
 
@@ -357,7 +333,7 @@ namespace BallOnTiltablePlate.JanRapp.Controls
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            //this.ReleaseMouseCapture();
+            this.ReleaseMouseCapture();
             this.mouseDown = false;
 
             base.OnMouseUp(e);

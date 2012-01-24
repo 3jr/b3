@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
+using BallOnTiltablePlate.JanRapp.Utilities;
 
 namespace BallOnTiltablePlate.JanRapp.Simulation
 {
@@ -67,6 +68,7 @@ namespace BallOnTiltablePlate.JanRapp.Simulation
 
         public void SetTilt(Vector tilt)
         {
+            tilt = tilt.ToNoNaN();
             DesiredTiltVecBox.SetValue(Controls.Vector2DControl.ValueProperty, tilt);
         }
 

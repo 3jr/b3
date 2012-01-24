@@ -30,6 +30,13 @@ namespace BallOnTiltablePlate.JanRapp.Utilities
             return secoundRotaion * firstRotation; //it just is that way with Quaternions
         }
 
+        public static RotateTransform3D RotateTransformForTilt(Vector sequentalTilt)
+        {
+            Quaternion rotation = TiltUtil.RotationForTilt(sequentalTilt);
+            RotateTransform3D rotationTransform = new RotateTransform3D(new QuaternionRotation3D(rotation));
+            return rotationTransform;
+        }
+
         public static Vector3D NormalVectorFromSequentialTilt(Vector sequentalTilt)
         {
             Quaternion rotation = TiltUtil.RotationForTilt(sequentalTilt);

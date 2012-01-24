@@ -80,44 +80,61 @@ namespace BallOnTiltablePlate.JanRapp.Output
 
         void SendData(bool force)
         {
-            if (port.IsOpen && (TransmitImmediately.IsChecked == true || force))
+            try
             {
-                Vector sequentialTilt = TiltAngle.Value.ToSequentailTilt();
-
-                System.UInt16[] values = new System.UInt16[4];
-                values[0] = (System.UInt16)((sequentialTilt.X * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetXRegular0.Value);
-                values[1] = (System.UInt16)((sequentialTilt.X * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetXInverted1.Value);
-                values[2] = (System.UInt16)((sequentialTilt.Y * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYRegular2.Value);
-                values[3] = (System.UInt16)((sequentialTilt.Y * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYInverted3.Value);
-
-                RecivedLog.Text =
-                    values[0].ToString() + Environment.NewLine +
-                    values[1].ToString() + Environment.NewLine +
-                    values[2].ToString() + Environment.NewLine +
-                    values[3].ToString();
-
-                byte[] sendBuffer = new byte[24];
-
-                for (int i = 0, j = 0; i < values.Length ; i++)
+                if (port.IsOpen && (TransmitImmediately.IsChecked == true || force))
                 {
-                    byte[] array = BitConverter.GetBytes(values[i]);
-                    if (array[0] == 0)
-                        array[0] = 1;
-                    if (array[1] == 0)
-                        array[1] = 1; //sending a null byte resets the microcontroller
-                    sendBuffer[j++] = array[1];
-                    sendBuffer[j++] = array[0];
-                    sendBuffer[j++] = array[1];
-                    sendBuffer[j++] = array[0];
-                    sendBuffer[j++] = array[1];
-                    sendBuffer[j++] = array[0];
+                    Vector sequentialTilt = TiltAngle.Value.ToSequentailTilt();
+
+                    System.UInt16[] values = new System.UInt16[4];
+                    values[0] = (System.UInt16)((sequentialTilt.X * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetXRegular0.Value);
+                    values[1] = (System.UInt16)((sequentialTilt.X * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetXInverted1.Value);
+                    values[2] = (System.UInt16)((sequentialTilt.Y * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYRegular2.Value);
+                    values[3] = (System.UInt16)((sequentialTilt.Y * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetYInverted3.Value);
+
+                    RecivedLog.Text =
+                        values[0].ToString() + Environment.NewLine +
+                        values[1].ToString() + Environment.NewLine +
+                        values[2].ToString() + Environment.NewLine +
+                        values[3].ToString();
+
+                    byte[] sendBuffer = new byte[24];
+
+                    for (int i = 0, j = 0; i < values.Length; i++)
+                    {
+                        byte[] array = BitConverter.GetBytes(values[i]);
+                        if (array[0] == 0)
+                            array[0] = 1;
+                        if (array[1] == 0)
+                            array[1] = 1; //sending a null byte resets the microcontroller
+                        sendBuffer[j++] = array[1];
+                        sendBuffer[j++] = array[0];
+                        sendBuffer[j++] = array[1];
+                        sendBuffer[j++] = array[0];
+                        sendBuffer[j++] = array[1];
+                        sendBuffer[j++] = array[0];
+                    }
+
+                    System.Diagnostics.Debug.WriteLine("New Transmittion Started");
+                    for (int i = 0; i < sendBuffer.Length; i++)
+                    {
+                        port.Write(sendBuffer, i, 1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Not able to send the Data \n\r \n\r Exeption: \n\r" + ex.ToString());
+
+                try
+                {
+                    port.Close();
+                }
+                catch
+                {
                 }
 
-                System.Diagnostics.Debug.WriteLine("New Transmittion Started");
-                for (int i = 0; i < sendBuffer.Length; i++ )
-                {
-                    port.Write(sendBuffer, i, 1);
-                }
+                ToggleConntectButton.Content = "Connect";
             }
         }
 
@@ -125,9 +142,13 @@ namespace BallOnTiltablePlate.JanRapp.Output
         {
             if (port.IsOpen)
             {
-                port.Close();
-
-                ToggleConntectButton.Content = "Connect";
+                try
+                {
+                    port.Close();
+                }
+                catch
+                {
+                }
             }
             else
             {

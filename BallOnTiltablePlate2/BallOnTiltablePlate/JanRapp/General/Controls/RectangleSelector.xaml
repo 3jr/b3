@@ -8,7 +8,13 @@
              Loaded="UserControl_Loaded"
              d:DesignHeight="480" d:DesignWidth="640">
     <Grid>
-        <controls:PointSelector SelectionBrush="{Binding SelectionBrush, RelativeSource={RelativeSource AncestorType=controls:RectangleSelector}}"  x:Name="TopLeft" ValueChanged="TopLeft_ValueChanged"></controls:PointSelector>
-        <controls:PointSelector SelectionBrush="{Binding SelectionBrush, RelativeSource={RelativeSource AncestorType=controls:RectangleSelector}}" x:Name="BottomRight" ValueChanged="BottomRight_ValueChanged"></controls:PointSelector>
+        <controls:PointSelector SelectionBrush="{Binding SelectionBrush, RelativeSource={RelativeSource AncestorType=controls:RectangleSelector}}"
+                                SelectorIcon="{Binding SelectorIcon, RelativeSource={RelativeSource AncestorType=controls:RectangleSelector}}"
+                                Value="0.333333,0.333333"
+                                x:Name="TopLeft" ValueChanged="TopLeft_ValueChanged"></controls:PointSelector>
+        <controls:PointSelector SelectionBrush="{Binding SelectionBrush, RelativeSource={RelativeSource AncestorType=controls:RectangleSelector}}"
+                                SelectorIcon="{Binding SelectorIcon, RelativeSource={RelativeSource AncestorType=controls:RectangleSelector}}"
+                                Value="0.666666,0.666666"
+                                x:Name="BottomRight" ValueChanged="BottomRight_ValueChanged"></controls:PointSelector>
     </Grid>
 </UserControl>

@@ -83,9 +83,22 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         }
 
         public static readonly DependencyProperty SelectionBrushProperty =
-            DependencyProperty.Register("SelectionBrush", typeof(Brush), typeof(RectangleSelector), new UIPropertyMetadata(Brushes.Black));
+            DependencyProperty.Register("SelectionBrush", typeof(Brush), typeof(RectangleSelector), new UIPropertyMetadata(new SolidColorBrush(Color.FromArgb(128, 0, 0, 0))));
 
         #endregion SelectionBrush
+
+        #region SelectorIcon
+
+        public FrameworkElement SelectorIcon
+        {
+            get { return (FrameworkElement)GetValue(SelectorIconProperty); }
+            set { SetValue(SelectorIconProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectorIconProperty =
+            DependencyProperty.Register("SelectorIcon", typeof(FrameworkElement), typeof(RectangleSelector), new UIPropertyMetadata());
+
+        #endregion SelectorIcon        
 
         public RectangleSelector()
         {

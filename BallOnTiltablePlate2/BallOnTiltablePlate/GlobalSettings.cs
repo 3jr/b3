@@ -23,6 +23,7 @@ namespace BallOnTiltablePlate
 
         public double FPSOfAlgorithm { get; set; }
 
+        // in Meter
         public double PlateSize { get; set;}
 
         internal static string ItemSettingsFolder(BallOnPlateItemInfoAttribute itemInfo)

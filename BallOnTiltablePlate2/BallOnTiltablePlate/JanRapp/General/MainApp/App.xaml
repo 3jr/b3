@@ -16,6 +16,10 @@
             <Setter Property="controls:SettingSaver.PropertysToSave" 
                     Value="Value"/>
         </Style>
+        <Style TargetType="controls:RectBox" x:Key="RectBoxBaseStyle">
+            <Setter Property="controls:SettingSaver.PropertysToSave" 
+                    Value="Value"/>
+        </Style>
         <Style TargetType="CheckBox" x:Key="CheckBoxBaseStyle">
             <Setter Property="controls:SettingSaver.PropertysToSave"    
                     Value="IsChecked"/>

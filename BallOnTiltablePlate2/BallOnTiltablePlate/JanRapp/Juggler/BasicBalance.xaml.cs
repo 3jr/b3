@@ -12,14 +12,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BallOnTiltablePlate.JanRapp.MainApp.Helper;
+using BallOnTiltablePlate.JanRapp.Utilities;
 
-namespace BallOnTiltablePlate.Juggler.JanRapp
+namespace BallOnTiltablePlate.JanRapp.Juggler
 {
     /// <summary>
     /// Interaction logic for BasicBalance.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "BasicBalance", "1.0")]
-    public partial class BasicBalance : UserControl, IJuggler<TestPreprocessor>
+    [BallOnPlateItemInfo("Jan", "Rapp", "BasicBalance", "2.0")]
+    public partial class BasicBalance : UserControl, IJuggler<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -28,39 +29,14 @@ namespace BallOnTiltablePlate.Juggler.JanRapp
         }
         #endregion
 
-        public TestPreprocessor IO { private get; set; }
-        Vector position;
-        Vector velocity;
-        Vector acceleration;
+        public JanRapp.Preprocessor.IBasicPreprocessor IO { private get; set; }
 
         public void Start()
         {
-            IO.Input.DataRecived += Input_DataRecived;
         }
 
         public void Stop()
         {
-            IO.Input.DataRecived -= Input_DataRecived;
-        }
-
-        private void Input_DataRecived(object sender, BallInputEventArgs e)
-        {
-            Vector newPosition = e.BallPosition;            
-            //Vector newVelocity = position - newPosition;
-            //Vector acceleration = velocity - newVelocity;
-            velocity = newPosition - position;
-            position = newPosition;
-
-            Positiondisplay.Text = "Position: " + position.ToString();
-            VelocityDisplay.Text = "Velocity: " + velocity.ToString();
-            AccelerationDisplay.Text = "Acceleration: " + acceleration.ToString();
-        
-            var tilt = new Vector(
-                AngleNeededToGetAccelerationOf(velocity.X),
-                AngleNeededToGetAccelerationOf(velocity.Y)
-                ) * MagigValue.Value;
-
-            IO.Output.SetTilt(tilt);
         }
 
         public BasicBalance()
@@ -70,11 +46,15 @@ namespace BallOnTiltablePlate.Juggler.JanRapp
 
         public void Update()
         {
-        }
+            //if (IO.ValuesValid)
+            {
+                Vector inductedVelo = IO.Position * PositionFactor.Value;
 
-        double AngleNeededToGetAccelerationOf(double acceleration)
-        {
-            return Math.Asin(acceleration / 10.0);
+                var tilt = (IO.Velocity + inductedVelo)
+                    .ToNoNaN() * VelocityFactor.Value;
+
+                IO.SetTilt(tilt);
+            }
         }
     }
 }

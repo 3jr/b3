@@ -97,7 +97,9 @@
     <Compile Include="JanRapp\General\Controls\vector setter\RectBox.xaml.cs">
       <DependentUpon>RectBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\General\Utilities\NumberUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TiltUtil.cs" />
+    <Compile Include="JanRapp\General\Utilities\TransformationUtil.cs" />
     <Compile Include="JanRapp\Input\Input1.0\BallPositionFast.cs" />
     <Compile Include="JanRapp\Input\ImageProcessing.cs" />
     <Compile Include="JanRapp\Input\Input1.0\ImageProcessing.cs" />
@@ -141,6 +143,9 @@
     <Compile Include="JanRapp\Juggler\BasicBalance.xaml.cs">
       <DependentUpon>BasicBalance.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Juggler\BasicBalance\BasicBalance1.xaml.cs">
+      <DependentUpon>BasicBalance1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\General\MainApp\Helper\TestInput.xaml.cs">
       <DependentUpon>TestInput.xaml</DependentUpon>
     </Compile>
@@ -158,6 +163,9 @@
     </Compile>
     <Compile Include="JanRapp\Output\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Preprocessor\BasicPreprocessor.xaml.cs">
+      <DependentUpon>BasicPreprocessor.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Simulation\SimulationInAir.cs" />
     <Compile Include="JanRapp\Simulation\Simulation3D.cs" />
@@ -183,7 +191,7 @@
     <Compile Include="TimoSchmetzer\General\Test.cs" />
     <Compile Include="TimoSchmetzer\General\PhysicUtilities.cs" />
     <Compile Include="TimoSchmetzer\Physics3D\Physics3D.cs" />
-    <Compile Include="JanRapp\General\Utilities\VectorUtilities.cs" />
+    <Compile Include="JanRapp\General\Utilities\VectorUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\WindowCustomizer.cs" />
     <Compile Include="TimoSchmetzer\Preprocessor\Preprocessor.xaml.cs">
       <DependentUpon>Preprocessor.xaml</DependentUpon>
@@ -239,6 +247,9 @@
     <Page Include="JanRapp\Juggler\BasicBalance.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\Juggler\BasicBalance\BasicBalance1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\General\MainApp\Helper\TestInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -273,6 +284,9 @@
     </Compile>
     <Page Include="JanRapp\Output\BasicPlateOutput.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Preprocessor\BasicPreprocessor.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Simulation\SimulationBase.xaml">
@@ -354,7 +368,6 @@
     <Resource Include="JanRapp\General\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="JanRapp\Preprocessor\" />
     <Folder Include="MoritzUehling\Lib\" />
   </ItemGroup>
   <ItemGroup>
