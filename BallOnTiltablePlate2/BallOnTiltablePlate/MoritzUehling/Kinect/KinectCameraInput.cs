@@ -13,7 +13,7 @@ using System.Windows.Media.Media3D;
 
 namespace BallOnTiltablePlate.MoritzUehling.Kinect
 {
-    [BallOnPlateItemInfo("Moritz", "Uehling", "Kinect Cam Input", "0.3")]
+    //[BallOnPlateItemInfo("Moritz", "Uehling", "Kinect Cam Input", "0.3")]
     public class KinectCameraInput : IBallInput
     {
         #region Managing Stuff

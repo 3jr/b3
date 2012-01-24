@@ -145,8 +145,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                 OutputList.SelectedItem != null)
                 timer.Start();
             else
-                timer.Stop();
-        }
+                timer.Stop();        }
 
         void timer_Tick(object sender, EventArgs e)
         {
