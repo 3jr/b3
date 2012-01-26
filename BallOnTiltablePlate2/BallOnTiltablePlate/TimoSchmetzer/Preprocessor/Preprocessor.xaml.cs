@@ -108,7 +108,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
             double t01 = (_LastRecieveTime[0] - _LastRecieveTime[1]).TotalSeconds;
             Vector3D s0 = _LastRecievedPositions[0];
             Vector3D s1 = _LastRecievedPositions[1];
-            Vector3D a = Utilities.Physics.HangabtriebskraftBerechnen(-9.81, getNormal(false));
+            Vector3D a = Utilities.Physics.HangabtriebsbeschleunigungBerechnen(-9.81, getNormal(false));
             Vector3D v1 = (s0 - s1) / (t01) - 0.5 * a * t01;
             Vector3D v0 = v1 + a * t01;
             Vector3D vN = v0 + a * t0N;

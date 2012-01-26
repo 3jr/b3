@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BallOnTiltablePlate.TimoSchmetzer.Preprocessor;
+using BallOnTiltablePlate.TimoSchmetzer.Simulation;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.TestAlgorithm
 {
@@ -125,7 +126,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.TestAlgorithm
         private double[] DistanceToOrigin(ValueSavePhyicsState s)
         {
             ValueSavePhyicsState inputs = s.Clone();
-            PhysicSimulationOnPlate.RunSimulation(inputs, 1);
+            Simulation.PhysicsWrapper wrapper = new PhysicsWrapper();
+            PhysicsCalculator calculator = (PhysicsCalculator)(new Simulation.PhysicsCalculators.PhysicsOnPlate());
+            wrapper.RunSimulation(calculator, inputs, 1.0);
             return new double[] { ((Vector3D)inputs.Position).Length, ((Vector3D)inputs.Velocity).Length };
         }
     }

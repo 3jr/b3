@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using BallOnTiltablePlate.JanRapp.Simulation;
-using BallOnTiltablePlate.TimoSchmetzer.Physics;
+using BallOnTiltablePlate.TimoSchmetzer.Simulation;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
 {
@@ -129,7 +129,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// </summary>
         /// <param name="Tilt">Tilt is given in Rad.</param>
         /// <returns>Hangabtriebskraft</returns>
-        public static Vector3D HangabtriebskraftBerechnen(double g, Vector Tilt)
+        public static Vector3D HangabtriebsbeschleunigungBerechnen(double g, Vector Tilt)
         {
             //AccelerationForce= G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
             Vector3D AccelerationForce = new Vector3D();
@@ -145,7 +145,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <param name="g">Gravity</param>
         /// <param name="Normal">Normal of Plate</param>
         /// <returns>Hangabtriebskraft</returns>
-        public static Vector3D HangabtriebskraftBerechnen(double g, Vector3D Normal)
+        public static Vector3D HangabtriebsbeschleunigungBerechnen(double g, Vector3D Normal)
         {
             //AccelerationForce= G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
             Vector3D AccelerationForce = new Vector3D();

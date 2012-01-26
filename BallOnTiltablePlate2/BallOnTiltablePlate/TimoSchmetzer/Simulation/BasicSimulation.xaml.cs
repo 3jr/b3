@@ -15,24 +15,23 @@ using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using BallOnTiltablePlate.JanRapp.Utilities;
 using System.Reflection;
-using BallOnTiltablePlate.JanRapp.Simulation;
 
-namespace BallOnTiltablePlate.TimoSchmetzer
+namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 {
-
     /// <summary>
     /// Interaction logic for Simulation3D.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo", "Schmetzer", "ModifiedSimulation", "0.1")]
-    public partial class ModifiedSimulation : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, IPhysicsState
+    [BallOnPlateItemInfo("Timo", "Schmetzer", "BasicSimulation", "0.1")]
+    public partial class BasicSimulation : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, SimulationState
     {
         DispatcherTimer timer;
         DateTime lastUpdateTime;
         bool stopped = true;
 
         Type[] Calculators;
+        PhysicsWrapper wrapper = new PhysicsWrapper();
 
-        public ModifiedSimulation()
+        public BasicSimulation()
         {
             timer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
             InitializeComponent();
@@ -68,14 +67,21 @@ namespace BallOnTiltablePlate.TimoSchmetzer
         {
             PhysicsCalculator Calc = this.GetSelectedCalculator();
             if(Calc!=null)
-            NewSimulation.RunSimulation(Calc, this, deltaSeconds);
+            wrapper.RunSimulation(Calc, this, deltaSeconds);
         }
         public PhysicsCalculator GetSelectedCalculator()
         {
             TreeViewItem t = (TreeViewItem)PhysicsCalculatorList.SelectedItem;
-            String s = (String)t.Header;
-            int i = (int)Int32.Parse(s.Substring(0,s.IndexOf(':')));
-            return (PhysicsCalculator)Activator.CreateInstance(Calculators[i]);
+            if (t != null)
+            {
+                String s = (String)t.Header;
+                int i = (int)Int32.Parse(s.Substring(0, s.IndexOf(':')));
+                return (PhysicsCalculator)Activator.CreateInstance(Calculators[i]);
+            }
+            else
+            {
+                return null; //No Calculator Selected 
+            }
         }
 
         public void Start()
@@ -267,10 +273,5 @@ namespace BallOnTiltablePlate.TimoSchmetzer
             VelocityVecBox.Value = new Vector3D(0.0, 0.0, 0.0);
             AccelerationVecBox.Value = new Vector3D(0.0, 0.0, 0.0);
         }
-    }
-
-    public interface PhysicsCalculator
-    {
-        void CalcPhysics(BallOnTiltablePlate.TimoSchmetzer.Physics.PhysicsState state, double elapsedSeconds);
     }
 }

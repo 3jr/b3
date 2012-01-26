@@ -185,21 +185,20 @@
       <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Experimental\SampleCalcTwo.cs" />
-    <Compile Include="TimoSchmetzer\Experimental\ModifiedSimulation.xaml.cs">
-      <DependentUpon>ModifiedSimulation.xaml</DependentUpon>
+    <Compile Include="TimoSchmetzer\Simulation\BasicSimulation.xaml.cs">
+      <DependentUpon>BasicSimulation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Experimental\NewSimulation.cs" />
+    <Compile Include="TimoSchmetzer\Simulation\PhysicsWrapper.cs" />
     <Compile Include="TimoSchmetzer\Experimental\SampleCalc.cs" />
     <Compile Include="TimoSchmetzer\General\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\Physics3D\PhysicSimulation3D.cs" />
-    <Compile Include="TimoSchmetzer\PhysicsInAir\PhysicsInAir.cs" />
+    <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsInAir.cs" />
     <Compile Include="TimoSchmetzer\PhysicsInAir\PhysicSimulationInAir.cs" />
     <Compile Include="TimoSchmetzer\PhysicsOnPlate\PhysicSimulationOnPlate.cs" />
-    <Compile Include="TimoSchmetzer\PhysicsOnPlate\PhysicsOnPlate.cs" />
-    <Compile Include="TimoSchmetzer\General\PhysicsState.cs" />
-    <Compile Include="TimoSchmetzer\General\Test.cs" />
+    <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsOnPlate.cs" />
+    <Compile Include="TimoSchmetzer\Test.cs" />
     <Compile Include="TimoSchmetzer\General\PhysicUtilities.cs" />
-    <Compile Include="TimoSchmetzer\Physics3D\Physics3D.cs" />
+    <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\Physics3D.cs" />
     <Compile Include="JanRapp\General\Utilities\VectorUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\WindowCustomizer.cs" />
     <Compile Include="TimoSchmetzer\Preprocessor\Preprocessor.xaml.cs">
@@ -208,6 +207,7 @@
     <Compile Include="TimoSchmetzer\Preprocessor\SimulationTestPreprocessor.xaml.cs">
       <DependentUpon>SimulationTestPreprocessor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Simulation\SimulationInterfaces.cs" />
     <Compile Include="TimoSchmetzer\TestAlgorithm\TestAlgorithm.xaml.cs">
       <DependentUpon>TestAlgorithm.xaml</DependentUpon>
     </Compile>
@@ -306,7 +306,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TimoSchmetzer\Experimental\ModifiedSimulation.xaml">
+    <Page Include="TimoSchmetzer\Simulation\BasicSimulation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

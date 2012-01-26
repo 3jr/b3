@@ -7,15 +7,16 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using BallOnTiltablePlate.JanRapp.Utilities;
 using BallOnTiltablePlate.JanRapp.Simulation;
 using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 
-namespace BallOnTiltablePlate.TimoSchmetzer.Physics
+namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
 {
     /// <summary>
-    /// Class, that does Physics cacultations assuming Ball is always on Plate.
+    /// Class, that does Physics cacultations.
     /// </summary>
-    public class PhysicsOnPlate
+    public class PhysicsInAir : PhysicsCalculator
     {
         /// <summary>
         /// Calculates the New State of the Ball given by the current IPhysicsState.
@@ -23,7 +24,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// <param name="current">Current Physics State</param>
         /// <param name="elapsedSeconds">Seconds to elapse</param>
         /// <returns>State after elapsedSeconds</returns>
-        public static void CalcPhysics(PhysicsState state, double elapsedSeconds)
+        public void CalcPhysics(PhysicsState state, double elapsedSeconds)
         {
             #region stuff
             //Sinnlose aufrufe vermeiden
@@ -37,10 +38,32 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #endregion
 
             #region CalcMovement
-                state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));
-                state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
-                Utilities.Physics.CalcMovement(state, elapsedSeconds);
-                state.Position.Z = Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt));
+            //Beschleunigung zur Hit-Berechnug setzen
+            state.Acceleration = G;
+            double nextHit = Utilities.Physics.CalcNextHit(state);
+
+            if (nextHit > elapsedSeconds)
+            {
+                    // Hit nicht mehr in diesem Update.
+                    Utilities.Physics.CalcMovement(state, elapsedSeconds);
+            }
+            else
+            {
+                if (Mathematics.IsDownPlate(state.Position, Mathematics.CalcNormalVector(state.Tilt)))
+                {
+                    //Bereits reflektiert, wergen Rundungsfehlern unter der Platte
+                    Utilities.Physics.CalcMovement(state, elapsedSeconds);
+                }
+                else
+                {
+                    //Hit in diesem Update.
+                    Utilities.Physics.CalcMovement(state, nextHit);
+                    state = Utilities.Physics.Reflect(state);
+                    CalcPhysics(state, elapsedSeconds - nextHit);
+                }
+            }
+
+
             #endregion
 
             #region Debugout
@@ -50,7 +73,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             //    + state.Acceleration.X + "\t" + state.Acceleration.Y + "\t" + state.Acceleration.Z + "\t" + bs
             //    + "\t" + BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.AngleBetwennVectors(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.CalcNormalVector(state.Tilt), state.Velocity)
             //    + "\t" + elapsedSeconds + "\t" + state.Tilt.X + "\t" + state.Tilt.Y + "\t" + state.PlateVelocity.X
-            //     + "\t" + state.PlateVelocity.Y + "\t" + Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
+            //     + "\t" + state.PlateVelocity.Y + "\t" + (state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
             #endregion
         }
     }

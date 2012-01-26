@@ -10,12 +10,12 @@ using System.Windows.Media.Media3D;
 using BallOnTiltablePlate.JanRapp.Simulation;
 using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 
-namespace BallOnTiltablePlate.TimoSchmetzer.Physics
+namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
 {
     /// <summary>
     /// Class, that does Physics cacultations.
     /// </summary>
-    public class Physics3D
+    public class Physics3D : PhysicsCalculator
     {
         /// <summary>
         /// Calculates the New State of the Ball given by the current IPhysicsState.
@@ -23,7 +23,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
         /// <param name="current">Current Physics State</param>
         /// <param name="elapsedSeconds">Seconds to elapse</param>
         /// <returns>State after elapsedSeconds</returns>
-        public static void CalcPhysics(PhysicsState state, double elapsedSeconds)
+        public void CalcPhysics(PhysicsState state, double elapsedSeconds)
         {
             #region stuff
             //Sinnlose aufrufe vermeiden
@@ -58,7 +58,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Physics
             #region CalcMovement
             if (bs == BallState.RollOnPlate)
             {
-                state.Acceleration = Utilities.Physics.HangabtriebskraftBerechnen(state.Gravity, state.Tilt);
+                state.Acceleration = Utilities.Physics.HangabtriebsbeschleunigungBerechnen(state.Gravity, state.Tilt);
                 #region CalcPseudoConstainingForce
                 {
                     if (Utilities.Mathematics.IsDownPlate(state.Position,Utilities.Mathematics.CalcNormalVector(state.Tilt)))
