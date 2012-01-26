@@ -184,6 +184,12 @@
     <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
       <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Experimental\SampleCalcTwo.cs" />
+    <Compile Include="TimoSchmetzer\Experimental\ModifiedSimulation.xaml.cs">
+      <DependentUpon>ModifiedSimulation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TimoSchmetzer\Experimental\NewSimulation.cs" />
+    <Compile Include="TimoSchmetzer\Experimental\SampleCalc.cs" />
     <Compile Include="TimoSchmetzer\General\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\Physics3D\PhysicSimulation3D.cs" />
     <Compile Include="TimoSchmetzer\PhysicsInAir\PhysicsInAir.cs" />
@@ -299,6 +305,10 @@
     <Page Include="MoritzUehling\UI\KinectSettingsWindows.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TimoSchmetzer\Experimental\ModifiedSimulation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TimoSchmetzer\Preprocessor\Preprocessor.xaml">
       <SubType>Designer</SubType>

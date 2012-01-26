@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.TimoSchmetzer.ModifiedSimulation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="557" d:DesignWidth="613">
+    <UserControl.Resources>
+		<RoutedCommand x:Key="ToogleRunningCmd">
+			<RoutedCommand.InputGestures>
+				<KeyGesture>Control+P</KeyGesture>
+			</RoutedCommand.InputGestures>
+		</RoutedCommand>
+        <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource DoubleBoxBaseStyle}">
+            <Setter Property="SmallChange" Value="0.001"/>
+            <Setter Property="RegularChange" Value="0.01"/>
+            <Setter Property="LargeChange" Value="0.1"/>
+            <Setter Property="Value" Value="0.00"/>
+        </Style>
+        <Style TargetType="controls:Vector2DControl" BasedOn="{StaticResource Vector2DControlBaseStyle}">
+            <Setter Property="SmallChange" Value="0.001"/>
+            <Setter Property="RegularChange" Value="0.01"/>
+            <Setter Property="LargeChange" Value="0.1"/>
+            <Setter Property="Value" Value="0,0"/>
+        </Style>
+        <Style TargetType="controls:Vector3DControl" BasedOn="{StaticResource Vector3DControlBaseStyle}">
+            <Setter Property="SmallChange" Value="0.001"/>
+            <Setter Property="RegularChange" Value="0.01"/>
+            <Setter Property="LargeChange" Value="0.1"/>
+            <Setter Property="Value" Value="0,0,0"/>
+        </Style>
+        <Style TargetType="controls:RectBox" BasedOn="{StaticResource RectBoxBaseStyle}">
+            <Setter Property="SmallChange" Value="0.001"/>
+            <Setter Property="RegularChange" Value="0.01"/>
+            <Setter Property="LargeChange" Value="0.1"/>
+            <Setter Property="Value" Value="0,0,0,0"/>
+        </Style>
+    </UserControl.Resources>
+	<UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ToogleRunningCmd}" Executed="ToogleRunningCmd_Executed" CanExecute="ToogleRunningCmd_CanExecute"/>
+	</UserControl.CommandBindings>
+    <WrapPanel Orientation="Vertical">
+		<controls:Visualizer3D Height="300" Width="300" x:Name="Visualizer3DCtrl" Margin="8"/>
+		<Grid x:Name="C1">
+            <Button Command="{StaticResource ToogleRunningCmd}" x:Name="ToogelRunningBtn" Content="Play" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+P"/>
+			<Label x:Name="FpsLbl" Content="_FPS:" Margin="56.786,8,0,8" HorizontalAlignment="Left" Target="{Binding ElementName=FpsSlider}" d:LayoutOverrides="Height"/>
+			<Slider x:Name="FpsSlider" Margin="94,8,8,8" d:LayoutOverrides="Height" MinWidth="140" Minimum=".1" Maximum="60" LargeChange="5" SmallChange="1" ValueChanged="FpsSlider_ValueChanged" AutoToolTipPlacement="BottomRight" Value="20"/>
+		</Grid>
+        <Expander Header="Varia_bles" Margin="8">
+            <StackPanel>
+                <Label Content="_Tilt:" Target="{Binding ElementName=TiltVecBox}"/>
+                <controls:Vector2DControl
+                    x:Name="TiltVecBox" ValueChanged="TiltVecBox_ValueChanged" Margin="0,2,0,0"
+                    SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                    />
+                <Label Content="_DesiredTilt:" Target="{Binding ElementName=DesiredTiltVecBox}"/>
+                <controls:Vector2DControl
+                    x:Name="DesiredTiltVecBox" Margin="0,2,0,0"
+                    SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                    />
+                <Label Content="_Position:" Target="{Binding ElementName=PositionVecBox}"/>
+                <controls:Vector3DControl x:Name="PositionVecBox" ValueChanged="PositionVecBox_ValueChanged" Margin="0,2,0,0" />
+                <Label Content="_Velocity:" Target="{Binding ElementName=VelocityVecBox}"/>
+                <controls:Vector3DControl x:Name="VelocityVecBox" Margin="0,2,0,0"/>
+                <Label Content="_Acceleration:" Target="{Binding ElementName=AccelerationVecBox}"/>
+                <controls:Vector3DControl x:Name="AccelerationVecBox" Margin="0,2,0,0"/>
+            </StackPanel>
+        </Expander>
+        <Expander Header="_Constants" Margin="8" >
+            <StackPanel Margin="8">
+        		<controls:DoubleBox x:Name="GravityDoubleBox" Text="_Gravity:" HorizontalAlignment="Right" Value="-9.81" Margin="0" SmallChange=".1" LargeChange="1"/>
+        		<controls:DoubleBox x:Name="HitAttenuationFactorDoubleBox" Text="Attenuation Factor at _Hit:" HorizontalAlignment="Right" Value="0.8" Margin="0,2,0,0"/>
+        		<controls:DoubleBox x:Name="AbsoluteHitAttenuationDoubleBox" Text="Ab_solute Attenuation at Hit:" HorizontalAlignment="Right" Value="1" Margin="0,2,0,0"/>
+                <controls:DoubleBox x:Name="PlateVelocityDoubleBox" Text="P_late Velocity:" HorizontalAlignment="Right" Value="0.08725" Margin="0,2,0,0"/>
+        	</StackPanel>
+        </Expander>
+        <controls:SettingSaver/>
+        <TreeView x:Name="PhysicsCalculatorList"
+                  Margin="7,0">
+            
+        </TreeView>
+    </WrapPanel>
+</UserControl>
