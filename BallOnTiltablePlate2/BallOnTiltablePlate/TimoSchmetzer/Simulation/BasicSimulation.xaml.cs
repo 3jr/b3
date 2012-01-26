@@ -130,7 +130,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 e.CanExecute = true;
         }
 
-        #region IPhysicsState
+        #region SimulationState
 
         public Vector PlateVelocity
         {
