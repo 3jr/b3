@@ -14,6 +14,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
 {
     /// <summary>
     /// Class, that does Physics cacultations.
+    /// Author: Timo Schmetzer
+    /// Version 0.1
     /// </summary>
     public class Physics3D : PhysicsCalculator
     {

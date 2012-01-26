@@ -184,20 +184,15 @@
     <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
       <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Experimental\SampleCalcTwo.cs" />
     <Compile Include="TimoSchmetzer\Simulation\BasicSimulation.xaml.cs">
       <DependentUpon>BasicSimulation.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Simulation\PhysicsWrapper.cs" />
-    <Compile Include="TimoSchmetzer\Experimental\SampleCalc.cs" />
-    <Compile Include="TimoSchmetzer\General\MathematicalUtilities.cs" />
-    <Compile Include="TimoSchmetzer\Physics3D\PhysicSimulation3D.cs" />
+    <Compile Include="TimoSchmetzer\Utilities\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsInAir.cs" />
-    <Compile Include="TimoSchmetzer\PhysicsInAir\PhysicSimulationInAir.cs" />
-    <Compile Include="TimoSchmetzer\PhysicsOnPlate\PhysicSimulationOnPlate.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsOnPlate.cs" />
     <Compile Include="TimoSchmetzer\Test.cs" />
-    <Compile Include="TimoSchmetzer\General\PhysicUtilities.cs" />
+    <Compile Include="TimoSchmetzer\Utilities\PhysicUtilities.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\Physics3D.cs" />
     <Compile Include="JanRapp\General\Utilities\VectorUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\WindowCustomizer.cs" />

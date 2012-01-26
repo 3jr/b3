@@ -14,7 +14,9 @@ using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
 {
     /// <summary>
-    /// Class, that does Physics cacultations.
+    /// Class, that does Physics cacultations, assuming Ball is always in Air.
+    /// Author: Timo Schmetzer
+    /// Version 0.1
     /// </summary>
     public class PhysicsInAir : PhysicsCalculator
     {

@@ -14,6 +14,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
 {
     /// <summary>
     /// Class, that does Physics cacultations assuming Ball is always on Plate.
+    /// Author: Timo Schmetzer
+    /// Version 0.1
     /// </summary>
     public class PhysicsOnPlate : PhysicsCalculator
     {
