@@ -20,7 +20,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// </summary>
         /// <param name="state">The state for which to calc</param>
         /// <returns>See summary.</returns>
-        public static bool WouldHit(PhysicsState state) 
+        public static bool WouldHit(IPhysicsState state) 
         {  
             Vector3D n = Mathematics.CalcNormalVector(state.Tilt);
             double angle = Mathematics.AngleBetwennVectors(n, state.Velocity);
@@ -34,7 +34,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// </summary>
         /// <param name="state">The state for which to calc</param>
         /// <returns>Reflected State</returns>
-        public static PhysicsState Reflect(PhysicsState state)
+        public static IPhysicsState Reflect(IPhysicsState state)
         {
             //Geschwindigkeit an Ebene der Platte Spiegln
             state.Velocity = Mathematics.Householdertransformation(state.Velocity, Mathematics.CalcNormalVector(state.Tilt));
@@ -63,7 +63,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// </summary>
         /// <param name="state">The state for which to calc</param>
         /// <returns>naechsten Zeitpunkt des Auftreffens. findet sich keine, double.PositiveInfinity</returns>
-        public static double CalcNextHit(PhysicsState state)
+        public static double CalcNextHit(IPhysicsState state)
         {
             double[] solutions = Physics.CalcNextHitRawSolution(state);
             //too high accuracy
@@ -114,7 +114,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// </summary>
         /// <param name="state">The state for which to calc</param>
         /// <returns>Raw Solution</returns>
-        public static double[] CalcNextHitRawSolution(PhysicsState state)
+        public static double[] CalcNextHitRawSolution(IPhysicsState state)
         {
             Vector3D Normal = Mathematics.CalcNormalVector(state.Tilt);
             double a = 0.5 * state.Acceleration.X * Normal.X + 0.5 * state.Acceleration.Y * Normal.Y + 0.5 * state.Acceleration.Z * Normal.Z;
@@ -158,7 +158,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <summary>
         /// Calculates Movement using s = 0.5att + v0t + s0, v= ...
         /// </summary>
-        public static void CalcMovement(PhysicsState state, double ElapsedSeconds)
+        public static void CalcMovement(IPhysicsState state, double ElapsedSeconds)
         {
             //Bewegungsgleichung
             state.Position += state.Velocity * ElapsedSeconds + 0.5 * state.Acceleration * ElapsedSeconds * ElapsedSeconds;

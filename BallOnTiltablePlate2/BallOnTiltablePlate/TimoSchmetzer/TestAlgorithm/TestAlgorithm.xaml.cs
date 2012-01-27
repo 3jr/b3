@@ -127,7 +127,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.TestAlgorithm
         {
             ValueSavePhyicsState inputs = s.Clone();
             Simulation.PhysicsWrapper wrapper = new PhysicsWrapper();
-            PhysicsCalculator calculator = (PhysicsCalculator)(new Simulation.PhysicsCalculators.PhysicsOnPlate());
+            IPhysicsCalculator calculator = (IPhysicsCalculator)(new Simulation.PhysicsCalculators.PhysicsOnPlate());
             wrapper.RunSimulation(calculator, inputs, 1.0);
             return new double[] { ((Vector3D)inputs.Position).Length, ((Vector3D)inputs.Velocity).Length };
         }

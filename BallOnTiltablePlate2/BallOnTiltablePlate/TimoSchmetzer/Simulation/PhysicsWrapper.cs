@@ -10,7 +10,7 @@ using System.Windows.Media.Media3D;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 {
-    public class PhysicsWrapper : PhysicsState
+    public class PhysicsWrapper : IPhysicsState
     {
         #region PhysicsState
 
@@ -116,7 +116,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         /// <param name="Calculator">Physics Calculator to use for Calculations</param>
         /// <param name="Istate"></param>
         /// <param name="elapsedSeconds"></param>
-        public void RunSimulation(PhysicsCalculator Calculator, SimulationState Istate, double elapsedSeconds)
+        public void RunSimulation(IPhysicsCalculator Calculator, ISimulationState Istate, double elapsedSeconds)
         {
             #region calccalltimes
             double tcallx = (Istate.DesiredTilt.X - Istate.Tilt.X) / (Istate.PlateVelocity.X);

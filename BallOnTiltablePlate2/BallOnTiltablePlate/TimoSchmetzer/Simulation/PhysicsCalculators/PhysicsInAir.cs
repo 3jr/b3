@@ -18,7 +18,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
     /// Author: Timo Schmetzer
     /// Version 0.1
     /// </summary>
-    public class PhysicsInAir : PhysicsCalculator
+    public class PhysicsInAir : IPhysicsCalculator
     {
         /// <summary>
         /// Calculates the New State of the Ball given by the current IPhysicsState.
@@ -26,7 +26,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
         /// <param name="current">Current Physics State</param>
         /// <param name="elapsedSeconds">Seconds to elapse</param>
         /// <returns>State after elapsedSeconds</returns>
-        public void CalcPhysics(PhysicsState state, double elapsedSeconds)
+        public void CalcPhysics(IPhysicsState state, double elapsedSeconds)
         {
             #region stuff
             //Sinnlose aufrufe vermeiden

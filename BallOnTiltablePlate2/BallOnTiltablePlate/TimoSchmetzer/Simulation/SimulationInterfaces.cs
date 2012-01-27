@@ -7,7 +7,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
     /// Interface used for Interaction with the User.
     /// Contains Desired Quantities an Constats rather than real quantities.
     /// </summary>
-    public interface SimulationState
+    public interface ISimulationState
     {
         #region Constats
         /// <summary>
@@ -71,7 +71,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
     /// Represents a physical state of the plate.
     /// Contains real quantities, not maximum Values or Controll variables.
     /// </summary>
-    public interface PhysicsState
+    public interface IPhysicsState
     {
         #region Constats
         /// <summary>
@@ -130,13 +130,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
     /// <summary>
     /// Implementions do calc Physical state after elapedSeconds.
     /// </summary>
-    public interface PhysicsCalculator
+    public interface IPhysicsCalculator
     {
         /// <summary>
         /// Method, that does the Physical Calculations
         /// </summary>
         /// <param name="state">Physical State</param>
         /// <param name="elapsedSeconds">Time to Elapse for which to calc.</param>
-        void CalcPhysics(PhysicsState state, double elapsedSeconds);
+        void CalcPhysics(IPhysicsState state, double elapsedSeconds);
     }
 }

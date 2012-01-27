@@ -68,7 +68,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
             set { Output.SetTilt(value); }
         }
     }
-    public class ValueSavePhyicsState : Simulation.SimulationState
+    public class ValueSavePhyicsState : Simulation.ISimulationState
     {
         private Vector _PlateVelocity;
         public Vector PlateVelocity

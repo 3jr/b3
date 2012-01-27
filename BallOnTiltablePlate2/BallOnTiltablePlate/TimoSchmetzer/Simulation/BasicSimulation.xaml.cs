@@ -22,7 +22,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
     /// Interaction logic for Simulation3D.xaml
     /// </summary>
     [BallOnPlateItemInfo("Timo", "Schmetzer", "BasicSimulation", "0.1")]
-    public partial class BasicSimulation : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, SimulationState
+    public partial class BasicSimulation : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, ISimulationState
     {
         DispatcherTimer timer;
         DateTime lastUpdateTime;
@@ -38,7 +38,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
             timer.Tick += new EventHandler(timer_Tick);
             Calculators = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsClass && typeof(PhysicsCalculator).IsAssignableFrom(t))
+                .Where(t => t.IsClass && typeof(IPhysicsCalculator).IsAssignableFrom(t))
                 .Select(t => t)
                 .ToArray();
             TreeViewItem[] elem = new TreeViewItem[Calculators.Length];
@@ -65,18 +65,18 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         public void Update(double deltaSeconds)
         {
-            PhysicsCalculator Calc = this.GetSelectedCalculator();
+            IPhysicsCalculator Calc = this.GetSelectedCalculator();
             if(Calc!=null)
             wrapper.RunSimulation(Calc, this, deltaSeconds);
         }
-        public PhysicsCalculator GetSelectedCalculator()
+        public IPhysicsCalculator GetSelectedCalculator()
         {
             TreeViewItem t = (TreeViewItem)PhysicsCalculatorList.SelectedItem;
             if (t != null)
             {
                 String s = (String)t.Header;
                 int i = (int)Int32.Parse(s.Substring(0, s.IndexOf(':')));
-                return (PhysicsCalculator)Activator.CreateInstance(Calculators[i]);
+                return (IPhysicsCalculator)Activator.CreateInstance(Calculators[i]);
             }
             else
             {
