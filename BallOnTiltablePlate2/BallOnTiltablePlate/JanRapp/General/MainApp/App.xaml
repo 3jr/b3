@@ -2,35 +2,67 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
+             xmlns:JRappWPF="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
              StartupUri="/BallOnTiltablePlate2;component/JanRapp/General/MainApp/MainWindow.xaml">
     <Application.Resources>
-        <Style TargetType="controls:DoubleBox" x:Key="DoubleBoxBaseStyle">
-            <Setter Property="controls:SettingSaver.PropertysToSave" 
-                    Value="Value"/>
-        </Style>
-        <Style TargetType="controls:Vector2DControl" x:Key="Vector2DControlBaseStyle">
-            <Setter Property="controls:SettingSaver.PropertysToSave" 
-                    Value="Value"/>
-        </Style>
-        <Style TargetType="controls:Vector3DControl" x:Key="Vector3DControlBaseStyle">
-            <Setter Property="controls:SettingSaver.PropertysToSave" 
-                    Value="Value"/>
-        </Style>
-        <Style TargetType="controls:RectBox" x:Key="RectBoxBaseStyle">
-            <Setter Property="controls:SettingSaver.PropertysToSave" 
-                    Value="Value"/>
-        </Style>
-        <Style TargetType="CheckBox" x:Key="CheckBoxBaseStyle">
-            <Setter Property="controls:SettingSaver.PropertysToSave"    
-                    Value="IsChecked"/>
-        </Style>
-        <Style TargetType="controls:RectangleSelector" x:Key="RectangleSelectorBaseStyle">
-            <Setter Property="controls:SettingSaver.PropertysToSave"
-                    Value="Value"/>
-        </Style>
-        <Style TargetType="controls:PointSelector" x:Key="PointSelectorBaseStyle">
-            <Setter Property="controls:SettingSaver.PropertysToSave"
-                    Value="Value"/>
-        </Style>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type JRappWPF:DoubleBox}">
+                <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave" 
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type JRappWPF:VectorBox}">
+                <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave" 
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type JRappWPF:Vector3DBox}">
+                <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave" 
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type JRappWPF:RectBox}">
+                <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave" 
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type JRappWPF:RectangleSelector}">
+                <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave"
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type JRappWPF:PointSelector}">
+                <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave"
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type CheckBox}">
+                <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave"    
+    				Value="IsChecked"/>
+                <!--Old SettingSaver-->
+                <Setter Property="controls:SettingSaver.PropertysToSave"    
+    				Value="IsChecked"/>
+            </Style>
+
+            <!--Old SettingSaver-->
+            <Style TargetType="{x:Type controls:DoubleBox}">
+                <Setter Property="controls:SettingSaver.PropertysToSave" 
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type controls:Vector2DControl}">
+                <Setter Property="controls:SettingSaver.PropertysToSave" 
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type controls:Vector3DControl}">
+                <Setter Property="controls:SettingSaver.PropertysToSave" 
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type controls:RectBox}">
+                <Setter Property="controls:SettingSaver.PropertysToSave" 
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type controls:RectangleSelector}">
+                <Setter Property="controls:SettingSaver.PropertysToSave"
+    				Value="Value"/>
+            </Style>
+            <Style TargetType="{x:Type controls:PointSelector}">
+                <Setter Property="controls:SettingSaver.PropertysToSave"
+    				Value="Value"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

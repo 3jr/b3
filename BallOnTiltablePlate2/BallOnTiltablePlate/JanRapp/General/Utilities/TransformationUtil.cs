@@ -167,8 +167,8 @@ namespace BallOnTiltablePlate.JanRapp.Utilities
         public static Vector PerspectiveProjection(Vector3D point, double cameraConstant)
         {
             return new Vector(
-               cameraConstant * point.Z / point.X,
-               cameraConstant * point.Z / point.Y);
+               cameraConstant * point.X / point.Z,
+               cameraConstant * point.Y / point.Z);
         }
 
         public static Vector[] PerspectiveProjection(Vector3D[] points, double cameraConstant)

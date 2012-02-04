@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using System.IO.Ports;
 using BallOnTiltablePlate.JanRapp.Utilities;
 
-namespace BallOnTiltablePlate.JanRapp.Output
+namespace BallOnTiltablePlate.JanRapp.Output.Output1
 {
     /// <summary>
     /// Interaction logic for BasicPlateOutput.xaml

@@ -6,11 +6,11 @@
         Width="393"
         Height="336">
     <Grid>
-        <my:DoubleBox x:Name="Plate_Size"
+        <my:DoubleBox x:Name="HalfPlateSize"
                       Height="24"
                       Margin="12,12,0,0"
                       VerticalAlignment="Top"
-                      Text="Width and Length of Plate (in Meters): "
+                      Text="Half Width and Length of the _Plate (in Meters): "
                       Minimum=".01"
                       LargeChange=".5"
                       RegularChange=".1"
@@ -43,6 +43,16 @@
                       RegularChange="2"
                       SmallChange=".1"
                       Value="{Binding Path=FPSOfAlgorithm, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}, Mode=TwoWay}"
+                      />
+        <my:DoubleBox
+                      Text="Maximum Tilt the Plate may has to an Axis: "
+                      Margin="12,88,0,0"
+                      VerticalAlignment="Top"
+                      Minimum=".0001"
+                      LargeChange="10"
+                      RegularChange="2"
+                      SmallChange=".1"
+                      Value="{Binding Path=MaxTilt, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}, Mode=TwoWay}"
                       />
     </Grid>
 </UserControl>

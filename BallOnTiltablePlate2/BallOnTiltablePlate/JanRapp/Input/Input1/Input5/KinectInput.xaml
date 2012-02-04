@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Input0_5.KinectInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             >
+    <UserControl.Resources>
+        <Style TargetType="Image">
+            <Setter Property="Width" Value="300"/>
+            <EventSetter Event="PreviewMouseMove" Handler="Image_MouseMove"/>
+        </Style>
+        <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource {x:Type controls:DoubleBox}}">
+        </Style>
+        <Style TargetType="controls:PointSelector" BasedOn="{StaticResource {x:Type controls:PointSelector}}">
+        </Style>
+        <Style TargetType="controls:RectangleSelector" BasedOn="{StaticResource {x:Type controls:RectangleSelector}}">
+        </Style>
+    </UserControl.Resources>
+    <WrapPanel Orientation="Vertical">
+        <controls:DoubleBox x:Name="ToleranceDoubelBox" Text="_Tolerance of Height Anormalities: " Value="10.0"/>
+        <controls:DoubleBox x:Name="MinHeightAnormalities" Text="Height Anormalities Thre_shold: " Value="15.0" SmallChange="1" RegularChange="1"/>
+        <controls:SettingSaver/>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Area for Average:</TextBlock>
+            <controls:RectBox x:Name="ClipBox" Value="0.33125,0.2979177,0.3609375,0.4333323"/>
+        </StackPanel>
+        <Expander Header="_Overall Image">
+             <Grid Width="640" Height="480">
+                <Image x:Name="OverAllImage" Width="640" Height="480"/>
+                <controls:PointSelector x:Name="BallSelector" SelectionBrush="Red" IsEnabled="False"/>
+                <controls:RectangleSelector x:Name="ClipSelector" SelectionBrush="#FF6695EB" Value="{Binding Value, ElementName=ClipBox, Mode=TwoWay}"/>
+                <!--<controls:PointSelector x:Name="MiddleSelector" SelectionBrush="Red" Value="320,240"/>-->
+            </Grid>
+        </Expander>
+        <Expander Header="_Depth">
+            <Image x:Name="DepthImage"/>
+        </Expander>
+        <Expander Header="_Delta">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <TextBlock> Horizontal:</TextBlock>
+                    <Image x:Name="DeltaXImage"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock>Vertical:</TextBlock>
+                    <Image x:Name="DeltaYImage"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+        <Expander Header="_Anormalities">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <TextBlock> Horizontal:</TextBlock>
+                    <Image x:Name="AnormalitiesXImage"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock>Vertical:</TextBlock>
+                    <Image x:Name="AnormalitiesYImage"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+        <Expander Header="_Hight Anormalities">
+            <Grid>
+                <Image x:Name="HeightAnormalitiesImage" Stretch="None"/>
+                <controls:PointSelector x:Name="BallSelector2" SelectionBrush="Red" 
+                                        IsEnabled="False"
+                                        Height="{Binding ActualHeight, ElementName=HeightAnormalitiesImage}"
+                                        Width="{Binding ActualWidth, ElementName=HeightAnormalitiesImage}"/>
+            </Grid>
+        </Expander>
+        
+        <TextBlock>Ball Position:</TextBlock>
+        <TextBox IsEnabled="False" x:Name="BallPositionTextBox"/>
+        <TextBlock>Average Actual Tilt:</TextBlock>
+        <TextBox IsEnabled="False" x:Name="AverageTextBox"/>
+        <TextBlock>Clip:</TextBlock>
+        <TextBox IsEnabled="False" x:Name="ClipTextBox"/>
+        <TextBlock>Hovering Color:</TextBlock>
+        <TextBox IsEnabled="False" x:Name="HoveringColorTextBox"/>
+    </WrapPanel>
+</UserControl>

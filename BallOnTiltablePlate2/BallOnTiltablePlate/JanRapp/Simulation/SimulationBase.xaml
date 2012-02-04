@@ -12,25 +12,25 @@
 				<KeyGesture>Control+P</KeyGesture>
 			</RoutedCommand.InputGestures>
 		</RoutedCommand>
-        <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource DoubleBoxBaseStyle}">
+        <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource {x:Type controls:DoubleBox}}">
             <Setter Property="SmallChange" Value="0.001"/>
             <Setter Property="RegularChange" Value="0.01"/>
             <Setter Property="LargeChange" Value="0.1"/>
             <Setter Property="Value" Value="0.00"/>
         </Style>
-        <Style TargetType="controls:Vector2DControl" BasedOn="{StaticResource Vector2DControlBaseStyle}">
+        <Style TargetType="controls:Vector2DControl" BasedOn="{StaticResource {x:Type controls:Vector2DControl}}">
             <Setter Property="SmallChange" Value="0.001"/>
             <Setter Property="RegularChange" Value="0.01"/>
             <Setter Property="LargeChange" Value="0.1"/>
             <Setter Property="Value" Value="0,0"/>
         </Style>
-        <Style TargetType="controls:Vector3DControl" BasedOn="{StaticResource Vector3DControlBaseStyle}">
+        <Style TargetType="controls:Vector3DControl" BasedOn="{StaticResource {x:Type controls:Vector3DControl}}">
             <Setter Property="SmallChange" Value="0.001"/>
             <Setter Property="RegularChange" Value="0.01"/>
             <Setter Property="LargeChange" Value="0.1"/>
             <Setter Property="Value" Value="0,0,0"/>
         </Style>
-        <Style TargetType="controls:RectBox" BasedOn="{StaticResource RectBoxBaseStyle}">
+        <Style TargetType="controls:RectBox" BasedOn="{StaticResource {x:Type controls:RectBox}}">
             <Setter Property="SmallChange" Value="0.001"/>
             <Setter Property="RegularChange" Value="0.01"/>
             <Setter Property="LargeChange" Value="0.1"/>

@@ -29,8 +29,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             this.instance = new Lazy<IBallOnPlateItem>(
                 delegate
                 {
-                    var createdInstance = (IBallOnPlateItem)Activator.CreateInstance(type); 
                     AllInitializedBPItemsList.Add(this); 
+                    var createdInstance = (IBallOnPlateItem)Activator.CreateInstance(type); 
                     return createdInstance;
                 }
             );

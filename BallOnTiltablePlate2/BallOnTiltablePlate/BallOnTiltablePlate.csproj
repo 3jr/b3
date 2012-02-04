@@ -63,6 +63,14 @@
     <Reference Include="Emgu.CV.OCR, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
     <Reference Include="Emgu.CV.UI, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
     <Reference Include="Emgu.Util, Version=2.3.0.1416, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
+    <Reference Include="JRapp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\JRapp.dll</HintPath>
+    </Reference>
+    <Reference Include="JRapp.WPF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\JRapp.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Desktop\C4FCKinect\Microsoft.Expression.Drawing.dll</HintPath>
@@ -94,19 +102,27 @@
     <Compile Include="JanRapp\General\Controls\PointSelector.xaml.cs">
       <DependentUpon>PointSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\General\Controls\SettingsSaver2.xaml.cs">
+      <DependentUpon>SettingsSaver2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\General\Controls\vector setter\RectBox.xaml.cs">
       <DependentUpon>RectBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\General\Utilities\ConvertUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\NumberUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TiltUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TransformationUtil.cs" />
-    <Compile Include="JanRapp\Input\Input1.0\BallPositionFast.cs" />
-    <Compile Include="JanRapp\Input\ImageProcessing.cs" />
-    <Compile Include="JanRapp\Input\Input1.0\ImageProcessing.cs" />
-    <Compile Include="JanRapp\Input\Input1.0\KinectInput.xaml.cs">
+    <Compile Include="JanRapp\Input\Input1\Input5\BallPositionFast.cs" />
+    <Compile Include="JanRapp\Input\Input1\ImageProcessing.cs" />
+    <Compile Include="JanRapp\Input\Input1\Input5\ImageProcessing.cs" />
+    <Compile Include="JanRapp\Input\Input1\Input5\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Input\KinectInput.xaml.cs">
+    <Compile Include="JanRapp\Input\Input2\ImageProcessing2.cs" />
+    <Compile Include="JanRapp\Input\Input2\KinectInput2.xaml.cs">
+      <DependentUpon>KinectInput2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Input\Input1\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces.cs" />
@@ -161,14 +177,16 @@
     <Compile Include="JanRapp\General\MainApp\Helper\TestPreprocessor3D.xaml.cs">
       <DependentUpon>TestPreprocessor3D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Output\BasicPlateOutput.xaml.cs">
+    <Compile Include="JanRapp\Output\Output1\BasicPlateOutput.xaml.cs">
+      <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Output\Output2\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Preprocessor\BasicPreprocessor.xaml.cs">
       <DependentUpon>BasicPreprocessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Simulation\SimulationInAir.cs" />
-    <Compile Include="JanRapp\Simulation\Simulation3D.cs" />
+    <Compile Include="JanRapp\SettingsSaverB3.cs" />
     <Compile Include="JanRapp\Simulation\SimulationBase.xaml.cs">
       <DependentUpon>SimulationBase.xaml</DependentUpon>
     </Compile>
@@ -209,13 +227,19 @@
     <Page Include="JanRapp\General\Controls\PointSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\General\Controls\SettingsSaver2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\General\Controls\vector setter\RectBox.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Input\Input1.0\KinectInput.xaml">
+    <Page Include="JanRapp\Input\Input1\Input5\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Input\KinectInput.xaml">
+    <Page Include="JanRapp\Input\Input2\KinectInput2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Input\Input1\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\General\Controls\RectangleSelector.xaml">
@@ -286,9 +310,13 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="JanRapp\Output\BasicPlateOutput.xaml">
+    <Page Include="JanRapp\Output\Output1\BasicPlateOutput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Output\Output2\BasicPlateOutput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="JanRapp\Preprocessor\BasicPreprocessor.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -379,6 +407,8 @@
   <ItemGroup>
     <Content Include="Resources\Coding4Fun.Kinect.WinForm.dll" />
     <Content Include="Resources\Coding4Fun.Kinect.Wpf.dll" />
+    <Content Include="Resources\JRapp.dll" />
+    <Content Include="Resources\JRapp.WPF.dll" />
     <Content Include="Resources\Microsoft.Research.Kinect.dll" />
     <Content Include="Resources\openCV\cudart32_40_17.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
