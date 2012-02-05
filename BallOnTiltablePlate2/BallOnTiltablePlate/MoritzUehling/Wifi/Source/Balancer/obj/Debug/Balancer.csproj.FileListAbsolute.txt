@@ -1,0 +1,13 @@
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\Bin\Debug\ApplicationIcon.png
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\Bin\Debug\Background.png
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\Bin\Debug\Balancer.dll
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\Bin\Debug\Balancer.pdb
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\Bin\Debug\AppManifest.xaml
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\Bin\Debug\Balancer.xap
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\obj\Debug\ResolveAssemblyReference.cache
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\obj\Debug\App.g.i.cs
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\obj\Debug\MainPage.g.i.cs
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\obj\Debug\Balancer.g.resources
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\obj\Debug\Balancer.dll
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\obj\Debug\Balancer.pdb
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Balancer\obj\Debug\XapCacheFile.xml

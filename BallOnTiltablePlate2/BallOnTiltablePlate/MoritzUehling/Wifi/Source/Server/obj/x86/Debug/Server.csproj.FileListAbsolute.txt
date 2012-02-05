@@ -1,0 +1,5 @@
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Server\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Server\bin\Debug\Server.pdb
+c:\users\moritz\documents\visual studio 2010\Projects\Balancer\Server\obj\x86\Debug\Server.pdb
+C:\Users\Moritz\documents\visual studio 2010\Projects\Balancer\Server\bin\Debug\Server.dll
+C:\Users\Moritz\documents\visual studio 2010\Projects\Balancer\Server\obj\x86\Debug\Server.dll
