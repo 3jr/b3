@@ -18,13 +18,14 @@ using System.Threading;
 using Coding4Fun.Kinect.Wpf;
 using BallOnTiltablePlate.JanRapp.General.Utilities;
 using BallOnTiltablePlate.JanRapp.Input;
+using BallOnTiltablePlate.JanRapp.Input1;
 
-namespace BallOnTiltablePlate.JanRapp.Input1
+namespace BallOnTiltablePlate.JanRapp.Input11
 {
     /// <summary>
     /// Interaction logic for KinectInput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "KinectInput", "1.0")]
+    [BallOnPlateItemInfo("Jan", "Rapp", "KinectInput", "1.1")]
     public partial class KinectInput : UserControl, IBallInput
     {
         Kinect.Runtime kinect;
@@ -62,9 +63,9 @@ namespace BallOnTiltablePlate.JanRapp.Input1
 
             if (computaionTask == null || computaionTask.IsCompleted)
             {
-                Vector center = CenterSelector.GetValueFromSize(KinectInputImageSize);
+                Vector center = CenterSelector.ValueFromIdealSize;
 
-                DepthAtCenterDisplay.Text = e.ImageFrame.GetDistance((int)center.X, (int)center.Y).ToString();
+                DepthAtCenterDisplay.Text = string.Format("Depth At Selected Center : {0:g6}", e.ImageFrame.GetDistance((int)center.X, (int)center.Y).ToString());
 
                 var rotationX = new Quaternion(new Vector3D(1, 0, 0), ProjectionAdjustRotaion.Value.X);
                 var rotationY = new Quaternion(new Vector3D(0, 1, 0), ProjectionAdjustRotaion.Value.Y);
@@ -75,13 +76,13 @@ namespace BallOnTiltablePlate.JanRapp.Input1
                 {
                     {"twoByteDepthBits", e.ImageFrame.Image.Bits},
                     {"depthHorizontalResulotion", 640},
-                    {"centerPosition", CenterSelector.GetValueFromSize(KinectInputImageSize)},
+                    {"centerPosition", CenterSelector.ValueFromIdealSize},
                     {"centerDepth", (int)CenterDepthBox.Value},
                     {"cameraConstant", CameraConstantBox.Value},
-                    {"clip", ConvertUtil.ToIntRect(ClipSelector.GetValueFromSize(KinectInputImageSize))},
+                    {"clip", ConvertUtil.ToIntRect(ClipSelector.ValueFromIdealSize)},
                     {"tolerance", (float)ToleranceDoubelBox.Value},
                     {"minHightAnormalities", (int)MinHeightAnormalities.Value},
-                    {"sizeAtZeroTilt", OneSizeSelector.GetValueFromSize(KinectInputImageSize)},
+                    {"sizeAtZeroTilt", OneSizeSelector.ValueFromIdealSize},
                     {"projectionAdjustRotation", rotation},
                     {"projectionAdjustScale", ProjectionAdjustScale.Value},
                     {"projectionAdjustTranslation", ProjectionAdjustTransalation.Value},
@@ -105,12 +106,14 @@ namespace BallOnTiltablePlate.JanRapp.Input1
         {
             var input = (Dictionary<string, object>)state;
 
-            System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
-            stopWatch.Start();
-
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
             var ballPosition = ImageProcessing.BallPositionFast(input, displays);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_BallPositionTotal", displays, "Ball Position Total: {0}", stopwatch.ElapsedMilliseconds);
 
-            System.Diagnostics.Debug.WriteLine("Time for ball pos" + stopWatch.ElapsedMilliseconds);
+            stopwatch.Restart();
+            byte[] prettyPicture = PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_PrettyPicture", displays, "Pre: {0}", stopwatch.ElapsedMilliseconds);
 
             return new ImageProcessing.Output(displays.ToArray(), ballPosition, PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]));
         }
@@ -119,11 +122,11 @@ namespace BallOnTiltablePlate.JanRapp.Input1
         {
             var output = task.Result;
 
-            Vector centerPos = CenterSelector.ValueCoordinates;
-            double widthThatIsPlateSizePixel = (OneSizeSelector.GetValueFromSize(KinectInputImageSize).Width / 2);
+            Vector centerPos = CenterSelector.ValueFromActualSize;
+            double widthThatIsPlateSizePixel = (OneSizeSelector.ValueFromIdealSize.Width / 2);
             double withThatIsPlateSizeMeter = GlobalSettings.Instance.HalfPlateSize;
 
-            BallSelector.ValueCoordinates = output.ballPosition
+            BallSelector.ValueFromActualSize = output.ballPosition
                 * widthThatIsPlateSizePixel
                 / withThatIsPlateSizeMeter
                 + centerPos;
@@ -138,8 +141,12 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             {
                 if(!item.Value.Display.IsValueCreated)
                 {
-                    if (item.Key.StartsWith("OutputImageSelector"))
+                    if (item.Key.StartsWith("OutputImageSelector_"))
                         OutputImagePanel.Children.Add(item.Value.Display.Value);
+                    else if (item.Key.StartsWith("Corner"))
+                        CornerContainer.Children.Add(item.Value.Display.Value);
+                    else if (item.Key.StartsWith("TimeDebug_"))
+                        TimeDegugContainer.Children.Add(item.Value.Display.Value);
                     else
                         MainPanel.Children.Add(item.Value.Display.Value);
                 }
@@ -150,10 +157,12 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             Vector ballPos = output.ballPosition;
             ballPos.Y = -ballPos.Y; //Y is upsidedown in regualar Math
 
-            BallPositionDisplay.Text = ballPos.ToString();
+            BallPositionDisplay.Text = string.Format("Ball Position: {0:g6},{1:g6}", ballPos.X, ballPos.Y);
 
             SendData(ballPos);
-            ((BallOnTiltablePlate.JanRapp.MainApp.MainWindow)Application.Current.MainWindow).JugglerTimer();
+            MainApp.MainWindow mainWindow = (BallOnTiltablePlate.JanRapp.MainApp.MainWindow)Application.Current.MainWindow;
+            if (mainWindow != null)
+                mainWindow.JugglerTimer();
         }
 
         BitmapSource CreateMyStandartBitmapSource(byte[] data, int width, int height)
@@ -170,14 +179,6 @@ namespace BallOnTiltablePlate.JanRapp.Input1
         public void Stop()
         {
             kinect.Uninitialize();
-        }
-
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
-        {
-            Point pos = e.GetPosition(this);
-
-
-            base.OnMouseMove(e);
         }
 
         #region Base
@@ -228,12 +229,12 @@ namespace BallOnTiltablePlate.JanRapp.Input1
                 byte[] pixels = new byte[4];
                 cb.CopyPixels(pixels, 4, 0);
 
-                HoveringColorDisplay.Text = pixels[0].ToString(); //should Be Green. I didn't use the beginning or end, since there is alpha somewhere;
+                HoveringColorDisplay.Text = string.Format("Hovering Color: {0:g6}", pixels[1].ToString()); //should Be Green. I didn't use the beginning or end, since there is alpha somewhere;
             }
             catch (Exception)
-            { 
+            {
                 //well happens
-            } 
+            }
         }
 
         public void OneSizeBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Rect> e)

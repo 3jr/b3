@@ -21,7 +21,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         {
             InitializeComponent();
 
-            timer.Tick += new EventHandler(timer_Tick);
+            timer.Tick += (timer_Tick);
         }
 
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -145,13 +145,19 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                 OutputList.SelectedItem != null)
                 timer.Start();
             else
-                timer.Stop();        }
+                timer.Stop();        
+        }
 
         void timer_Tick(object sender, EventArgs e)
         {
             timer.Interval = TimeSpan.FromSeconds(1 / GlobalSettings.Instance.FPSOfAlgorithm);
+            //JugglerTimer();
+        }
 
-            ((dynamic)AlgorithmList.SelectedValue).Update();
+        public void JugglerTimer()
+        {
+            if(timer.IsEnabled)
+                ((dynamic)AlgorithmList.SelectedValue).Update();
         }
         
         private void GlobalSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)

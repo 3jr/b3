@@ -36,15 +36,17 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
 
             LogParagraph = new Paragraph();
-            //RecivedLog.Document = new FlowDocument(LogParagraph);
+            RecivedLog.Document = new FlowDocument(LogParagraph);
         }
 
         void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(
-                port.ReadExisting()
+            this.Dispatcher.Invoke((Action)delegate
+            {
+                LogParagraph.Inlines.Add(new Bold(new Run(port.ReadExisting())));
+                ScrollReciveLogCorrectly();
+            }
             );
-            //this.Dispatcher.Invoke( () => LogParagraph.Inlines.Add(new Bold(new Run(
         }
 
         public void SetTilt(System.Windows.Vector tilt)
@@ -94,8 +96,8 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
 
                 Vector sequentialTilt = TiltAngle.Value.ToSequentailTilt();
 
-                var xPos = (UInt16)((-sequentialTilt.X * +ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetX.Value);
-                var yPos = (UInt16)((sequentialTilt.Y * -ValuePerAngle.Value) + ZeroDegreeValue.Value + OffsetY.Value);
+                var xPos = (UInt16)((-sequentialTilt.X * +ValuePerAngle.Value) + OffsetX.Value);
+                var yPos = (UInt16)((sequentialTilt.Y * -ValuePerAngle.Value) + OffsetY.Value);
 
                 WritePortWithRightEndian(
                     "!xP{0}yP{1}",
@@ -244,7 +246,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             controlEnabled = !controlEnabled;
         }
 
-        private void XEnabled_Checked(object sender, RoutedEventArgs e)
+        private void XEnabled_CheckedChanged(object sender, RoutedEventArgs e)
         {
             if (controlEnabled)
                 if (XEnabled.IsChecked ?? true)
@@ -253,13 +255,23 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
                     WritePort("xd");
         }
 
-        private void YEnabled_Checked(object sender, RoutedEventArgs e)
+        private void YEnabled_CheckedChanged(object sender, RoutedEventArgs e)
         {
             if (controlEnabled)
                 if (YEnabled.IsChecked ?? true)
                     WritePort("ye");
                 else
                     WritePort("yd");
+        }
+
+        private void SendCommandTextBox_KeyDown(object sender, KeyboardEventArgs e)
+        {
+            if (e.KeyboardDevice.IsKeyDown(Key.Enter) && port.IsOpen)
+            {
+                var txtBox = (TextBox)sender;
+                WritePort(txtBox.Text);
+                txtBox.Clear();
+            }
         }
 
         public void Dispose()
@@ -297,8 +309,8 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         {
             try
             {
-                //LogParagraph.Inlines.Add(s);
-                System.Diagnostics.Debug.WriteLine(s);
+                LogParagraph.Inlines.Add(s);
+                ScrollReciveLogCorrectly();
                 port.Write(s);
             }
             catch (Exception ex)
@@ -313,6 +325,12 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
 
                 ToggleConntectButton.Content = "Connect";
             }
+        }
+
+        void ScrollReciveLogCorrectly()
+        {
+                if(LogScrollViewer.VerticalOffset == LogScrollViewer.ScrollableHeight)
+                    LogScrollViewer.ScrollToBottom();
         }
     }
 }

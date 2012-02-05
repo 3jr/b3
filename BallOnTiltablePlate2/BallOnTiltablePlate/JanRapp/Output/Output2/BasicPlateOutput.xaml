@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
              xmlns:controlsB3="clr-namespace:JRapp.WPF"
-             mc:Ignorable="d">
+             mc:Ignorable="d" MinWidth="236" >
     <UserControl.Resources>
         <RoutedCommand x:Key="ToggleConnectCmd" >
             <RoutedCommand.InputGestures>
@@ -57,7 +57,8 @@
                         Executed="TransmitConfigCmd_Executed"
                         CanExecute="TransmitDataCmd_CanExecute"/>
     </UserControl.CommandBindings>
-    <StackPanel>
+    <DockPanel LastChildFill="True"  Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=FrameworkElement, AncestorLevel=1}}">
+    <StackPanel DockPanel.Dock="Top">
         <Button x:Name="ToggleConntectButton" Content="Connect" Command="{StaticResource ToggleConnectCmd}" ToolTip="Ctrl+D"/>
         <StackPanel Orientation="Horizontal">
             <Label Content="SerialPortNumber:  _COM" />
@@ -65,8 +66,8 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Button x:Name="EnableControlButton" Content="Enable Controll" Command="{StaticResource EnableControlCmd}" ToolTip="Ctrl+E"/>
-            <CheckBox x:Name="XEnabled" Content="_X Enabled  " IsChecked="True" Checked="XEnabled_Checked"/>
-            <CheckBox x:Name="YEnabled" Content="_Y Enabled" IsChecked="True" Checked="YEnabled_Checked"/>
+            <CheckBox x:Name="XEnabled" Content="_X Enabled  " IsChecked="True" Unchecked="XEnabled_CheckedChanged" Checked="XEnabled_CheckedChanged"/>
+            <CheckBox x:Name="YEnabled" Content="_Y Enabled" IsChecked="True" Checked="YEnabled_CheckedChanged" Unchecked="YEnabled_CheckedChanged"/>
         </StackPanel>
         <controls:VectorBox Text="Tilt _Angle: " x:Name="TiltAngle" ValueChanged="Angle_ValueChanged" 
             SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
@@ -109,12 +110,15 @@
                             </StackPanel>
                         </GroupBox>
                         <controls:DoubleBox x:Name="ValuePerAngle" Text="Value P_er Angle: " ValueChanged="Calibration_ValueChanged"/>
-                        <controls:DoubleBox x:Name="ZeroDegreeValue" Text="_ZeroDegreeValue: " ValueChanged="Calibration_ValueChanged" LargeChange="500" RegularChange="20" SmallChange="1"/>
                     </StackPanel>
                 </controlsB3:SettingsSaverB3>
             </Expander>
+        <Label Content="Send Command:"/>
+        <TextBox KeyDown="SendCommandTextBox_KeyDown"/>
         <TextBlock>Send and Recive Log:</TextBlock>
-            <RichTextBox x:Name="RecivedLog" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=FrameworkElement, AncestorLevel=1}}">
-            </RichTextBox>
     </StackPanel>
+    <ScrollViewer x:Name="LogScrollViewer" DockPanel.Dock="Bottom">
+        <RichTextBox x:Name="RecivedLog" IsDocumentEnabled="False" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+    </ScrollViewer>
+    </DockPanel>
 </UserControl>

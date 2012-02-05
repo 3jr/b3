@@ -112,6 +112,9 @@
     <Compile Include="JanRapp\General\Utilities\NumberUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TiltUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TransformationUtil.cs" />
+    <Compile Include="JanRapp\Input\Input1\Input11\KinectInput.xaml.cs">
+      <DependentUpon>KinectInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Input\Input1\Input5\BallPositionFast.cs" />
     <Compile Include="JanRapp\Input\Input1\ImageProcessing.cs" />
     <Compile Include="JanRapp\Input\Input1\Input5\ImageProcessing.cs" />
@@ -231,6 +234,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\General\Controls\vector setter\RectBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Input\Input1\Input11\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Input\Input1\Input5\KinectInput.xaml">

@@ -100,6 +100,7 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             }
 
             System.Diagnostics.Debug.WriteLine("Average over depth took:" + stopwatch.ElapsedMilliseconds);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_Average", displays, "Average: {0}", stopwatch.ElapsedMilliseconds);
             stopwatch.Restart();
             //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,10 +135,10 @@ namespace BallOnTiltablePlate.JanRapp.Input1
 
             transform.Transform(corners);
 
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner11", displays, "Corner11 {0}", corners[0]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner21", displays, "Corner21 {0}", corners[1]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner31", displays, "Corner31 {0}", corners[2]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner41", displays, "Corner41 {0}", corners[3]);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner11", displays, "Corner11 {0:n5},{1:n5},{2:n5}", corners[0].X, corners[0].Y, corners[0].Z);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner21", displays, "Corner21 {0:n5},{1:n5},{2:n5}", corners[1].X, corners[1].Y, corners[1].Z);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner31", displays, "Corner31 {0:n5},{1:n5},{2:n5}", corners[2].X, corners[2].Y, corners[2].Z);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner41", displays, "Corner41 {0:n5},{1:n5},{2:n5}", corners[3].X, corners[3].Y, corners[3].Z);
 
 
             Transform3D projectionAdjustTransform = new Transform3DGroup()
@@ -159,10 +160,10 @@ namespace BallOnTiltablePlate.JanRapp.Input1
                 corners[i] = corners[i] + trans;
             }
 
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner12", displays, "Corner12 {0}", corners[0]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner22", displays, "Corner22 {0}", corners[1]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner32", displays, "Corner32 {0}", corners[2]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner42", displays, "Corner42 {0}", corners[3]);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner12", displays, "Corner12 {0:n5},{1:n5},{2:n5}", corners[0].X, corners[0].Y, corners[0].Z);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner22", displays, "Corner22 {0:n5},{1:n5},{2:n5}", corners[1].X, corners[1].Y, corners[1].Z);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner32", displays, "Corner32 {0:n5},{1:n5},{2:n5}", corners[2].X, corners[2].Y, corners[2].Z);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner42", displays, "Corner42 {0:n5},{1:n5},{2:n5}", corners[3].X, corners[3].Y, corners[3].Z);
 
             return corners;
         }
@@ -225,10 +226,10 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             DisplayDescribtion.CreateOrUpdateSelectorDisplay("Corner3", displays, System.Windows.Media.Brushes.Red, picturePlane[2] + centerPosition);
             DisplayDescribtion.CreateOrUpdateSelectorDisplay("Corner4", displays, System.Windows.Media.Brushes.Red, picturePlane[3] + centerPosition);
 
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner1Txt", displays, "Corner1Txt {0}", picturePlane[0]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner2Txt", displays, "Corner2Txt {0}", picturePlane[1]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner3Txt", displays, "Corner3Txt {0}", picturePlane[2]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner4Txt", displays, "Corner4Txt {0}", picturePlane[3]);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner1Txt", displays, "Corner1Txt {0}{1}", picturePlane[0].X, picturePlane[0].Y);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner2Txt", displays, "Corner2Txt {0}{1}", picturePlane[1].X, picturePlane[1].Y);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner3Txt", displays, "Corner3Txt {0}{1}", picturePlane[2].X, picturePlane[2].Y);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Corner4Txt", displays, "Corner4Txt {0}{1}", picturePlane[3].X, picturePlane[3].Y);
 
 
             Int32Vector[] cornerPoints = new Int32Vector[4];
@@ -245,6 +246,9 @@ namespace BallOnTiltablePlate.JanRapp.Input1
         public static Vector BallPositionFast(Dictionary<string, object> input, Dictionary<string, DisplayDescribtion> displays
             )
         {
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+
             byte[] depthData = (byte[])input["twoByteDepthBits"];
             int depthHorizontalResulotion = (int)input["depthHorizontalResulotion"];
             Vector centerPosition = (Vector)input["centerPosition"];
@@ -253,8 +257,11 @@ namespace BallOnTiltablePlate.JanRapp.Input1
 
             DisplayDescribtion.CreateOrUpdateTextBoxDisplay("Average", displays, "Average is: {0,6:F3}, {1,6:F3}", average.X, average.Y);
 
+            stopwatch.Restart();
+            #region Corner Calc
+
             Vector tiltToAxis = average * (double)input["angleFactor"];// new Vector(Math.Tan(average.X / 0.574), Math.Tan(average.Y / 0.574));
-            
+
             DisplayDescribtion.CreateOrUpdateTextBoxDisplay("tiltToAxis", displays, "tiltToAxis is: {0,6:F3}, {1,6:F3}", tiltToAxis.X, tiltToAxis.Y);
 
             Vector sequentialTilt = tiltToAxis.ToSequentailTilt();
@@ -262,11 +269,14 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             Vector3D[] transformedCorners = TransformedCorners(sequentialTilt, (QuaternionRotation3D)input["projectionAdjustRotation"],
                 (Vector3D)input["projectionAdjustScale"], (Vector3D)input["projectionAdjustTranslation"], displays);
 
-
             Int32Vector[] cornerPoints = (Int32Vector[])ImageProcessing.ConersInPicture(transformedCorners,
                 (double)input["cameraConstant"], centerPosition, (bool)input["projectionInverted"], displays);
 
+            #endregion
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_CornerCalc", displays, "Corner Calculations: {0}", stopwatch.ElapsedMilliseconds);
 
+            stopwatch.Restart();
+            #region TraverseBLABLA
             var sections2 = TraverseBLABLA.GetSections2(cornerPoints);
 
             var left = sections2[0];
@@ -289,7 +299,7 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             int top = left[0].Top.Y;
             int bottom = NumberUtil.Min(left[0].Bottom.Y, right[0].Bottom.Y);
 
-            while(true)
+            while (true)
             {
 
                 double rwStart = left[l].XPosAt(top);
@@ -322,7 +332,7 @@ namespace BallOnTiltablePlate.JanRapp.Input1
                     }
                 }
 
-                if (l == left.Length - 1  && r == right.Length - 1)
+                if (l == left.Length - 1 && r == right.Length - 1)
                     break;
 
                 if (left[l].Bottom.Y == bottom)
@@ -333,6 +343,8 @@ namespace BallOnTiltablePlate.JanRapp.Input1
                 top = bottom;
                 bottom = NumberUtil.Min(left[l].Bottom.Y, right[r].Bottom.Y);
             }
+            #endregion TraverseBLABLA
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_TraverseQuadrant", displays, "Traverse Quadrant: {0}", stopwatch.ElapsedMilliseconds);
 
             DisplayDescribtion.CreateOrUpdateImageDisplay("Traversed Pixels", displays, traversed, new Int32Rect(0, 0, 640, 480));
             DisplayDescribtion.CreateOrUpdateImageDisplay("Anormalie Pixels", displays, anormalies, new Int32Rect(0, 0, 640, 480));
@@ -461,7 +473,7 @@ namespace BallOnTiltablePlate.JanRapp.Input1
 
         public static void CreateOrUpdateSelectorDisplay(string name, Dictionary<string, DisplayDescribtion> displays, System.Windows.Media.Brush color, Vector value)
         {
-            name = "OutputImageSelector" + name;//Keyword to show over OutputImage
+            name = "OutputImageSelector_" + name;//Keyword to show over OutputImage
             if (!displays.ContainsKey(name))
                 displays.Add(name, new DisplayDescribtion()
                 {
