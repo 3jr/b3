@@ -56,8 +56,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             DateTime now = DateTime.Now;
             Update((now - lastUpdateTime).TotalSeconds);
 
-            if (Position != lastPosition)
-                SendData((Vector3D)Position);
+
+            SendData((Vector3D)Position);
+
+            BallOnTiltablePlate.JanRapp.MainApp.MainWindow mainWindow = (BallOnTiltablePlate.JanRapp.MainApp.MainWindow)Application.Current.MainWindow;
+            if (mainWindow != null)
+                mainWindow.JugglerTimer();
+
 
             lastPosition = Position;
             lastUpdateTime = now;
