@@ -82,7 +82,9 @@
                 <StackPanel x:Name="CornerContainer"/>
         </Expander>
         <Expander Header="Time Debug">
-            <StackPanel x:Name="TimeDegugContainer"/>
+            <StackPanel x:Name="TimeDegugContainer">
+                    <TextBlock x:Name="FramesSkippedDisplay"/>
+                </StackPanel>
         </Expander>
         </WrapPanel>
     </controlsB3:SettingsSaverB3>

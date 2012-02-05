@@ -205,20 +205,6 @@
     <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
       <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MoritzUehling\Wifi\Source\Balancer\App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MoritzUehling\Wifi\Source\Balancer\MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\App.g.cs" />
-    <Compile Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\App.g.i.cs" />
-    <Compile Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\MainPage.g.cs" />
-    <Compile Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\MainPage.g.i.cs" />
-    <Compile Include="MoritzUehling\Wifi\Source\Balancer\Properties\AssemblyInfo.cs" />
-    <Compile Include="MoritzUehling\Wifi\Source\Balancer\SocketClient.cs" />
-    <Compile Include="MoritzUehling\Wifi\Source\Server\Properties\AssemblyInfo.cs" />
-    <Compile Include="MoritzUehling\Wifi\Source\Server\WifiHelper.cs" />
     <Compile Include="TimoSchmetzer\Simulation\BasicSimulation.xaml.cs">
       <DependentUpon>BasicSimulation.xaml</DependentUpon>
     </Compile>
@@ -349,18 +335,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MoritzUehling\Wifi\Source\Balancer\App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MoritzUehling\Wifi\Source\Balancer\Bin\Debug\AppManifest.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MoritzUehling\Wifi\Source\Balancer\MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="TimoSchmetzer\Simulation\BasicSimulation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -392,16 +366,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\Balancer.g.resources" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
-    <None Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="MoritzUehling\Wifi\Source\Server\bin\Debug\Server.vshost.exe.manifest" />
-    <None Include="MoritzUehling\Wifi\Source\Server\obj\x86\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="MoritzUehling\Wifi\Source\Server\obj\x86\Debug\ResolveAssemblyReference.cache" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -441,36 +409,8 @@
   <ItemGroup>
     <Resource Include="JanRapp\General\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\TempPE\" />
-    <Folder Include="MoritzUehling\Wifi\Source\Server\obj\x86\Debug\TempPE\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MoritzUehling\Wifi\Source\Balancer.sln" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\ApplicationIcon.png" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\Background.png" />
-    <Content Include="MoritzUehling\Wifi\Source\Balancer\Balancer.csproj" />
-    <Content Include="MoritzUehling\Wifi\Source\Balancer\Balancer.csproj.user" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\Bin\Debug\ApplicationIcon.png" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\Bin\Debug\Background.png" />
-    <Content Include="MoritzUehling\Wifi\Source\Balancer\Bin\Debug\Balancer.dll" />
-    <Content Include="MoritzUehling\Wifi\Source\Balancer\Bin\Debug\Balancer.pdb" />
-    <Content Include="MoritzUehling\Wifi\Source\Balancer\Bin\Debug\Balancer.xap" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\Bin\Debug\WMAppManifest.xml" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\Balancer.csproj.FileListAbsolute.txt" />
-    <Content Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\Balancer.dll" />
-    <Content Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\Balancer.pdb" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\obj\Debug\XapCacheFile.xml" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\Properties\AppManifest.xml" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\Properties\WMAppManifest.xml" />
-    <Resource Include="MoritzUehling\Wifi\Source\Balancer\SplashScreenImage.jpg" />
-    <Content Include="MoritzUehling\Wifi\Source\Server\bin\Debug\Server.dll" />
-    <Content Include="MoritzUehling\Wifi\Source\Server\bin\Debug\Server.pdb" />
-    <Content Include="MoritzUehling\Wifi\Source\Server\bin\Debug\Server.vshost.exe" />
-    <Resource Include="MoritzUehling\Wifi\Source\Server\obj\x86\Debug\Server.csproj.FileListAbsolute.txt" />
-    <Content Include="MoritzUehling\Wifi\Source\Server\obj\x86\Debug\Server.dll" />
-    <Content Include="MoritzUehling\Wifi\Source\Server\obj\x86\Debug\Server.pdb" />
-    <Content Include="MoritzUehling\Wifi\Source\Server\Server.csproj" />
     <Content Include="Resources\Coding4Fun.Kinect.WinForm.dll" />
     <Content Include="Resources\Coding4Fun.Kinect.Wpf.dll" />
     <Content Include="Resources\JRapp.dll" />

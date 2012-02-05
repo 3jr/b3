@@ -32,6 +32,7 @@ namespace BallOnTiltablePlate.JanRapp.Input11
         Task<ImageProcessing.Output> computaionTask;
         Dictionary<string, DisplayDescribtion> displays = 
             new Dictionary<string, DisplayDescribtion>();
+        int framesSkipt = 0;
 
         readonly int KinectInputImageWidth;
         readonly int KinectInputImageHeight;
@@ -71,7 +72,7 @@ namespace BallOnTiltablePlate.JanRapp.Input11
                 var rotationY = new Quaternion(new Vector3D(0, 1, 0), ProjectionAdjustRotaion.Value.Y);
                 var rotationZ = new Quaternion(new Vector3D(0, 0, 1), ProjectionAdjustRotaion.Value.Z);
                 var rotation = new QuaternionRotation3D(rotationZ * rotationY * rotationX);
-                
+
                 Dictionary<string, object> state = new Dictionary<string, object>()
                 {
                     {"twoByteDepthBits", e.ImageFrame.Image.Bits},
@@ -97,11 +98,16 @@ namespace BallOnTiltablePlate.JanRapp.Input11
                 computaionTask.Start();
             }
             else
+            {
                 System.Diagnostics.Debug.WriteLine("Frame Skipped!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                framesSkipt++; 
+                FramesSkippedDisplay.Text = "Skiped Frames: " + framesSkipt;
+            }
 
             System.Diagnostics.Debug.WriteLine("kinect_DepthFrameReady: " + stopwatch.ElapsedMilliseconds);
         }
 
+        byte[] prettyPicture;
         ImageProcessing.Output DoMainComputaionAsync(object state)
         {
             var input = (Dictionary<string, object>)state;
@@ -112,10 +118,10 @@ namespace BallOnTiltablePlate.JanRapp.Input11
             DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_BallPositionTotal", displays, "Ball Position Total: {0}", stopwatch.ElapsedMilliseconds);
 
             stopwatch.Restart();
-            byte[] prettyPicture = PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]);
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_PrettyPicture", displays, "Pre: {0}", stopwatch.ElapsedMilliseconds);
+            prettyPicture = PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]);
+            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_PrettyPicture", displays, "PrettyPicture: {0}", stopwatch.ElapsedMilliseconds);
 
-            return new ImageProcessing.Output(displays.ToArray(), ballPosition, PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]));
+            return new ImageProcessing.Output(displays.ToArray(), ballPosition, prettyPicture);
         }
 
         void DisplayComputation(Task<ImageProcessing.Output> task)

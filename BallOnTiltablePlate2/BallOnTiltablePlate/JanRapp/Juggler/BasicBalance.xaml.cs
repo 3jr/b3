@@ -48,10 +48,10 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
         {
             //if (IO.ValuesValid)
             {
-                Vector inductedVelo = IO.Position * PositionFactor.Value;
+                Vector inductedVelo = IO.Position.ToNoNaN() * PositionFactor.Value;
 
-                var tilt = (IO.Velocity + inductedVelo)
-                    .ToNoNaN() * VelocityFactor.Value;
+                var tilt = (IO.Velocity.ToNoNaN() + inductedVelo)
+                    * VelocityFactor.Value;
 
                 IO.SetTilt(tilt);
             }

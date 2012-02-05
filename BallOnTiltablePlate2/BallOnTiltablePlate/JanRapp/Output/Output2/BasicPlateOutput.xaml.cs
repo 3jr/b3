@@ -99,6 +99,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
                 var xPos = (UInt16)((-sequentialTilt.X * +ValuePerAngle.Value) + OffsetX.Value);
                 var yPos = (UInt16)((sequentialTilt.Y * -ValuePerAngle.Value) + OffsetY.Value);
 
+                if(controlEnabled && ((XEnabled.IsChecked ?? true) || (YEnabled.IsChecked ?? true)))
                 WritePortWithRightEndian(
                     "!xP{0}yP{1}",
                     xPos, yPos

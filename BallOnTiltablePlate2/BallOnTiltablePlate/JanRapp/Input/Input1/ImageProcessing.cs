@@ -242,7 +242,7 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             return cornerPoints;
         }
 
-
+        static byte[] traversed, anormalies, plate;
         public static Vector BallPositionFast(Dictionary<string, object> input, Dictionary<string, DisplayDescribtion> displays
             )
         {
@@ -285,9 +285,9 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             if (left.Length < 1 || right.Length < 1)
                 return VectorUtil.NaNVector;
 
-            byte[] traversed = new byte[depthData.Length / 2];
-            byte[] anormalies = new byte[depthData.Length / 2];
-            byte[] plate = new byte[depthData.Length / 2];
+            traversed = new byte[depthData.Length / 2];
+            anormalies = new byte[depthData.Length / 2];
+            plate = new byte[depthData.Length / 2];
             int ballX = 0, ballY = 0, ballPointsCount = 0;
 
             int tolerance = (int)(float)input["tolerance"];
