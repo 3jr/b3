@@ -60,10 +60,14 @@ namespace BallOnTiltablePlate.MoritzUehling.Helpers
 
 		public void WritePos(double x, double y)
 		{
+			int count = 0;
 			if (write != null)
 			{
-				write.Write(String.Format("{0}|{1}", x, y));
-				write.Flush();
+				if (count % 3 == 0)
+				{
+					write.Write(String.Format("{0}|{1}", x, y));
+					write.Flush();
+				}
 			}
 		}
 
@@ -71,11 +75,6 @@ namespace BallOnTiltablePlate.MoritzUehling.Helpers
 		{
 			while (true)
 			{
-				while (phone.Available == 0)
-				{
-					Thread.Sleep(5);
-				}
-
 				string message = read.ReadLine();
 
 				string[] vars = message.Split("|".ToCharArray());

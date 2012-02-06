@@ -198,6 +198,9 @@
     <Compile Include="MoritzUehling\Juggler\Circle.cs" />
     <Compile Include="MoritzUehling\Juggler\Wifi.cs" />
     <Compile Include="MoritzUehling\Juggler\WifiHelper.cs" />
+    <Compile Include="MoritzUehling\Juggler\WifiSettings.xaml.cs">
+      <DependentUpon>WifiSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
     <Compile Include="MoritzUehling\Kinect\ImageManager.cs" />
     <Compile Include="MoritzUehling\Kinect\KinectCamaraInput.v02.cs" />
@@ -331,7 +334,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MoritzUehling\UI\KinectSettingsWindows.xaml">
+    <Page Include="MoritzUehling\Juggler\WifiSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

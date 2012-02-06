@@ -15,56 +15,60 @@ using BallOnTiltablePlate.JanRapp.MainApp.Helper;
 using BallOnTiltablePlate.JanRapp.Utilities;
 using BallOnTiltablePlate;
 using BallOnTiltablePlate.MoritzUehling.Helpers;
+using BallOnTiltablePlate.JanRapp.Controls;
 
-
-/// <summary>
-/// Interaction logic for BasicBalance.xaml
-/// </summary>
-[BallOnPlateItemInfo("Moritz", "Uehling", "Phone Controller", "0.8")]
-public class WifiConnector : UserControl, IJuggler<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
+namespace BallOnTiltablePlate.MoritzUehling.Juggler
 {
-	double veloFactor = 0;
-	double posFactor = 1;
-
-	double factor = 0.1;
-
-	WifiHelper connector;
-
-
-	public BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor IO { private get; set; }
-
-	#region Base
-	public System.Windows.FrameworkElement SettingsUI
+	/// <summary>
+	/// Interaction logic for BasicBalance.xaml
+	/// </summary>
+	[BallOnPlateItemInfo("Moritz", "Uehling", "Phone Controller", "0.8")]
+	public class WifiConnector : UserControl, IJuggler<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
 	{
-		get { return null; }
-	}
-	#endregion
+		double factor = 1;
 
-	public void Start()
-	{
+		WifiHelper connector;
 
-	}
+		DoubleBox settings = new DoubleBox();
 
-	public void Stop()
-	{
-	}
+		public BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor IO { private get; set; }
 
-	public WifiConnector()
-	{
-		connector = new WifiHelper();
-	}
-
-	public void Update()
-	{
-		if (!IO.Position.HasNaN())
+		#region Base
+		public System.Windows.FrameworkElement SettingsUI
 		{
-			connector.WritePos(IO.Position.X, IO.Position.Y);
+			get { return settings; }
 		}
-		else
+		#endregion
+
+		public void Start()
 		{
-			connector.WritePos(0, 0);
+
 		}
 
-		IO.SetTilt(new Vector(-connector.tiltY, connector.tiltX));
+		public void Stop()
+		{
+		}
+
+		public WifiConnector()
+		{
+			connector = new WifiHelper();
+			settings.Value = 1;
+		}
+
+		public void Update()
+		{
+			if (!IO.Position.HasNaN())
+			{
+				connector.WritePos(IO.Position.X, IO.Position.Y);
+			}
+			else
+			{
+				connector.WritePos(0, 0);
+			}
+
+
+			factor = settings.Value;
+			IO.SetTilt(new Vector(-connector.tiltY * factor, connector.tiltX * factor));
+		}
 	}
 }

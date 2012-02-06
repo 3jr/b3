@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.MoritzUehling.Juggler.WifiSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="48" d:DesignWidth="96" xmlns:my="clr-namespace:BallOnTiltablePlate.JanRapp.Controls">
+    <Grid Height="45" Width="310">
+		<my:DoubleBox Value="1" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" x:Name="doubleBox1" VerticalAlignment="Top" Width="72" Loaded="doubleBox1_Loaded" />
+	</Grid>
+</UserControl>
