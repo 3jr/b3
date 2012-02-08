@@ -28,7 +28,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         DateTime lastUpdateTime;
         bool stopped = true;
 
-        Type[] Calculators;
         PhysicsWrapper wrapper = new PhysicsWrapper();
 
         public BasicSimulation()
@@ -37,17 +36,24 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             InitializeComponent();
 
             timer.Tick += new EventHandler(timer_Tick);
-            Calculators = Assembly.GetExecutingAssembly().GetTypes()
+            IEnumerable<Type> Calculators = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => t.IsClass && typeof(IPhysicsCalculator).IsAssignableFrom(t))
                 .Select(t => t)
                 .ToArray();
-            TreeViewItem[] elem = new TreeViewItem[Calculators.Length];
-            for (int i = 0; i < elem.Length; i++)
+            foreach(Type t in Calculators)
             {
-                elem[i] = new TreeViewItem();
-                elem[i].Header = i.ToString()+": "+Calculators[i].FullName;
-                PhysicsCalculatorList.Items.Add(elem[i]);
+                TreeViewItem treeitem = new TreeViewItem();
+                treeitem.Header = t.FullName;
+                treeitem.Tag = Activator.CreateInstance(t);
+                PhysicsCalculatorList.Items.Add(treeitem);
             }
+            //TreeViewItem[] elem = new TreeViewItem[Calculators.Length];
+            //for (int i = 0; i < elem.Length; i++)
+            //{
+            //    elem[i] = new TreeViewItem();
+            //    elem[i].Header = i.ToString()+": "+Calculators[i].FullName;
+            //    PhysicsCalculatorList.Items.Add(elem[i]);
+            //}
         }
 
         Point3D lastPosition = new Point3D();
@@ -70,24 +76,24 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         public void Update(double deltaSeconds)
         {
-            IPhysicsCalculator Calc = this.GetSelectedCalculator();
+            IPhysicsCalculator Calc = (IPhysicsCalculator)(((TreeViewItem)PhysicsCalculatorList.SelectedItem).Tag);
             if(Calc!=null)
             wrapper.RunSimulation(Calc, this, deltaSeconds);
         }
-        public IPhysicsCalculator GetSelectedCalculator()
-        {
-            TreeViewItem t = (TreeViewItem)PhysicsCalculatorList.SelectedItem;
-            if (t != null)
-            {
-                String s = (String)t.Header;
-                int i = (int)Int32.Parse(s.Substring(0, s.IndexOf(':')));
-                return (IPhysicsCalculator)Activator.CreateInstance(Calculators[i]);
-            }
-            else
-            {
-                return null; //No Calculator Selected 
-            }
-        }
+        //public IPhysicsCalculator GetSelectedCalculator()
+        //{
+        //    TreeViewItem t = (TreeViewItem)PhysicsCalculatorList.SelectedItem;
+        //    if (t != null)
+        //    {
+        //        String s = (String)t.Header;
+        //        int i = (int)Int32.Parse(s.Substring(0, s.IndexOf(':')));
+        //        return (IPhysicsCalculator)Activator.CreateInstance(Calculators[i]);
+        //    }
+        //    else
+        //    {
+        //        return null; //No Calculator Selected 
+        //    }
+        //}
 
         public void Start()
         {
