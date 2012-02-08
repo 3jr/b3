@@ -112,6 +112,10 @@
     <Compile Include="JanRapp\General\Utilities\NumberUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TiltUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TransformationUtil.cs" />
+    <Compile Include="JanRapp\Input\Input1\Input101\ImageProcessing.cs" />
+    <Compile Include="JanRapp\Input\Input1\Input101\KinectInput.xaml.cs">
+      <DependentUpon>KinectInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Input\Input1\Input11\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
     </Compile>
@@ -201,13 +205,6 @@
     <Compile Include="MoritzUehling\Juggler\WifiSettings.xaml.cs">
       <DependentUpon>WifiSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MoritzUehling\Kinect\KinectCameraInput.cs" />
-    <Compile Include="MoritzUehling\Kinect\ImageManager.cs" />
-    <Compile Include="MoritzUehling\Kinect\KinectCamaraInput.v02.cs" />
-    <Compile Include="MoritzUehling\Kinect\ImageManager.v02.cs" />
-    <Compile Include="MoritzUehling\UI\KinectSettingsWindows.xaml.cs">
-      <DependentUpon>KinectSettingsWindows.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TimoSchmetzer\Simulation\BasicSimulation.xaml.cs">
       <DependentUpon>BasicSimulation.xaml</DependentUpon>
     </Compile>
@@ -237,6 +234,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\General\Controls\vector setter\RectBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Input\Input1\Input101\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Input\Input1\Input11\KinectInput.xaml">

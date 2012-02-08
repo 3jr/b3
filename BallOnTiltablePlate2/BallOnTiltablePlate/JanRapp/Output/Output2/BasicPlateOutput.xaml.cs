@@ -43,14 +43,17 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         {
             this.Dispatcher.Invoke((Action)delegate
             {
-                LogParagraph.Inlines.Add(new Bold(new Run(port.ReadExisting())));
-                ScrollReciveLogCorrectly();
+                WriteLog(port.ReadExisting(), true);
             }
             );
         }
 
+        System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
         public void SetTilt(System.Windows.Vector tilt)
         {
+            //LogParagraph.Inlines.Add(new Underline(new Run("(" + stopWatch.ElapsedMilliseconds + ")")));
+            stopWatch.Restart();
+
             if (double.IsNaN(tilt.X))
                 tilt.X = 0;
             if (double.IsNaN(tilt.Y))
@@ -85,25 +88,22 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             SendData(false);
         }
 
-        System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
-
         void SendData(bool force)
         {
+
             if (port.IsOpen && (TransmitImmediately.IsChecked == true || force))
             {
-                System.Diagnostics.Debug.WriteLine("Long Lone::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + stopWatch.ElapsedMilliseconds);
-                stopWatch.Restart();
-
                 Vector sequentialTilt = TiltAngle.Value.ToSequentailTilt();
 
                 var xPos = (UInt16)((-sequentialTilt.X * +ValuePerAngle.Value) + OffsetX.Value);
                 var yPos = (UInt16)((sequentialTilt.Y * -ValuePerAngle.Value) + OffsetY.Value);
 
-                if(controlEnabled && ((XEnabled.IsChecked ?? true) || (YEnabled.IsChecked ?? true)))
-                WritePortWithRightEndian(
-                    "!xP{0}yP{1}",
-                    xPos, yPos
-                );
+                port.Write("!");
+                if(controlEnabled && (XEnabled.IsChecked ?? true))
+                    port.Write(ChangeEndian("xP{0}", xPos));
+
+                if(controlEnabled && (YEnabled.IsChecked ?? true))
+                    port.Write(ChangeEndian("yP{0}", yPos));
             }
         }
 
@@ -294,7 +294,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             return chars.Substring(2, 2) + chars.Substring(0, 2);
         }
 
-        void WritePortWithRightEndian(string formatString, params ushort[] values)
+        string ChangeEndian(string formatString, params ushort[] values)
         {
             string[] s = new string[values.Length];
 
@@ -303,15 +303,19 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
 
             string result = string.Format(formatString, s);
 
-            WritePort(result);
+            return result;
+        }
+
+        void WritePortWithRightEndian(string formatString, params ushort[] values)
+        {
+            WritePort(ChangeEndian(formatString, values));
         }
 
         void WritePort(string s)
         {
             try
             {
-                LogParagraph.Inlines.Add(s);
-                ScrollReciveLogCorrectly();
+                WriteLog(s, false);
                 port.Write(s);
             }
             catch (Exception ex)
@@ -328,10 +332,22 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             }
         }
 
-        void ScrollReciveLogCorrectly()
+        void WriteLog(string s, bool Bold)
         {
-                if(LogScrollViewer.VerticalOffset == LogScrollViewer.ScrollableHeight)
-                    LogScrollViewer.ScrollToBottom();
+            if (LoggingActivated.IsChecked ?? true)
+            {
+                if (Bold)
+                    LogParagraph.Inlines.Add(new Bold(new Run(s)));
+                else
+                    LogParagraph.Inlines.Add(s);
+            }
+            //if(LogScrollViewer.VerticalOffset == LogScrollViewer.ScrollableHeight)
+                // LogScrollViewer.ScrollToBottom();
+        }
+
+        private void ClearLogBtn_Click(object sender, RoutedEventArgs e)
+        {
+            LogParagraph.Inlines.Clear();
         }
     }
 }

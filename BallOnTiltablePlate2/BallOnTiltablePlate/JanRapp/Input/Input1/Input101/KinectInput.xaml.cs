@@ -17,15 +17,13 @@ using System.Threading.Tasks;
 using System.Threading;
 using Coding4Fun.Kinect.Wpf;
 using BallOnTiltablePlate.JanRapp.General.Utilities;
-using BallOnTiltablePlate.JanRapp.Input;
-using BallOnTiltablePlate.JanRapp.Input1;
 
-namespace BallOnTiltablePlate.JanRapp.Input11
+namespace BallOnTiltablePlate.JanRapp.Input101
 {
     /// <summary>
     /// Interaction logic for KinectInput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "KinectInput", "1.1")]
+    [BallOnPlateItemInfo("Jan", "Rapp", "KinectInput", "1.01")]
     public partial class KinectInput : UserControl, IBallInput
     {
         Kinect.Runtime kinect;
@@ -119,7 +117,7 @@ namespace BallOnTiltablePlate.JanRapp.Input11
             DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_BallPositionTotal", displays, "Ball Position Total: {0}", stopwatch.ElapsedMilliseconds);
 
             stopwatch.Restart();
-            prettyPicture = PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]);
+            prettyPicture = Input.PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]);
             DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_PrettyPicture", displays, "PrettyPicture: {0}", stopwatch.ElapsedMilliseconds);
 
             stopwatch.Stop();

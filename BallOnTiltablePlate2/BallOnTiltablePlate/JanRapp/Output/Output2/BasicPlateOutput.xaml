@@ -115,6 +115,8 @@
             </Expander>
         <Label Content="Send Command:"/>
         <TextBox KeyDown="SendCommandTextBox_KeyDown"/>
+        <CheckBox x:Name="LoggingActivated" Content="Log Se_nd/Recive"/>
+        <Button x:Name="ClearLogBtn" Content="Clear L_og" Click="ClearLogBtn_Click"/>
         <TextBlock>Send and Recive Log:</TextBlock>
     </StackPanel>
     <ScrollViewer x:Name="LogScrollViewer" DockPanel.Dock="Bottom">
