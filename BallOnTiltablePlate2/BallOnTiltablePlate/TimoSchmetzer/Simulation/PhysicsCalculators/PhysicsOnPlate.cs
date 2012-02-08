@@ -45,13 +45,51 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
             #endregion
 
             #region Debugout
+            #region StringBufferOut
+            //(Nr.)	PositionX	PositionY	PositionZ	VelociyX	VelocityY	VelocityZ	AccelerationX	AccelerationY	AccelerationZ	AngleBetweenVec	elapsedSec	TiltX	TiltY	PlateVelX	PlateVelY   DeltaZBallPlate
+            //StringBuilder debugOut = new StringBuilder();
+            //debugOut.Append(state.Position.X);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Position.Y);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Position.Z);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Velocity.X);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Velocity.Y);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Velocity.Z);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Acceleration.X);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Acceleration.Y);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Acceleration.Z);
+            //debugOut.Append("\t");
+            //debugOut.Append(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.AngleBetwennVectors(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.CalcNormalVector(state.Tilt), state.Velocity));
+            //debugOut.Append("\t");
+            //debugOut.Append(elapsedSeconds);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Tilt.X);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.Tilt.Y);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.PlateVelocity.X);
+            //debugOut.Append("\t");
+            //debugOut.Append(state.PlateVelocity.Y);
+            //debugOut.Append("\t");
+            //debugOut.Append((state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
+            //System.Diagnostics.Debug.Print(debugOut.ToString());
+            #endregion
+            #region StrigOut
             //(Nr.)	PositionX	PositionY	PositionZ	VelociyX	VelocityY	VelocityZ	AccelerationX	AccelerationY	AccelerationZ	AngleBetweenVec	elapsedSec	TiltX	TiltY	PlateVelX	PlateVelY   DeltaZBallPlate
                 //System.Diagnostics.Debug.Print(state.Position.X + "\t" + state.Position.Y + "\t" + state.Position.Z + "\t" +
-                //    state.Velocity.X + "\t" + state.Velocity.Y + "\t" + state.Velocity.Z + "\t"
+                //   state.Velocity.X + "\t" + state.Velocity.Y + "\t" + state.Velocity.Z + "\t"
                 //    + state.Acceleration.X + "\t" + state.Acceleration.Y + "\t" + state.Acceleration.Z + "\t" +
                 //    +BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.AngleBetwennVectors(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.CalcNormalVector(state.Tilt), state.Velocity)
-                //    + "\t" + elapsedSeconds + "\t" + state.Tilt.X + "\t" + state.Tilt.Y + "\t" + state.PlateVelocity.X
-                //     + "\t" + state.PlateVelocity.Y + "\t" + Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
+                //   + "\t" + elapsedSeconds + "\t" + state.Tilt.X + "\t" + state.Tilt.Y + "\t" + state.PlateVelocity.X
+            //    + "\t" + state.PlateVelocity.Y + "\t" + Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
+            #endregion
             #endregion
         }
     }
