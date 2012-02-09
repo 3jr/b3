@@ -124,7 +124,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Helpers
 				}
 				else
 				{
-					System.Threading.Thread.Sleep(100);
+					return;
 				}
 			}
 		}
