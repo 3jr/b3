@@ -84,7 +84,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Helpers
 					{
 						if (count % 3 == 0)
 						{
-							write.Write(String.Format("{0}|{1}", x.ToString(CultureInfo.InvariantCulture), y.ToString(CultureInfo.InvariantCulture)));
+							write.Write(String.Format("{0}|{1}|", x.ToString(CultureInfo.InvariantCulture), y.ToString(CultureInfo.InvariantCulture)));
 							write.Flush();
 						}
 					}
