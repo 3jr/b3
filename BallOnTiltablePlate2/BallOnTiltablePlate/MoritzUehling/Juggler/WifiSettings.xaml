@@ -4,8 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="48" d:DesignWidth="96" xmlns:my="clr-namespace:BallOnTiltablePlate.JanRapp.Controls">
-    <Grid Height="45" Width="310">
-		<my:DoubleBox Value="1" Height="24" HorizontalAlignment="Left" Margin="12,12,0,0" x:Name="doubleBox1" VerticalAlignment="Top" Width="72" Loaded="doubleBox1_Loaded" />
+             d:DesignHeight="131" d:DesignWidth="200" xmlns:my="clr-namespace:BallOnTiltablePlate.JanRapp.Controls">
+	<Grid>
+		<Label Content="Factor:" Height="28" HorizontalAlignment="Left" Margin="5,0,0,0" Name="label1" VerticalAlignment="Top" />
+		<my:DoubleBox Value="1" Height="24" HorizontalAlignment="Left" Margin="12,22,0,0" x:Name="factorBox" VerticalAlignment="Top" Width="176" Loaded="doubleBox1_Loaded" />
+		<Label Content="Status:" Height="28" HorizontalAlignment="Left" Margin="5,52,0,0" Name="label2" VerticalAlignment="Top" />
+		<TextBlock Height="43" HorizontalAlignment="Left" Background="Red" Margin="12,76,0,0" Name="statusInfo" Text="Disconnected" VerticalAlignment="Top" Width="176" TextAlignment="Center" FontSize="16" />
 	</Grid>
 </UserControl>

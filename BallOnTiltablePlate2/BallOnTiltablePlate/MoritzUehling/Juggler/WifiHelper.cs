@@ -7,14 +7,15 @@ using System.Net;
 using System.IO;
 
 using System.Threading;
+using System.Globalization;
 
 namespace BallOnTiltablePlate.MoritzUehling.Helpers
 {
-	class WifiHelper
+	public class WifiHelper
 	{
 
 		TcpListener listener;
-		TcpClient phone;
+		public TcpClient phone;
 
 		StreamReader read;
 		StreamWriter write;
@@ -24,12 +25,20 @@ namespace BallOnTiltablePlate.MoritzUehling.Helpers
 		public double tiltX = 0;
 		public double tiltY = 0;
 
+		bool connected = false;
+
+		public bool Connected { get { return connected; } }
+
+		IFormatProvider culture;
+
 		public WifiHelper()
 		{
 			listener = new TcpListener(IPAddress.Any, 31337);
 
 			listener.Start();
 			listener.BeginAcceptTcpClient(new AsyncCallback(PhoneConnected), listener);
+
+			
 
 		}
 
@@ -53,21 +62,41 @@ namespace BallOnTiltablePlate.MoritzUehling.Helpers
 				Console.WriteLine("Phone accepted!");
 			}
 
+			connected = true;
+
 			reciveThread = new Thread(new ThreadStart(ReciveData));
+			reciveThread.Priority = ThreadPriority.BelowNormal;
+			reciveThread.IsBackground = true;
 			reciveThread.Start();
 
+
+			listener.BeginAcceptTcpClient(new AsyncCallback(PhoneConnected), listener);
 		}
 
 		public void WritePos(double x, double y)
 		{
-			int count = 0;
-			if (write != null)
+			if (connected)
 			{
-				if (count % 3 == 0)
+				try
 				{
-					write.Write(String.Format("{0}|{1}", x, y));
-					write.Flush();
+					int count = 0;
+					if (write != null)
+					{
+						if (count % 3 == 0)
+						{
+							write.Write(String.Format("{0}|{1}", x.ToString(CultureInfo.InvariantCulture), y.ToString(CultureInfo.InvariantCulture)));
+							write.Flush();
+						}
+					}
 				}
+				catch
+				{
+					Disconnect();
+				}
+			}
+			else
+			{
+				System.Threading.Thread.Sleep(100);
 			}
 		}
 
@@ -75,14 +104,39 @@ namespace BallOnTiltablePlate.MoritzUehling.Helpers
 		{
 			while (true)
 			{
-				string message = read.ReadLine();
+				if (connected)
+				{
+					try
+					{
+						string message = read.ReadLine();
 
-				string[] vars = message.Split("|".ToCharArray());
+
+						string[] vars = message.Split("|".ToCharArray());
 
 
-				tiltX = double.Parse(vars[0]);
-				tiltY = double.Parse(vars[1]);
+						tiltX = double.Parse(vars[0], CultureInfo.InvariantCulture);
+						tiltY = double.Parse(vars[1], CultureInfo.InvariantCulture);
+					}
+					catch
+					{
+						Disconnect();
+					}
+				}
+				else
+				{
+					System.Threading.Thread.Sleep(100);
+				}
 			}
+		}
+
+		public void Disconnect()
+		{
+			if (phone.Connected)
+				phone.Close();
+
+			connected = false;
+
+
 		}
 		
 	}

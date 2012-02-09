@@ -23,13 +23,13 @@ namespace BallOnTiltablePlate.MoritzUehling.Juggler
 	/// Interaction logic for BasicBalance.xaml
 	/// </summary>
 	[BallOnPlateItemInfo("Moritz", "Uehling", "Phone Controller", "0.8")]
-	public class WifiConnector : UserControl, IJuggler<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
+	public class WifiConnector : IJuggler<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
 	{
 		double factor = 1;
 
-		WifiHelper connector;
+		public WifiHelper connector;
 
-		DoubleBox settings = new DoubleBox();
+		WifiSettings settings;
 
 		public BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor IO { private get; set; }
 
@@ -51,8 +51,8 @@ namespace BallOnTiltablePlate.MoritzUehling.Juggler
 
 		public WifiConnector()
 		{
+			settings = new WifiSettings(this);
 			connector = new WifiHelper();
-			settings.Value = 1;
 		}
 
 		public void Update()
@@ -65,9 +65,8 @@ namespace BallOnTiltablePlate.MoritzUehling.Juggler
 			{
 				connector.WritePos(0, 0);
 			}
+			factor = settings.factorBox.Value;
 
-
-			factor = settings.Value;
 			IO.SetTilt(new Vector(-connector.tiltY * factor, connector.tiltX * factor));
 		}
 	}
