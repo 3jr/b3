@@ -14,13 +14,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BallOnTiltablePlate.TimoSchmetzer.Preprocessor;
 using BallOnTiltablePlate.TimoSchmetzer.Simulation;
+using BallOnTiltablePlate.TimoSchmetzer.Test.Preprocessor;
 
-namespace BallOnTiltablePlate.TimoSchmetzer.TestAlgorithm
+namespace BallOnTiltablePlate.TimoSchmetzer.Test.Algorithm
 {
     /// <summary>
     /// Interaction logic for TestAlgorithm.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo", "Schmetzer", "TestAlgorithm", "0.1")]
+    //[BallOnPlateItemInfo("Timo", "Schmetzer", "TestAlgorithm", "0.1")]
     public partial class TestAlgorithm : UserControl, IJuggler<SimulationTestPreprocessor>
     {
         #region Base

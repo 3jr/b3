@@ -8,11 +8,14 @@ using System.Drawing.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows;
 
-namespace BallOnTiltablePlate.TimoSchmetzer
+namespace BallOnTiltablePlate.TimoSchmetzer.Test
 {
     class Test
     {
     }
+}
+namespace BallOnTiltablePlate.TimoSchmetzer
+{
     class PhysicSimulationInAir
     {
         public static void RunSimulation(Object o, double deltaSeconds) { }

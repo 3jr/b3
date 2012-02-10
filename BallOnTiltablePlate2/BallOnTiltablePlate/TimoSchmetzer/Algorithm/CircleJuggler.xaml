@@ -11,6 +11,7 @@
         <StackPanel>
             <controls:DoubleBox x:Name="PositionFactor" Text="Position: " />
             <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity: " />
+            <controls:DoubleBox x:Name="VelocityLimit" Text="VelocityLimit: " />
         </StackPanel>
     </controlsB3:SettingsSaverB3>
 </UserControl>

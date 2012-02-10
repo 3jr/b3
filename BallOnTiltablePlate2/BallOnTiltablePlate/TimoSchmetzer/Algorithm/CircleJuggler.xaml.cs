@@ -46,7 +46,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
         {
             if (IO.ValuesValid)
             {
-                double velocityfactoractive = IO.Velocity.Length > 1 ? 1 : 0;
+                double velocityfactoractive = IO.Velocity.Length > VelocityLimit.Value ? 1 : 0;
                 Vector direction = IO.Position;
                 direction.Normalize();
                 var tilt = IO.Velocity * velocityfactoractive * VelocityFactor.Value + (IO.Position.Length -0.0)* direction * PositionFactor.Value;

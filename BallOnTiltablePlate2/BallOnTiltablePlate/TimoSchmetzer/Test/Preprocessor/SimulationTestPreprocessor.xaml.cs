@@ -14,12 +14,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BallOnTiltablePlate.JanRapp.Simulation;
 
-namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
+namespace BallOnTiltablePlate.TimoSchmetzer.Test.Preprocessor
 {
     /// <summary>
     /// Interaction logic for Preprocessor.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo", "Schmetzer", "SimulationTestPreprocessor", "0.1")]
+    //[BallOnPlateItemInfo("Timo", "Schmetzer", "SimulationTestPreprocessor", "0.1")]
     public partial class SimulationTestPreprocessor : UserControl, IPreprocessor, IPreprocessorIO<SimulationBase, SimulationBase>
     {
         #region Base
