@@ -205,6 +205,9 @@
     <Compile Include="MoritzUehling\Juggler\WifiSettings.xaml.cs">
       <DependentUpon>WifiSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler.xaml.cs">
+      <DependentUpon>CircleJuggler.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Simulation\BasicSimulation.xaml.cs">
       <DependentUpon>BasicSimulation.xaml</DependentUpon>
     </Compile>
@@ -220,11 +223,11 @@
     <Compile Include="TimoSchmetzer\Preprocessor\Preprocessor.xaml.cs">
       <DependentUpon>Preprocessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Preprocessor\SimulationTestPreprocessor.xaml.cs">
+    <Compile Include="TimoSchmetzer\Test\Preprocessor\SimulationTestPreprocessor.xaml.cs">
       <DependentUpon>SimulationTestPreprocessor.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Simulation\SimulationInterfaces.cs" />
-    <Compile Include="TimoSchmetzer\TestAlgorithm\TestAlgorithm.xaml.cs">
+    <Compile Include="TimoSchmetzer\Test\Algorithm\TestAlgorithm.xaml.cs">
       <DependentUpon>TestAlgorithm.xaml</DependentUpon>
     </Compile>
     <Page Include="JanRapp\General\Controls\PointSelector.xaml">
@@ -338,6 +341,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="TimoSchmetzer\Algorithm\CircleJuggler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TimoSchmetzer\Simulation\BasicSimulation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -346,11 +353,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TimoSchmetzer\Preprocessor\SimulationTestPreprocessor.xaml">
+    <Page Include="TimoSchmetzer\Test\Preprocessor\SimulationTestPreprocessor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TimoSchmetzer\TestAlgorithm\TestAlgorithm.xaml">
+    <Page Include="TimoSchmetzer\Test\Algorithm\TestAlgorithm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
