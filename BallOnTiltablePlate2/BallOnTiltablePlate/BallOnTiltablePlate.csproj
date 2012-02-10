@@ -215,7 +215,7 @@
     <Compile Include="TimoSchmetzer\Utilities\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsInAir.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsOnPlate.cs" />
-    <Compile Include="TimoSchmetzer\Test.cs" />
+    <Compile Include="TimoSchmetzer\Test\Test.cs" />
     <Compile Include="TimoSchmetzer\Utilities\PhysicUtilities.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\Physics3D.cs" />
     <Compile Include="JanRapp\General\Utilities\VectorUtil.cs" />
