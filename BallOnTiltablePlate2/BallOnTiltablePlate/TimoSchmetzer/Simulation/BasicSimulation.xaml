@@ -76,9 +76,11 @@
         	</StackPanel>
         </Expander>
         <controls:SettingSaver/>
-        <TreeView x:Name="PhysicsCalculatorList"
+        <StackPanel Margin="8">
+            <Label>PhysicsCalculators</Label>
+            <TreeView x:Name="PhysicsCalculatorList"
                   Margin="7,0">
-            
-        </TreeView>
+            </TreeView>
+        </StackPanel>
     </WrapPanel>
 </UserControl>

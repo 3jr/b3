@@ -36,6 +36,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             InitializeComponent();
 
             timer.Tick += new EventHandler(timer_Tick);
+
             IEnumerable<Type> Calculators = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => t.IsClass && typeof(IPhysicsCalculator).IsAssignableFrom(t))
                 .Select(t => t)
@@ -47,16 +48,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 treeitem.Tag = Activator.CreateInstance(t);
                 PhysicsCalculatorList.Items.Add(treeitem);
             }
-            //TreeViewItem[] elem = new TreeViewItem[Calculators.Length];
-            //for (int i = 0; i < elem.Length; i++)
-            //{
-            //    elem[i] = new TreeViewItem();
-            //    elem[i].Header = i.ToString()+": "+Calculators[i].FullName;
-            //    PhysicsCalculatorList.Items.Add(elem[i]);
-            //}
         }
 
-        Point3D lastPosition = new Point3D();
         void timer_Tick(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
@@ -69,31 +62,17 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             if (mainWindow != null)
                 mainWindow.JugglerTimer();
 
-
-            lastPosition = Position;
             lastUpdateTime = now;
         }
 
         public void Update(double deltaSeconds)
         {
-            IPhysicsCalculator Calc = (IPhysicsCalculator)(((TreeViewItem)PhysicsCalculatorList.SelectedItem).Tag);
-            if(Calc!=null)
-            wrapper.RunSimulation(Calc, this, deltaSeconds);
+            if (PhysicsCalculatorList.SelectedItem != null)
+            {
+                IPhysicsCalculator Calc = (IPhysicsCalculator)(((TreeViewItem)PhysicsCalculatorList.SelectedItem).Tag);
+                wrapper.RunSimulation(Calc, this, deltaSeconds);
+            }
         }
-        //public IPhysicsCalculator GetSelectedCalculator()
-        //{
-        //    TreeViewItem t = (TreeViewItem)PhysicsCalculatorList.SelectedItem;
-        //    if (t != null)
-        //    {
-        //        String s = (String)t.Header;
-        //        int i = (int)Int32.Parse(s.Substring(0, s.IndexOf(':')));
-        //        return (IPhysicsCalculator)Activator.CreateInstance(Calculators[i]);
-        //    }
-        //    else
-        //    {
-        //        return null; //No Calculator Selected 
-        //    }
-        //}
 
         public void Start()
         {
@@ -274,15 +253,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         private void FpsSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             timer.Interval = new TimeSpan((long)(1000000 / FpsSlider.Value));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            TiltVecBox.Value = new Vector(0.0, 0.0);
-            DesiredTiltVecBox.Value = new Vector(0.0, 0.0);
-            PositionVecBox.Value = new Vector3D(0.0, 0.0, 0.0);
-            VelocityVecBox.Value = new Vector3D(0.0, 0.0, 0.0);
-            AccelerationVecBox.Value = new Vector3D(0.0, 0.0, 0.0);
         }
     }
 }
