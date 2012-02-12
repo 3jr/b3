@@ -45,16 +45,34 @@ namespace BallOnTiltablePlate.JanRapp.Input11
 
             InitializeComponent();
 
-            if (Kinect.Runtime.Kinects.Count == 0)
+            Kinect.Runtime.Kinects.StatusChanged += Kinects_StatusChanged;
+            TryInitializeKinectDevice();
+        }
+
+        void TryInitializeKinectDevice()
+        {
+            if (Kinect.Runtime.Kinects.Count == 0 || Kinect.Runtime.Kinects[0].Status != Kinect.KinectStatus.Connected)
             {
-                MessageBox.Show("Kinect not (properly) connected. Restart App for now.");
+                MessageBox.Show("Kinect[0] not (properly) connected.");
                 this.IsEnabled = false;
             }
             else
             {
+                this.IsEnabled = true;
                 kinect = Kinect.Runtime.Kinects[0];
                 kinect.DepthFrameReady += kinect_DepthFrameReady;
+                if (started)
+                {
+                    kinect.Initialize(Kinect.RuntimeOptions.UseDepth);
+                    kinect.DepthStream.Open(Kinect.ImageStreamType.Depth, 4, Kinect.ImageResolution.Resolution640x480, Kinect.ImageType.Depth);
+                }
             }
+        }
+
+        void Kinects_StatusChanged(object sender, Kinect.StatusChangedEventArgs e)
+        {
+            if(kinect == null)
+                TryInitializeKinectDevice();
         }
 
         void kinect_DepthFrameReady(object sender, Kinect.ImageFrameReadyEventArgs e)
@@ -180,15 +198,24 @@ namespace BallOnTiltablePlate.JanRapp.Input11
             return BitmapSource.Create(width, height, 96.0, 96.0, PixelFormats.Gray8, null, data, width);
         }
 
+        bool started = false;
         public void Start()
         {
-            kinect.Initialize(Kinect.RuntimeOptions.UseDepth);
-            kinect.DepthStream.Open(Kinect.ImageStreamType.Depth, 4, Kinect.ImageResolution.Resolution640x480, Kinect.ImageType.Depth);
+            started = true;
+            if (kinect != null)
+            {
+                kinect.Initialize(Kinect.RuntimeOptions.UseDepth);
+                kinect.DepthStream.Open(Kinect.ImageStreamType.Depth, 4, Kinect.ImageResolution.Resolution640x480, Kinect.ImageType.Depth);
+            }
+            else
+                TryInitializeKinectDevice();
         }
 
         public void Stop()
         {
-            kinect.Uninitialize();
+            started = false;
+            if(kinect != null)
+                kinect.Uninitialize();
         }
 
         #region Base
