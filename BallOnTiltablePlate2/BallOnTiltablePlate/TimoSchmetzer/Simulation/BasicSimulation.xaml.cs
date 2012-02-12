@@ -126,7 +126,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                double d = (double)PlateVelocityDoubleBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.DoubleBox.ValueProperty);
+                double d = PlateVelocityDoubleBox.Value;
 
                 return new Vector(d, d);
             }
@@ -136,7 +136,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                return (Vector)DesiredTiltVecBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.Vector2DControl.ValueProperty);
+                return DesiredTiltVecBox.Value;
             }
         }
 
@@ -144,7 +144,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                return (double)GravityDoubleBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.DoubleBox.ValueProperty);
+                return GravityDoubleBox.Value;
             }
         }
 
@@ -152,7 +152,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                return (double)HitAttenuationFactorDoubleBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.DoubleBox.ValueProperty);
+                return HitAttenuationFactorDoubleBox.Value;
             }
         }
 
@@ -160,7 +160,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                return (double)AbsoluteHitAttenuationDoubleBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.DoubleBox.ValueProperty);
+                return AbsoluteHitAttenuationDoubleBox.Value;
             }
         }
 
@@ -168,12 +168,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                return (Vector)TiltVecBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.Vector2DControl.ValueProperty);
+                return TiltVecBox.Value;
             }
 
             set
             {
-                TiltVecBox.SetValue(BallOnTiltablePlate.JanRapp.Controls.Vector2DControl.ValueProperty, value);
+                TiltVecBox.Value = value;
             }
         }
 
@@ -181,12 +181,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                Vector3D vec = ((Vector3D)PositionVecBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.Vector3DControl.ValueProperty));
+                Vector3D vec = PositionVecBox.Value;
                 return new Point3D(vec.X, vec.Y, vec.Z);
             }
             set
             {
-                PositionVecBox.SetValue(BallOnTiltablePlate.JanRapp.Controls.Vector3DControl.ValueProperty, new Vector3D(value.X, value.Y, value.Z));
+                PositionVecBox.Value = new Vector3D(value.X, value.Y, value.Z);
             }
         }
 
@@ -194,11 +194,11 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                return (Vector3D)VelocityVecBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.Vector3DControl.ValueProperty);
+                return VelocityVecBox.Value;
             }
             set
             {
-                VelocityVecBox.SetValue(BallOnTiltablePlate.JanRapp.Controls.Vector3DControl.ValueProperty, value);
+                VelocityVecBox.Value = value;
             }
         }
 
@@ -206,11 +206,11 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             get
             {
-                return (Vector3D)AccelerationVecBox.GetValue(BallOnTiltablePlate.JanRapp.Controls.Vector3DControl.ValueProperty);
+                return AccelerationVecBox.Value;
             }
             set
             {
-                AccelerationVecBox.SetValue(BallOnTiltablePlate.JanRapp.Controls.Vector3DControl.ValueProperty, value);
+                AccelerationVecBox.Value = value;
             }
         }
 
@@ -221,9 +221,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         private void PositionVecBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector3D> e)
         {
-            //Vector3D vec = (Vector3D)e.NewValue;
-            //Visualizer3DCtrl.BallPositon = new Point3D(vec.X, vec.Y, vec.Z);
-
             Visualizer3DCtrl.BallPositon = (Point3D)e.NewValue;
         }
         #endregion
