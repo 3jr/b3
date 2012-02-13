@@ -17,7 +17,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo", "Schmetzer", "CircleJuggler", "0.0")]
+    [BallOnPlateItemInfo("Timo", "Schmetzer", "CircleJuggler", "0.1")]
     public partial class CircleJuggler : UserControl, IJuggler<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
@@ -47,9 +47,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
             if (IO.ValuesValid)
             {
                 double velocityfactoractive = IO.Velocity.Length > VelocityLimit.Value ? 1 : 0;
-                Vector direction = IO.Position;
-                direction.Normalize();
-                var tilt = IO.Velocity * velocityfactoractive * VelocityFactor.Value + (IO.Position.Length -0.0)* direction * PositionFactor.Value;
+                var tilt = IO.Velocity * velocityfactoractive * VelocityFactor.Value + IO.Position * PositionFactor.Value;
 
                 IO.SetTilt(tilt);
             }
