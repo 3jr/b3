@@ -91,7 +91,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         public void SetTilt(Vector tilt)
         {
             tilt = tilt.ToNoNaN();
-            DesiredTiltVecBox.SetValue(BallOnTiltablePlate.JanRapp.Controls.Vector2DControl.ValueProperty, tilt);
+            DesiredTiltVecBox.Value = tilt;
         }
 
         public FrameworkElement SettingsUI
