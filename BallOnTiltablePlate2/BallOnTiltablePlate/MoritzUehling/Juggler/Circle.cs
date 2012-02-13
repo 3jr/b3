@@ -15,68 +15,70 @@ using BallOnTiltablePlate.JanRapp.MainApp.Helper;
 using BallOnTiltablePlate.JanRapp.Utilities;
 using BallOnTiltablePlate;
 
-
-/// <summary>
-/// Interaction logic for BasicBalance.xaml
-/// </summary>
-[BallOnPlateItemInfo("Moritz", "Uehling", "BallCircle", "0.1")]
-public class CircleJuggler : UserControl, IJuggler<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
+namespace BallOnTiltablePlate.MoritzUehling.Juggler
 {
-	double veloFactor = 0;
-	double posFactor = 1;
+    /// <summary>
+    /// Interaction logic for BasicBalance.xaml
+    /// </summary>
+    //[BallOnPlateItemInfo("Moritz", "Uehling", "BallCircle", "0.1")]
+    public class CircleJuggler : UserControl, IJuggler<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
+    {
+        double veloFactor = 0;
+        double posFactor = 1;
 
-	double factor = 0.1;
+        double factor = 0.1;
 
-	#region Base
-	public System.Windows.FrameworkElement SettingsUI
-	{
-		get { return null; }
-	}
-	#endregion
+        #region Base
+        public System.Windows.FrameworkElement SettingsUI
+        {
+            get { return null; }
+        }
+        #endregion
 
-	public BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor IO { private get; set; }
+        public BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor IO { private get; set; }
 
-	public void Start()
-	{
-	}
+        public void Start()
+        {
+        }
 
-	public void Stop()
-	{
-	}
+        public void Stop()
+        {
+        }
 
-	public CircleJuggler()
-	{
-	}
+        public CircleJuggler()
+        {
+        }
 
-	public void Update()
-	{
-		if (!IO.Position.HasNaN())
-		{
-			Vector velo = IO.Velocity;
+        public void Update()
+        {
+            if (!IO.Position.HasNaN())
+            {
+                Vector velo = IO.Velocity;
 
-			if (velo.HasNaN())
-				velo = new Vector(0, 0);
-
-
+                if (velo.HasNaN())
+                    velo = new Vector(0, 0);
 
 
-			Vector tilt = IO.Position * posFactor;
 
 
-			//double angle = Math.Atan(tilt.X / tilt.Y);
-			//angle += Math.PI / 2; //+90°
+                Vector tilt = IO.Position * posFactor;
 
-			
-			//Vector tilt2 = new Vector(Math.Cos(angle), Math.Sign(angle)) * Math.Sqrt(Math.Pow(tilt.X, 2) + Math.Pow(tilt.Y,2));
 
-			//tilt *= posFactor;
-			//tilt -= tilt2 * veloFactor;
+                //double angle = Math.Atan(tilt.X / tilt.Y);
+                //angle += Math.PI / 2; //+90°
 
-			////tilt += velo;
 
-			tilt *= factor;
+                //Vector tilt2 = new Vector(Math.Cos(angle), Math.Sign(angle)) * Math.Sqrt(Math.Pow(tilt.X, 2) + Math.Pow(tilt.Y,2));
 
-			IO.SetTilt(tilt);
-		}
-	}
+                //tilt *= posFactor;
+                //tilt -= tilt2 * veloFactor;
+
+                ////tilt += velo;
+
+                tilt *= factor;
+
+                IO.SetTilt(tilt);
+            }
+        }
+    }
 }
