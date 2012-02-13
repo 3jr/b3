@@ -186,6 +186,9 @@
     <Compile Include="JanRapp\Preprocessor\BasicPreprocessor.xaml.cs">
       <DependentUpon>BasicPreprocessor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Preprocessor\BasicPreprocessor3D.xaml.cs">
+      <DependentUpon>BasicPreprocessor3D.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\SettingsSaverB3.cs" />
     <Compile Include="JanRapp\General\Utilities\WPFConverter.cs" />
     <Compile Include="MoritzUehling\Juggler\Circle.cs" />
@@ -322,6 +325,9 @@
     <Page Include="JanRapp\Preprocessor\BasicPreprocessor.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\Preprocessor\BasicPreprocessor3D.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MoritzUehling\Juggler\WifiSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -391,7 +397,8 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>xcopy ".\Resources\openCV\*" ".\" /D /S</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

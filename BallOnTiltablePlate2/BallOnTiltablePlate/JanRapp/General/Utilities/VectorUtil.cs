@@ -73,6 +73,11 @@ namespace BallOnTiltablePlate.JanRapp.Utilities
         {
             return new Vector3D(v.X * v1.X, v.Y * v1.Y, v.Z * v1.Z);
         }
+
+        public static Vector ToVector2D(this Vector3D vec)
+        {
+            return new Vector(vec.X, vec.Y);
+        }
     }
 }
 
