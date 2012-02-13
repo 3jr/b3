@@ -49,7 +49,7 @@
             <Label x:Name="FpsLbl" Content="_FPS:" Margin="56.786,8,0,8" HorizontalAlignment="Left" Target="{Binding ElementName=FpsSlider}" d:LayoutOverrides="Height"/>
             <Slider x:Name="FpsSlider" Margin="94,8,8,8" d:LayoutOverrides="Height" MinWidth="140" Minimum=".1" Maximum="60" LargeChange="5" SmallChange="1" ValueChanged="FpsSlider_ValueChanged" AutoToolTipPlacement="BottomRight" Value="20"/>
         </Grid>
-        <controlsB3:SettingsSaverB3>
+        <controlsB3:SettingsSaverB3 x:Name="BasicSimulationGlobalSettingsSaver">
             <WrapPanel>
                 <Expander Header="Varia_bles" Margin="8">
                     <StackPanel>
