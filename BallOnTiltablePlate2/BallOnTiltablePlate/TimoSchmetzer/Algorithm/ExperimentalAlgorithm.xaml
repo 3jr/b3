@@ -14,6 +14,8 @@
             <controls:DoubleBox x:Name="VelocityLimit" Text="VelocityLimit: " />
             <controls:DoubleBox x:Name="AdditionalPositionVectorLength" Text="AdditionalPositionVectorLength: " />
             <controls:DoubleBox x:Name="PowerPositionFactor" Text="PowerPositionFactor: " />
+            <controls:DoubleBox x:Name="SquareFktParam" Text="SquareFktParam: " />
+            <controls:DoubleBox x:Name="SquareFktFactor" Text="SquareFktFactor: " />
         </StackPanel>
     </controlsB3:SettingsSaverB3>
 </UserControl>

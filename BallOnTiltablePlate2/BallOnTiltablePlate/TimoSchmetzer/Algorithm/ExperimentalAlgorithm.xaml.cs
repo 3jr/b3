@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BallOnTiltablePlate.JanRapp.Utilities;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
 {
@@ -49,8 +50,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
                 double velocityfactoractive = IO.Velocity.Length > VelocityLimit.Value ? 1 : 0;
                 Vector direction = IO.Position;
                 direction.Normalize();
+                direction.ToNoNaN();
                 var tilt = IO.Velocity * velocityfactoractive * VelocityFactor.Value 
                     + (IO.Position.Length +AdditionalPositionVectorLength.Value)* direction * Math.Pow(Math.E,PowerPositionFactor.Value*IO.Position.Length)*PositionFactor.Value
+                    + direction * SquareFktFactor.Value *Math.Pow(( IO.Position.Length - SquareFktParam.Value),2)
                     ;
 
                 IO.SetTilt(tilt);
