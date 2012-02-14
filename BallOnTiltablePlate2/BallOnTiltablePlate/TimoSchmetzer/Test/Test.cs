@@ -141,5 +141,22 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Test
     //    #endregion
 
     //    #endregion
+
+    //    public TemporaryPhysicsState Clone()
+    //    {
+    //        return (TemporaryPhysicsState)this.MemberwiseClone();
+    //    }
+    //    public void CopyFields(TemporaryPhysicsState Input, TemporaryPhysicsState state)
+    //    {
+    //        state.AbsoluteAbsorbtion = Input.AbsoluteAbsorbtion;
+    //        state.Acceleration = Input.Acceleration;
+    //        state.DesiredTilt = Input.DesiredTilt;
+    //        state.Gravity = Input.Gravity;
+    //        state.HitAttenuationFactor = Input.HitAttenuationFactor;
+    //        state.PlateVelocity = Input.PlateVelocity;
+    //        state.Position = Input.Position;
+    //        state.Tilt = Input.Tilt;
+    //        state.Velocity = Input.Velocity;
+    //    }
     //}
 }

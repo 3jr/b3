@@ -218,13 +218,7 @@
     <Compile Include="TimoSchmetzer\Preprocessor\Preprocessor.xaml.cs">
       <DependentUpon>Preprocessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Test\Preprocessor\SimulationTestPreprocessor.xaml.cs">
-      <DependentUpon>SimulationTestPreprocessor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TimoSchmetzer\Simulation\SimulationInterfaces.cs" />
-    <Compile Include="TimoSchmetzer\Test\Algorithm\TestAlgorithm.xaml.cs">
-      <DependentUpon>TestAlgorithm.xaml</DependentUpon>
-    </Compile>
     <Page Include="JanRapp\General\Controls\PointSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -351,14 +345,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TimoSchmetzer\Test\Preprocessor\SimulationTestPreprocessor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TimoSchmetzer\Test\Algorithm\TestAlgorithm.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -390,7 +376,10 @@
   <ItemGroup>
     <Resource Include="JanRapp\General\Controls\Visualizer\Shapes\PlateTextureWhite.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="TimoSchmetzer\Test\Algorithm\" />
+    <Folder Include="TimoSchmetzer\Test\Preprocessor\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Coding4Fun.Kinect.WinForm.dll" />
     <Content Include="Resources\Coding4Fun.Kinect.Wpf.dll" />
