@@ -68,6 +68,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Desktop\C4FCKinect\Microsoft.Expression.Drawing.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.Research.Kinect, Version=1.0.0.45, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -207,6 +210,7 @@
       <DependentUpon>BasicSimulation.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Simulation\PhysicsWrapper.cs" />
+    <Compile Include="TimoSchmetzer\Utilities\ExcelUtilities.cs" />
     <Compile Include="TimoSchmetzer\Utilities\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsInAir.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsOnPlate.cs" />
