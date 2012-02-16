@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using Microsoft.Office.Interop.Excel;
 using System.Reflection;
+using System.Windows;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
 {
     class ExcelUtilities
     {
         /// <summary>
-        /// 
+        /// Generates and shows a diagram with the specified data.
         /// </summary>
-        /// <param name="Data">Tuple<IEnumerable<headings>,Ienumerable<Tuple<xData,Ienumerable<yData>>>></param>
-        public static void GenerateAndShowDiagram(Tuple<IEnumerable<string>, IEnumerable<Tuple<double, IEnumerable<double>>>> Data)
+        /// <param name="Data">Ienumerable<Datarow<Dataheading,IEnumerable<Datapoints>>></param>
+        public static void GenerateAndShowDiagram(string ChartTitle, string CategryAxisName, string ValueAxisName, IEnumerable<Tuple<string, IEnumerable<System.Windows.Point>>> Data)
         {
             #region InitExel
             Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
@@ -33,44 +34,102 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
                 Console.WriteLine("Worksheet could not be created. Check that your office installation and project references are correct.");
             }
             #endregion
-            #region WriteValues
-            int[] WritePosition = new int[2];
-            WritePosition[0] = 1;
-            WritePosition[1] = 1;
-            //Generate headings
-            foreach (string heading in Data.Item1)
-            {
-                writeCell(ws, WritePosition[0], WritePosition[1], heading);
-                WritePosition[1]++;
-            }
-            //Write Cell values
-            foreach (Tuple<double, IEnumerable<double>> CellValues in Data.Item2)
-            {
-                WritePosition[0]++;
-                writeCell(ws, WritePosition[0], WritePosition[1], CellValues.Item1);
-                foreach (double yValue in CellValues.Item2)
-                {
-                    WritePosition[1]++;
-                    writeCell(ws, WritePosition[0], WritePosition[1], yValue);
-                }
-            }
-            #endregion
-            #region CreateDiagram
+            #region WriteValuesAndGenerateDiagram
             Chart c = wb.Charts.Add(Missing.Value, Missing.Value, Missing.Value, Missing.Value);
-            c.ChartWizard(Missing.Value, XlChartType.xlXYScatter, Missing.Value, XlRowCol.xlColumns, Missing.Value, Missing.Value, Missing.Value,
-            Missing.Value, Missing.Value, Missing.Value, Missing.Value);
-            Series s = c.SeriesCollection(1);
-            int DataLength = Data.Item2.ToArray().Length;
-            s.XValues = ws.get_Range(ws.Cells[2, 1], ws.Cells[DataLength, 1]);
-            s.Values = ws.get_Range(ws.Cells[2, 2], ws.Cells[DataLength, 2]);
-            s.Name = Data.Item1.ElementAt(0);
-            c.Location(XlChartLocation.xlLocationAsNewSheet, ws.Name);
+            //c.ChartWizard(Missing.Value, XlChartType.xlXYScatter, Missing.Value, XlRowCol.xlColumns, Missing.Value, Missing.Value, Missing.Value,
+            //Missing.Value, Missing.Value, Missing.Value, Missing.Value);
+            c.ChartType = XlChartType.xlXYScatter;
+            c.SetSourceData(ws.get_Range("A1", "B1"), XlRowCol.xlRows);
+            int CollectionNumber = 0;
+
+            Cellwriter writer = new Cellwriter(ws);
+            writer.WriteColumn = 1;
+            foreach (Tuple<string, IEnumerable<System.Windows.Point>> Datarow in Data)
+            {
+                //Generate headings
+                writer.WriteRow = 1;
+                writer.writeCell("X");
+                writer.WriteColumn++;
+                writer.writeCell(Datarow.Item1);
+                writer.WriteColumn--;
+                //Write Points
+                foreach (System.Windows.Point datapoint in Datarow.Item2)
+                {
+                    writer.WriteRow++;
+                    writer.writeCell(datapoint.X);
+                    writer.WriteColumn++;
+                    writer.writeCell(datapoint.Y);
+                    writer.WriteColumn--;
+                }
+                writer.WriteColumn += 2;
+                //Generate Dataseries
+                CollectionNumber++;
+                Series s = c.SeriesCollection(CollectionNumber);
+                int DataLength = Datarow.Item2.ToArray().Length;
+
+                s.XValues = xlApp.Range[ws.Cells[2, writer.WriteColumn - 2], ws.Cells[DataLength + 1, writer.WriteColumn - 2]];
+                s.Values = xlApp.Range[ws.Cells[2, writer.WriteColumn - 1], ws.Cells[DataLength + 1, writer.WriteColumn - 1]];
+                s.Name = Datarow.Item1;
+            }
+
+            c.HasTitle = true;
+            c.ChartTitle.Text = ChartTitle;
+            ((Axis)c.Axes(XlAxisType.xlCategory, XlAxisGroup.xlPrimary)).HasTitle = true;
+            ((Axis)c.Axes(XlAxisType.xlCategory, XlAxisGroup.xlPrimary)).AxisTitle.Text = CategryAxisName;
+            ((Axis)c.Axes(XlAxisType.xlValue, XlAxisGroup.xlPrimary)).HasTitle = true;
+            ((Axis)c.Axes(XlAxisType.xlValue, XlAxisGroup.xlPrimary)).AxisTitle.Text = ValueAxisName;
+
+            c.Location(XlChartLocation.xlLocationAsNewSheet, ChartTitle);
             #endregion
         }
 
-        public static void writeCell(Worksheet Worksheet, int Row, int Column, dynamic Value)
+        public class Cellwriter
         {
-            Worksheet.Cells[Row, Column].Value2 = Value;
+            public Cellwriter() { }
+            public Cellwriter(Worksheet WriteSheet)
+            {
+                this.WriteSheet = WriteSheet;
+            }
+
+            /// <summary>
+            /// The Point to Write at.
+            /// x:Row 1->1
+            /// y:Column 1->A
+            /// </summary>
+            public int WriteColumn;
+
+            /// <summary>
+            /// The Point to Write at.
+            /// x:Row 1->1
+            /// y:Column 1->A
+            /// </summary>
+            public int WriteRow;
+
+            /// <summary>
+            /// The ExcelSheet to write to.
+            /// </summary>
+            public Worksheet WriteSheet { get; set; }
+
+            /// <summary>
+            /// Method writes the specified value at the WritePosition in WriteSheet.
+            /// </summary>
+            /// <param name="value">Value to be written.</param>
+            public void writeCell(dynamic value)
+            {
+                writeCell(WriteSheet, WriteRow, WriteColumn, value);
+            }
+
+            /// <summary>
+            /// Writes a cell
+            /// </summary>
+            /// <param name="Worksheet">The worksheet to write to</param>
+            /// <param name="Row">The Row to be written</param>
+            /// <param name="Column">The Column to be written</param>
+            /// <param name="Value">The Value to be written</param>
+            private static void writeCell(Worksheet Worksheet, int Row, int Column, dynamic Value)
+            {
+                Worksheet.Cells[Row, Column].Value2 = Value;
+            }
         }
     }
 }
