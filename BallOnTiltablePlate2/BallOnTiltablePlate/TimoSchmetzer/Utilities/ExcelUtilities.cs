@@ -10,79 +10,138 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
 {
     class ExcelUtilities
     {
-        /// <summary>
-        /// Generates and shows a diagram with the specified data.
-        /// </summary>
-        /// <param name="Data">Ienumerable<Datarow<Dataheading,IEnumerable<Datapoints>>></param>
-        public static void GenerateAndShowDiagram(string ChartTitle, string CategryAxisName, string ValueAxisName, IEnumerable<Tuple<string, IEnumerable<System.Windows.Point>>> Data)
+        public class ExcelDiagramCreator
         {
-            #region InitExel
-            Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+            /// <summary>
+            /// Used to save Data.
+            /// </summary>
+            private Dictionary<string, List<System.Windows.Point>> Dataseries = new Dictionary<string,List<System.Windows.Point>>();
 
-            if (xlApp == null)
+            /// <summary>
+            /// X Axis name Displayed in the Diagram
+            /// </summary>
+            public string AxisNameX { get; set; }
+
+            /// <summary>
+            /// Y Axis name Displayed in the Diagram
+            /// </summary>
+            public string AxisNameY { get; set; }
+
+            /// <summary>
+            /// Diagram Title Displayed in the Diagram and Name of the Diagram
+            /// </summary>
+            public string DiagramTitle { get; set; }
+
+            public void AddPoint(string series, System.Windows.Point p)
             {
-                Console.WriteLine("EXCEL could not be started. Check that your office installation and project references are correct.");
-                return;
-            }
-            xlApp.Visible = true;
-
-            Workbook wb = xlApp.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
-            Worksheet ws = (Worksheet)wb.Worksheets[1];
-
-            if (ws == null)
-            {
-                Console.WriteLine("Worksheet could not be created. Check that your office installation and project references are correct.");
-            }
-            #endregion
-            #region WriteValuesAndGenerateDiagram
-            Chart c = wb.Charts.Add(Missing.Value, Missing.Value, Missing.Value, Missing.Value);
-            //c.ChartWizard(Missing.Value, XlChartType.xlXYScatter, Missing.Value, XlRowCol.xlColumns, Missing.Value, Missing.Value, Missing.Value,
-            //Missing.Value, Missing.Value, Missing.Value, Missing.Value);
-            c.ChartType = XlChartType.xlXYScatter;
-            c.SetSourceData(ws.get_Range("A1", "B1"), XlRowCol.xlRows);
-            int CollectionNumber = 0;
-
-            Cellwriter writer = new Cellwriter(ws);
-            writer.WriteColumn = 1;
-            foreach (Tuple<string, IEnumerable<System.Windows.Point>> Datarow in Data)
-            {
-                //Generate headings
-                writer.WriteRow = 1;
-                writer.writeCell("X");
-                writer.WriteColumn++;
-                writer.writeCell(Datarow.Item1);
-                writer.WriteColumn--;
-                //Write Points
-                foreach (System.Windows.Point datapoint in Datarow.Item2)
+                if (Dataseries.ContainsKey(series))
                 {
-                    writer.WriteRow++;
-                    writer.writeCell(datapoint.X);
-                    writer.WriteColumn++;
-                    writer.writeCell(datapoint.Y);
-                    writer.WriteColumn--;
+                    Dataseries[series].Add(p);
                 }
-                writer.WriteColumn += 2;
-                //Generate Dataseries
-                CollectionNumber++;
-                Series s = c.SeriesCollection(CollectionNumber);
-                int DataLength = Datarow.Item2.ToArray().Length;
-
-                s.XValues = xlApp.Range[ws.Cells[2, writer.WriteColumn - 2], ws.Cells[DataLength + 1, writer.WriteColumn - 2]];
-                s.Values = xlApp.Range[ws.Cells[2, writer.WriteColumn - 1], ws.Cells[DataLength + 1, writer.WriteColumn - 1]];
-                s.Name = Datarow.Item1;
+                else
+                {
+                    List<System.Windows.Point> l = new List<System.Windows.Point>();
+                    l.Add(p);
+                    Dataseries.Add(series, l);
+                }
             }
 
-            c.HasTitle = true;
-            c.ChartTitle.Text = ChartTitle;
-            ((Axis)c.Axes(XlAxisType.xlCategory, XlAxisGroup.xlPrimary)).HasTitle = true;
-            ((Axis)c.Axes(XlAxisType.xlCategory, XlAxisGroup.xlPrimary)).AxisTitle.Text = CategryAxisName;
-            ((Axis)c.Axes(XlAxisType.xlValue, XlAxisGroup.xlPrimary)).HasTitle = true;
-            ((Axis)c.Axes(XlAxisType.xlValue, XlAxisGroup.xlPrimary)).AxisTitle.Text = ValueAxisName;
+            public void AddPoints(string series, IEnumerable<System.Windows.Point> p)
+            {
+                if (Dataseries.ContainsKey(series))
+                {
+                    Dataseries[series].AddRange(p);
+                }
+                else
+                {
+                    Dataseries.Add(series, new List<System.Windows.Point>(p));
+                }
+            }
 
-            c.Location(XlChartLocation.xlLocationAsNewSheet, ChartTitle);
-            #endregion
+            public void GenerateAndShowDiagram()
+            {
+                List<Tuple<string, IEnumerable<System.Windows.Point>>> Data = new List<Tuple<string, IEnumerable<System.Windows.Point>>>();
+                foreach (KeyValuePair<string, List<System.Windows.Point>> kvp in Dataseries)
+                {
+                    Data.Add(new Tuple<string, IEnumerable<System.Windows.Point>>(kvp.Key, kvp.Value));
+                }
+                GenerateAndShowDiagram(DiagramTitle, AxisNameX, AxisNameY, Data);
+            }
+
+            /// <summary>
+            /// Generates and shows a diagram with the specified data.
+            /// </summary>
+            /// <param name="Data">Ienumerable<Datarow<Dataheading,IEnumerable<Datapoints>>></param>
+            private static void GenerateAndShowDiagram(string ChartTitle, string CategryAxisName, string ValueAxisName, IEnumerable<Tuple<string, IEnumerable<System.Windows.Point>>> Data)
+            {
+                #region InitExel
+                Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+                if (xlApp == null)
+                {
+                    Console.WriteLine("EXCEL could not be started. Check that your office installation and project references are correct.");
+                    return;
+                }
+                xlApp.Visible = true;
+
+                Workbook wb = xlApp.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
+                Worksheet ws = (Worksheet)wb.Worksheets[1];
+
+                if (ws == null)
+                {
+                    Console.WriteLine("Worksheet could not be created. Check that your office installation and project references are correct.");
+                }
+                #endregion
+                #region WriteValuesAndGenerateDiagram
+                Chart c = wb.Charts.Add(Missing.Value, Missing.Value, Missing.Value, Missing.Value);
+                c.ChartType = XlChartType.xlXYScatter;
+                c.SetSourceData(ws.get_Range("A1", "B1"), XlRowCol.xlRows);
+                int CollectionNumber = 0;
+                Cellwriter writer = new Cellwriter(ws);
+                writer.WriteColumn = 1;
+                foreach (Tuple<string, IEnumerable<System.Windows.Point>> Datarow in Data)
+                {
+                    //Generate headings
+                    writer.WriteRow = 1;
+                    writer.writeCell("X");
+                    writer.WriteColumn++;
+                    writer.writeCell(Datarow.Item1);
+                    writer.WriteColumn--;
+                    //Write Points
+                    foreach (System.Windows.Point datapoint in Datarow.Item2)
+                    {
+                        writer.WriteRow++;
+                        writer.writeCell(datapoint.X);
+                        writer.WriteColumn++;
+                        writer.writeCell(datapoint.Y);
+                        writer.WriteColumn--;
+                    }
+                    writer.WriteColumn += 2;
+                    //Generate Dataseries
+                    CollectionNumber++;
+                    if (CollectionNumber > 1)
+                    {
+                        c.SeriesCollection().NewSeries();
+                    }
+                    Series s = c.SeriesCollection(CollectionNumber);
+                    int DataLength = Datarow.Item2.ToArray().Length;
+                    
+                    s.XValues = xlApp.Range[ws.Cells[2, writer.WriteColumn - 2], ws.Cells[DataLength + 1, writer.WriteColumn - 2]];
+                    s.Values = xlApp.Range[ws.Cells[2, writer.WriteColumn - 1], ws.Cells[DataLength + 1, writer.WriteColumn - 1]];
+                    s.Name = Datarow.Item1;
+                }
+
+                c.HasTitle = true;
+                c.ChartTitle.Text = ChartTitle;
+                ((Axis)c.Axes(XlAxisType.xlCategory, XlAxisGroup.xlPrimary)).HasTitle = true;
+                ((Axis)c.Axes(XlAxisType.xlCategory, XlAxisGroup.xlPrimary)).AxisTitle.Text = CategryAxisName;
+                ((Axis)c.Axes(XlAxisType.xlValue, XlAxisGroup.xlPrimary)).HasTitle = true;
+                ((Axis)c.Axes(XlAxisType.xlValue, XlAxisGroup.xlPrimary)).AxisTitle.Text = ValueAxisName;
+
+                c.Location(XlChartLocation.xlLocationAsNewSheet, ChartTitle);
+                #endregion
+            }
         }
-
         public class Cellwriter
         {
             public Cellwriter() { }

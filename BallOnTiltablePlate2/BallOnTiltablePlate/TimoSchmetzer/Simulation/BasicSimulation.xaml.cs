@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using BallOnTiltablePlate.JanRapp.Utilities;
+using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 using System.Reflection;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
@@ -41,7 +42,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 .Where(t => t.IsClass && typeof(IPhysicsCalculator).IsAssignableFrom(t))
                 .Select(t => t)
                 .ToArray();
-            foreach(Type t in Calculators)
+            foreach (Type t in Calculators)
             {
                 TreeViewItem treeitem = new TreeViewItem();
                 treeitem.Header = t.FullName;
@@ -71,6 +72,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             {
                 IPhysicsCalculator Calc = (IPhysicsCalculator)(((TreeViewItem)PhysicsCalculatorList.SelectedItem).Tag);
                 wrapper.RunSimulation(Calc, this, deltaSeconds);
+                if (recording)
+                {
+                    AddDataToDiagramCreator(deltaSeconds);
+                }
             }
         }
 
@@ -251,5 +256,48 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             timer.Interval = new TimeSpan((long)(1000000 / FpsSlider.Value));
         }
+
+        #region Diagram
+        private ExcelUtilities.ExcelDiagramCreator diagramcreator;
+        private bool recording = false;
+        private double time = 0;
+        private void AddDataToDiagramCreator(double elapsedSeconds)
+        {
+            time += elapsedSeconds;
+            diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
+            diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
+            diagramcreator.AddPoint("PositionZ", new Point(time, Position.Z));
+            diagramcreator.AddPoint("VelocityX", new Point(time, Velocity.X));
+            diagramcreator.AddPoint("VelocityY", new Point(time, Velocity.Y));
+            diagramcreator.AddPoint("VelocityZ", new Point(time, Velocity.Z));
+            diagramcreator.AddPoint("AccelerationX", new Point(time, Acceleration.X));
+            diagramcreator.AddPoint("AccelerationY", new Point(time, Acceleration.Y));
+            diagramcreator.AddPoint("AccelerationZ", new Point(time, Acceleration.Z));
+            diagramcreator.AddPoint("TiltX", new Point(time, Tilt.X));
+            diagramcreator.AddPoint("TiltY", new Point(time, Tilt.Y));
+        }
+        private void CreateDiagram()
+        {
+            diagramcreator.AxisNameX = "Time";
+            diagramcreator.AxisNameY = "Value";
+            diagramcreator.DiagramTitle = "NoTitle";
+            diagramcreator.GenerateAndShowDiagram();
+        }
+        private void ToogleRecordCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            recording = !recording;
+            if (recording)
+            {
+                diagramcreator = new ExcelUtilities.ExcelDiagramCreator();
+                time = 0;
+                ToggleReccordBtn.Content = "Stop";
+            }
+            else
+            {
+                CreateDiagram();
+                ToggleReccordBtn.Content = "Record";
+            }
+        }
+        #endregion
     }
 }
