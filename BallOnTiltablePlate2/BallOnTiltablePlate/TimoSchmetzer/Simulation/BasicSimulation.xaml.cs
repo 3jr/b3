@@ -121,7 +121,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         private void ToogleRunningCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (!stopped)
+            if ((!stopped)&&(!recording))
                 e.CanExecute = true;
         }
 
@@ -291,9 +291,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 diagramcreator = new ExcelUtilities.ExcelDiagramCreator();
                 time = 0;
                 ToggleReccordBtn.Content = "Stop";
+                if (!timer.IsEnabled)
+                {
+                    ToogleRunningCmd_Executed(null, null);
+                }
             }
             else
             {
+                ToogleRunningCmd_Executed(null, null);
                 CreateDiagram();
                 ToggleReccordBtn.Content = "Record";
             }

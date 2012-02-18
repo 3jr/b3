@@ -65,7 +65,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
                 {
                     Data.Add(new Tuple<string, IEnumerable<System.Windows.Point>>(kvp.Key, kvp.Value));
                 }
-                GenerateAndShowDiagram(DiagramTitle, AxisNameX, AxisNameY, Data);
+                try
+                {
+                    GenerateAndShowDiagram(DiagramTitle, AxisNameX, AxisNameY, Data);
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show("Unable to Create Diagram. ExceptionMessage:" + e.Message);
+                }
             }
 
             /// <summary>
