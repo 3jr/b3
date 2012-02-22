@@ -15,17 +15,25 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
 
         #region LinearRegression
 
+        /// <summary>
+        /// Represents the equation of a line.
+        /// f(x) = m*x+c
+        /// </summary>
         public struct LineEquation
         {
-            //f(x) = m*x+c
             public double m;
             public double c;
         }
 
-        public static LineEquation GetLineEquation(Point[] values)
+        /// <summary>
+        /// Searches a line Equation fitting best for all Points using linear Regression.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static LineEquation GetLineEquation(IEnumerable<Point> values)
         {
             //Do Linear Regression
-            int n = values.Length;
+            int n = values.Count();
             double SumX = 0;
             double SumY = 0;
             double SumSquaredX = 0;
@@ -160,8 +168,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         public static Vector3D CalcNormalVectorSequentialTilt(Vector SequentialTilt)
         {
             Vector3D NormalVector = new Vector3D();
-            Vector3D a = (Vector3D)PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(0, 1), SequentialTilt);
-            Vector3D b = (Vector3D)PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(1, 0), SequentialTilt);
+            Vector3D a = (Vector3D)TransformPlatePoint(new Vector(0, 1), SequentialTilt);
+            Vector3D b = (Vector3D)TransformPlatePoint(new Vector(1, 0), SequentialTilt);
             NormalVector = Vector3D.CrossProduct(a, b);
             return NormalVector;
         }
@@ -244,27 +252,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         /// <param name="PlateCoordinate">Plate Coordinates</param>
         /// <param name="SequentialTilt">Tilt of the plate</param>
         /// <returns></returns>
-        public static Point3D PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(Vector PlateCoordinate, Vector SequentialTilt)
+        public static Point3D TransformPlatePoint(Vector PlateCoordinate, Vector SequentialTilt)
         {
             Point3D p = new Point3D(PlateCoordinate.X, PlateCoordinate.Y, 0);
-            Matrix3x3 T = RotateTransformationMatrix(new Vector3D(1, 0, 0), -SequentialTilt.Y) * RotateTransformationMatrix(new Vector3D(0, Math.Cos(SequentialTilt.Y), Math.Sin(SequentialTilt.Y)), Math.Cos(SequentialTilt.Y) * SequentialTilt.X);
-            p = T * p;
+            p = RotateTransform(new Vector3D(0.0, 1.0, 0.0), SequentialTilt.X, p);
+            p = RotateTransform(new Vector3D(1.0, 0.0, 0.0), SequentialTilt.Y, p);
             return p;
-        }
-
-        /// <summary>
-        /// Calcs Plate Edges of a 2x2 plate
-        /// </summary>
-        /// <param name="SequentialTilt">Tilt of the plate</param>
-        /// <returns></returns>
-        public static Point3D[] CalcPlateEdgesSequentialTilt(Vector SequentialTilt)
-        {
-            Point3D[] Edges = new Point3D[4];
-            Edges[0] = PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(-1, 1), SequentialTilt);
-            Edges[1] = PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(-1, -1), SequentialTilt);
-            Edges[2] = PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(1, -1), SequentialTilt);
-            Edges[3] = PlateCoordinatesToEucidean3DCoordinatesSequentialTilt(new Vector(1, 1), SequentialTilt);
-            return Edges;
         }
 
         /// <summary>
@@ -279,6 +272,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
                 / (NormalVector.X * NormalVector.X + NormalVector.Y * NormalVector.Y + NormalVector.Z * NormalVector.Z);
             return p + t * NormalVector;
         }
+
+        public static Vector ToSequentialTilt(Vector Tilt)
+        {
+            return new Vector(
+                -Math.Acos(1/(Math.Cos(Tilt.Y)*Math.Sqrt(1+Math.Tan(Tilt.X)*Math.Tan(Tilt.X)+Math.Tan(Tilt.Y)*Math.Tan(Tilt.Y))))
+                ,Tilt.Y);
+        }
+
 
         #endregion
 
