@@ -16,7 +16,7 @@ using Kinect = Microsoft.Research.Kinect.Nui;
 using System.Threading.Tasks;
 using System.Threading;
 using Coding4Fun.Kinect.Wpf;
-using BallOnTiltablePlate.JanRapp.General.Utilities;
+using BallOnTiltablePlate.JanRapp.Utilities;
 using BallOnTiltablePlate.JanRapp.Input;
 using BallOnTiltablePlate.JanRapp.Input1;
 

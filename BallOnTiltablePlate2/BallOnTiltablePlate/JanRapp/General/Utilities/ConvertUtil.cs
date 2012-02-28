@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace BallOnTiltablePlate.JanRapp.General.Utilities
+namespace BallOnTiltablePlate.JanRapp.Utilities
 {
     public static class ConvertUtil
     {

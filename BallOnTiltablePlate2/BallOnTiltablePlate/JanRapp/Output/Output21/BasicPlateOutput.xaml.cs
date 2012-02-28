@@ -14,13 +14,13 @@ using System.Windows.Shapes;
 using System.IO.Ports;
 using BallOnTiltablePlate.JanRapp.Utilities;
 
-namespace BallOnTiltablePlate.JanRapp.Output.Output2
+namespace BallOnTiltablePlate.JanRapp.Output.Output21
 {
     /// <summary>
     /// Interaction logic for BasicPlateOutput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "BasicPlateOutput", "2.0")]
-    public partial class BasicPlateOutput2 : UserControl, IPlateOutput, IDisposable
+    [BallOnPlateItemInfo("Jan", "Rapp", "BasicPlateOutput", "2.1")]
+    public partial class BasicPlateOutput21 : UserControl, IPlateOutput, IDisposable
     {
         public FrameworkElement SettingsUI
         {
@@ -29,11 +29,12 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         SerialPort port = new SerialPort();
         Paragraph LogParagraph;
 
-        public BasicPlateOutput2()
+        public BasicPlateOutput21()
         {
             InitializeComponent();
 
             port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
+
             LogParagraph = new Paragraph();
             RecivedLog.Document = new FlowDocument(LogParagraph);
         }
@@ -265,7 +266,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             GC.SuppressFinalize(this);
         }
 
-        ~BasicPlateOutput2()
+        ~BasicPlateOutput21()
         {
             Dispose();
         }

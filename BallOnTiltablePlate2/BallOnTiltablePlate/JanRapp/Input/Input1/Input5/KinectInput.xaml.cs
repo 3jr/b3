@@ -16,7 +16,7 @@ using Kinect = Microsoft.Research.Kinect.Nui;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace BallOnTiltablePlate.JanRapp.Input0_5
+namespace BallOnTiltablePlate.JanRapp.Input05
 {
     /// <summary>
     /// Interaction logic for KinectInput.xaml

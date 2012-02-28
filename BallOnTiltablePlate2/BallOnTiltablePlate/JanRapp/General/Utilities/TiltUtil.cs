@@ -22,12 +22,12 @@ namespace BallOnTiltablePlate.JanRapp.Utilities
         public static Quaternion RotationForTilt(Vector sequentalTilt) //c
         {
             Vector3D firstAxisForYRotation = new Vector3D(1.0, 0.0, 0.0); //X-Axis
-            Vector3D secoundAxisForXRotation = new Vector3D(0.0, 1.0, Math.Tan(sequentalTilt.Y)); //Y-Axis Rotated by seqentialTilt.Y
+            Vector3D secoundAxisForXRotation = new Vector3D(0.0, 1.0, 0.0);// Math.Tan(sequentalTilt.Y)); //Y-Axis Rotated by seqentialTilt.Y
 
             Quaternion firstRotation = new Quaternion(firstAxisForYRotation, RadToDeg(sequentalTilt.Y));
             Quaternion secoundRotaion = new Quaternion(secoundAxisForXRotation, RadToDeg(sequentalTilt.X));
 
-            return secoundRotaion * firstRotation; //it just is that way with Quaternions
+            return firstRotation * secoundRotaion; //it just is that way with Quaternions
         }
 
         public static RotateTransform3D RotateTransformForTilt(Vector sequentalTilt)
@@ -76,7 +76,7 @@ namespace BallOnTiltablePlate.JanRapp.Utilities
 
             Vector3D normalForXAxis = negativYRotationTransform.Transform(normal);
 
-            seqentialTilt.X = Math.Atan(normalForXAxis.X / normalForXAxis.Z);
+            seqentialTilt.X = Math.Atan2(normalForXAxis.X, normalForXAxis.Z);
 
             return seqentialTilt;
         }

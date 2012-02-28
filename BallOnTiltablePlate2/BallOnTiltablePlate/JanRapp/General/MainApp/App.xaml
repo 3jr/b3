@@ -6,6 +6,12 @@
              StartupUri="/BallOnTiltablePlate2;component/JanRapp/General/MainApp/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <RoutedCommand x:Key="BackupB3SettingsSaverSaves">
+                <RoutedCommand.InputGestures>
+                    <KeyGesture>Control+B</KeyGesture>
+                </RoutedCommand.InputGestures>
+            </RoutedCommand>
+
             <Style TargetType="{x:Type JRappWPF:DoubleBox}">
                 <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave" 
     				Value="Value"/>

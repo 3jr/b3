@@ -11,10 +11,19 @@ namespace JRapp.WPF
 {
     public class SettingsSaverB3 : SettingsSaver
     {
+        static List<WeakReference> allSettingsSaverB3 = new List<WeakReference>();
+
         protected override void OnInitialized(EventArgs e)
         {
             SaveLocation = GetSaveFolder();
             base.OnInitialized(e);
+
+            GlobalSettings.Instance.EnviromentVariableChanged += OnEnviromentVarChanged;
+        }
+
+        void OnEnviromentVarChanged(object sender, EventArgs e)
+        {
+            SaveLocation = GetSaveFolder();
         }
 
         private string GetSaveFolder()
@@ -34,7 +43,7 @@ namespace JRapp.WPF
 
             var item = items.First();
 
-            return Path.Combine(GlobalSettings.ItemSettingsFolder(item.Info), "SettingSaver");
+            return GlobalSettings.ItemSettingsFolder(item.Info);
         }
     }
 }

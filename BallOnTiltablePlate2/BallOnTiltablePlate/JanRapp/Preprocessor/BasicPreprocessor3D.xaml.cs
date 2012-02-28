@@ -30,7 +30,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     public partial class BasicPreprocessor3D : UserControl, IPreprocessorIO<IBallInput3D, IPlateOutput>,
         IBasicPreprocessor3D, IBasicPreprocessor
     {
-        DateTime lastUpdate;
+        System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 
         public Vector3D Position { get; private set; }
 
@@ -65,15 +65,15 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         
         void Input_DataRecived(object sender, BallInputEventArgs3D e)
         {
-            double deltaTime = (DateTime.Now - lastUpdate).TotalSeconds;
+            double deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000;
+            sinceLastUpdate.Restart();
 
             Vector3D newPosition = e.BallPosition3D;
             Vector3D newVelocity = (newPosition - Position) / deltaTime;
-                   Acceleration = (Velocity - newVelocity) / deltaTime;
+                Acceleration = (newVelocity - Velocity) / deltaTime;
 
             Velocity = newVelocity;
             Position = newPosition;
-            lastUpdate = DateTime.Now;
             ValuesValid = !Position.HasNaN() && !Velocity.HasNaN() && !Acceleration.HasNaN();
 
             position2D = this.Position.ToVector2D();
@@ -90,7 +90,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             Position = VectorUtil.NaNVector3D;
             Velocity = VectorUtil.NaNVector3D;
             Acceleration = VectorUtil.NaNVector3D;
-            lastUpdate = DateTime.Now;
+            sinceLastUpdate.Restart();
         }
 
         public void SetTilt(Vector tiltToAxis)

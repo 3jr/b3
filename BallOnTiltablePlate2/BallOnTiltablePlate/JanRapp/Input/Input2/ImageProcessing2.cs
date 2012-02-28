@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using BallOnTiltablePlate.JanRapp.Utilities;
 
-namespace BallOnTiltablePlate.JanRapp.Input.Input2
+namespace BallOnTiltablePlate.JanRapp.Input2
 {
     static class ImageProcessing2
     {

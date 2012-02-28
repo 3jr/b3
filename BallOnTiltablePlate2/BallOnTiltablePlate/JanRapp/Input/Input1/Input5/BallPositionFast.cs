@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace BallOnTiltablePlate.JanRapp.Input0_5
+namespace BallOnTiltablePlate.JanRapp.Input05
 {
     static class BallPosition
     {

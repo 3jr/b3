@@ -51,19 +51,27 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
         static BPItemUI()
         {
-            Stopwatch s = new Stopwatch();
-            s.Start();
-            //AllBPItems = System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
-                //.Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe
-                //.Where(p => IsAssemblyManged(p))
-                //.Select(p => Assembly.LoadFile(p).GetTypes())
-                //.Aggregate(new List<Type>(), (a, t) => { a.AddRange(t); return a; })
-            AllBPItems = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
+            Stopwatch stopwatch = new Stopwatch(); stopwatch.Start();
+            //AllBPItems = Assembly.GetExecutingAssembly().GetTypes()
+            //    .Where(t => t.IsClass && typeof(IBallOnPlateItem).IsAssignableFrom(t))
+            //    .Where(t => CheckOnType(t))
+            //    .Select(t => CreateItemUI(t))
+            //    .ToArray();
+
+            AllBPItems =
+                System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
+                .Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe"))
+                .Where(f => IsAssemblyManged(f))
+                .Select(f => {
+                    try { return Assembly.LoadFrom(f); }
+                    catch { return null; } 
+                })
+                .Where(a => a != null)
+                .SelectMany(a => a.GetTypes())
                 .Where(t => CheckOnType(t))
                 .Select(t => CreateItemUI(t))
                 .ToArray();
-            Debug.WriteLine("Reading, instanciating, and validation of item took {0} milliseconds", s.ElapsedMilliseconds);
+            Debug.WriteLine("Reading, instanciating, and validation of item took {0} milliseconds", stopwatch.ElapsedMilliseconds);
 
             PopulateJugglerLists =
                 OrderForTreeView(

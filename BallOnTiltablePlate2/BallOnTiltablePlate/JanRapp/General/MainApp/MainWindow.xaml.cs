@@ -211,6 +211,34 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             }
         }
 
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            var userchois = MessageBox.Show("Do you want your SettingsSaverSaves to be Backupt?","",
+                MessageBoxButton.YesNoCancel);
+
+            switch (userchois)
+            {
+                case MessageBoxResult.Cancel:
+                    e.Cancel = true;
+                    break;
+                case MessageBoxResult.Yes:
+                    backupAfterClosing = true;
+                    break;
+                case MessageBoxResult.No:
+                    backupAfterClosing = false;
+                    break;
+            }
+
+            base.OnClosing(e);
+        }
+        bool backupAfterClosing;
+        protected override void OnClosed(EventArgs e)
+        {
+            if (backupAfterClosing)
+                GlobalSettings.BackupSettingsSaves();
+            base.OnClosed(e);
+        }
+
         Dictionary<object,Tuple<TreeView,string>> settingsCmdMetadata;
         Dictionary<IBallOnPlateItem, SettingsWindow> windows = new Dictionary<IBallOnPlateItem,SettingsWindow>();
     }

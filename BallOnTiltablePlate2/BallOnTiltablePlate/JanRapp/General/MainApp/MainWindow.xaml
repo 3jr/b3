@@ -17,7 +17,7 @@
     <Window.Resources>
         <RoutedCommand x:Key="JugglerSettings">
             <RoutedCommand.InputGestures>
-                <KeyGesture>Control+A</KeyGesture>
+                <KeyGesture>Control+J</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
         <RoutedCommand x:Key="PreprocessorSettings">
@@ -64,7 +64,8 @@
     </Window.CommandBindings>
     <StackPanel>
         <Menu>
-            <MenuItem Header="_File" />
+            <MenuItem Header="_File">
+            </MenuItem>
             <MenuItem Header="Settings">
                 <MenuItem Command="{StaticResource PreprocessorSettings}" Header="Preprocessor" />
                 <MenuItem Command="{StaticResource JugglerSettings}" Header="Juggler _Algorithm" />
@@ -81,7 +82,7 @@
                     VerticalAlignment="Bottom"
                     Command="{StaticResource JugglerSettings}"
                     Content="Settings"
-                    ToolTip="Algorithm Settings (Ctrl+A)" />
+                    ToolTip="Algorithm Settings (Ctrl+J)" />
             <Label HorizontalAlignment="Left"
                    VerticalAlignment="Top"
                    Content="Juggler _Algorithm"

@@ -2,57 +2,78 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:my="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
+        xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
         xmlns:ballOnTiltablePlate="clr-namespace:BallOnTiltablePlate"
         Width="393"
-        Height="336">
-    <Grid>
-        <my:DoubleBox x:Name="HalfPlateSize"
-                      Height="24"
-                      Margin="12,12,0,0"
-                      VerticalAlignment="Top"
-                      Text="Half Width and Length of the _Plate (in Meters): "
-                      Minimum=".01"
-                      LargeChange=".5"
-                      RegularChange=".1"
-                      SmallChange=".01"
-                      Value="{Binding Path=PlateSize, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}, Mode=TwoWay}"
+        Height="376">
+    <StackPanel>
+        <Border>
+            <controls:SettingsSaver x:Name="GlobalSettingsSS" Height="140">
+                <StackPanel Orientation="Vertical" Height="101">
+                    <my:DoubleBox 
+                        x:Name="HalfPlateSize"
+                        Height="24"
+                        Margin="8,0"
+                        Text="Half Width and Length of the _Plate (in Meters): "
+                        Minimum=".01"
+                        LargeChange=".5"
+                        RegularChange=".1"
+                        SmallChange=".01"
+                        Value="{Binding HalfPlateSize, Mode=TwoWay, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}}"
                       />
-        <my:DoubleBox x:Name="PhysicalKinectAngle"
-                      Text="_Angle of Kinect [-40, 40]: "
-                      Margin="12,36,0,0"
-                      VerticalAlignment="Top"
-                      Minimum="-27"
-                      Maximum="27" 
-                      LargeChange="5"
-                      RegularChange="2"
-                      SmallChange="1"
+                    <my:DoubleBox
+                        x:Name="JugglerUpdatesPerSecound"
+                        Text="Set _Updates per Second for Juggeler: "
+                        Margin="8,0"
+                        Minimum=".0001"
+                        LargeChange="10"
+                        RegularChange="2"
+                        SmallChange=".1"
+                        Value="{Binding FPSOfAlgorithm, Mode=TwoWay, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}}"
                       />
-        <Button x:Name="SetPhysicalKinectAngle"
-                Content="Se_t Angle"
-                Click="SetPhysicalKinectAngle_Click" 
-                Margin="237,35,84,0" 
-                Height="25" 
-                VerticalAlignment="Top"
-                />
-        <my:DoubleBox
-                      Text="Set _Updates per Second for Juggeler: "
-                      Margin="12,64,0,0"
-                      VerticalAlignment="Top"
-                      Minimum=".0001"
-                      LargeChange="10"
-                      RegularChange="2"
-                      SmallChange=".1"
-                      Value="{Binding Path=FPSOfAlgorithm, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}, Mode=TwoWay}"
+                    <my:DoubleBox
+                        x:Name="MaximumTilt"
+                        Text="_Maximum Tilt the Plate may has to an Axis: "
+                        Margin="8,0"
+                        Minimum=".0001"
+                        SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+                        Value="{Binding MaxTilt, Mode=TwoWay, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}}"
                       />
-        <my:DoubleBox
-                      Text="Maximum Tilt the Plate may has to an Axis: "
-                      Margin="12,88,0,0"
-                      VerticalAlignment="Top"
-                      Minimum=".0001"
-                      LargeChange="10"
-                      RegularChange="2"
-                      SmallChange=".1"
-                      Value="{Binding Path=MaxTilt, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}, Mode=TwoWay}"
-                      />
-    </Grid>
+                </StackPanel>
+            </controls:SettingsSaver>
+        </Border>
+        <GroupBox Header="Enviroment Varialbles" Margin="8">
+            <StackPanel>
+                <TextBlock TextWrapping="Wrap">If you chagne the Enviromentvariable somewhere else but here, the loaded SettingsSaver don't get the new save location assigned and the application needs to be restarted.</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="%b3SettingsSaver_SaveLocation%: " Target="{Binding ElementName=SettingsSaverSaveLocation}" Margin="8,0" VerticalAlignment="Bottom" Height="26"/>
+                    <Button Content="_Browse" HorizontalAlignment="Right" Margin="8,8,8,2" Width="75" Click="BrowseSaveLocation_Click"/>
+                </StackPanel>
+                <TextBox x:Name="SettingsSaverSaveLocation" Margin="8,0"/>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="%b3SettingsSaver_BackupLocation%: " Target="{Binding ElementName=SettingsSaverBackupLocation}" Margin="8,0" VerticalAlignment="Bottom" Height="26"/>
+                    <Button Content="_Browse" HorizontalAlignment="Right" Margin="8,8,8,2" Width="75" Click="BrowseBackupLocation_Click"/>
+                </StackPanel>
+                <TextBox x:Name="SettingsSaverBackupLocation" Margin="8,0"/>
+                <Button Content="Set _Envirmoment Variables" Width="170" Margin="8" HorizontalAlignment="Right" Click="SetEnviromentVariables_Click"/>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal">
+            <my:DoubleBox x:Name="PhysicalKinectAngle"
+                        Text="_Angle of Kinect [-40, 40]: "
+                        Margin="8,2"
+                        Minimum="-27"
+                        Maximum="27" 
+                        LargeChange="5"
+                        RegularChange="2"
+                        SmallChange="1"
+                          />
+            <Button x:Name="SetPhysicalKinectAngle"
+                        Content="Se_t Angle"
+                        Click="SetPhysicalKinectAngle_Click" 
+                        Margin="8,2" 
+                        Height="25" 
+                    />
+        </StackPanel>
+    </StackPanel>
 </UserControl>

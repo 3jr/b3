@@ -44,16 +44,20 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
             InitializeComponent();
         }
 
+        Vector intgral;
+        System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
+
         public void Update()
         {
             if (IO.ValuesValid)
             {
-                //Vector inductedVelo = IO.Position.ToNoNaN() * PositionFactor.Value;
+                intgral += IO.Position;
+                var deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
+                var tilt = IO.Position * PositionFactor.Value +
+                    intgral * IntegralFactor.Value * deltaTime +
+                    IO.Velocity * VelocityFactor.Value;
 
-                //var tilt = (IO.Velocity.ToNoNaN() + inductedVelo)
-                //    * VelocityFactor.Value;
-
-                var tilt = IO.Velocity * VelocityFactor.Value + IO.Position * PositionFactor.Value;
+                sinceLastUpdate.Reset();
 
                 IO.SetTilt(tilt);
             }

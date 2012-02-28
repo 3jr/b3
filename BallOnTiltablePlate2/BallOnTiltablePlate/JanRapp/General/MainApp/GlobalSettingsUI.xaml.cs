@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Research.Kinect.Nui;
+using System.IO;
 
 namespace BallOnTiltablePlate.JanRapp.MainApp
 {
@@ -22,6 +23,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         public GlobalSettingsUI()
         {
             InitializeComponent();
+            this.GlobalSettingsSS.SaveLocation = GlobalSettings.SettinsSaverSaveLocation;
+            this.SettingsSaverSaveLocation.Text = GlobalSettings.SettinsSaverSaveLocation;
+            this.SettingsSaverBackupLocation.Text = GlobalSettings.SettinsSaverBackupZip;
         }
 
         private void SetPhysicalKinectAngle_Click(object sender, RoutedEventArgs e)
@@ -30,6 +34,54 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             nui.Initialize(RuntimeOptions.UseColor);
             nui.NuiCamera.ElevationAngle = (int)PhysicalKinectAngle.Value;
             nui.Uninitialize();
+        }
+
+        private void BrowseSaveLocation_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+
+            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                SettingsSaverSaveLocation.Text = fbd.SelectedPath;
+            }
+        }
+
+        private void BrowseBackupLocation_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+
+            sfd.AddExtension = true;
+            sfd.AutoUpgradeEnabled = true;
+            sfd.Title = "Create and choose File to store the SettingsSaver Backups";
+            sfd.Filter = "b3-SettingsSaver-Backup|" + GlobalSettings.b3SettingSaverBackupExtension;
+            sfd.DefaultExt = GlobalSettings.b3SettingSaverBackupExtension;
+
+            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                SettingsSaverBackupLocation.Text = sfd.FileName;
+            }
+        }
+
+        private void SetEnviromentVariables_Click(object sender, RoutedEventArgs e)
+        {
+            //Set on User Level
+            System.Diagnostics.ProcessStartInfo elevatedProcessInfo = new System.Diagnostics.ProcessStartInfo();
+            elevatedProcessInfo.FileName = "cmd";
+            elevatedProcessInfo.Arguments =
+                "\"/c SETX " + GlobalSettings.b3SettingsSaverSaveLocationVariableName + " \"" + SettingsSaverSaveLocation.Text + "\" " +
+                "&& SETX " + GlobalSettings.b3SettingsSaverBackupZipVariableName + " \"" + SettingsSaverBackupLocation.Text + "\" ";
+            elevatedProcessInfo.UseShellExecute = true;
+            elevatedProcessInfo.Verb = "runas";
+            elevatedProcessInfo.CreateNoWindow = true;
+
+            var process = System.Diagnostics.Process.Start(elevatedProcessInfo);
+
+            process.WaitForExit();
+
+            if(GlobalSettings.Instance.EnviromentVariableChanged != null)
+                GlobalSettings.Instance.EnviromentVariableChanged(this, new EventArgs());
+
+            this.GlobalSettingsSS.SaveLocation = GlobalSettings.SettinsSaverSaveLocation;
         }
     }
 }

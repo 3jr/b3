@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Output.Output21.BasicPlateOutput21"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
+             xmlns:controlsB3="clr-namespace:JRapp.WPF"
+             mc:Ignorable="d" MinWidth="236" >
+    <UserControl.Resources>
+        <RoutedCommand x:Key="ToggleConnectCmd" >
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+D</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="TransmitDataCmd" >
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+T</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="TransmitConfigCmd" >
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+G</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="ResetMicroControlerCmd" >
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+R</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="GetCurrentPositionCmd" >
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+P</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+        <RoutedCommand x:Key="EnableControlCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+E</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ToggleConnectCmd}"
+                        Executed="ToggleConnectCmd_Executed"/>
+        <CommandBinding Command="{StaticResource TransmitDataCmd}"
+                        Executed="TransmitDataCmd_Executed"
+                        CanExecute="TransmitDataCmd_CanExecute"/>
+        <CommandBinding Command="{StaticResource ResetMicroControlerCmd}"
+                        Executed="ResetMicroControlerCmd_Executed"
+                        CanExecute="TransmitDataCmd_CanExecute"/>
+        <CommandBinding Command="{StaticResource GetCurrentPositionCmd}"
+                        Executed="GetCurrentPositionCmd_Executed"
+                        CanExecute="TransmitDataCmd_CanExecute"/>
+        <CommandBinding Command="{StaticResource EnableControlCmd}"
+                        Executed="EnableControlCmd_Executed"
+                        CanExecute="TransmitDataCmd_CanExecute"/>
+        <CommandBinding Command="{StaticResource TransmitConfigCmd}"
+                        Executed="TransmitConfigCmd_Executed"
+                        CanExecute="TransmitDataCmd_CanExecute"/>
+    </UserControl.CommandBindings>
+    <DockPanel LastChildFill="True"  Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=FrameworkElement, AncestorLevel=1}}">
+    <StackPanel DockPanel.Dock="Top">
+        <Button x:Name="ToggleConntectButton" Content="Connect" Command="{StaticResource ToggleConnectCmd}" ToolTip="Ctrl+D"/>
+        <StackPanel Orientation="Horizontal">
+            <Label Content="SerialPortNumber:  _COM" />
+            <TextBox x:Name="SerialPortNumber" Text="4" Width="25" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="EnableControlButton" Content="Enable Controll" Command="{StaticResource EnableControlCmd}" ToolTip="Ctrl+E"/>
+            <CheckBox x:Name="XEnabled" Content="_X Enabled  " IsChecked="True" Unchecked="XEnabled_CheckedChanged" Checked="XEnabled_CheckedChanged"/>
+            <CheckBox x:Name="YEnabled" Content="_Y Enabled" IsChecked="True" Checked="YEnabled_CheckedChanged" Unchecked="YEnabled_CheckedChanged"/>
+        </StackPanel>
+        <controls:VectorBox Text="Tilt _Angle: " x:Name="TiltAngle" ValueChanged="Angle_ValueChanged" 
+            SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
+            />
+        <CheckBox x:Name="TransmitImmediately" Content="Transmit _Immediately"/>
+        <Button Content="Transmit Now" Command="{StaticResource TransmitDataCmd}" ToolTip="Ctrl+T"/>
+        <Button Content="Get Current Plate Postion" Command="{StaticResource GetCurrentPositionCmd}" ToolTip="Ctrl+P"/>
+        <Button Content="Reset MicroControler" Command="{StaticResource ResetMicroControlerCmd}" ToolTip="Ctrl+R"/>
+            <Expander Header="Motor Cali_bration">
+                <controlsB3:SettingsSaverB3 x:Name="CalibrationSS">
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource {x:Type controls:DoubleBox}}">
+                                <Setter Property="SmallChange" Value="1"/>
+                                <Setter Property="RegularChange" Value="10"/>
+                                <Setter Property="LargeChange" Value="100"/>
+                            </Style>
+                        </StackPanel.Resources>
+                    <Button Content="Transmit Configuration" Command="{StaticResource TransmitConfigCmd}" ToolTip="Ctrl+G"/>
+                    <GroupBox Header="X Calibration">
+                            <StackPanel>
+                                <controls:DoubleBox x:Name="OffsetX"  Text="_Offset: "  ValueChanged="Calibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="PropertionalX"  Text="_Proportional: "  ValueChanged="XCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="IntegralX"  Text="Inegra_l: "  ValueChanged="XCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="DerivativX"  Text="_Derivativ: "  ValueChanged="XCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="MinimumPositionX" Text="Mi_nimum Position: " ValueChanged="XCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="MaximumPositionX" Text="_Maximum Position: " ValueChanged="XCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="ResetPositionX" Text="_Reset Position: " ValueChanged="XCalibration_ValueChanged"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Y Calibration">
+                            <StackPanel>
+                                <controls:DoubleBox x:Name="OffsetY"  Text="_Offset: "  ValueChanged="Calibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="PropertionalY"  Text="_Proportional: "  ValueChanged="YCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="IntegralY"  Text="Inegra_l: "  ValueChanged="YCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="DerivativY"  Text="_Derivativ: "  ValueChanged="YCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="MinimumPositionY" Text="Mi_nimum Position: " ValueChanged="YCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="MaximumPositionY" Text="_Maximum Position: " ValueChanged="YCalibration_ValueChanged"/>
+                                <controls:DoubleBox x:Name="ResetPositionY" Text="_Reset Position: " ValueChanged="YCalibration_ValueChanged"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <controls:DoubleBox x:Name="ValuePerAngle" Text="Value P_er Angle: " ValueChanged="Calibration_ValueChanged"/>
+                    </StackPanel>
+                </controlsB3:SettingsSaverB3>
+            </Expander>
+        <Label Content="Send Command:"/>
+        <TextBox KeyDown="SendCommandTextBox_KeyDown"/>
+        <CheckBox x:Name="LoggingActivated" Content="Log Se_nd/Recive"/>
+        <Button x:Name="ClearLogBtn" Content="Clear L_og" Click="ClearLogBtn_Click"/>
+        <TextBlock>Send and Recive Log:</TextBlock>
+    </StackPanel>
+    <ScrollViewer x:Name="LogScrollViewer" DockPanel.Dock="Bottom">
+        <RichTextBox x:Name="RecivedLog" IsDocumentEnabled="False" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+    </ScrollViewer>
+    </DockPanel>
+</UserControl>

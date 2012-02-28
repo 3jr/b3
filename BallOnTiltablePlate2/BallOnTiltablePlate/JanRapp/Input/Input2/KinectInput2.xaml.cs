@@ -15,9 +15,9 @@ using Kinect = Microsoft.Research.Kinect.Nui;
 using System.Threading.Tasks;
 using System.Threading;
 using Coding4Fun.Kinect.Wpf;
-using BallOnTiltablePlate.JanRapp.General.Utilities;
+using BallOnTiltablePlate.JanRapp.Utilities;
 
-namespace BallOnTiltablePlate.JanRapp.Input.Input2
+namespace BallOnTiltablePlate.JanRapp.Input2
 {
     /// <summary>
     /// Interaction logic for KinectInput2.xaml
@@ -100,7 +100,7 @@ namespace BallOnTiltablePlate.JanRapp.Input.Input2
 
             var ballPosition = ImageProcessing2.BallPositionFast(input, displays);
 
-            return new Tuple<Vector, byte[]>(ballPosition, PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]));
+            return new Tuple<Vector, byte[]>(ballPosition, Input.PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]));
         }
 
         void DisplayComputation(Task<Tuple<Vector, byte[]>> task)

@@ -6,8 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              mc:Ignorable="d" Height="24" 
-             FocusManager.IsFocusScope="True"
-             FocusManager.FocusedElement="{Binding ElementName=txtBox}">
+             FocusManager.IsFocusScope="True">
     <UserControl.Resources>
         <RoutedCommand x:Key="IncreaseValue">
         </RoutedCommand>

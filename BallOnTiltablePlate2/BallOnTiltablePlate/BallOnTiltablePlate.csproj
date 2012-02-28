@@ -56,6 +56,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\Coding4Fun.Kinect.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="JRapp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\JRapp.dll</HintPath>
@@ -85,6 +89,10 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="UIAutomationProvider" />
+    <Reference Include="WiimoteLib, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\WiimoteLib.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -159,38 +167,48 @@
     <Compile Include="JanRapp\General\MainApp\GlobalSettingsUI.xaml.cs">
       <DependentUpon>GlobalSettingsUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Input\TestInput.xaml.cs">
+      <DependentUpon>TestInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Juggler\BasicBalance.xaml.cs">
       <DependentUpon>BasicBalance.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Juggler\BasicBalance\BasicBalance1.xaml.cs">
       <DependentUpon>BasicBalance1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\General\MainApp\Helper\TestInput.xaml.cs">
-      <DependentUpon>TestInput.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="JanRapp\General\MainApp\Helper\TestJuggler.xaml.cs">
+    <Compile Include="JanRapp\Juggler\TestJuggler.xaml.cs">
       <DependentUpon>TestJuggler.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\General\MainApp\Helper\TestOutput.xaml.cs">
-      <DependentUpon>TestOutput.xaml</DependentUpon>
+    <Compile Include="JanRapp\Juggler\WiiMoteControled02.xaml.cs">
+      <DependentUpon>WiiMoteControled02.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\General\MainApp\Helper\TestPreprocessor.xaml.cs">
-      <DependentUpon>TestPreprocessor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="JanRapp\General\MainApp\Helper\TestPreprocessor3D.xaml.cs">
-      <DependentUpon>TestPreprocessor3D.xaml</DependentUpon>
+    <Compile Include="JanRapp\Juggler\WiiMoteControled01.xaml.cs">
+      <DependentUpon>WiiMoteControled01.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Output\Output1\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Output\Output21\b3SGCommands.cs" />
+    <Compile Include="JanRapp\Output\Output21\BasicPlateOutput.xaml.cs">
+      <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Output\Output2\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Output\TestOutput.xaml.cs">
+      <DependentUpon>TestOutput.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Preprocessor\BasicPreprocessor.xaml.cs">
       <DependentUpon>BasicPreprocessor.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Preprocessor\BasicPreprocessor3D.xaml.cs">
       <DependentUpon>BasicPreprocessor3D.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Preprocessor\TestPreprocessor.xaml.cs">
+      <DependentUpon>TestPreprocessor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Preprocessor\TestPreprocessor3D.xaml.cs">
+      <DependentUpon>TestPreprocessor3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\SettingsSaverB3.cs" />
     <Compile Include="JanRapp\General\Utilities\WPFConverter.cs" />
@@ -277,29 +295,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\Input\TestInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Juggler\BasicBalance.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Juggler\BasicBalance\BasicBalance1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="JanRapp\General\MainApp\Helper\TestInput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="JanRapp\General\MainApp\Helper\TestJuggler.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="JanRapp\General\MainApp\Helper\TestOutput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="JanRapp\General\MainApp\Helper\TestPreprocessor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="JanRapp\General\MainApp\Helper\TestPreprocessor3D.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\General\MainApp\MainWindow.xaml">
@@ -315,18 +317,40 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="JanRapp\Juggler\TestJuggler.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Juggler\WiiMoteControled02.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Juggler\WiiMoteControled01.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Output\Output1\BasicPlateOutput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Output\Output21\BasicPlateOutput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="JanRapp\Output\Output2\BasicPlateOutput.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="JanRapp\Output\TestOutput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Preprocessor\BasicPreprocessor.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Preprocessor\BasicPreprocessor3D.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Preprocessor\TestPreprocessor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Preprocessor\TestPreprocessor3D.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MoritzUehling\Juggler\WifiSettings.xaml">
@@ -368,6 +392,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="JanRapp\JanRapp.b3SettingsSaverBackup" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -387,9 +412,11 @@
   <ItemGroup>
     <Content Include="Resources\Coding4Fun.Kinect.WinForm.dll" />
     <Content Include="Resources\Coding4Fun.Kinect.Wpf.dll" />
+    <Content Include="Resources\Ionic.Zip.dll" />
     <Content Include="Resources\JRapp.dll" />
     <Content Include="Resources\JRapp.WPF.dll" />
     <Content Include="Resources\Microsoft.Research.Kinect.dll" />
+    <Content Include="Resources\WiimoteLib.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

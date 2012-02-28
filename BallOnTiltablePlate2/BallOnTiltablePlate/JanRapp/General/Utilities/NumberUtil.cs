@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BallOnTiltablePlate.JanRapp.General.Utilities
+namespace BallOnTiltablePlate.JanRapp.Utilities
 {
     [System.Diagnostics.DebuggerDisplay("{X},{Y}")]
     public struct Int32Vector
