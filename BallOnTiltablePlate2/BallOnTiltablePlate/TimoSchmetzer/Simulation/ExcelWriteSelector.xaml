@@ -1,0 +1,25 @@
+﻿<Window x:Class="BallOnTiltablePlate.TimoSchmetzer.Simulation.ExcelWriteSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ExcelWriteSelector" Height="600" Width="600">
+    <Window.Resources>
+        <RoutedCommand x:Key="OKExecuted">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+O</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource OKExecuted}" Executed="OKExecuted_Executed" />
+    </Window.CommandBindings>
+    <Grid>
+        <StackPanel Margin="8">
+            <Label>Select a type to allow it to wirite into the Diagram.</Label>
+            <TreeView x:Name="TypeList"
+                  Margin="7,0">
+            </TreeView>
+            <Button Command="{StaticResource OKExecuted}" x:Name="OKButton" Content="OK" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" ToolTip="Ctrl+O"/>
+        </StackPanel>
+    </Grid>
+</Window>

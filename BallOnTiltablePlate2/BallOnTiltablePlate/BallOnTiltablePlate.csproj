@@ -227,6 +227,9 @@
     <Compile Include="TimoSchmetzer\Simulation\BasicSimulation.xaml.cs">
       <DependentUpon>BasicSimulation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Simulation\ExcelWriteSelector.xaml.cs">
+      <DependentUpon>ExcelWriteSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Simulation\PhysicsWrapper.cs" />
     <Compile Include="TimoSchmetzer\Utilities\ExcelUtilities.cs" />
     <Compile Include="TimoSchmetzer\Utilities\MathematicalUtilities.cs" />
@@ -370,6 +373,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TimoSchmetzer\Preprocessor\Preprocessor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TimoSchmetzer\Simulation\ExcelWriteSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

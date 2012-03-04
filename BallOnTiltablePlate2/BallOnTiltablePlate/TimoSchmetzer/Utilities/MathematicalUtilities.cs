@@ -157,6 +157,79 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         }
         #endregion
 
+        #region TiltTransforms
+        /// <summary>
+        /// Returns a Quarternion that is able to transform a point on the xy-Layer to a Point on the tilted plate.
+        /// Copied from JanRapp's TiltUtil
+        /// </summary>
+        /// <param name="sequentalTilt">The tilt for which to calc.</param>
+        /// <returns>See summary.</returns>
+        public static Quaternion RotationForTilt(Vector sequentalTilt) //c
+        {
+            Vector3D firstAxisForYRotation = new Vector3D(1.0, 0.0, 0.0); //X-Axis
+            Vector3D secoundAxisForXRotation = new Vector3D(0.0, 1.0, 0.0);// Math.Tan(sequentalTilt.Y)); //Y-Axis Rotated by seqentialTilt.Y
+
+            Quaternion firstRotation = new Quaternion(firstAxisForYRotation, RadToDeg(sequentalTilt.Y));
+            Quaternion secoundRotaion = new Quaternion(secoundAxisForXRotation, RadToDeg(sequentalTilt.X));
+
+            return firstRotation * secoundRotaion; //it just is that way with Quaternions
+        }
+
+        /// <summary>
+        /// Returns a RotateTransform3D that is able to transform a point on the xy-Layer to a Point on the tilted plate.
+        /// Copied from JanRapp's TiltUtil
+        /// </summary>
+        /// <param name="sequentalTilt">The tilt for which to calc.</param>
+        /// <returns>See summary.</returns>
+        public static RotateTransform3D RotateTransformForTilt(Vector sequentalTilt)
+        {
+            Quaternion rotation = Mathematics.RotationForTilt(sequentalTilt);
+            RotateTransform3D rotationTransform = new RotateTransform3D(new QuaternionRotation3D(rotation));
+            return rotationTransform;
+        }
+
+        /// <summary>
+        /// Returns a Quarternion that is able to transform a Point on the tilted plate to a point on the xy-Layer.
+        /// </summary>
+        /// <param name="sequentalTilt">The tilt for which to calc.</param>
+        /// <returns>See summary.</returns>
+        public static Quaternion InverseRotationForTilt(Vector sequentalTilt) //c
+        {
+            Vector3D firstAxisForYRotation = new Vector3D(1.0, 0.0, 0.0); //X-Axis
+            Vector3D secoundAxisForXRotation = new Vector3D(0.0, 1.0, 0.0);// Math.Tan(sequentalTilt.Y)); //Y-Axis Rotated by seqentialTilt.Y
+
+            Quaternion firstRotation = new Quaternion(firstAxisForYRotation, -RadToDeg(sequentalTilt.Y));
+            Quaternion secoundRotaion = new Quaternion(secoundAxisForXRotation, -RadToDeg(sequentalTilt.X));
+
+            return secoundRotaion * firstRotation; 
+        }
+
+        /// <summary>
+        /// Returns a Quarternion that is able to transform a Point on the tilted plate to a point on the xy-Layer.
+        /// </summary>
+        /// <param name="sequentalTilt">The tilt for which to calc.</param>
+        /// <returns>See summary.</returns>
+        public static RotateTransform3D InverseRotateTransformForTilt(Vector sequentalTilt)
+        {
+            Quaternion rotation = Mathematics.InverseRotationForTilt(sequentalTilt);
+            RotateTransform3D rotationTransform = new RotateTransform3D(new QuaternionRotation3D(rotation));
+            return rotationTransform;
+        }
+
+        /// <summary>
+        /// Transforms a point on a tilted Plate to the Point with an other Tilt
+        /// </summary>
+        /// <param name="Point">The Point to Transform</param>
+        /// <param name="oldsequentialTilt">The Tilt that has the plate the point is on</param>
+        /// <param name="newsequentialTilt">The Tilt which the transformed platepoint will have</param>
+        public static Point3D TransformVectorToDifferentTilt(Point3D Point, Vector oldsequentialTilt, Vector newsequentialTilt)
+        {
+            Point = Mathematics.InverseRotateTransformForTilt(oldsequentialTilt).Transform(Point);
+            Point = Mathematics.RotateTransformForTilt(newsequentialTilt).Transform(Point);
+            return Point;
+        }
+        #endregion
+
         #region PlaneCalcs
 
         /// <summary>

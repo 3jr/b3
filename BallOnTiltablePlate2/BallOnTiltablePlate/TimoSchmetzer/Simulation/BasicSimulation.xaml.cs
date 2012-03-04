@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using BallOnTiltablePlate.JanRapp.Utilities;
 using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 {
@@ -301,6 +302,52 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 ToogleRunningCmd_Executed(null, null);
                 CreateDiagram();
                 ToggleReccordBtn.Content = "Record";
+            }
+        }
+        #endregion
+        #region PublicDiagramAccess
+        List<Type> allowedTypes = new List<Type>(10);
+
+        /// <summary>
+        /// Puts a Datapoint in a Row in the Diagramm at the current time.
+        /// </summary>
+        /// <param name="Datarow">Row to which to add datapoint</param>
+        /// <param name="Value">The value to write to the row</param>
+        /// <returns>Whether the writing to the list was rejected. true:allowed false:rejected</returns>
+        public bool WriteToDiagram(string Datarow, double Value)
+        {
+            if (allowedTypes.Contains((new StackFrame(1)).GetMethod().DeclaringType))
+            {
+                diagramcreator.AddPoint(Datarow, new Point(time, Value));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private void AddPermissionCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ExcelWriteSelector slc = new ExcelWriteSelector();
+            //slc.Owner = this;
+            slc.TypeChosen += new EventHandler(slc_TypeChosen);
+            slc.Show();
+        }
+
+        private void slc_TypeChosen(object sender, EventArgs e)
+        {
+            allowedTypes.Add(((ExcelWriteSelector)sender).SelectedType);
+            TreeViewItem treeitem = new TreeViewItem();
+            treeitem.Header = ((ExcelWriteSelector)sender).SelectedType.FullName;
+            treeitem.Tag = ((ExcelWriteSelector)sender).SelectedType;
+            PermissionList.Items.Add(treeitem);
+        }
+        private void RemovePermissionCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (PermissionList.SelectedItem != null)
+            {
+                allowedTypes.Remove((Type)(((TreeViewItem)PermissionList.SelectedItem).Tag));
+                PermissionList.Items.Remove(PermissionList.SelectedItem);
             }
         }
         #endregion

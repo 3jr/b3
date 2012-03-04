@@ -27,6 +27,18 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         }
 
         /// <summary>
+        /// Retrurns Whether the ball is already refelcted.
+        /// </summary>
+        /// <param name="state">The state for which to calc</param>
+        /// <returns>See summary.</returns>
+        public static bool AlreadyReflected(IPhysicsState state)
+        {
+            Vector3D n = Mathematics.CalcNormalVector(state.Tilt);
+            double angle = Mathematics.AngleBetwennVectors(n, state.Velocity);
+            return angle < Mathematics.DegToRad(80);
+        }
+
+        /// <summary>
         /// Spiegelt den Geschwindigkeitsvektor mittels einer Householdertransformation.
         /// Geschwindikeitsvektor wird entsprechend von absorbitonsfaktor skaliert.
         /// AbsTimeReflected wird auf abstime gesetzt.
@@ -135,6 +147,15 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
             Vector3D G = new Vector3D(0,0,g);
             Vector3D n = Mathematics.CalcNormalVector(Tilt);
             AccelerationForce = G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
+            return AccelerationForce;
+        }
+
+        public static Vector3D CalcNormalPart(Vector3D G, Vector Tilt)
+        {
+            //AccelerationForce= G - (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
+            Vector3D AccelerationForce = new Vector3D();
+            Vector3D n = Mathematics.CalcNormalVector(Tilt);
+            AccelerationForce = (((Vector3D.DotProduct(G, n)) / (Vector3D.DotProduct(n, n))) * n);
             return AccelerationForce;
         }
 
