@@ -41,6 +41,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
             IEnumerable<Type> Calculators = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => t.IsClass && typeof(IPhysicsCalculator).IsAssignableFrom(t))
+                .OrderBy(t=>t.FullName)
                 .Select(t => t)
                 .ToArray();
             foreach (Type t in Calculators)
@@ -259,9 +260,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         }
 
         #region Diagram
-        private ExcelUtilities.ExcelDiagramCreator diagramcreator;
+        private static ExcelUtilities.ExcelDiagramCreator diagramcreator;
         private bool recording = false;
-        private double time = 0;
+        private static double time = 0;
         private void AddDataToDiagramCreator(double elapsedSeconds)
         {
             time += elapsedSeconds;
@@ -306,7 +307,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         }
         #endregion
         #region PublicDiagramAccess
-        List<Type> allowedTypes = new List<Type>(10);
+        static List<Type> allowedTypes = new List<Type>(10);
 
         /// <summary>
         /// Puts a Datapoint in a Row in the Diagramm at the current time.
@@ -314,7 +315,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         /// <param name="Datarow">Row to which to add datapoint</param>
         /// <param name="Value">The value to write to the row</param>
         /// <returns>Whether the writing to the list was rejected. true:allowed false:rejected</returns>
-        public bool WriteToDiagram(string Datarow, double Value)
+        public static bool WriteToDiagram(string Datarow, double Value)
         {
             if (allowedTypes.Contains((new StackFrame(1)).GetMethod().DeclaringType))
             {

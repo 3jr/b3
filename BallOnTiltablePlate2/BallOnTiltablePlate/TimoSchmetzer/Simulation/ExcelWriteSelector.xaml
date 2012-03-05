@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BallOnTiltablePlate.TimoSchmetzer.Simulation.ExcelWriteSelector"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ExcelWriteSelector" Height="600" Width="600">
+        Title="ExcelWriteSelector" MinHeight="100" MinWidth="350" SizeToContent="WidthAndHeight">
     <Window.Resources>
         <RoutedCommand x:Key="OKExecuted">
             <RoutedCommand.InputGestures>

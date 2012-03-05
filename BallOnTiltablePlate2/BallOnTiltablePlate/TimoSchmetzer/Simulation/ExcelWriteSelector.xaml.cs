@@ -24,6 +24,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             InitializeComponent();
             IEnumerable<Type> Calculators = Assembly.GetExecutingAssembly().GetTypes()
             .Where(t => t.IsClass && (typeof(IBallOnPlateItem).IsAssignableFrom(t) || typeof(IPhysicsCalculator).IsAssignableFrom(t)))
+            .OrderBy(t => t.FullName)
             .Select(t => t)
             .ToArray();
             foreach (Type t in Calculators)
