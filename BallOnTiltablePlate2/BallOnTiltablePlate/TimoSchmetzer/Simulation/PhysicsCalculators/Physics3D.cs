@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using BallOnTiltablePlate.TimoSchmetzer.Utilities;
+using System.Diagnostics;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
 {
@@ -35,7 +36,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
 
             #region CalcBallstate
             BallState bs;
-            if (Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))) > 0.01)
+            if (Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))) > 0.1)
             {
                 bs = BallState.InAir;
             }
@@ -51,98 +52,46 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
                 }
             }
             #endregion
-
-            #region SetNEWAngle
-            state.Tilt += elapsedSeconds * state.PlateVelocity;
-            #endregion
-
             #region CalcMovement
+            #region RollOnPlate
             if (bs == BallState.RollOnPlate)
             {
-                state.Acceleration = Utilities.Physics.HangabtriebsbeschleunigungBerechnen(state.Gravity, state.Tilt);
-                #region CalcPseudoConstainingForce
-                {
-                    if (Utilities.Mathematics.IsDownPlate(state.Position,Utilities.Mathematics.CalcNormalVector(state.Tilt)))
-                    {
-                        state.Acceleration +=
-                            (2.0 * (Utilities.Mathematics.CalcFootOfPerpendicular(state.Position, Utilities.Mathematics.CalcNormalVector(state.Tilt))-state.Position))
-                            / (elapsedSeconds * elapsedSeconds);
-                    }
-
-                }
-                #endregion
+                Vector3D vN = Physics.CalcNormalPart(state.Velocity, state.Tilt);
+                state.Velocity -= vN;
+                Point3D newPlatePosition = Mathematics.TransformVectorToDifferentTilt(state.Position, Mathematics.ToSequentialTilt(state.Tilt), Mathematics.ToSequentialTilt(state.Tilt + elapsedSeconds * state.PlateVelocity));
+                Vector3D deltas = (newPlatePosition - state.Position);
+                state.Acceleration = (2.0 * (deltas - vN*elapsedSeconds)) / (elapsedSeconds * elapsedSeconds);
+                state.Tilt += elapsedSeconds * state.PlateVelocity;
+                state.Acceleration += Utilities.Physics.HangabtriebsbeschleunigungBerechnen(state.Gravity, state.Tilt);
                 Utilities.Physics.CalcMovement(state, elapsedSeconds);
-
             }
+            #endregion
+            #region InAir
             if (bs == BallState.InAir)
             {
+                #region SetNEWAngle
+                state.Tilt += elapsedSeconds * state.PlateVelocity;
+                #endregion
                 //Beschleunigung zur Hit-Berechnug setzen
                 state.Acceleration = G;
                 double nextHit = Utilities.Physics.CalcNextHit(state);
-
-                if (nextHit > elapsedSeconds)
+                if (Mathematics.IsDownPlate(state.Position, Mathematics.CalcNormalVector(state.Tilt)) && (!Physics.AlreadyReflected(state)))
                 {
-                    //Ball rollt nicht auf der Platte. Hit nicht mehr in diesem Update.
-                    Utilities.Physics.CalcMovement(state, elapsedSeconds);
-                }
-                else
-                {
-                    //Hit in diesem Update.
-                    Utilities.Physics.CalcMovement(state, nextHit);
                      state = Utilities.Physics.Reflect(state);
-                    CalcPhysics(state, elapsedSeconds - nextHit);
                 }
+                Utilities.Physics.CalcMovement(state, elapsedSeconds);
+                 
             }
             #endregion
-
-            #region Debugout
-            #region StringBufferOut
-            //(Nr.)	PositionX	PositionY	PositionZ	VelociyX	VelocityY	VelocityZ	AccelerationX	AccelerationY	AccelerationZ	BallState	AngleBetweenVec	elapsedSec	TiltX	TiltY	PlateVelX	PlateVelY   DeltaZBallPlate
-            //StringBuilder debugOut = new StringBuilder();
-            //debugOut.Append(state.Position.X);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Position.Y);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Position.Z);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Velocity.X);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Velocity.Y);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Velocity.Z);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Acceleration.X);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Acceleration.Y);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Acceleration.Z);
-            //debugOut.Append("\t");
-            //debugOut.Append(bs);
-            //debugOut.Append("\t");
-            //debugOut.Append(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.AngleBetwennVectors(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.CalcNormalVector(state.Tilt), state.Velocity));
-            //debugOut.Append("\t");
-            //debugOut.Append(elapsedSeconds);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Tilt.X);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.Tilt.Y);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.PlateVelocity.X);
-            //debugOut.Append("\t");
-            //debugOut.Append(state.PlateVelocity.Y);
-            //debugOut.Append("\t");
-            //debugOut.Append((state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
-            //System.Diagnostics.Debug.Print(debugOut.ToString());
             #endregion
-            #region StrigOut
-            //(Nr.)	PositionX	PositionY	PositionZ	VelociyX	VelocityY	VelocityZ	AccelerationX	AccelerationY	AccelerationZ	BallState	AngleBetweenVec	elapsedSec	TiltX	TiltY	PlateVelX	PlateVelY   DeltaZBallPlate
-            //System.Diagnostics.Debug.Print(state.Position.X + "\t" + state.Position.Y + "\t" + state.Position.Z + "\t" +
-            //    state.Velocity.X + "\t" + state.Velocity.Y + "\t" + state.Velocity.Z + "\t"
-            //    + state.Acceleration.X + "\t" + state.Acceleration.Y + "\t" + state.Acceleration.Z + "\t" + bs
-            //    + "\t" + BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.AngleBetwennVectors(BallOnTiltablePlate.TimoSchmetzer.Utilities.Mathematics.CalcNormalVector(state.Tilt), state.Velocity)
-            //    + "\t" + elapsedSeconds + "\t" + state.Tilt.X + "\t" + state.Tilt.Y + "\t" + state.PlateVelocity.X
-            //     + "\t" + state.PlateVelocity.Y + "\t" + (state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
-            #endregion
+            #region Debug
+            BasicSimulation.WriteToDiagram("hdist", Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
+            if (bs == BallState.RollOnPlate)
+            { BasicSimulation.WriteToDiagram("Ballstate", 0); }
+            else { BasicSimulation.WriteToDiagram("Ballstate", 1); }
+            BasicSimulation.WriteToDiagram("wouldhit", Utilities.Physics.WouldHit(state) ? 1 : 0);
+            BasicSimulation.WriteToDiagram("angle", Utilities.Mathematics.AngleBetwennVectors(state.Velocity,Mathematics.CalcNormalVector(state.Tilt)));
+            BasicSimulation.WriteToDiagram("vN", Physics.CalcNormalPart(state.Velocity, state.Tilt).Length);
             #endregion
         }
 
