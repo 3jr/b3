@@ -72,11 +72,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         {
             if (PhysicsCalculatorList.SelectedItem != null)
             {
+                time += deltaSeconds;
                 IPhysicsCalculator Calc = (IPhysicsCalculator)(((TreeViewItem)PhysicsCalculatorList.SelectedItem).Tag);
                 wrapper.RunSimulation(Calc, this, deltaSeconds);
                 if (recording)
                 {
-                    AddDataToDiagramCreator(deltaSeconds);
+                    AddDataToDiagramCreator();
                 }
             }
         }
@@ -261,11 +262,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         #region Diagram
         private static ExcelUtilities.ExcelDiagramCreator diagramcreator;
-        private bool recording = false;
+        private static bool recording = false;
         private static double time = 0;
-        private void AddDataToDiagramCreator(double elapsedSeconds)
+        private void AddDataToDiagramCreator()
         {
-            time += elapsedSeconds;
             diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
             diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
             diagramcreator.AddPoint("PositionZ", new Point(time, Position.Z));
@@ -317,7 +317,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         /// <returns>Whether the writing to the list was rejected. true:allowed false:rejected</returns>
         public static bool WriteToDiagram(string Datarow, double Value)
         {
-            if (allowedTypes.Contains((new StackFrame(1)).GetMethod().DeclaringType))
+            if (allowedTypes.Contains((new StackFrame(1)).GetMethod().DeclaringType)&&recording)
             {
                 diagramcreator.AddPoint(Datarow, new Point(time, Value));
                 return true;
