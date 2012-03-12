@@ -37,12 +37,26 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
 
         public JanRapp.Preprocessor.IBasicPreprocessor IO { private get; set; }
 
+        Queue<Vector> lastAccelerationData = new Queue<Vector>();
+
         public void Update()
         {
-            IO.SetTilt(new Vector(
+            lastAccelerationData.Enqueue(new Vector(
                 wii.WiimoteState.AccelState.Values.X,
                 wii.WiimoteState.AccelState.Values.Y
-                ) * MovementFactor.Value);
+                ));
+
+            int countForAverage = (int)CountForAverage.Value;
+
+            if (lastAccelerationData.Count >= countForAverage)
+            {
+                Vector sum = lastAccelerationData.Take(countForAverage).Aggregate(new Vector(), (aggregator, item) => aggregator += item);
+                Vector median = sum / countForAverage;
+
+                IO.SetTilt(median * MovementFactor.Value);
+
+                lastAccelerationData.Dequeue();
+            }
         }
 
 
@@ -50,6 +64,7 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
         {
             try
             {
+                wii.SetReportType(InputReport.ButtonsAccel, true);
                 wii.Connect();
                 wii.SetLEDs(0xF);
                 this.IsEnabled = true;

@@ -185,6 +185,9 @@
     <Compile Include="JanRapp\Juggler\WiiMoteControled01.xaml.cs">
       <DependentUpon>WiiMoteControled01.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Output\MicroFrameworkOutput1\MicroFrameworkPlateOutput.xaml.cs">
+      <DependentUpon>MicroFrameworkPlateOutput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Output\Output1\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
     </Compile>
@@ -328,6 +331,10 @@
     </Page>
     <Page Include="JanRapp\Juggler\WiiMoteControled01.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Output\MicroFrameworkOutput1\MicroFrameworkPlateOutput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="JanRapp\Output\Output1\BasicPlateOutput.xaml">
       <SubType>Designer</SubType>

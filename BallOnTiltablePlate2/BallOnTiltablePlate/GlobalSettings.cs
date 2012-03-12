@@ -36,19 +36,22 @@ namespace BallOnTiltablePlate
         // in Meter
         public double HalfPlateSize { get; set;}
 
-        internal static string ItemSettingsFolder(BallOnPlateItemInfoAttribute itemInfo)
+        public static string SettingsFolder()
         {
             string enviromentSetSaveLocation = Environment.
                 GetEnvironmentVariable(b3SettingsSaverSaveLocationVariableName, EnvironmentVariableTarget.User);
 
             if (Directory.Exists(SettinsSaverSaveLocation))
-                return Path.Combine(enviromentSetSaveLocation,
-                    string.Format("{0}_{1}_{2}", itemInfo.AuthorFirstName, itemInfo.AuthorLastName, itemInfo.ItemName));
-
+                return enviromentSetSaveLocation;
+            
             MessageBox.Show("The enviroment Variable " + b3SettingsSaverSaveLocationVariableName + " is not set to a valid path, witch would be used to store the SettingsSaver Save files. This is also possible in the Global Settings under Settings.\n\rThe Current Directory is default and currently used.");
-            return Path.Combine(Environment.CurrentDirectory,
-                    string.Format("{0}_{1}_{2}", itemInfo.AuthorFirstName, itemInfo.AuthorLastName, itemInfo.ItemName));
-
+            return Environment.CurrentDirectory;
+        }
+        
+        public static string ItemSettingsFolder(BallOnPlateItemInfoAttribute itemInfo)
+        {
+            return Path.Combine(SettingsFolder(),
+                string.Format("{0}_{1}_{2}", itemInfo.AuthorFirstName, itemInfo.AuthorLastName, itemInfo.ItemName));
         }
 
         public Vector ToValidTilt(Vector tilt)
@@ -85,9 +88,12 @@ namespace BallOnTiltablePlate
         {
             string settinsSaverBackupZip = SettinsSaverBackupZip;
 
-            if (settinsSaverBackupZip != null &&
-                settinsSaverBackupZip.EndsWith(GlobalSettings.b3SettingSaverBackupExtension))
-                MessageBox.Show("The Enviroment variable \"" + GlobalSettings.b3SettingsSaverBackupZipVariableName + "\" must be set to a valid location with the correct extentsion (" + GlobalSettings.b3SettingSaverBackupExtension + ")");
+            if (string.IsNullOrWhiteSpace(settinsSaverBackupZip) ||
+                !settinsSaverBackupZip.EndsWith(GlobalSettings.b3SettingSaverBackupExtension))
+            {
+                MessageBox.Show("The Enviroment variable \"" + GlobalSettings.b3SettingsSaverBackupZipVariableName + "\" must be set to a valid location with the correct extentsion (" + GlobalSettings.b3SettingSaverBackupExtension + ") \n\r\nBecasue of this no Backup was created!");
+                return;
+            }
 
             using (ZipFile zip = new ZipFile(SettinsSaverBackupZip))
             {

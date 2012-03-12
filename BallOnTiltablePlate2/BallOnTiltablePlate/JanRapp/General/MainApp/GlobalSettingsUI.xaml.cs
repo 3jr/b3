@@ -23,7 +23,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         public GlobalSettingsUI()
         {
             InitializeComponent();
-            this.GlobalSettingsSS.SaveLocation = GlobalSettings.SettinsSaverSaveLocation;
+            this.GlobalSettingsSS.SaveLocation = GlobalSettings.SettingsFolder();
             this.SettingsSaverSaveLocation.Text = GlobalSettings.SettinsSaverSaveLocation;
             this.SettingsSaverBackupLocation.Text = GlobalSettings.SettinsSaverBackupZip;
         }
@@ -51,6 +51,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
 
             sfd.AddExtension = true;
+            sfd.CheckFileExists = false;
+            sfd.CheckPathExists = false;
+            sfd.CreatePrompt = false;
+            sfd.OverwritePrompt = false;
+            sfd.InitialDirectory = System.IO.Path.Combine(Environment.CurrentDirectory, @"\..");
             sfd.AutoUpgradeEnabled = true;
             sfd.Title = "Create and choose File to store the SettingsSaver Backups";
             sfd.Filter = "b3-SettingsSaver-Backup|" + GlobalSettings.b3SettingSaverBackupExtension;
