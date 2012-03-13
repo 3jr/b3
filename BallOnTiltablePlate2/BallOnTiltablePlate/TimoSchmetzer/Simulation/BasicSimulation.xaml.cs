@@ -128,6 +128,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 e.CanExecute = true;
         }
 
+        private void ToogleRecordCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (!stopped)
+                e.CanExecute = true;
+        }
+
         #region SimulationState
 
         public Vector PlateVelocity

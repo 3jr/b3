@@ -56,7 +56,7 @@
     </UserControl.Resources>
     <UserControl.CommandBindings>
         <CommandBinding Command="{StaticResource ToogleRunningCmd}" Executed="ToogleRunningCmd_Executed" CanExecute="ToogleRunningCmd_CanExecute"/>
-        <CommandBinding Command="{StaticResource ToogleRecordCmd}" Executed="ToogleRecordCmd_Executed" />
+        <CommandBinding Command="{StaticResource ToogleRecordCmd}" Executed="ToogleRecordCmd_Executed" CanExecute="ToogleRecordCmd_CanExecute"/>
         <CommandBinding Command="{StaticResource AddPermissionCmd}" Executed="AddPermissionCmd_Executed" />
         <CommandBinding Command="{StaticResource RemovePermissionCmd}" Executed="RemovePermissionCmd_Executed" />
     </UserControl.CommandBindings>
