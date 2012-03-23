@@ -41,7 +41,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
             IEnumerable<Type> Calculators = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => t.IsClass && typeof(IPhysicsCalculator).IsAssignableFrom(t))
-                .OrderBy(t=>t.FullName)
+                .OrderBy(t => t.FullName)
                 .Select(t => t)
                 .ToArray();
             foreach (Type t in Calculators)
@@ -107,8 +107,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             get { return this; }
         }
 
+        private bool running = false;
         private void ToogleRunningCmd_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            running = !running;
             if (timer.IsEnabled)
             {
                 timer.Stop();
@@ -124,13 +126,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         private void ToogleRunningCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if ((!stopped)&&(!recording))
+            if ((!stopped) && (!recording) && PhysicsCalculatorList.SelectedItem != null)
                 e.CanExecute = true;
         }
 
         private void ToogleRecordCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (!stopped)
+            if (!stopped && !(running&&!recording) && PhysicsCalculatorList.SelectedItem != null)
                 e.CanExecute = true;
         }
 
@@ -323,7 +325,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         /// <returns>Whether the writing to the list was rejected. true:allowed false:rejected</returns>
         public static bool WriteToDiagram(string Datarow, double Value)
         {
-            if (allowedTypes.Contains((new StackFrame(1)).GetMethod().DeclaringType)&&recording)
+            if (allowedTypes.Contains((new StackFrame(1)).GetMethod().DeclaringType) && recording)
             {
                 diagramcreator.AddPoint(Datarow, new Point(time, Value));
                 return true;
