@@ -72,7 +72,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Desktop\C4FCKinect\Microsoft.Expression.Drawing.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Research.Kinect, Version=1.0.0.45, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -224,6 +224,12 @@
     <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler.xaml.cs">
       <DependentUpon>CircleJuggler.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Algorithm\sinjuggler.xaml.cs">
+      <DependentUpon>sinjuggler.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TimoSchmetzer\Algorithm\Copy of CircleJuggler.xaml.cs">
+      <DependentUpon>Copy of CircleJuggler.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Algorithm\ExperimentalAlgorithm.xaml.cs">
       <DependentUpon>ExperimentalAlgorithm.xaml</DependentUpon>
     </Compile>
@@ -234,6 +240,9 @@
       <DependentUpon>ExcelWriteSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Simulation\PhysicsWrapper.cs" />
+    <Compile Include="TimoSchmetzer\Test\ControlExamle.xaml.cs">
+      <DependentUpon>ControlExamle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Utilities\ExcelUtilities.cs" />
     <Compile Include="TimoSchmetzer\Utilities\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsInAir.cs" />
@@ -371,6 +380,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="TimoSchmetzer\Algorithm\sinjuggler.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TimoSchmetzer\Algorithm\Copy of CircleJuggler.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="TimoSchmetzer\Algorithm\ExperimentalAlgorithm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -384,6 +401,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TimoSchmetzer\Simulation\ExcelWriteSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TimoSchmetzer\Test\ControlExamle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -412,6 +433,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="TimoSchmetzer\backup.b3SettingsSaverBackup" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="JanRapp\General\Controls\Visualizer\Shapes\PlateTextureBlackAxies.png" />
