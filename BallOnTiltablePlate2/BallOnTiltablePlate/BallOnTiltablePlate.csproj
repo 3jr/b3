@@ -224,11 +224,14 @@
     <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler.xaml.cs">
       <DependentUpon>CircleJuggler.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler3.xaml.cs">
+      <DependentUpon>CircleJuggler3.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Algorithm\sinjuggler.xaml.cs">
       <DependentUpon>sinjuggler.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\Copy of CircleJuggler.xaml.cs">
-      <DependentUpon>Copy of CircleJuggler.xaml</DependentUpon>
+    <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler2.xaml.cs">
+      <DependentUpon>CircleJuggler2.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Algorithm\ExperimentalAlgorithm.xaml.cs">
       <DependentUpon>ExperimentalAlgorithm.xaml</DependentUpon>
@@ -380,11 +383,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="TimoSchmetzer\Algorithm\CircleJuggler3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="TimoSchmetzer\Algorithm\sinjuggler.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\Copy of CircleJuggler.xaml">
+    <Page Include="TimoSchmetzer\Algorithm\CircleJuggler2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
