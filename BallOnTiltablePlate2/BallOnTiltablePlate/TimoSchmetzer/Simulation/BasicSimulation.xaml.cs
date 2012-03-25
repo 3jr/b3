@@ -77,8 +77,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             DateTime now = DateTime.Now;
             Update((now - lastUpdateTime).TotalSeconds);
 
-            System.Diagnostics.Debug.WriteLine("Calc" + Position);
-            System.Diagnostics.Debug.WriteLine("Send" + PositionQueue.ElementAt(0));
+            //System.Diagnostics.Debug.WriteLine("Calc" + Position);
+            //System.Diagnostics.Debug.WriteLine("Send" + PositionQueue.ElementAt(0));
 
             #region calcrandom
             if (RandomCalcCheckBox.IsChecked == true)
