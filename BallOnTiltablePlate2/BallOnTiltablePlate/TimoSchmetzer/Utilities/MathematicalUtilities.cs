@@ -509,5 +509,19 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         }
         #endregion
 
+        #region Random
+        /// <summary>
+        /// Returns a Random number in the specified Range
+        /// </summary>
+        /// <param name="min">Minimum value of random number</param>
+        /// <param name="max">Maximum value of random number</param>
+        /// <returns>Random number in the specified Range</returns>
+        public static double Random(double min, double max)
+        {
+            Random r = new Random();
+            return min + (max - min) * r.NextDouble();
+        }
+        #endregion
+
     }
     }

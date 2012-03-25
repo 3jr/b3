@@ -53,17 +53,66 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             }
         }
 
+        private Queue<Vector3D> PositionQueue = new Queue<Vector3D>();
         void timer_Tick(object sender, EventArgs e)
         {
+            #region queue
+            if (PositionQueue.Count < LatencyFramesDoubleBox.Value - 1)
+            {
+                for (int count = PositionQueue.Count; count < (LatencyFramesDoubleBox.Value - 1); count++)
+                {
+                    PositionQueue.Enqueue((Vector3D)Position);
+                }
+            }
+            if (PositionQueue.Count > LatencyFramesDoubleBox.Value - 1)
+            {
+                for (int count = PositionQueue.Count; count > (LatencyFramesDoubleBox.Value - 1); count--)
+                {
+                    PositionQueue.Dequeue();
+                }
+            }
+            PositionQueue.Enqueue((Vector3D)Position);
+            #endregion
+
             DateTime now = DateTime.Now;
             Update((now - lastUpdateTime).TotalSeconds);
 
+            System.Diagnostics.Debug.WriteLine("Calc" + Position);
+            System.Diagnostics.Debug.WriteLine("Send" + PositionQueue.ElementAt(0));
 
-            SendData((Vector3D)Position);
+            #region calcrandom
+            if (RandomCalcCheckBox.IsChecked == true)
+            {
+                Position += new Vector3D(Mathematics.Random(-RandomCalcDoubleBox.Value, RandomCalcDoubleBox.Value),
+                    Mathematics.Random(-RandomCalcDoubleBox.Value, RandomCalcDoubleBox.Value), Mathematics.Random(-RandomCalcDoubleBox.Value, RandomCalcDoubleBox.Value));
+            }
+            #endregion
 
+            Vector3D SendPosition;
+            #region latency
+            if (LatencyCheckBox.IsChecked == true)
+            {
+                SendPosition = PositionQueue.Dequeue();
+            }
+            else
+            {
+                SendPosition = (Vector3D)Position;
+            }
+            #endregion
+            #region random
+            if (RandomCheckBox.IsChecked == true)
+            {
+                SendPosition += new Vector3D(Mathematics.Random(-RandomDoubleBox.Value, RandomDoubleBox.Value),
+                    Mathematics.Random(-RandomDoubleBox.Value, RandomDoubleBox.Value), Mathematics.Random(-RandomDoubleBox.Value, RandomDoubleBox.Value));
+            }
+            #endregion
+            SendData((Vector3D)SendPosition);
+
+            #region jugglerupdate
             BallOnTiltablePlate.JanRapp.MainApp.MainWindow mainWindow = (BallOnTiltablePlate.JanRapp.MainApp.MainWindow)Application.Current.MainWindow;
             if (mainWindow != null)
                 mainWindow.JugglerTimer();
+            #endregion
 
             lastUpdateTime = now;
         }
@@ -132,7 +181,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         private void ToogleRecordCmd_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (!stopped && !(running&&!recording) && PhysicsCalculatorList.SelectedItem != null)
+            if (!stopped && !(running && !recording) && PhysicsCalculatorList.SelectedItem != null)
                 e.CanExecute = true;
         }
 
