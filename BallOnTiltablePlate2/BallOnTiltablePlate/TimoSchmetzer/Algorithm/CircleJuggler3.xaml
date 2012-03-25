@@ -7,12 +7,22 @@
              xmlns:controlsB3="clr-namespace:JRapp.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <RoutedCommand x:Key="InverseSignCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+I</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource InverseSignCmd}" Executed="InverseSignCmd_Executed" />
+    </UserControl.CommandBindings>
     <controlsB3:SettingsSaverB3 x:Name="CircleJugglerSaver">
         <StackPanel>
             <controls:DoubleBox x:Name="PositionFactor" Text="Position: " />
             <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity: " />
             <controls:DoubleBox x:Name="OrthagonalVelocityFactor" Text="OrthagonalVelocityFactor: " />
-            <controls:DoubleBox x:Name="AccelerationFactor" Text="AccelerationFactor: " />
+            <Button Command="{StaticResource InverseSignCmd}" x:Name="InverseSignBtn" Content="InverseSign" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+I"/>
         </StackPanel>
     </controlsB3:SettingsSaverB3>
 </UserControl>

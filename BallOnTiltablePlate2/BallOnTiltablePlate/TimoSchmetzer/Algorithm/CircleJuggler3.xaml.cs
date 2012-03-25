@@ -51,10 +51,14 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
                 Vector vs = new Vector(-Pos.Y, Pos.X);
                 vs *= OrthagonalVelocityFactor.Value;
 
-                var tilt = VelocityFactor.Value*( IO.Velocity -vs) +IO.Acceleration*AccelerationFactor.Value+ PositionFactor.Value* IO.Position;
+                var tilt = VelocityFactor.Value*( IO.Velocity -vs) + PositionFactor.Value* IO.Position;
 
                 IO.SetTilt(tilt);
             }
+        }
+        private void InverseSignCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            OrthagonalVelocityFactor.Value *= -1;
         }
     }
 }
