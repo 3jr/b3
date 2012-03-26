@@ -106,7 +106,7 @@
                     <StackPanel Margin="8">
                         <!--<Label x:Name="FpsLbl" Content="_FPS:" Margin="0,2,0,0" HorizontalAlignment="Left" Target="{Binding ElementName=FpsSlider}" d:LayoutOverrides="Height"/>
                         <Slider x:Name="FpsSlider" Margin="0,2,0,0" d:LayoutOverrides="Height" MinWidth="140" Minimum=".1" Maximum="60" LargeChange="5" SmallChange="1" ValueChanged="FpsSlider_ValueChanged" AutoToolTipPlacement="BottomRight" Value="20"/>-->
-                        <controls:DoubleBox x:Name="FpsSlider" Text="_Fps: " HorizontalAlignment="Left" Value="20" Margin="0,2,0,0" ValueChanged="FpsSlider_ValueChanged" SmallChange="0.1" RegularChange="1" LargeChange="10"/>
+                        <controls:DoubleBox x:Name="FpsSlider" Text="_Fps: " HorizontalAlignment="Left" Value="20" Margin="0,2,0,0" ValueChanged="FpsSlider_ValueChanged" SmallChange="0.1" RegularChange="1" LargeChange="10" Minimum="0.1"/>
                         <CheckBox Content="Enable Latency (Send Delayed Data)" x:Name="LatencyCheckBox"/>
                         <controls:DoubleBox x:Name="LatencyFramesDoubleBox" Text="Latency Frames: " HorizontalAlignment="Left" Value="1" Margin="0,2,0,0" SmallChange="1" RegularChange="1" LargeChange="10" Minimum="1"/>
                         <CheckBox Content="Enable Random Errors (Send data only)" x:Name="RandomCheckBox"/>
