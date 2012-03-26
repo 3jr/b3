@@ -107,24 +107,24 @@
                         <!--<Label x:Name="FpsLbl" Content="_FPS:" Margin="0,2,0,0" HorizontalAlignment="Left" Target="{Binding ElementName=FpsSlider}" d:LayoutOverrides="Height"/>
                         <Slider x:Name="FpsSlider" Margin="0,2,0,0" d:LayoutOverrides="Height" MinWidth="140" Minimum=".1" Maximum="60" LargeChange="5" SmallChange="1" ValueChanged="FpsSlider_ValueChanged" AutoToolTipPlacement="BottomRight" Value="20"/>-->
                         <controls:DoubleBox x:Name="FpsSlider" Text="_Fps: " HorizontalAlignment="Left" Value="20" Margin="0,2,0,0" ValueChanged="FpsSlider_ValueChanged" SmallChange="0.1" RegularChange="1" LargeChange="10" Minimum="0.1"/>
-                        <CheckBox Content="Enable Latency (Send Delayed Data)" x:Name="LatencyCheckBox"/>
-                        <controls:DoubleBox x:Name="LatencyFramesDoubleBox" Text="Latency Frames: " HorizontalAlignment="Left" Value="1" Margin="0,2,0,0" SmallChange="1" RegularChange="1" LargeChange="10" Minimum="1"/>
-                        <CheckBox Content="Enable Random Errors (Send data only)" x:Name="RandomCheckBox"/>
-                        <controls:DoubleBox x:Name="RandomDoubleBox" Text="RandomRange: " HorizontalAlignment="Left" Value="0.01" Margin="0,2,0,0" Minimum="0"/>
-                        <CheckBox Content="Enable Random Errors (Calc)" x:Name="RandomCalcCheckBox"/>
-                        <controls:DoubleBox x:Name="RandomCalcDoubleBox" Text="RandomRange: " HorizontalAlignment="Left" Value="0.001" Margin="0,2,0,0" Minimum="0"/>
+                        <CheckBox Content="Enable _Latency (Send Delayed Data)" x:Name="LatencyCheckBox"/>
+                        <controls:DoubleBox x:Name="LatencyFramesDoubleBox" Text="Latenc_y Frames: " HorizontalAlignment="Left" Value="1" Margin="0,2,0,0" SmallChange="1" RegularChange="1" LargeChange="10" Minimum="1"/>
+                        <CheckBox Content="Enable _Random Errors (Send data only)" x:Name="RandomCheckBox"/>
+                        <controls:DoubleBox x:Name="RandomDoubleBox" Text="Rando_m Range: " HorizontalAlignment="Left" Value="0.01" Margin="0,2,0,0" Minimum="0"/>
+                        <CheckBox Content="Enable Random Err_ors (Calc)" x:Name="RandomCalcCheckBox"/>
+                        <controls:DoubleBox x:Name="RandomCalcDoubleBox" Text="Random Rang_e: " HorizontalAlignment="Left" Value="0.001" Margin="0,2,0,0" Minimum="0"/>
                     </StackPanel>
                 </Expander>
             </WrapPanel>
         </controlsB3:SettingsSaverB3>
         <StackPanel Margin="8">
-            <Label>PhysicsCalculators</Label>
+            <Label Content="P_hysicsCalculators" Target="PhysicsCalculatorList"/>
             <TreeView x:Name="PhysicsCalculatorList"
                   Margin="7,0">
             </TreeView>
         </StackPanel>
         <StackPanel Margin="8">
-            <Label>DiagramWritePermissions</Label>
+            <Label Content="DiagramWritePerm_issions" Target="PermissionList"/>
             <TreeView x:Name="PermissionList"
                   Margin="7,0">
             </TreeView>

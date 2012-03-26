@@ -246,9 +246,6 @@
     <Compile Include="TimoSchmetzer\Algorithm\sinjuggler.xaml.cs">
       <DependentUpon>sinjuggler.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler2.xaml.cs">
-      <DependentUpon>CircleJuggler2.xaml</DependentUpon>
-    </Compile>
     <Compile Include="TimoSchmetzer\Algorithm\ExperimentalAlgorithm.xaml.cs">
       <DependentUpon>ExperimentalAlgorithm.xaml</DependentUpon>
     </Compile>
@@ -424,10 +421,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TimoSchmetzer\Algorithm\sinjuggler.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TimoSchmetzer\Algorithm\CircleJuggler2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
