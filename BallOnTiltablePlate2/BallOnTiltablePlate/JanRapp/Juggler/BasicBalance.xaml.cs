@@ -44,22 +44,28 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
             InitializeComponent();
         }
 
-        Vector intgral;
+        Vector integral;
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 
         public void Update()
         {
             if (IO.ValuesValid)
             {
-                intgral += IO.Position;
+                integral += IO.Position;
                 var deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
                 var tilt = IO.Position * PositionFactor.Value +
-                    intgral * IntegralFactor.Value * deltaTime +
+                    integral * IntegralFactor.Value * deltaTime +
                     IO.Velocity * VelocityFactor.Value;
 
-                sinceLastUpdate.Reset();
+                IntegralDisplay.Text = "Integral: " + integral;
+                sinceLastUpdate.Restart();
 
                 IO.SetTilt(tilt);
+            }
+            else
+            {
+                IO.SetTilt(new Vector());
+                integral = new Vector();
             }
         }
     }

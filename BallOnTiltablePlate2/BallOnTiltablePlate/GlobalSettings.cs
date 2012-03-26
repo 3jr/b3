@@ -13,7 +13,7 @@ namespace BallOnTiltablePlate
     {
         public const string b3SettingsSaverSaveLocationVariableName = "b3SettingsSaverSaveLocation";
         public const string b3SettingsSaverBackupZipVariableName = "b3SettingsSaverBackupLocation";
-        public const string b3SettingSaverBackupExtension = "*.b3SettingsSaverBackup";
+        public const string b3SettingSaverBackupExtension = ".b3SettingsSaverBackup";
 
         static GlobalSettings()
         {
@@ -91,7 +91,7 @@ namespace BallOnTiltablePlate
             if (string.IsNullOrWhiteSpace(settinsSaverBackupZip) ||
                 !settinsSaverBackupZip.EndsWith(GlobalSettings.b3SettingSaverBackupExtension))
             {
-                MessageBox.Show("The Enviroment variable \"" + GlobalSettings.b3SettingsSaverBackupZipVariableName + "\" must be set to a valid location with the correct extentsion (" + GlobalSettings.b3SettingSaverBackupExtension + ") \n\r\nBecasue of this no Backup was created!");
+                MessageBox.Show("The Enviroment variable \"" + GlobalSettings.b3SettingsSaverBackupZipVariableName + "\" must be set to a valid location with the correct extentsion (*" + GlobalSettings.b3SettingSaverBackupExtension + ") \n\r\nBecasue of this no Backup was created!");
                 return;
             }
 

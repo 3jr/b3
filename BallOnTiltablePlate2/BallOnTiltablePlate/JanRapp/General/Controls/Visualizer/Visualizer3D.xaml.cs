@@ -55,9 +55,11 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         {
             set
             {
-                BallPositionX = value.X;
-                BallPositionY = value.Y;
-                BallPositionZ = value.Z;
+                Vector3D pos = ((Vector3D)value) / GlobalSettings.Instance.HalfPlateSize;
+
+                BallPositionX = pos.X;
+                BallPositionY = pos.Y;
+                BallPositionZ = pos.Z;
             }
         }
 

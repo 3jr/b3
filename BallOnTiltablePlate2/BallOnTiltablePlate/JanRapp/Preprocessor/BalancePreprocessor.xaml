@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Preprocessor.BalancePreprocessor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
+             xmlns:controlsB3="clr-namespace:JRapp.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel>
+        <GroupBox Header="PID Ball Balance">
+            <controlsB3:SettingsSaverB3>
+                <StackPanel>
+                    <controls:DoubleBox x:Name="PositionFactor" Text="Position: " />
+                    <controls:DoubleBox x:Name="IntegralFactor" Text="Intrgral: " />
+                    <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(Differencial): " />
+                    <TextBlock x:Name="IntegralDisplay"/>
+                </StackPanel>
+            </controlsB3:SettingsSaverB3>
+        </GroupBox>
+        <controls:VectorBox x:Name="TargetPositionVecBox" Text="Target Position"/>
+        <CheckBox x:Name="IsAutoBalancingOnCheckBox" Content="AutoBalancing On"/>
+        <GroupBox Header="Data">
+            <StackPanel>
+                <TextBlock x:Name="PositionDisplay" />
+                <TextBlock x:Name="VelocityDisplay" />
+                <TextBlock x:Name="AccelerationDisplay" />
+                <Button Content="Reset Pevious Data" Click="Reset_Click"/>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>

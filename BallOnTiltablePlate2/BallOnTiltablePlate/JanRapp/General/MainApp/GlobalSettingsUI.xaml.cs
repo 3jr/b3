@@ -58,8 +58,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             sfd.InitialDirectory = System.IO.Path.Combine(Environment.CurrentDirectory, @"\..");
             sfd.AutoUpgradeEnabled = true;
             sfd.Title = "Create and choose File to store the SettingsSaver Backups";
-            sfd.Filter = "b3-SettingsSaver-Backup|" + GlobalSettings.b3SettingSaverBackupExtension;
-            sfd.DefaultExt = GlobalSettings.b3SettingSaverBackupExtension;
+            sfd.Filter = "b3-SettingsSaver-Backup|*" + GlobalSettings.b3SettingSaverBackupExtension;
+            sfd.DefaultExt = "*" + GlobalSettings.b3SettingSaverBackupExtension;
 
             if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {

@@ -112,10 +112,14 @@
     <Compile Include="JanRapp\General\Controls\vector setter\RectBox.xaml.cs">
       <DependentUpon>RectBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\General\MainApp\InitializingParts.cs" />
     <Compile Include="JanRapp\General\Utilities\ConvertUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\NumberUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TiltUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TransformationUtil.cs" />
+    <Compile Include="JanRapp\Juggler\HarmonicOscillator.xaml.cs">
+      <DependentUpon>HarmonicOscillator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Input\Input1\Input101\ImageProcessing.cs" />
     <Compile Include="JanRapp\Input\Input1\Input101\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
@@ -163,6 +167,9 @@
       <DependentUpon>Visualizer3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="GlobalSettings.cs" />
+    <Compile Include="JanRapp\Input\MouseInput.xaml.cs">
+      <DependentUpon>MouseInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Input\PrettyPictureOfDepthData.cs" />
     <Compile Include="JanRapp\General\MainApp\GlobalSettingsUI.xaml.cs">
       <DependentUpon>GlobalSettingsUI.xaml</DependentUpon>
@@ -175,6 +182,9 @@
     </Compile>
     <Compile Include="JanRapp\Juggler\BasicBalance\BasicBalance1.xaml.cs">
       <DependentUpon>BasicBalance1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Juggler\SequentailMoveTo.xaml.cs">
+      <DependentUpon>SequentailMoveTo.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Juggler\TestJuggler.xaml.cs">
       <DependentUpon>TestJuggler.xaml</DependentUpon>
@@ -206,6 +216,9 @@
     </Compile>
     <Compile Include="JanRapp\Preprocessor\BasicPreprocessor3D.xaml.cs">
       <DependentUpon>BasicPreprocessor3D.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Preprocessor\BalancePreprocessor.xaml.cs">
+      <DependentUpon>BalancePreprocessor.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Preprocessor\TestPreprocessor.xaml.cs">
       <DependentUpon>TestPreprocessor.xaml</DependentUpon>
@@ -271,6 +284,10 @@
     <Page Include="JanRapp\General\Controls\vector setter\RectBox.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\Juggler\HarmonicOscillator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Input\Input1\Input101\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -316,6 +333,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\Input\MouseInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Input\TestInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -338,6 +359,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="JanRapp\Juggler\SequentailMoveTo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Juggler\TestJuggler.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -371,6 +396,10 @@
     </Page>
     <Page Include="JanRapp\Preprocessor\BasicPreprocessor3D.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Preprocessor\BalancePreprocessor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="JanRapp\Preprocessor\TestPreprocessor.xaml">
       <Generator>MSBuild:Compile</Generator>

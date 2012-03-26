@@ -10,8 +10,11 @@
     <controlsB3:SettingsSaverB3>
         <StackPanel>
             <controls:DoubleBox x:Name="PositionFactor" Text="Position: " />
-            <controls:DoubleBox x:Name="IntegralFactor" Text="Intrgral: " />
+            <controls:DoubleBox x:Name="IntegralFactor" Text="Integral: " />
             <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(Differencial): " />
+            <CheckBox x:Name="ResetPlateToZeroIfOffPlate" Content="Reset Plate To Zero If Off Plate"/>
+            <TextBlock x:Name="IntegralDisplay"/>
         </StackPanel>
     </controlsB3:SettingsSaverB3>
+
 </UserControl>
