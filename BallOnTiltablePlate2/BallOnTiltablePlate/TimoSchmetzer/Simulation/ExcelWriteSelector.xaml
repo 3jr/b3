@@ -9,13 +9,14 @@
             </RoutedCommand.InputGestures>
         </RoutedCommand>
     </Window.Resources>
-
+    
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource OKExecuted}" Executed="OKExecuted_Executed" />
     </Window.CommandBindings>
+    
     <Grid>
         <StackPanel Margin="8">
-            <Label>Select a type to allow it to wirite into the Diagram.</Label>
+            <Label Content="_Select a type to allow it to write into the Diagram." Target="TypeList"/>
             <TreeView x:Name="TypeList"
                   Margin="7,0">
             </TreeView>

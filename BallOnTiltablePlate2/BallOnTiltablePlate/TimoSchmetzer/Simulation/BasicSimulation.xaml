@@ -111,7 +111,7 @@
                         <controls:DoubleBox x:Name="LatencyFramesDoubleBox" Text="Latenc_y Frames: " HorizontalAlignment="Left" Value="1" Margin="0,2,0,0" SmallChange="1" RegularChange="1" LargeChange="10" Minimum="1"/>
                         <CheckBox Content="Enable _Random Errors (Send data only)" x:Name="RandomCheckBox"/>
                         <controls:DoubleBox x:Name="RandomDoubleBox" Text="Rando_m Range: " HorizontalAlignment="Left" Value="0.01" Margin="0,2,0,0" Minimum="0"/>
-                        <CheckBox Content="Enable Random Err_ors (Calc)" x:Name="RandomCalcCheckBox"/>
+                        <CheckBox Content="Enable Random Error_s (Calc)" x:Name="RandomCalcCheckBox"/>
                         <controls:DoubleBox x:Name="RandomCalcDoubleBox" Text="Random Rang_e: " HorizontalAlignment="Left" Value="0.001" Margin="0,2,0,0" Minimum="0"/>
                     </StackPanel>
                 </Expander>
