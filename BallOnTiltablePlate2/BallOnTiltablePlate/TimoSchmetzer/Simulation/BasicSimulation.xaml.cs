@@ -314,7 +314,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         private void FpsSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            timer.Interval = new TimeSpan((long)(1000000 / FpsSlider.Value));
+            timer.Interval = new TimeSpan((long)(10000000 / FpsSlider.Value));
         }
 
         #region Diagram
