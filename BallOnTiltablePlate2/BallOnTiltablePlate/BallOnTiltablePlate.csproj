@@ -249,6 +249,9 @@
     <Compile Include="TimoSchmetzer\Algorithm\ExperimentalAlgorithm.xaml.cs">
       <DependentUpon>ExperimentalAlgorithm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Preprocessor\CirclePreprocessor.xaml.cs">
+      <DependentUpon>CirclePreprocessor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Simulation\BasicSimulation.xaml.cs">
       <DependentUpon>BasicSimulation.xaml</DependentUpon>
     </Compile>
@@ -425,6 +428,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TimoSchmetzer\Algorithm\ExperimentalAlgorithm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TimoSchmetzer\Preprocessor\CirclePreprocessor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
