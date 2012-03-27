@@ -64,8 +64,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
         {
             try
             {
-                wii.SetReportType(InputReport.ButtonsAccel, true);
                 wii.Connect();
+                wii.SetReportType(InputReport.ButtonsAccel, true);
                 wii.SetLEDs(0xF);
                 this.IsEnabled = true;
             }

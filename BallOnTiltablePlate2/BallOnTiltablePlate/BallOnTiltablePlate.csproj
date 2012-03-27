@@ -103,6 +103,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="JanRapp\General\Controls\HistoryVisualizer.xaml.cs">
+      <DependentUpon>HistoryVisualizer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\General\Controls\PointSelector.xaml.cs">
       <DependentUpon>PointSelector.xaml</DependentUpon>
     </Compile>
@@ -201,10 +204,6 @@
     <Compile Include="JanRapp\Output\Output1\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Output\Output21\b3SGCommands.cs" />
-    <Compile Include="JanRapp\Output\Output21\BasicPlateOutput.xaml.cs">
-      <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
-    </Compile>
     <Compile Include="JanRapp\Output\Output2\BasicPlateOutput.xaml.cs">
       <DependentUpon>BasicPlateOutput.xaml</DependentUpon>
     </Compile>
@@ -275,6 +274,10 @@
       <DependentUpon>Preprocessor.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Simulation\SimulationInterfaces.cs" />
+    <Page Include="JanRapp\General\Controls\HistoryVisualizer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\General\Controls\PointSelector.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -379,10 +382,6 @@
     <Page Include="JanRapp\Output\Output1\BasicPlateOutput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="JanRapp\Output\Output21\BasicPlateOutput.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="JanRapp\Output\Output2\BasicPlateOutput.xaml">
       <Generator>MSBuild:Compile</Generator>

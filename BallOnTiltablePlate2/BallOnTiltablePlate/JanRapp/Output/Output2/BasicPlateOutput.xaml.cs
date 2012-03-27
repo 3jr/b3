@@ -59,10 +59,16 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
 
         public void Start()
         {
+            if(!port.IsOpen)
+                ToggleConnectCmd_Executed(null, null);
+            if (!controlEnabled)
+                EnableControlCmd_Executed(null, null);
         }
 
         public void Stop()
         {
+            if (controlEnabled)
+                EnableControlCmd_Executed(null, null);
         }
 
         void SendData()

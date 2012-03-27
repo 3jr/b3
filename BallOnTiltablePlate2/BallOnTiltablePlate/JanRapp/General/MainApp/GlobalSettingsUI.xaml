@@ -5,12 +5,12 @@
         xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
         xmlns:ballOnTiltablePlate="clr-namespace:BallOnTiltablePlate"
         Width="393"
-        Height="376">
+        Height="416">
     <StackPanel>
         <Border>
             <controls:SettingsSaver x:Name="GlobalSettingsSS" Height="140">
                 <StackPanel Orientation="Vertical" Height="101">
-                    <my:DoubleBox 
+                    <controls:DoubleBox 
                         x:Name="HalfPlateSize"
                         Height="24"
                         Margin="8,0"
@@ -21,7 +21,7 @@
                         SmallChange=".01"
                         Value="{Binding HalfPlateSize, Mode=TwoWay, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}}"
                       />
-                    <my:DoubleBox
+                    <controls:DoubleBox
                         x:Name="JugglerUpdatesPerSecound"
                         Text="Set _Updates per Second for Juggeler: "
                         Margin="8,0"
@@ -31,7 +31,7 @@
                         SmallChange=".1"
                         Value="{Binding FPSOfAlgorithm, Mode=TwoWay, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}}"
                       />
-                    <my:DoubleBox
+                    <controls:DoubleBox
                         x:Name="MaximumTilt"
                         Text="_Maximum Tilt the Plate may has to an Axis: "
                         Margin="8,0"
@@ -59,7 +59,7 @@
             </StackPanel>
         </GroupBox>
         <StackPanel Orientation="Horizontal">
-            <my:DoubleBox x:Name="PhysicalKinectAngle"
+            <controls:DoubleBox x:Name="PhysicalKinectAngle"
                         Text="_Angle of Kinect [-40, 40]: "
                         Margin="8,2"
                         Minimum="-27"

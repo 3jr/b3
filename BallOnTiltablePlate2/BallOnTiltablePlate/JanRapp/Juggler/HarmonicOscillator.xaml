@@ -14,8 +14,8 @@
             <controls:DoubleBox x:Name="Accuracy" Text="Accuracy: "/>
             <GroupBox Header="PID Controler of Velocity">
                 <StackPanel>
-                    <controls:DoubleBox x:Name="PositionFactor" Text="Position: " />
-                    <controls:DoubleBox x:Name="IntegralFactor" Text="Intrgral: " />
+                    <controls:DoubleBox x:Name="PositionFactor" Text="Proportional: " />
+                    <controls:DoubleBox x:Name="IntegralFactor" Text="Integral: " />
                     <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(Differencial): " />
                 </StackPanel>
             </GroupBox>

@@ -59,8 +59,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             sinceLastUpdate.Restart();
 
             Vector newPosition = e.BallPosition;
-            Vector newVelocity = (newPosition - Position) / deltaTime;
-                   Acceleration = (newVelocity - Velocity) / deltaTime;
+            Vector newVelocity = (newPosition - Position) / ((UseDelataTime.IsChecked ?? true) ? deltaTime : 1);
+            Acceleration = (newVelocity - Velocity) / ((UseDelataTime.IsChecked ?? true) ? deltaTime : 1);
 
             Velocity = newVelocity;
             Position = newPosition;
@@ -69,6 +69,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             PositionDisplay.Text = "Position: " + Position.ToString();
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
             AccelerationDisplay.Text = "Acceleration: " + Acceleration.ToString();
+
+            History.FeedUpdate(Position, Velocity, Acceleration);
 
             if (IsAutoBalancing)
             {

@@ -213,7 +213,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            var userchois = MessageBox.Show("Do you want your SettingsSaverSaves to be Backupt?","",
+            var userchois = MessageBox.Show("Do you want your SettingsSaverSaves to be Backuped?","",
                 MessageBoxButton.YesNoCancel);
 
             switch (userchois)

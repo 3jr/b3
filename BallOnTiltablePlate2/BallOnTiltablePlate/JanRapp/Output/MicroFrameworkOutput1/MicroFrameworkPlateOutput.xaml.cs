@@ -93,7 +93,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.MicroFrameworkPlateOutput1
         {
             if (port.IsOpen && (TransmitImmediately.IsChecked == true || force))
             {
-                // TODO: Send Command
+                // TO DO: Send Command
                 System.Threading.Thread.Sleep(100);
                 if (controlEnabled && (XEnabled.IsChecked ?? true))
                     WritePort("xe");
@@ -104,7 +104,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.MicroFrameworkPlateOutput1
         {
             if (port.IsOpen && (TransmitImmediately.IsChecked == true || force))
             {
-                // TODO: Send Command
+                // TO DO: Send Command
                 System.Threading.Thread.Sleep(100);
                 if (controlEnabled && (YEnabled.IsChecked ?? true))
                     WritePort("ye");

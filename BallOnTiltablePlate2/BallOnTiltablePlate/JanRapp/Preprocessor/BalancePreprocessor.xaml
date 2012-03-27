@@ -11,9 +11,10 @@
         <GroupBox Header="PID Ball Balance">
             <controlsB3:SettingsSaverB3>
                 <StackPanel>
-                    <controls:DoubleBox x:Name="PositionFactor" Text="Position: " />
-                    <controls:DoubleBox x:Name="IntegralFactor" Text="Intrgral: " />
-                    <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(Differencial): " />
+                    <controls:DoubleBox x:Name="PositionFactor" Text="_Position: " />
+                    <controls:DoubleBox x:Name="IntegralFactor" Text="_Integral: " />
+                    <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(_Differencial): " />
+                    <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime"/>
                     <TextBlock x:Name="IntegralDisplay"/>
                 </StackPanel>
             </controlsB3:SettingsSaverB3>
@@ -28,5 +29,6 @@
                 <Button Content="Reset Pevious Data" Click="Reset_Click"/>
             </StackPanel>
         </GroupBox>
+        <controlsB3:HistoryVisualizer x:Name="History"/>
     </StackPanel>
 </UserControl>
