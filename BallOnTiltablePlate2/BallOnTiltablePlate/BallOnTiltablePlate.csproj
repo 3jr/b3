@@ -27,7 +27,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>C:\Users\Jan\Documents\b3\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -36,7 +36,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>C:\Users\Jan\Documents\b3R\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -120,6 +120,9 @@
     <Compile Include="JanRapp\General\Utilities\NumberUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TiltUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TransformationUtil.cs" />
+    <Compile Include="JanRapp\Juggler\SequentailMoveTo2.xaml.cs">
+      <DependentUpon>SequentailMoveTo2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Juggler\HarmonicOscillator.xaml.cs">
       <DependentUpon>HarmonicOscillator.xaml</DependentUpon>
     </Compile>
@@ -286,6 +289,10 @@
     </Page>
     <Page Include="JanRapp\General\Controls\vector setter\RectBox.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Juggler\SequentailMoveTo2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="JanRapp\Juggler\HarmonicOscillator.xaml">
       <SubType>Designer</SubType>

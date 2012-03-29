@@ -71,8 +71,15 @@ namespace BallOnTiltablePlate.JanRapp.Input11
 
         void Kinects_StatusChanged(object sender, Kinect.StatusChangedEventArgs e)
         {
-            if(kinect == null)
-                TryInitializeKinectDevice();
+            try
+            {
+                if(kinect == null)
+                    TryInitializeKinectDevice();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kinect counldn't be initialized. Exception Message: " + ex.Message);
+            }
         }
 
         void kinect_DepthFrameReady(object sender, Kinect.ImageFrameReadyEventArgs e)
@@ -108,6 +115,7 @@ namespace BallOnTiltablePlate.JanRapp.Input11
                     {"angleFactor", AngleFactor.Value},
                     {"axesSeperatly", AxesSeperalty.IsChecked ?? false},
                     {"projectionInverted", ProjectionInverted.IsChecked ?? false},
+                    {"generatePrettyPictures", this.IsVisible},
                 };
 
                 computaionTask = new Task<ImageProcessing.Output>(DoMainComputaionAsync, state);
@@ -137,7 +145,8 @@ namespace BallOnTiltablePlate.JanRapp.Input11
             DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_BallPositionTotal", displays, "Ball Position Total: {0}", stopwatch.ElapsedMilliseconds);
 
             stopwatch.Restart();
-            prettyPicture = PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]);
+            if ((bool)input["generatePrettyPictures"])
+                prettyPicture = PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]);
             DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_PrettyPicture", displays, "PrettyPicture: {0}", stopwatch.ElapsedMilliseconds);
 
             stopwatch.Stop();
@@ -157,7 +166,7 @@ namespace BallOnTiltablePlate.JanRapp.Input11
                 / withThatIsPlateSizeMeter
                 + centerPos;
 
-            if (output.prettyPicture != null)
+            if (output.prettyPicture != null && this.IsVisible)
             {
                 InputImage.Source = CreateMyStandartBitmapSource(output.prettyPicture, KinectInputImageWidth, KinectInputImageHeight);
                 OutputImage.Source = CreateMyStandartBitmapSource(output.prettyPicture, KinectInputImageWidth, KinectInputImageHeight);
@@ -201,21 +210,32 @@ namespace BallOnTiltablePlate.JanRapp.Input11
         bool started = false;
         public void Start()
         {
-            started = true;
-            if (kinect != null)
+            try
             {
-                kinect.Initialize(Kinect.RuntimeOptions.UseDepth);
-                kinect.DepthStream.Open(Kinect.ImageStreamType.Depth, 4, Kinect.ImageResolution.Resolution640x480, Kinect.ImageType.Depth);
+                started = true;
+                if (kinect != null)
+                {
+                    kinect.Initialize(Kinect.RuntimeOptions.UseDepth);
+                    kinect.DepthStream.Open(Kinect.ImageStreamType.Depth, 4, Kinect.ImageResolution.Resolution640x480, Kinect.ImageType.Depth);
+                }
+                else
+                    TryInitializeKinectDevice();
             }
-            else
-                TryInitializeKinectDevice();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kinect counldn't be initialized. Exception Message: " + ex.Message);
+            }
         }
 
         public void Stop()
         {
-            started = false;
-            if(kinect != null)
-                kinect.Uninitialize();
+            try
+            {
+                started = false;
+                if (kinect != null)
+                    kinect.Uninitialize();
+            }
+            catch { }
         }
 
         #region Base

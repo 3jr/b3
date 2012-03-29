@@ -11,6 +11,7 @@
         <StackPanel>
             <controls:DoubleBox x:Name="MovementFactor" Text="_Movement Factor: " Value="1"/>
             <controls:DoubleBox x:Name="CountForAverage" Text="Average: " Value="5" SmallChange="1" RegularChange="1" LargeChange="5"/>
+            <TextBlock x:Name="AccelerationDataDisplay"/>
         </StackPanel>
     </controlsB3:SettingsSaverB3>
 </UserControl>

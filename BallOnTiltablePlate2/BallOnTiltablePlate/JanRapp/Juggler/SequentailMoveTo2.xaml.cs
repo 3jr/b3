@@ -19,8 +19,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
     /// <summary>
     /// Interaction logic for SequentailMoveTo.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "Sequential MoveTo", "1.3")]
-    public partial class SequentailMoveTo : UserControl, IJuggler<IBalancePreprocessor>
+    [BallOnPlateItemInfo("Jan", "Rapp", "Sequential MoveTo", "2.1")]
+    public partial class SequentailMoveTo2 : UserControl, IJuggler<IBalancePreprocessor>
     {
         ObservableCollection<Vector> nextPositions = new ObservableCollection<Vector>();
 
@@ -28,7 +28,7 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
         int nextRecentBallPosition;
         int historiCount = 0;
 
-        public SequentailMoveTo()
+        public SequentailMoveTo2()
         {
             InitializeComponent();
 
@@ -46,7 +46,7 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
 
         void InitNewHistory(int count)
         {
-            Container.Children.RemoveRange(3,historiCount);
+            Container.Children.RemoveRange(0,historiCount);
 
             historiCount = count;
             nextRecentBallPosition = 0;
@@ -57,6 +57,7 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
                 Ellipse e = new Ellipse();
                 e.Fill = Brushes.Gray;
                 e.Width = e.Height = 5;
+                e.Margin = new Thickness(-2.5, -2.5, - 2.5, -2.5);
                 Container.Children.Add(e);
                 recentBallPositions[i] = e;
             }
@@ -64,7 +65,13 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
 
         public FrameworkElement SettingsUI { get { return this; } }
 
-        public void Start() { }
+        public void Start()
+        {
+            double cosMaxTilt = nextPositionInput.Width / 2 * Math.Cos(GlobalSettings.Instance.MaxTilt);
+            CosMaxTilt.Width = CosMaxTilt.Height = cosMaxTilt * 2;
+            Canvas.SetTop(CosMaxTilt, nextPositionInput.Width / 2 - cosMaxTilt);
+            Canvas.SetLeft(CosMaxTilt, nextPositionInput.Width / 2 - cosMaxTilt);
+        }
 
         public void Stop() { }
 
@@ -72,21 +79,23 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
 
         public void Update()
         {
-            Vector displayPos = GetDisplayPos(IO.Position);
+            if (this.IsVisible)
+            {
+                Vector displayPos = GetDisplayPos(IO.Position);
 
-            Canvas.SetLeft(recentBallPositions[nextRecentBallPosition], displayPos.X);
-            Canvas.SetTop(recentBallPositions[nextRecentBallPosition], displayPos.Y);
-            nextRecentBallPosition++;
-            nextRecentBallPosition %= historiCount;
+                Canvas.SetLeft(recentBallPositions[nextRecentBallPosition], displayPos.X);
+                Canvas.SetTop(recentBallPositions[nextRecentBallPosition], displayPos.Y);
+                nextRecentBallPosition++;
+                nextRecentBallPosition %= historiCount;
+            }
 
-            if (nextPositions.Count > 0 && (IO.Position - nextPositions[0]).LengthSquared < Tolerance.Value * Tolerance.Value && IO.Velocity.LengthSquared < SpeedAtTarget.Value * SpeedAtTarget.Value)
+            if (nextPositions.Count > 0 && (IO.Position - nextPositions[0]).Length < Tolerance.Value && IO.Velocity.Length < SpeedAtTarget.Value)
             {
                 nextPositions.Add(nextPositions[0]);
                 nextPositions.RemoveAt(0);
 
-
-            }
                 SetNewTarget();
+            }
         }
 
         void SetNewTarget()
@@ -98,8 +107,19 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
 
                 Vector displayPos = GetDisplayPos(nextPositions[0]);
 
-                Canvas.SetLeft(NextPositionEllipse, displayPos.X);
-                Canvas.SetTop(NextPositionEllipse, displayPos.Y);
+                if (this.IsVisible)
+                {
+                    Canvas.SetLeft(NextPositionEllipse, displayPos.X);
+                    Canvas.SetTop(NextPositionEllipse, displayPos.Y);
+
+                    Canvas.SetLeft(TagetRadiusDisplay, displayPos.X);
+                    Canvas.SetTop(TagetRadiusDisplay, displayPos.Y);
+
+                    double size = Tolerance.Value / GlobalSettings.Instance.HalfPlateSize * nextPositionInput.Width/2 * 2;
+                    TagetRadiusDisplay.Margin = new Thickness(-size / 2, -size / 2, size / 2, size / 2);
+
+                    TagetRadiusDisplay.Width = TagetRadiusDisplay.Height = size;
+                }
             }
         }
 

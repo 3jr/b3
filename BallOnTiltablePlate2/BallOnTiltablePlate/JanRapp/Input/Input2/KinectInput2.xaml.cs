@@ -83,6 +83,7 @@ namespace BallOnTiltablePlate.JanRapp.Input2
                     {"twoByteDepthBits", e.ImageFrame.Image.Bits},
                     {"depthHorizontalResulotion", 640},
                     {"clip", ConvertUtil.ToIntRect(ClipSelector.GetValueFromSize(KinectInputImageSize))},
+                    {"generatePrettyPictures", this.IsVisible},
                 };
 
 
@@ -100,7 +101,11 @@ namespace BallOnTiltablePlate.JanRapp.Input2
 
             var ballPosition = ImageProcessing2.BallPositionFast(input, displays);
 
-            return new Tuple<Vector, byte[]>(ballPosition, Input.PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]));
+            byte[] prettyPictureBytes = null;
+            if ((bool)input["generatePrettyPictures"])
+                prettyPictureBytes = Input.PrettyPictureOfDepthData.PrettyPicture((byte[])input["twoByteDepthBits"]);
+
+            return new Tuple<Vector, byte[]>(ballPosition, prettyPictureBytes);
         }
 
         void DisplayComputation(Task<Tuple<Vector, byte[]>> task)
@@ -113,8 +118,11 @@ namespace BallOnTiltablePlate.JanRapp.Input2
             BallSelector.ValueCoordinates = ballPosition
                 + (Vector)ClipSelector.ValueCoordinates.TopLeft;
 
-            InputImage.Source = CreateMyStandartBitmapSource(prettyPicture, KinectInputImageWidth, KinectInputImageHeight);
-            OutputImage.Source = CreateMyStandartBitmapSource(prettyPicture, KinectInputImageWidth, KinectInputImageHeight);
+            if (this.IsVisible && prettyPicture != null)
+            {
+                InputImage.Source = CreateMyStandartBitmapSource(prettyPicture, KinectInputImageWidth, KinectInputImageHeight);
+                OutputImage.Source = CreateMyStandartBitmapSource(prettyPicture, KinectInputImageWidth, KinectInputImageHeight);
+            }
 
             Vector ballPos = ballPosition
                 + (Vector)ClipSelector.ValueCoordinates.TopLeft

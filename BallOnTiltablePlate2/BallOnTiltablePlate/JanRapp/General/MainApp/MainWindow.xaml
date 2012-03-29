@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
         Title="Ball on Tilitable Plate"
         Width="340"
-        Height="550"
+        Height="650"
         MinWidth="340"
         MaxWidth="340"
         d:DesignHeight="566.5"

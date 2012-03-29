@@ -6,7 +6,17 @@
              xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
              xmlns:controlsB3="clr-namespace:JRapp.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" Width="300">
+    <UserControl.Resources>
+        <RoutedCommand x:Key="ToogleRecordCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+R</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ToogleRecordCmd}" Executed="ToogleRecordCmd_Executed"/>
+    </UserControl.CommandBindings>
     <StackPanel>
         <GroupBox Header="PID Ball Balance">
             <controlsB3:SettingsSaverB3>
@@ -14,7 +24,8 @@
                     <controls:DoubleBox x:Name="PositionFactor" Text="_Position: " />
                     <controls:DoubleBox x:Name="IntegralFactor" Text="_Integral: " />
                     <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(_Differencial): " />
-                    <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime"/>
+                    <controls:DoubleBox x:Name="IntegralOfAbsenseFactor" Text="Integral of _Absense: " />
+                    <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime" IsChecked="True"/>
                     <TextBlock x:Name="IntegralDisplay"/>
                 </StackPanel>
             </controlsB3:SettingsSaverB3>
@@ -26,7 +37,8 @@
                 <TextBlock x:Name="PositionDisplay" />
                 <TextBlock x:Name="VelocityDisplay" />
                 <TextBlock x:Name="AccelerationDisplay" />
-                <Button Content="Reset Pevious Data" Click="Reset_Click"/>
+                <Button Content="Reset _Pevious Data" Click="Reset_Click"/>
+                <Button Command="{StaticResource ToogleRecordCmd}" x:Name="ToggleReccordBtn" Content="Record" ToolTip="Ctrl+R"/>
             </StackPanel>
         </GroupBox>
         <controlsB3:HistoryVisualizer x:Name="History"/>

@@ -18,8 +18,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
     /// <summary>
     /// Interaction logic for WiiMoteControled.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "WiiMote Controled", "0.2")]
-    public partial class WiiMoteControled02 : UserControl, IJuggler<JanRapp.Preprocessor.IBasicPreprocessor>
+    [BallOnPlateItemInfo("Jan", "Rapp", "WiiMote Controled", "1.0")]
+    public partial class WiiMoteControled02 : UserControl, IJuggler<JanRapp.Preprocessor.IBalancePreprocessor>
     {
         Wiimote wii = new Wiimote();
 
@@ -35,7 +35,7 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
         }
         #endregion
 
-        public JanRapp.Preprocessor.IBasicPreprocessor IO { private get; set; }
+        public JanRapp.Preprocessor.IBalancePreprocessor IO { private get; set; }
 
         Queue<Vector> lastAccelerationData = new Queue<Vector>();
 
@@ -46,14 +46,24 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
                 wii.WiimoteState.AccelState.Values.Y
                 ));
 
+            AccelerationDataDisplay.Text = string.Format("Acceleration Data: {0:f4}, {1:f4}", wii.WiimoteState.AccelState.Values.X, wii.WiimoteState.AccelState.Values.Y);
+
             int countForAverage = (int)CountForAverage.Value;
 
             if (lastAccelerationData.Count >= countForAverage)
             {
-                Vector sum = lastAccelerationData.Take(countForAverage).Aggregate(new Vector(), (aggregator, item) => aggregator += item);
-                Vector median = sum / countForAverage;
+                if (wii.WiimoteState.ButtonState.B)
+                {
+                    IO.TargetPosition = new Vector();
+                    IO.IsAutoBalancing = true;
+                }
+                else
+                {
+                    Vector sum = lastAccelerationData.Take(countForAverage).Aggregate(new Vector(), (aggregator, item) => aggregator += item);
+                    Vector median = sum / countForAverage;
 
-                IO.SetTilt(median * MovementFactor.Value);
+                    IO.SetTilt(median * MovementFactor.Value);
+                }
 
                 lastAccelerationData.Dequeue();
             }

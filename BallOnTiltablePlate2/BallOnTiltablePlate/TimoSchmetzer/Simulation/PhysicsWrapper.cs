@@ -118,6 +118,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         /// <param name="elapsedSeconds"></param>
         public void RunSimulation(IPhysicsCalculator Calculator, ISimulationState Istate, double elapsedSeconds)
         {
+            #region MaxElapsed
+            elapsedSeconds = Math.Min(elapsedSeconds, .2);
+            #endregion MaxElapsed
             #region calccalltimes
             double tcallx = (Istate.DesiredTilt.X - Istate.Tilt.X) / (Istate.PlateVelocity.X);
             double tcally = (Istate.DesiredTilt.Y - Istate.Tilt.Y) / (Istate.PlateVelocity.Y);

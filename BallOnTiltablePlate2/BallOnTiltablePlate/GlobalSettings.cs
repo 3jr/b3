@@ -20,21 +20,37 @@ namespace BallOnTiltablePlate
             Instance = new GlobalSettings();
         }
 
-        public GlobalSettings()
-        {
-            FPSOfAlgorithm = 20;
-            HalfPlateSize = .25;
-            MaxTilt = Math.PI * 5 / 64;
-        }
-
         public static GlobalSettings Instance { get; private set; }
 
         public  EventHandler EnviromentVariableChanged;
 
-        public double FPSOfAlgorithm { get; set; }
+        private double fPSOfAlgorithm = 1;
+        public double FPSOfAlgorithm
+        {
+            get
+            {
+                return fPSOfAlgorithm;
+            }
+            set
+            {
+                fPSOfAlgorithm = value;
+            }
+        }
 
         // in Meter
-        public double HalfPlateSize { get; set;}
+        private double halfPlateSize = 0.25;
+        public double HalfPlateSize
+        {
+            get { return halfPlateSize; }
+            set { halfPlateSize = value; }
+        }
+
+        private double maxTilt = 0.44726;
+        public double MaxTilt
+        {
+            get { return maxTilt; }
+            set { maxTilt = value; }
+        }
 
         public static string SettingsFolder()
         {
@@ -61,8 +77,6 @@ namespace BallOnTiltablePlate
                 NumberUtil.Clamp(tilt.Y, -this.MaxTilt, this.MaxTilt).ToNoNaN()
                 );
         }
-
-        public double MaxTilt { get; set; }
 
         public static string SettinsSaverSaveLocation 
         { 

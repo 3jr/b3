@@ -245,6 +245,8 @@ namespace BallOnTiltablePlate.JanRapp.Input1
         public static Vector BallPositionFast(Dictionary<string, object> input, Dictionary<string, DisplayDescribtion> displays
             )
         {
+            bool createPictures = (bool)input["generatePrettyPictures"];
+
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
 
@@ -313,12 +315,15 @@ namespace BallOnTiltablePlate.JanRapp.Input1
 
                     for (int x = (int)rwStart; x < (rwEnd); x++)
                     {
-                        traversed[y * 640 + x] = 255;
-
                         int depthOfPlate = (int)((x - centerPosition.X) * average.X) + (int)((y - centerPosition.Y) * average.Y) + centerDepth;
 
                         int dept = depthData[j++] | depthData[j++] << 8;
-                        plate[y * depthHorizontalResulotion + x] = (byte)(depthOfPlate - dept);
+                        
+                        if (createPictures)
+                        {
+                            plate[y * depthHorizontalResulotion + x] = (byte)(depthOfPlate - dept);
+                            traversed[y * 640 + x] = 255;
+                        }
 
                         if (depthOfPlate - tolerance > dept && dept != 0)
                         {
@@ -326,7 +331,8 @@ namespace BallOnTiltablePlate.JanRapp.Input1
                             ballY += y;
                             ballPointsCount++;
 
-                            anormalies[y * depthHorizontalResulotion + x] = 255;
+                            if(createPictures)
+                                anormalies[y * depthHorizontalResulotion + x] = 255;
                         }
                     }
                 }
@@ -345,9 +351,12 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             #endregion TraverseBLABLA
             DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_TraverseQuadrant", displays, "Traverse Quadrant: {0}", stopwatch.ElapsedMilliseconds);
 
-            DisplayDescribtion.CreateOrUpdateImageDisplay("Traversed Pixels", displays, traversed, new Int32Rect(0, 0, 640, 480));
-            DisplayDescribtion.CreateOrUpdateImageDisplay("Anormalie Pixels", displays, anormalies, new Int32Rect(0, 0, 640, 480));
-            DisplayDescribtion.CreateOrUpdateImageDisplay("Plate Pixels", displays, plate, new Int32Rect(0, 0, 640, 480));
+            if ((bool)input["generatePrettyPictures"])
+            {
+                DisplayDescribtion.CreateOrUpdateImageDisplay("Traversed Pixels", displays, traversed, new Int32Rect(0, 0, 640, 480));
+                DisplayDescribtion.CreateOrUpdateImageDisplay("Anormalie Pixels", displays, anormalies, new Int32Rect(0, 0, 640, 480));
+                DisplayDescribtion.CreateOrUpdateImageDisplay("Plate Pixels", displays, plate, new Int32Rect(0, 0, 640, 480));
+            }
 
             stopwatch.Stop();
             if (ballPointsCount > (int)input["minHightAnormalities"])
