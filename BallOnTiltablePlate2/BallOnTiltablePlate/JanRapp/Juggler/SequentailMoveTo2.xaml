@@ -13,7 +13,7 @@
                 <Rectangle Height="300" Width="300" VerticalAlignment="Top" MouseUp="Border_MouseUp_1" x:Name="CosMaxTilt" HorizontalAlignment="Left" StrokeThickness="1" Stroke="Gray" Fill="#FFD4DEBD"/>
                 <Canvas Height="300" Width="300" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" x:Name="Container"/>
                 <Ellipse x:Name="NextPositionEllipse" Width="6" Height="6" Margin="-3,-3" Fill="Red"/>
-                <Ellipse Stroke="Red" StrokeThickness="1" x:Name="TagetRadiusDisplay"/>
+                <!--<Ellipse Stroke="Red" StrokeThickness="1" x:Name="TagetRadiusDisplay"/>-->
             </Canvas>
             <ListBox Height="300" VerticalAlignment="Top" Margin="315,10,0,0" x:Name="NextPositionList" HorizontalAlignment="Left" Width="172" controls:SettingsSaver.PropertiesToSave="ItemsSource"/>
             <controls:DoubleBox x:Name="Tolerance" Text="_Tolerance: " Value="0.02" Margin="10,315,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" d:LayoutOverrides="Height"/>

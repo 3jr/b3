@@ -22,8 +22,8 @@ namespace BallOnTiltablePlate.MoritzUehling.Juggler
 	/// <summary>
 	/// Interaction logic for BasicBalance.xaml
 	/// </summary>
-	[BallOnPlateItemInfo("Moritz", "Uehling", "Phone Controller", "0.8")]
-	public class WifiConnector : IJuggler<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
+	[ControledSystemModuleInfo("Moritz", "Uehling", "Phone Controller", "0.8")]
+	public class WifiConnector : IControledSystemProcessor<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
 	{
 		double factor = 1;
 

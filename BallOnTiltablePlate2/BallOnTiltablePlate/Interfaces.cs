@@ -5,41 +5,12 @@ using System.Windows.Media.Media3D;
 
 namespace BallOnTiltablePlate
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class BallInputEventArgs : EventArgs
+    public interface IControledSystemInput : IControledSystemModule
     {
-        public Vector BallPosition { get; set; }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IBallInput
-        : IBallOnPlateItem
+    public interface IControledSystemOutput : IControledSystemModule
     {
-        event EventHandler<BallInputEventArgs> DataRecived;
-    }
-
-    public class BallInputEventArgs3D : BallInputEventArgs
-    {
-        public Vector3D BallPosition3D { get; set; }
-    }
-
-    public interface IBallInput3D
-        : IBallInput
-    {
-        new event EventHandler<BallInputEventArgs3D> DataRecived;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IPlateOutput
-        : IBallOnPlateItem
-    {
-        void SetTilt(Vector tilt);
     }
 
     /// <summary>
@@ -49,8 +20,8 @@ namespace BallOnTiltablePlate
     /// <typeparam name="TIn"></typeparam>
     /// <typeparam name="TOut"></typeparam>
     public interface
-        IPreprocessorIO<in TIn, in TOut>
-        : IBallOnPlateItem
+        IControledSystemPreprocessorIO<in TIn, in TOut>
+        : IControledSystemModule
         where TIn : IBallInput
         where TOut : IPlateOutput
     {
@@ -63,7 +34,7 @@ namespace BallOnTiltablePlate
     /// For a Preprocessor the IPreprocessorIO Interface must be implemented, too!
     /// A derived Interface may never implement IPreprocessorIO!
     /// </summary>
-    public interface IPreprocessor { }
+    public interface IControledSystemPreprocessor { }
 
     /// <summary>
     /// Common Interface for all Juggler Algorithms
@@ -71,9 +42,9 @@ namespace BallOnTiltablePlate
     /// It's only purpose is to tell the MainApp that is is a Juggler and the Preprocessor required.
     /// </summary>
     /// <typeparam name="T">Must be a type of IPreprocessor</typeparam>
-    public interface IJuggler<in T>
-        : IBallOnPlateItem
-        where T : IPreprocessor
+    public interface IControledSystemProcessor<in T>
+        : IControledSystemModule
+        where T : IControledSystemPreprocessor
     {
         T IO { set; }
         void Update();
@@ -84,7 +55,7 @@ namespace BallOnTiltablePlate
     /// A public constructor without parameters must exist.
     /// There must allways be a BallOnPlateItemInfoAttribute attached to the class
     /// </summary>
-    public interface IBallOnPlateItem
+    public interface IControledSystemModule
     {
         FrameworkElement SettingsUI { get; }
         void Start();
@@ -92,7 +63,7 @@ namespace BallOnTiltablePlate
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    sealed class BallOnPlateItemInfoAttribute : Attribute
+    sealed class ControledSystemModuleInfoAttribute : Attribute
     {
         readonly string authorFirstName;
         readonly string authorLastName;
@@ -106,7 +77,7 @@ namespace BallOnTiltablePlate
         }
 
         // This is a positional argument
-        public BallOnPlateItemInfoAttribute(string authorFirstName, string authorLastName, string itemName, string version)
+        public ControledSystemModuleInfoAttribute(string authorFirstName, string authorLastName, string itemName, string version)
         {
             if (!IsStringValid(authorFirstName))
                 throw new ArgumentException("authorFirstName must only contain [a-z] characters");

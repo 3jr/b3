@@ -15,7 +15,7 @@ using BallOnTiltablePlate.JanRapp.Utilities;
 
 namespace BallOnTiltablePlate.JanRapp.Preprocessor
 {
-    public interface IBasicPreprocessor : IPreprocessor
+    public interface IBasicPreprocessor : IControledSystemPreprocessor
     {
         Vector Position { get; }
         Vector Velocity { get; }
@@ -27,8 +27,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     /// <summary>
     /// Interaction logic for BasicPreprocessor.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan","Rapp", "Basic Preprocessor", "1.0")]
-    public partial class BasicPreprocessor : UserControl, IPreprocessorIO<IBallInput, IPlateOutput>, IBasicPreprocessor
+    [ControledSystemModuleInfo("Jan","Rapp", "Basic Preprocessor", "1.0")]
+    public partial class BasicPreprocessor : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBasicPreprocessor
     {
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 

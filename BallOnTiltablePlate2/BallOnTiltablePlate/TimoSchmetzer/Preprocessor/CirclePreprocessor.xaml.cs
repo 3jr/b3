@@ -15,7 +15,7 @@ using BallOnTiltablePlate.JanRapp.Utilities;
 
 namespace BallOnTiltablePlate.JanRapp.Preprocessor
 {
-    public interface ICirclePreprocessor : IBasicPreprocessor, IPreprocessor
+    public interface ICirclePreprocessor : IBasicPreprocessor, IControledSystemPreprocessor
     {
         double TargetOrthagonalFactor { set; get; }
         bool IsAutoBalancing { get; set; }
@@ -24,8 +24,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     /// <summary>
     /// Interaction logic for BasicPreprocessor.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo","Schmetzer", "Circle Preprocessor", "0.1")]
-    public partial class CirclePreprocessor : UserControl, IPreprocessorIO<IBallInput, IPlateOutput>, ICirclePreprocessor, IBasicPreprocessor, IPreprocessor
+    [ControledSystemModuleInfo("Timo","Schmetzer", "Circle Preprocessor", "0.1")]
+    public partial class CirclePreprocessor : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, ICirclePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
     {
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 

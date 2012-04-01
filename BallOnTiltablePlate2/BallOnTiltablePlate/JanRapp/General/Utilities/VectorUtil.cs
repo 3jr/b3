@@ -78,6 +78,11 @@ namespace BallOnTiltablePlate.JanRapp.Utilities
         {
             return new Vector(vec.X, vec.Y);
         }
+
+        public static Vector GetNormalized(this Vector v)
+        {
+            return v / v.Length;
+        }
     }
 }
 

@@ -20,8 +20,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
     /// <summary>
     /// Interaction logic for HarmonicOscillator.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "Harmonic Oscillator", "0.1")]
-    public partial class HarmonicOscillator : UserControl, IJuggler<IBasicPreprocessor>
+    [ControledSystemModuleInfo("Jan", "Rapp", "Harmonic Oscillator", "0.1")]
+    public partial class HarmonicOscillator : UserControl, IControledSystemProcessor<IBasicPreprocessor>
     {
         public HarmonicOscillator()
         {

@@ -19,8 +19,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
     /// <summary>
     /// Interaction logic for SequentailMoveTo.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "Sequential MoveTo", "1.3")]
-    public partial class SequentailMoveTo : UserControl, IJuggler<IBalancePreprocessor>
+    [ControledSystemModuleInfo("Jan", "Rapp", "Sequential MoveTo", "1.3")]
+    public partial class SequentailMoveTo : UserControl, IControledSystemProcessor<IBalancePreprocessor>
     {
         ObservableCollection<Vector> nextPositions = new ObservableCollection<Vector>();
 

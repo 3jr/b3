@@ -26,8 +26,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     /// <summary>
     /// Interaction logic for BasicPreprocessor.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan","Rapp", "Basic Preprocessor 3D", "1.0")]
-    public partial class BasicPreprocessor3D : UserControl, IPreprocessorIO<IBallInput3D, IPlateOutput>,
+    [ControledSystemModuleInfo("Jan","Rapp", "Basic Preprocessor 3D", "1.0")]
+    public partial class BasicPreprocessor3D : UserControl, IControledSystemPreprocessorIO<IBallInput3D, IPlateOutput>,
         IBasicPreprocessor3D, IBasicPreprocessor
     {
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();

@@ -17,8 +17,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo", "Schmetzer", "CircleJuggler", "0.3")]
-    public partial class CircleJuggler3 : UserControl, IJuggler<JanRapp.Preprocessor.IBasicPreprocessor>
+    [ControledSystemModuleInfo("Timo", "Schmetzer", "CircleJuggler", "0.3")]
+    public partial class CircleJuggler3 : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI

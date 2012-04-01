@@ -18,8 +18,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo", "Schmetzer", "DynamicCircle", "0.1")]
-    public partial class DynamicCircle : UserControl, IJuggler<JanRapp.Preprocessor.IBasicPreprocessor>
+    [ControledSystemModuleInfo("Timo", "Schmetzer", "DynamicCircle", "0.1")]
+    public partial class DynamicCircle : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI

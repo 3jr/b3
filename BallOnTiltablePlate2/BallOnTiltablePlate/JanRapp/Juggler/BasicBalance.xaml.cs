@@ -19,8 +19,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
     /// <summary>
     /// Interaction logic for BasicBalance.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "BasicBalance", "2.0")]
-    public partial class BasicBalance : UserControl, IJuggler<JanRapp.Preprocessor.IBasicPreprocessor>
+    [ControledSystemModuleInfo("Jan", "Rapp", "BasicBalance", "2.0")]
+    public partial class BasicBalance : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI

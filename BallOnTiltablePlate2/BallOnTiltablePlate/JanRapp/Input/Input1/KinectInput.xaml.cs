@@ -24,7 +24,7 @@ namespace BallOnTiltablePlate.JanRapp.Input1
     /// <summary>
     /// Interaction logic for KinectInput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "KinectInput", "1.0")]
+    [ControledSystemModuleInfo("Jan", "Rapp", "KinectInput", "1.0")]
     public partial class KinectInput : UserControl, IBallInput
     {
         Kinect.Runtime kinect;

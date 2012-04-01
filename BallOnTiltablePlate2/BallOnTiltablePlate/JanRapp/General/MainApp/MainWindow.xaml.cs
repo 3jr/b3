@@ -135,7 +135,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             {
                 maintnace();
 
-                ((IBallOnPlateItem)list.SelectedValue).Start();
+                ((IControledSystemModule)list.SelectedValue).Start();
                 started = true;
             }
 
@@ -184,7 +184,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             if (metaData.Item1.SelectedItem == null)
                 return;
 
-            var instance = (IBallOnPlateItem)metaData.Item1.SelectedValue;
+            var instance = (IControledSystemModule)metaData.Item1.SelectedValue;
             if (instance.SettingsUI == null)
                 return;
 
@@ -194,7 +194,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         private void SettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
             var metaData = settingsCmdMetadata[e.Command];
-            IBallOnPlateItem instance = (IBallOnPlateItem)metaData.Item1.SelectedValue;
+            IControledSystemModule instance = (IControledSystemModule)metaData.Item1.SelectedValue;
 
             if (windows.ContainsKey(instance))
             {
@@ -240,7 +240,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         }
 
         Dictionary<object,Tuple<TreeView,string>> settingsCmdMetadata;
-        Dictionary<IBallOnPlateItem, SettingsWindow> windows = new Dictionary<IBallOnPlateItem,SettingsWindow>();
+        Dictionary<IControledSystemModule, SettingsWindow> windows = new Dictionary<IControledSystemModule,SettingsWindow>();
     }
 
     internal class SettingsWindow : Window

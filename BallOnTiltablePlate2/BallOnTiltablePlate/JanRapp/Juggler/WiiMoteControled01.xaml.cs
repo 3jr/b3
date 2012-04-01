@@ -18,8 +18,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
     /// <summary>
     /// Interaction logic for WiiMoteControled.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "WiiMote Controled", "0.1")]
-    public partial class WiiMoteControled01 : UserControl, IJuggler<JanRapp.Preprocessor.IBasicPreprocessor>
+    [ControledSystemModuleInfo("Jan", "Rapp", "WiiMote Controled", "0.1")]
+    public partial class WiiMoteControled01 : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         Wiimote wii = new Wiimote();
 

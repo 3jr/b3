@@ -21,7 +21,7 @@ namespace BallOnTiltablePlate.MoritzUehling.Juggler
     /// Interaction logic for BasicBalance.xaml
     /// </summary>
     //[BallOnPlateItemInfo("Moritz", "Uehling", "BallCircle", "0.1")]
-    public class CircleJuggler : UserControl, IJuggler<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
+    public class CircleJuggler : UserControl, IControledSystemProcessor<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
     {
         double veloFactor = 0;
         double posFactor = 1;

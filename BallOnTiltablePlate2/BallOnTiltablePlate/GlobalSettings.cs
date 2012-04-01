@@ -64,7 +64,7 @@ namespace BallOnTiltablePlate
             return Environment.CurrentDirectory;
         }
         
-        public static string ItemSettingsFolder(BallOnPlateItemInfoAttribute itemInfo)
+        public static string ItemSettingsFolder(ControledSystemModuleInfoAttribute itemInfo)
         {
             return Path.Combine(SettingsFolder(),
                 string.Format("{0}_{1}_{2}", itemInfo.AuthorFirstName, itemInfo.AuthorLastName, itemInfo.ItemName));

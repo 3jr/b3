@@ -17,8 +17,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestPreprocessor3D.xaml
     /// </summary>
-    [BallOnPlateItemInfo(" Jan", "Rapp", "TestPreprocessor3D", "1.0")]
-    partial class TestPreprocessor3D : UserControl, IPreprocessor, IPreprocessorIO<IBallInput, IPlateOutput>
+    [ControledSystemModuleInfo(" Jan", "Rapp", "TestPreprocessor3D", "1.0")]
+    partial class TestPreprocessor3D : UserControl, IControledSystemPreprocessor, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI

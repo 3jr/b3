@@ -12,21 +12,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BallOnTiltablePlate.JanRapp.Utilities;
-using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 
 namespace BallOnTiltablePlate.JanRapp.Preprocessor
 {
-    public interface IBalancePreprocessor : IBasicPreprocessor, IControledSystemPreprocessor
-    {
-        Vector TargetPosition { set; get; }
-        bool IsAutoBalancing { get; set; }
-    }
-
     /// <summary>
     /// Interaction logic for BasicPreprocessor.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Jan","Rapp", "Balance Preprocessor", "1.0")]
-    public partial class BalancePreprocessor : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
+    [ControledSystemModuleInfo("Jan", "Rapp", "Balance Preprocessor", "0.9")]
+    public partial class BalancePreprocessor2 : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
     {
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 
@@ -47,17 +40,17 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             get { return this; }
         }
 
-        public BalancePreprocessor()
+        public BalancePreprocessor2()
         {
             InitializeComponent();
         }
 
         Vector integral;
-        double integralOfAbsense;
-        double deltaTime;
+        Vector lastRelativePositon;
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
-            deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
+            double deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
+            sinceLastUpdate.Restart();
 
             Vector newPosition = e.BallPosition;
             Vector newVelocity = (newPosition - Position) / ((UseDelataTime.IsChecked ?? true) ? deltaTime : 1);
@@ -71,45 +64,37 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
             AccelerationDisplay.Text = "Acceleration: " + Acceleration.ToString();
 
-            if(this.IsVisible)
-                History.FeedUpdate(Position, Velocity, Acceleration);
-            
-            AddDataToDiagramCreator();
+            History.FeedUpdate(Position, Velocity, Acceleration);
+
             if (IsAutoBalancing)
             {
                 if (this.ValuesValid)
                 {
                     Vector currentRelativePosition = this.Position - TargetPosition;
-                    //integral += currentRelativePosition * deltaTime;
-                    integralOfAbsense += deltaTime;
+                    integral += currentRelativePosition;
                     var tilt = currentRelativePosition * PositionFactor.Value +
-                        integral * IntegralFactor.Value +
-                        currentRelativePosition.GetNormalized() * integralOfAbsense * IntegralOfAbsenseFactor.Value +
+                        integral * IntegralFactor.Value * deltaTime +
+                        //(currentRelativePosition - lastRelativePositon) * VelocityFactor.Value;
                         this.Velocity * VelocityFactor.Value;
 
+                    lastRelativePositon = currentRelativePosition;
                     IntegralDisplay.Text = "Integral: " + integral;
 
-                    //if (Math.Abs(tilt.X) > GlobalSettings.Instance.MaxTilt)
-                    //    tilt.X = GlobalSettings.Instance.MaxTilt * Math.Sign(tilt.X);
+                    if (Math.Abs(tilt.X) > GlobalSettings.Instance.MaxTilt)
+                        tilt.X = GlobalSettings.Instance.MaxTilt * Math.Sign(tilt.X);
 
-                    //if (Math.Abs(tilt.Y) > GlobalSettings.Instance.MaxTilt)
-                    //    tilt.Y = GlobalSettings.Instance.MaxTilt * Math.Sign(tilt.Y);
+                    if (Math.Abs(tilt.Y) > GlobalSettings.Instance.MaxTilt)
+                        tilt.Y = GlobalSettings.Instance.MaxTilt * Math.Sign(tilt.Y);
 
                     Output.SetTilt(tilt);
-                    if (recording)
-                    {
-                        diagramcreator.AddPoint("TiltX", new Point(time, tilt.X));
-                        diagramcreator.AddPoint("TiltY", new Point(time, tilt.Y));
-                    }
                 }
                 else
                 {
                     Output.SetTilt(new Vector());
                     integral = new Vector();
+                    lastRelativePositon = VectorUtil.NaNVector;
                 }
             }
-
-            sinceLastUpdate.Restart();
         }
 
         public void Reset()
@@ -124,11 +109,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         {
             IsAutoBalancing = false;
             Output.SetTilt(tiltToAxis);
-            if (recording)
-            {
-                diagramcreator.AddPoint("TiltX", new Point(time, tiltToAxis.X));
-                diagramcreator.AddPoint("TiltY", new Point(time, tiltToAxis.Y));
-            }
         }
 
         public void Start()
@@ -150,13 +130,14 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         public Vector TargetPosition
         {
             get { return TargetPositionVecBox.Value; }
-            
+
             set
             {
                 if (TargetPositionVecBox.Value != value)
                 {
                     integral = new Vector();
                     TargetPositionVecBox.Value = value;
+                    lastRelativePositon = VectorUtil.NaNVector;
                 }
             }
         }
@@ -166,46 +147,5 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             get { return IsAutoBalancingOnCheckBox.IsChecked ?? true; }
             set { IsAutoBalancingOnCheckBox.IsChecked = value; }
         }
-
-        #region Diagram
-        private static ExcelUtilities.ExcelDiagramCreator diagramcreator;
-        private static bool recording = false;
-        private static double time = 0;
-        private void AddDataToDiagramCreator()
-        {
-            if (recording)
-            {
-                time += sinceLastUpdate.ElapsedMilliseconds / 1000.0;
-                diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
-                diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
-                diagramcreator.AddPoint("VelocityX", new Point(time, Velocity.X));
-                diagramcreator.AddPoint("VelocityY", new Point(time, Velocity.Y));
-                diagramcreator.AddPoint("AccelerationX", new Point(time, Acceleration.X));
-                diagramcreator.AddPoint("AccelerationY", new Point(time, Acceleration.Y));
-            }
-        }
-        private void CreateDiagram()
-        {
-            diagramcreator.AxisNameX = "Time";
-            diagramcreator.AxisNameY = "Value";
-            diagramcreator.DiagramTitle = "NoTitle";
-            diagramcreator.GenerateAndShowDiagram();
-        }
-        private void ToogleRecordCmd_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            recording = !recording;
-            if (recording)
-            {
-                diagramcreator = new ExcelUtilities.ExcelDiagramCreator();
-                time = 0;
-                ToggleReccordBtn.Content = "Stop Recording";
-            }
-            else
-            {
-                System.Threading.Tasks.Task.Factory.StartNew(CreateDiagram);
-                ToggleReccordBtn.Content = "Record";
-            }
-        }
-        #endregion
     }
 }

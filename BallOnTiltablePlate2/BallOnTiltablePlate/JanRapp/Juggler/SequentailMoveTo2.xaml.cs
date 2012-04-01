@@ -19,8 +19,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
     /// <summary>
     /// Interaction logic for SequentailMoveTo.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "Sequential MoveTo", "2.1")]
-    public partial class SequentailMoveTo2 : UserControl, IJuggler<IBalancePreprocessor>
+    [ControledSystemModuleInfo("Jan", "Rapp", "Sequential MoveTo", "2.1")]
+    public partial class SequentailMoveTo2 : UserControl, IControledSystemProcessor<IBalancePreprocessor>
     {
         ObservableCollection<Vector> nextPositions = new ObservableCollection<Vector>();
 
@@ -112,13 +112,13 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
                     Canvas.SetLeft(NextPositionEllipse, displayPos.X);
                     Canvas.SetTop(NextPositionEllipse, displayPos.Y);
 
-                    Canvas.SetLeft(TagetRadiusDisplay, displayPos.X);
-                    Canvas.SetTop(TagetRadiusDisplay, displayPos.Y);
+                    //Canvas.SetLeft(TagetRadiusDisplay, displayPos.X);
+                    //Canvas.SetTop(TagetRadiusDisplay, displayPos.Y);
 
-                    double size = Tolerance.Value / GlobalSettings.Instance.HalfPlateSize * nextPositionInput.Width/2 * 2;
-                    TagetRadiusDisplay.Margin = new Thickness(-size / 2, -size / 2, size / 2, size / 2);
+                    //double size = Tolerance.Value / GlobalSettings.Instance.HalfPlateSize * nextPositionInput.Width/2 * 2;
+                    //TagetRadiusDisplay.Margin = new Thickness(-size / 2, -size / 2, size / 2, size / 2);
 
-                    TagetRadiusDisplay.Width = TagetRadiusDisplay.Height = size;
+                    //TagetRadiusDisplay.Width = TagetRadiusDisplay.Height = size;
                 }
             }
         }

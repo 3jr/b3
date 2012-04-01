@@ -12,11 +12,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 {
     internal class BPItemUI
     {
-        private readonly Lazy<IBallOnPlateItem> instance;
-        public IBallOnPlateItem Instance { get { return instance.Value; } }
+        private readonly Lazy<IControledSystemModule> instance;
+        public IControledSystemModule Instance { get { return instance.Value; } }
         public bool IsInstanceCreated { get { return instance.IsValueCreated; } }
 
-        public BallOnPlateItemInfoAttribute Info { get; private set; }
+        public ControledSystemModuleInfoAttribute Info { get; private set; }
 
         protected readonly Type type;
         public Type Type { get { return type; } }
@@ -24,13 +24,13 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         public BPItemUI(Type type)
         {
             this.type = type;
-            this.Info = (BallOnPlateItemInfoAttribute)Attribute.GetCustomAttribute(
-                type, typeof(BallOnPlateItemInfoAttribute));
-            this.instance = new Lazy<IBallOnPlateItem>(
+            this.Info = (ControledSystemModuleInfoAttribute)Attribute.GetCustomAttribute(
+                type, typeof(ControledSystemModuleInfoAttribute));
+            this.instance = new Lazy<IControledSystemModule>(
                 delegate
                 {
                     AllInitializedBPItemsList.Add(this); 
-                    var createdInstance = (IBallOnPlateItem)Activator.CreateInstance(type); 
+                    var createdInstance = (IControledSystemModule)Activator.CreateInstance(type); 
                     return createdInstance;
                 }
             );
@@ -84,19 +84,19 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         #region Init Helper
         private static BPItemUI CreateItemUI(Type type)
         {
-            if (type.GetInterface("IJuggler`1") != null)
+            if (type.GetInterface("IControledSystemProcessor`1") != null)
             {
                 return new JugglerItemUI(type);
             }
-            else if (type.GetInterface("IPreprocessor") != null)
+            else if (type.GetInterface("IControledSystemPreprocessor") != null)
             {
                 return new PreprocessorItemUI(type);
             }
-            else if (type.GetInterface("IBallInput") != null)
+            else if (type.GetInterface("IControledSystemInput") != null)
             {
                 return new BPItemUI(type);
             }
-            else if (type.GetInterface("IPlateOutput") != null)
+            else if (type.GetInterface("IControledSystemOutput") != null)
             {
                 return new BPItemUI(type);
             }
@@ -109,30 +109,30 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
             try
             {
-                if (Attribute.GetCustomAttribute(type, typeof(BallOnPlateItemInfoAttribute)) == null)
+                if (Attribute.GetCustomAttribute(type, typeof(ControledSystemModuleInfoAttribute)) == null)
                     return false;
 
                 ErrorCode = 0;
 
                 Assert(type.GetConstructor(Type.EmptyTypes) != null);
 
-                if (type.GetInterface("IJuggler`1") != null)
+                if (type.GetInterface("IControledSystemProcessor`1") != null)
                 {
                     ErrorCode = 100;
-                    Type j = type.GetInterface("IJuggler`1");
+                    Type j = type.GetInterface("IControledSystemProcessor`1");
                     Assert(type.GetInterfaces().Any(t => !j.IsAssignableFrom(t) || j == t));// Derived interfaces from IJuggler are not allowed, only derived classes
 
                 }
-                else if (type.GetInterface("IPreprocessor") != null)
+                else if (type.GetInterface("IControledSystemPreprocessor") != null)
                 {
                     ErrorCode = 200;
-                    Type io = type.GetInterface("IPreprocessorIO`2");
+                    Type io = type.GetInterface("IControledSystemPreprocessorIO`2");
                     Assert(io != null);
                     Assert(io.GetInterfaces().Any(t => !io.IsAssignableFrom(t) || io == t));// Derived interfaces from IPreprocessorIO are not allowed, only derived classes
                 }
-                else if (type.GetInterface("IBallInput") != null)
+                else if (type.GetInterface("IControledSystemInput") != null)
                 { }
-                else if (type.GetInterface("IPlateOutput") != null)
+                else if (type.GetInterface("IControledSystemOutput") != null)
                 { }
                 else
                     Assert(false);
@@ -211,7 +211,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         public JugglerItemUI(Type type)
             : base(type)
         {
-            Type preprocessorType = type.GetInterface("IJuggler`1").GetGenericArguments()[0];
+            Type preprocessorType = type.GetInterface("IControledSystemProcessor`1").GetGenericArguments()[0];
 
             preprocessors = new Lazy<IEnumerable<object>>(
                 () => 
@@ -237,7 +237,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         public PreprocessorItemUI(Type type)
             : base(type)
         {
-            Type[] genericArguments = type.GetInterface("IPreprocessorIO`2").GetGenericArguments();
+            Type[] genericArguments = type.GetInterface("IControledSystemPreprocessorIO`2").GetGenericArguments();
             Type input = genericArguments[0];
             Type output = genericArguments[1];
 

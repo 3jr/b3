@@ -19,7 +19,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Preprocessor
     /// Interaction logic for Preprocessor.xaml
     /// </summary>
     //[BallOnPlateItemInfo("Timo", "Schmetzer", "Preprocessor", "0.1")]
-    public partial class Preprocessor : UserControl, IPreprocessor, IPreprocessorIO<IBallInput3D, IPlateOutput>
+    public partial class Preprocessor : UserControl, IControledSystemPreprocessor, IControledSystemPreprocessorIO<IBallInput3D, IPlateOutput>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI

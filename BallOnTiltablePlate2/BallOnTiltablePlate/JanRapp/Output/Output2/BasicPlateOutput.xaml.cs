@@ -19,7 +19,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
     /// <summary>
     /// Interaction logic for BasicPlateOutput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan", "Rapp", "BasicPlateOutput", "2.0")]
+    [ControledSystemModuleInfo("Jan", "Rapp", "BasicPlateOutput", "2.0")]
     public partial class BasicPlateOutput2 : UserControl, IPlateOutput, IDisposable
     {
         public FrameworkElement SettingsUI
@@ -61,7 +61,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         {
             if(!port.IsOpen)
                 ToggleConnectCmd_Executed(null, null);
-            if (!controlEnabled)
+            if (!controlEnabled && port.IsOpen)
                 EnableControlCmd_Executed(null, null);
         }
 

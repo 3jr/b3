@@ -19,7 +19,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output1
     /// <summary>
     /// Interaction logic for BasicPlateOutput.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Jan","Rapp","BasicPlateOutput", "1.0")]
+    [ControledSystemModuleInfo("Jan","Rapp","BasicPlateOutput", "1.0")]
     public partial class BasicPlateOutput : UserControl, IPlateOutput, IDisposable
     {
         public FrameworkElement SettingsUI

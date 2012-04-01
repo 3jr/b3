@@ -23,8 +23,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
     /// <summary>
     /// Interaction logic for Simulation3D.xaml
     /// </summary>
-    [BallOnPlateItemInfo("Timo", "Schmetzer", "BasicSimulation", "0.1")]
-    public partial class BasicSimulation : UserControl, IBallInput3D, IPlateOutput, IBallOnPlateItem, ISimulationState
+    [ControledSystemModuleInfo("Timo", "Schmetzer", "BasicSimulation", "0.1")]
+    public partial class BasicSimulation : UserControl, IBallInput3D, IPlateOutput, IControledSystemModule, ISimulationState
     {
         DispatcherTimer timer;
         DateTime lastUpdateTime;
@@ -358,7 +358,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             else
             {
                 ToogleRunningCmd_Executed(null, null);
-                CreateDiagram();
+                System.Threading.Tasks.Task.Factory.StartNew(CreateDiagram);
                 ToggleReccordBtn.Content = "Record";
             }
         }
