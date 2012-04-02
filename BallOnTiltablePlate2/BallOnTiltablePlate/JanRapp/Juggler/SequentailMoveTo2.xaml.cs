@@ -46,7 +46,7 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
 
         void InitNewHistory(int count)
         {
-            Container.Children.RemoveRange(0,historiCount);
+            Container.Children.RemoveRange(4,historiCount);
 
             historiCount = count;
             nextRecentBallPosition = 0;
@@ -57,7 +57,7 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
                 Ellipse e = new Ellipse();
                 e.Fill = Brushes.Gray;
                 e.Width = e.Height = 5;
-                e.Margin = new Thickness(-2.5, -2.5, - 2.5, -2.5);
+                e.Margin = new Thickness(-2.5, -2.5, 0, 0);
                 Container.Children.Add(e);
                 recentBallPositions[i] = e;
             }
