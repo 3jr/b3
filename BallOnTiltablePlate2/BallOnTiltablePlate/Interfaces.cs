@@ -20,7 +20,7 @@ namespace BallOnTiltablePlate
     /// <typeparam name="TIn"></typeparam>
     /// <typeparam name="TOut"></typeparam>
     public interface
-        IControledSystemPreprocessorIO<in TIn, in TOut>
+        IControledSystemPreprocessorIO<TIn,TOut>
         : IControledSystemModule
         where TIn : IBallInput
         where TOut : IPlateOutput
@@ -42,7 +42,7 @@ namespace BallOnTiltablePlate
     /// It's only purpose is to tell the MainApp that is is a Juggler and the Preprocessor required.
     /// </summary>
     /// <typeparam name="T">Must be a type of IPreprocessor</typeparam>
-    public interface IControledSystemProcessor<in T>
+    public interface IControledSystemProcessor<T>
         : IControledSystemModule
         where T : IControledSystemPreprocessor
     {

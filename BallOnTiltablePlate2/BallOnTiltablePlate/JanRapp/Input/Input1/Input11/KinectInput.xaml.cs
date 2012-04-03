@@ -101,7 +101,7 @@ namespace BallOnTiltablePlate.JanRapp.Input11
                 Dictionary<string, object> state = new Dictionary<string, object>()
                 {
                     {"twoByteDepthBits", e.ImageFrame.Image.Bits},
-                    {"depthHorizontalResulotion", 640},
+                    {"depthHorizontalResulotion", KinectInputImageWidth},
                     {"centerPosition", CenterSelector.ValueFromIdealSize},
                     {"centerDepth", (int)CenterDepthBox.Value},
                     {"cameraConstant", CameraConstantBox.Value},

@@ -50,18 +50,23 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         public BalancePreprocessor()
         {
             InitializeComponent();
+            lastTicks = DateTime.Now.Ticks;
         }
 
         Vector integral;
         double integralOfAbsense;
         double deltaTime;
+        long lastTicks;
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
             deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
+            long currentTicks = DateTime.Now.Ticks;
+            long deltaTicks = currentTicks - lastTicks;
+            lastTicks = currentTicks;
 
             Vector newPosition = e.BallPosition;
-            Vector newVelocity = (newPosition - Position) / ((UseDelataTime.IsChecked ?? true) ? deltaTime : 1);
-            Acceleration = (newVelocity - Velocity) / ((UseDelataTime.IsChecked ?? true) ? deltaTime : 1);
+            Vector newVelocity = (newPosition - Position) / ((UseDelataTime.IsChecked ?? true) ? deltaTime : StaticPeriod.Value);
+            Acceleration = (newVelocity - Velocity) / ((UseDelataTime.IsChecked ?? true) ? deltaTime : StaticPeriod.Value);
 
             Velocity = newVelocity;
             Position = newPosition;
@@ -70,6 +75,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             PositionDisplay.Text = "Position: " + Position.ToString();
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
             AccelerationDisplay.Text = "Acceleration: " + Acceleration.ToString();
+            DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
+            DeltaTicksDisplay.Text = "DeltaTicks: " + deltaTicks.ToString();
 
             if(this.IsVisible)
                 History.FeedUpdate(Position, Velocity, Acceleration);

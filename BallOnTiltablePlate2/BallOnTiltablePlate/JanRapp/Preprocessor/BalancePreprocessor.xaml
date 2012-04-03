@@ -26,6 +26,7 @@
                     <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(_Differencial): " />
                     <controls:DoubleBox x:Name="IntegralOfAbsenseFactor" Text="Integral of _Absense: " />
                     <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime" IsChecked="True"/>
+                    <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: " />
                     <TextBlock x:Name="IntegralDisplay"/>
                 </StackPanel>
             </controlsB3:SettingsSaverB3>
@@ -37,6 +38,8 @@
                 <TextBlock x:Name="PositionDisplay" />
                 <TextBlock x:Name="VelocityDisplay" />
                 <TextBlock x:Name="AccelerationDisplay" />
+                <TextBlock x:Name="DeltaTimeDisplay"/>
+                <TextBlock x:Name="DeltaTicksDisplay"/>
                 <Button Content="Reset _Pevious Data" Click="Reset_Click"/>
                 <Button Command="{StaticResource ToogleRecordCmd}" x:Name="ToggleReccordBtn" Content="Record" ToolTip="Ctrl+R"/>
             </StackPanel>

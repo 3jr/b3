@@ -223,9 +223,6 @@
     <Compile Include="JanRapp\Preprocessor\BalancePreprocessor.xaml.cs">
       <DependentUpon>BalancePreprocessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Preprocessor\BalancePreprocessor2.xaml.cs">
-      <DependentUpon>BalancePreprocessor2.xaml</DependentUpon>
-    </Compile>
     <Compile Include="JanRapp\Preprocessor\TestPreprocessor.xaml.cs">
       <DependentUpon>TestPreprocessor.xaml</DependentUpon>
     </Compile>
@@ -408,10 +405,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Preprocessor\BalancePreprocessor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="JanRapp\Preprocessor\BalancePreprocessor2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
