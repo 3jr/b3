@@ -121,6 +121,10 @@
     <Compile Include="JanRapp\General\Utilities\NumberUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TiltUtil.cs" />
     <Compile Include="JanRapp\General\Utilities\TransformationUtil.cs" />
+    <Compile Include="JanRapp\Input\Input2\ImageProcessing.cs" />
+    <Compile Include="JanRapp\Input\Input2\KinectInput.xaml.cs">
+      <DependentUpon>KinectInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Juggler\SequentailMoveTo2.xaml.cs">
       <DependentUpon>SequentailMoveTo2.xaml</DependentUpon>
     </Compile>
@@ -139,10 +143,6 @@
     <Compile Include="JanRapp\Input\Input1\Input5\ImageProcessing.cs" />
     <Compile Include="JanRapp\Input\Input1\Input5\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="JanRapp\Input\Input2\ImageProcessing2.cs" />
-    <Compile Include="JanRapp\Input\Input2\KinectInput2.xaml.cs">
-      <DependentUpon>KinectInput2.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Input\Input1\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
@@ -291,6 +291,10 @@
     <Page Include="JanRapp\General\Controls\vector setter\RectBox.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\Input\Input2\KinectInput.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="JanRapp\Juggler\SequentailMoveTo2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -306,9 +310,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Input\Input1\Input5\KinectInput.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="JanRapp\Input\Input2\KinectInput2.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Input\Input1\KinectInput.xaml">

@@ -59,7 +59,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
 
         public void Start()
         {
-            if(!port.IsOpen)
+            if (!port.IsOpen)
                 ToggleConnectCmd_Executed(null, null);
             if (!controlEnabled && port.IsOpen)
                 EnableControlCmd_Executed(null, null);
@@ -87,11 +87,13 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
                 var yPos = (UInt16)((sequentialTilt.Y * -ValuePerAngle.Value) + OffsetY.Value);
 
                 WritePort("!");
-                if(controlEnabled && (XEnabled.IsChecked ?? true))
+                if (controlEnabled && (XEnabled.IsChecked ?? true))
                     WritePortWithRightEndian("xP{0}", xPos);
 
-                if(controlEnabled && (YEnabled.IsChecked ?? true))
+                if (controlEnabled && (YEnabled.IsChecked ?? true))
                     WritePortWithRightEndian("yP{0}", yPos);
+
+                SendTiltValuesDisplay.Text = string.Format("{0,6} ({1}), {2,6} ({3})", xPos, ChangeEndian(xPos), yPos, ChangeEndian(yPos));
             }
         }
 
@@ -169,11 +171,25 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         private void XCalibration_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             SendNewCalibrationX(false);
+
+            HexDisplayOfPropertionalX.Text = "PropertionalX   : " + ChangeEndian((ushort)PropertionalX.Value);
+            HexDisplayOfIntegralX.Text = "IntegralX       : " + ChangeEndian((ushort)IntegralX.Value);
+            HexDisplayOfDerivativX.Text = "DerivativX      : " + ChangeEndian((ushort)DerivativX.Value);
+            HexDisplayOfMinimumPositionX.Text = "MinimumPositionX: " + ChangeEndian((ushort)MinimumPositionX.Value);
+            HexDisplayOfMaximumPositionX.Text = "MaximumPositionX: " + ChangeEndian((ushort)MaximumPositionX.Value);
+            HexDisplayOfResetPositionX.Text = "ResetPositionX  : " + ChangeEndian((ushort)ResetPositionX.Value);
         }
 
         private void YCalibration_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             SendNewCalibrationY(false);
+
+            HexDisplayOfPropertionalY.Text = "PropertionalY   : " + ChangeEndian((ushort)PropertionalY.Value);
+            HexDisplayOfIntegralY.Text = "IntegralY       : " + ChangeEndian((ushort)IntegralY.Value);
+            HexDisplayOfDerivativY.Text = "DerivativY      : " + ChangeEndian((ushort)DerivativY.Value);
+            HexDisplayOfMinimumPositionY.Text = "MinimumPositionY: " + ChangeEndian((ushort)MinimumPositionY.Value);
+            HexDisplayOfMaximumPositionY.Text = "MaximumPositionY: " + ChangeEndian((ushort)MaximumPositionY.Value);
+            HexDisplayOfResetPositionY.Text = "ResetPositionY  : " + ChangeEndian((ushort)ResetPositionY.Value);
         }
 
         private void Calibration_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -331,7 +347,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
                     LogParagraph.Inlines.Add(s);
             }
             //if(LogScrollViewer.VerticalOffset == LogScrollViewer.ScrollableHeight)
-                // LogScrollViewer.ScrollToBottom();
+            // LogScrollViewer.ScrollToBottom();
         }
 
         private void ClearLogBtn_Click(object sender, RoutedEventArgs e)

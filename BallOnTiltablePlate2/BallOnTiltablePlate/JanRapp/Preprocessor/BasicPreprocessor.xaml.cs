@@ -54,6 +54,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             InitializeComponent();
         }
         
+
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
             double deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;

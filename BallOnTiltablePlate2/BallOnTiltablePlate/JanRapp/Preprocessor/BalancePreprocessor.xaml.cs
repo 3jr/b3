@@ -70,7 +70,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             Velocity = newVelocity;
             Position = newPosition;
-            ValuesValid = !Position.HasNaN() && !Velocity.HasNaN() && !Acceleration.HasNaN();
+            ValuesValid = !Position.HasNaN() && !Velocity.HasNaN();
 
             PositionDisplay.Text = "Position: " + Position.ToString();
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();

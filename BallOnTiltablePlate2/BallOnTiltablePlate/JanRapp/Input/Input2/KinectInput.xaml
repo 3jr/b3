@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Input2.KinectInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
+             xmlns:controlsB3="clr-namespace:JRapp.WPF"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             >
+    <UserControl.Resources>
+        <Style TargetType="Image">
+            <Setter Property="Width" Value="300"/>
+            <EventSetter Event="PreviewMouseMove" Handler="Image_MouseMove"/>
+        </Style>
+        <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource {x:Type controls:DoubleBox}}"/>
+        <Style TargetType="controls:VectorBox" BasedOn="{StaticResource {x:Type controls:VectorBox}}"/>
+        <Style TargetType="controls:Vector3DBox" BasedOn="{StaticResource {x:Type controls:Vector3DBox}}"/>
+        <Style TargetType="controls:RectBox" BasedOn="{StaticResource {x:Type controls:RectBox}}"/>
+    </UserControl.Resources>
+    <controlsB3:SettingsSaverB3>
+    <WrapPanel Orientation="Vertical" x:Name="MainPanel">
+        <controls:DoubleBox x:Name="ToleranceDoubelBox" Text="_Tolerance of Height Anormalities: " Value="10.0"/>
+        <controls:DoubleBox x:Name="MinHeightAnormalities" Text="Heigh Anormalities Thre_shold: " Value="15.0" SmallChange="1" RegularChange="2" LargeChange="5"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Center: </TextBlock>
+            <controls:VectorBox x:Name="CenterPositionBox" IsEnabled="False"/>
+        </StackPanel>
+        <controls:DoubleBox x:Name="CenterDepthBox" Text="Depth at _Center" Value="900" SmallChange="1" RegularChange="2" LargeChange="5"/>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Area for Average: </TextBlock>
+            <controls:RectBox x:Name="ClipBox" Value="0.33125,0.2979177,0.3609375,0.4333323"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock>Size for 1,1 at tilt {0,0}: </TextBlock>
+            <controls:RectBox x:Name="OneSizeBox" Value="0.33125,0.2979177,0.3609375,0.4333323" ValueChanged="OneSizeBox_ValueChanged"/>
+        </StackPanel>
+        <Expander Header="Projection Parameters">
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="controls:Vector3DBox" BasedOn="{StaticResource {x:Type controls:Vector3DBox}}">
+                        <Setter Property="SmallChange" Value="1"/>
+                        <Setter Property="RegularChange" Value="10"/>
+                        <Setter Property="LargeChange" Value="100"/>
+                    </Style>
+                </StackPanel.Resources>
+                <controls:DoubleBox x:Name="CameraConstantBox" Text="The Camera Constant" Value="1"/>
+                <controls:DoubleBox x:Name="AngleFactor" Text="Angle Factor" Value="1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Rotation:</TextBlock>
+                    <controls:Vector3DBox x:Name="ProjectionAdjustRotaion"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Scale:</TextBlock>
+                    <controls:Vector3DBox x:Name="ProjectionAdjustScale" Value="1,1,1"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Transalation:</TextBlock>
+                    <controls:Vector3DBox x:Name="ProjectionAdjustTransalation"/>
+                </StackPanel>
+                <CheckBox Content="Invert Result" x:Name="ProjectionInverted" IsChecked="True"/>
+                <CheckBox Content="Calculate Axes Seperatly" x:Name="AxesSeperalty" IsChecked="False"/>
+            </StackPanel>
+        </Expander>
+        <Expander Header="_Input Image">
+             <Grid Width="640" Height="480">
+                <Image x:Name="InputImage" Width="640" Height="480"/>
+                <controls:PointSelector     IdealSize="640,480" x:Name="CenterSelector" SelectionBrush="#FF996A14" Value="{Binding Value, ElementName=CenterPositionBox, Mode=TwoWay}"/>
+                <controls:RectangleSelector IdealSize="640,480" x:Name="ClipSelector" SideBrush="#FF6695EB" Value="{Binding Value, ElementName=ClipBox, Mode=TwoWay}"/>
+                <controls:RectangleSelector IdealSize="640,480" x:Name="OneSizeSelector" Value="{Binding Value, ElementName=OneSizeBox, Mode=TwoWay}"/>
+            </Grid>
+        </Expander>
+        <Expander Header="_Output Image">
+            <Grid Width="640" Height="480" x:Name="OutputImagePanel">
+                <Image x:Name="OutputImage" Width="640" Height="480"/>
+                <controls:PointSelector IdealSize="640,480" x:Name="BallSelector" SelectionBrush="Red" Value="0.0,0.0" IsEnabled="False"/>
+            </Grid>
+        </Expander>
+        <TextBlock x:Name="BallPositionDisplay">Ball Position: </TextBlock>
+        <TextBlock x:Name="DepthAtCenterDisplay">Depth At Selected Center :</TextBlock>
+        <TextBlock x:Name="HoveringColorDisplay">Hovering Color: </TextBlock>
+        <Expander Header="Coner Calc Debug">
+                <StackPanel x:Name="CornerContainer"/>
+        </Expander>
+        <Expander Header="Time Debug">
+            <StackPanel x:Name="TimeDegugContainer">
+                    <TextBlock x:Name="FramesSkippedDisplay"/>
+                </StackPanel>
+        </Expander>
+        </WrapPanel>
+    </controlsB3:SettingsSaverB3>
+</UserControl>
