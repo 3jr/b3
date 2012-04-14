@@ -134,15 +134,15 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         public void Start()
         {
             stopped = false;
-            ToogelRunningBtn.IsEnabled = true;
         }
 
         public void Stop()
         {
+            if (recording)
+                ToogleRecordCmd_Executed(null, null);
+            if (running)
+                ToogleRunningCmd_Executed(null, null);
             stopped = true;
-            timer.Stop();
-            ToogelRunningBtn.Content = "Play";
-            ToogelRunningBtn.IsEnabled = false;
         }
 
         public void SetTilt(Vector tilt)
