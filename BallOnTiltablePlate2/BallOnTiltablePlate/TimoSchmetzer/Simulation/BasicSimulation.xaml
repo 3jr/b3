@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
              xmlns:controlsB3="clr-namespace:JRapp.WPF"
+             xmlns:JRappWPF="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
              xmlns:Visualizer="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="557" d:DesignWidth="613">
@@ -29,6 +30,10 @@
                 <KeyGesture>Control+O</KeyGesture>
             </RoutedCommand.InputGestures>
         </RoutedCommand>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave" 
+    				Value="Text"/>
+        </Style>
         <Style TargetType="controls:DoubleBox" BasedOn="{StaticResource {x:Type controls:DoubleBox}}">
             <Setter Property="SmallChange" Value="0.001"/>
             <Setter Property="RegularChange" Value="0.01"/>
@@ -67,7 +72,7 @@
                 <Button Command="{StaticResource ToogleRunningCmd}" x:Name="ToogelRunningBtn" Content="Play" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+P"/>
                 <Button Command="{StaticResource ToogleRecordCmd}" x:Name="ToggleReccordBtn" Content="Record" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+R"/>
             </WrapPanel>
-            
+
         </Grid>
         <Grid>
 
@@ -117,16 +122,17 @@
                 </Expander>
             </WrapPanel>
         </controlsB3:SettingsSaverB3>
-        <StackPanel Margin="8">
-            <Label Content="P_hysicsCalculators" Target="PhysicsCalculatorList"/>
-            <TreeView x:Name="PhysicsCalculatorList"
-                  Margin="7,0">
-            </TreeView>
-        </StackPanel>
+        <controlsB3:SettingsSaverB3 x:Name="BasicSimulationCalculatorSettingsSaver">
+            <StackPanel Margin="8">
+                <TextBox x:Name="PCSaveBox" Visibility="Collapsed" TextChanged="PCSSLoaded"/>
+                <Label Content="P_hysicsCalculators" Target="PhysicsCalculatorList"/>
+                <TreeView x:Name="PhysicsCalculatorList" SelectedItemChanged="PCSelectionChanged" Margin="7,0">
+                </TreeView>
+            </StackPanel>
+        </controlsB3:SettingsSaverB3>
         <StackPanel Margin="8">
             <Label Content="DiagramWritePerm_issions" Target="PermissionList"/>
-            <TreeView x:Name="PermissionList"
-                  Margin="7,0">
+            <TreeView x:Name="PermissionList" Margin="7,0" >
             </TreeView>
             <WrapPanel>
                 <Button Command="{StaticResource AddPermissionCmd}" x:Name="AddPermissionBtn" Content="Add" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+I"/>

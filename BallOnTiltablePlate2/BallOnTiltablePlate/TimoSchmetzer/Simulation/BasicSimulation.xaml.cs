@@ -32,12 +32,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         PhysicsWrapper wrapper = new PhysicsWrapper();
 
+        private List<TreeViewItem> PCItems = new List<TreeViewItem>();
         public BasicSimulation()
         {
             timer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
-            InitializeComponent();
 
-            timer.Tick += new EventHandler(timer_Tick);
+            InitializeComponent();
 
             IEnumerable<Type> Calculators = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => t.IsClass && typeof(IPhysicsCalculator).IsAssignableFrom(t))
@@ -50,7 +50,22 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 treeitem.Header = t.FullName;
                 treeitem.Tag = Activator.CreateInstance(t);
                 PhysicsCalculatorList.Items.Add(treeitem);
+                PCItems.Add(treeitem);
             }
+            PCSSLoaded(null, null);
+
+            timer.Tick += new EventHandler(timer_Tick);
+        }
+
+        private void PCSelectionChanged(object sender, RoutedPropertyChangedEventArgs<Object> e)
+        {
+            PCSaveBox.Text = ((TreeViewItem)e.NewValue).Header.ToString();
+        }
+
+        private void PCSSLoaded(object sender, TextChangedEventArgs e)
+        {
+            if (PCItems.Any(t => (String)t.Header == (String)PCSaveBox.Text) && PCItems.Where(t => (String)t.Header == (String)PCSaveBox.Text).ElementAt(0).IsSelected==false)
+            PCItems.Where(t => (String)t.Header == (String)PCSaveBox.Text).ElementAt(0).IsSelected = true;
         }
 
         private Queue<Vector3D> PositionQueue = new Queue<Vector3D>();
