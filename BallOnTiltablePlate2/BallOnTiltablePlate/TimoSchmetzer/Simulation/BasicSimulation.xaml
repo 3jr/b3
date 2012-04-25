@@ -74,9 +74,6 @@
             </WrapPanel>
 
         </Grid>
-        <Grid>
-
-        </Grid>
         <controlsB3:SettingsSaverB3 x:Name="BasicSimulationGlobalSettingsSaver" Width="500">
             <WrapPanel>
                 <Expander Header="Varia_bles" Margin="8">
@@ -118,26 +115,20 @@
                         <controls:DoubleBox x:Name="RandomDoubleBox" Text="Rando_m Range: " HorizontalAlignment="Left" Value="0.01" Margin="0,2,0,0" Minimum="0"/>
                         <CheckBox Content="Enable Random Error_s (Calc)" x:Name="RandomCalcCheckBox"/>
                         <controls:DoubleBox x:Name="RandomCalcDoubleBox" Text="Random Rang_e: " HorizontalAlignment="Left" Value="0.001" Margin="0,2,0,0" Minimum="0"/>
+                        <TextBox x:Name="PCSaveBox" Visibility="Collapsed" TextChanged="PCSSLoaded"/>
+                        <Label Content="P_hysicsCalculators" Target="PhysicsCalculatorList"/>
+                        <TreeView x:Name="PhysicsCalculatorList" SelectedItemChanged="PCSelectionChanged" Margin="7,0">
+                        </TreeView>
+                        <Label Content="DiagramWritePerm_issions" Target="PermissionList"/>
+                        <TreeView x:Name="PermissionList" Margin="7,0" >
+                        </TreeView>
+                        <WrapPanel>
+                            <Button Command="{StaticResource AddPermissionCmd}" x:Name="AddPermissionBtn" Content="Add" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+I"/>
+                            <Button Command="{StaticResource RemovePermissionCmd}" x:Name="RemovePermissionBtn" Content="Remove" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+O"/>
+                        </WrapPanel>
                     </StackPanel>
                 </Expander>
             </WrapPanel>
         </controlsB3:SettingsSaverB3>
-        <controlsB3:SettingsSaverB3 x:Name="BasicSimulationCalculatorSettingsSaver">
-            <StackPanel Margin="8">
-                <TextBox x:Name="PCSaveBox" Visibility="Collapsed" TextChanged="PCSSLoaded"/>
-                <Label Content="P_hysicsCalculators" Target="PhysicsCalculatorList"/>
-                <TreeView x:Name="PhysicsCalculatorList" SelectedItemChanged="PCSelectionChanged" Margin="7,0">
-                </TreeView>
-            </StackPanel>
-        </controlsB3:SettingsSaverB3>
-        <StackPanel Margin="8">
-            <Label Content="DiagramWritePerm_issions" Target="PermissionList"/>
-            <TreeView x:Name="PermissionList" Margin="7,0" >
-            </TreeView>
-            <WrapPanel>
-                <Button Command="{StaticResource AddPermissionCmd}" x:Name="AddPermissionBtn" Content="Add" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+I"/>
-                <Button Command="{StaticResource RemovePermissionCmd}" x:Name="RemovePermissionBtn" Content="Remove" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+O"/>
-            </WrapPanel>
-        </StackPanel>
     </WrapPanel>
 </UserControl>
