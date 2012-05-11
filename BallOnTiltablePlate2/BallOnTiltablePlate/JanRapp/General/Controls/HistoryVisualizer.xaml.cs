@@ -36,7 +36,7 @@ namespace JRapp.WPF
                 //this.Children.Add(acceleration);
             }
 
-            public void SetValues(Vector position, Vector velocity, Vector acceleration)
+            public void SetValues(Vector position, Vector velocity)
             {
                 Canvas.SetLeft(this, position.X);
                 Canvas.SetTop(this, position.Y);
@@ -47,12 +47,6 @@ namespace JRapp.WPF
 
                 //velocity = velocity.ToNoNaN();
                 //this.velocity.RenderTransform = new ScaleTransform(Math.Sign(velocity.X), Math.Sign(velocity.Y));
-
-                //this.acceleration.Width = Math.Abs(acceleration.X * 10);
-                //this.acceleration.Height = Math.Abs(acceleration.Y * 10);
-
-                //acceleration = acceleration.ToNoNaN();
-                //this.acceleration.RenderTransform = new ScaleTransform(Math.Sign(acceleration.X), Math.Sign(acceleration.Y));
             }
         }
 
@@ -99,10 +93,10 @@ namespace JRapp.WPF
             }
         }
 
-        public void FeedUpdate(Vector position, Vector velocity, Vector acceleration)
+        public void FeedUpdate(Vector position, Vector velocity)
         {
             DataPoint p = dataPoints[nextDataPoint];
-            p.SetValues(GetDisplayPos(position), velocity, acceleration);
+            p.SetValues(GetDisplayPos(position), velocity);
             nextDataPoint++;
             nextDataPoint %= dataPoints.Length;
         }

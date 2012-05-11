@@ -29,7 +29,6 @@ namespace BallOnTiltablePlate.MoritzUehling.Helpers
 
 		public bool Connected { get { return connected; } }
 
-		IFormatProvider culture;
 
 		public WifiHelper()
 		{

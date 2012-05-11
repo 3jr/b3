@@ -20,7 +20,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     {
         new Vector3D Position { get; }
         new Vector3D Velocity { get; }
-        new Vector3D Acceleration { get; }
     }
 
     /// <summary>
@@ -36,17 +35,12 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
         public Vector3D Velocity { get; private set; }
 
-        public Vector3D Acceleration { get; private set; }
-
         private Vector position2D;
         Vector IBasicPreprocessor.Position { get { return position2D; } }
 
         private Vector velocity2D;
         Vector IBasicPreprocessor.Velocity { get { return velocity2D; } }
-
-        private Vector acceleration2D;
-        Vector IBasicPreprocessor.Acceleration { get { return acceleration2D; } }
-
+        
         public bool ValuesValid { get; private set; }
 
         public IBallInput3D Input { get; set; }
@@ -69,27 +63,22 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             sinceLastUpdate.Restart();
 
             Vector3D newPosition = e.BallPosition3D;
-            Vector3D newVelocity = (newPosition - Position) / deltaTime;
-                Acceleration = (newVelocity - Velocity) / deltaTime;
+            Velocity = (newPosition - Position) / deltaTime;
 
-            Velocity = newVelocity;
             Position = newPosition;
-            ValuesValid = !Position.HasNaN() && !Velocity.HasNaN() && !Acceleration.HasNaN();
+            ValuesValid = !Position.HasNaN() && !Velocity.HasNaN();
 
             position2D = this.Position.ToVector2D();
             velocity2D = this.Velocity.ToVector2D();
-            acceleration2D = this.Acceleration.ToVector2D();
 
             PositionDisplay.Text = "Position: " + Position.ToString();
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
-            AccelerationDisplay.Text = "Acceleration: " + Acceleration.ToString();
         }
 
         public void Reset()
         {
             Position = VectorUtil.NaNVector3D;
             Velocity = VectorUtil.NaNVector3D;
-            Acceleration = VectorUtil.NaNVector3D;
             sinceLastUpdate.Restart();
         }
 

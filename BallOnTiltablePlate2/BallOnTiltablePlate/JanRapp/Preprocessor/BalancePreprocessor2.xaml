@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Preprocessor.BalancePreprocessor"
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Preprocessor.BalancePreprocessor2"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -24,7 +24,6 @@
                     <controls:DoubleBox x:Name="PositionFactor" Text="_Position: " />
                     <controls:DoubleBox x:Name="IntegralFactor" Text="_Integral: " />
                     <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(_Differencial): " />
-                    <controls:DoubleBox x:Name="IntegralOfAbsenseFactor" Text="Integral of _Absense: " />
                     <controls:VectorBox x:Name="LFactor" Text="L: "/>
                     
                     <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime" IsChecked="True"/>

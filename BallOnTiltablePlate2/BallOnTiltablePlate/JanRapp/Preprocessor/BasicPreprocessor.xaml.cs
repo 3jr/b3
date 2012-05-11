@@ -19,7 +19,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     {
         Vector Position { get; }
         Vector Velocity { get; }
-        Vector Acceleration { get; }
         bool ValuesValid { get; }
         void SetTilt(Vector tiltToAxis);
     }
@@ -35,8 +34,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         public Vector Position { get; private set; }
 
         public Vector Velocity { get; private set; }
-
-        public Vector Acceleration { get; private set; }
 
         public bool ValuesValid { get; private set; }
 
@@ -54,30 +51,24 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             InitializeComponent();
         }
         
-
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
             double deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
             sinceLastUpdate.Restart();
 
             Vector newPosition = e.BallPosition;
-            Vector newVelocity = (newPosition - Position) / deltaTime;
-                   Acceleration = (newVelocity - Velocity) / deltaTime;
-
-            Velocity = newVelocity;
+            Velocity = (newPosition - Position) / deltaTime;
             Position = newPosition;
-            ValuesValid = !Position.HasNaN() && !Velocity.HasNaN() && !Acceleration.HasNaN();
+            ValuesValid = !Position.HasNaN() && !Velocity.HasNaN();
 
             PositionDisplay.Text = "Position: " + Position.ToString();
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
-            AccelerationDisplay.Text = "Acceleration: " + Acceleration.ToString();
         }
 
         public void Reset()
         {
             Position = VectorUtil.NaNVector;
             Velocity = VectorUtil.NaNVector;
-            Acceleration = VectorUtil.NaNVector;
             sinceLastUpdate.Restart();
         }
 

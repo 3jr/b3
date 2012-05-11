@@ -52,27 +52,15 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
                 }
             }
             #endregion
-            bs = BallState.RollOnPlate;
             #region CalcMovement
             #region RollOnPlate
             if (bs == BallState.RollOnPlate)
             {
                 Vector3D vN = Physics.CalcNormalPart(state.Velocity, state.Tilt);
                 state.Velocity -= vN;
-                try
-                {
-                    BasicSimulation.WriteToDiagram("vN", ((double)Math.Sign(vN.X / Mathematics.CalcNormalVector(state.Tilt).X)) * vN.Length);
-                }
-                catch(Exception){}
-                //BasicSimulation.WriteToDiagram("test01",Vector3D.DotProduct(state.Velocity,Mathematics.CalcNormalVector(state.Tilt)));
-                //Point3D newPlatePosition = Mathematics.TransformVectorToDifferentTilt(state.Position, Mathematics.ToSequentialTilt(state.Tilt), Mathematics.ToSequentialTilt(state.Tilt + elapsedSeconds * state.PlateVelocity));
-                Vector3D newNormal = Mathematics.CalcNormalVector(state.Tilt + elapsedSeconds * state.PlateVelocity);
-                Point3D newPlatePosition = state.Position + newNormal * -1 * (Vector3D.DotProduct(newNormal, (Vector3D)state.Position) / Vector3D.DotProduct(newNormal, newNormal));
+                Point3D newPlatePosition = Mathematics.TransformVectorToDifferentTilt(state.Position, Mathematics.ToSequentialTilt(state.Tilt), Mathematics.ToSequentialTilt(state.Tilt + elapsedSeconds * state.PlateVelocity));
                 Vector3D deltas = (newPlatePosition - state.Position);
-                Vector3D accn = (2.0 * (deltas - vN*elapsedSeconds)) / (elapsedSeconds * elapsedSeconds);
-                state.Acceleration = (accn.Z > 0 ? accn : new Vector3D(0, 0, 0));
-                BasicSimulation.WriteToDiagram("accwhZ", state.Acceleration.Z);
-                BasicSimulation.WriteToDiagram("accwhX", state.Acceleration.X);
+                state.Acceleration = (2.0 * (deltas - vN*elapsedSeconds)) / (elapsedSeconds * elapsedSeconds);
                 state.Tilt += elapsedSeconds * state.PlateVelocity;
                 state.Acceleration += Utilities.Physics.HangabtriebsbeschleunigungBerechnen(state.Gravity, state.Tilt);
                 Utilities.Physics.CalcMovement(state, elapsedSeconds);
@@ -97,21 +85,19 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation.PhysicsCalculators
             #endregion
             #endregion
             #region Debug
-            BasicSimulation.WriteToDiagram("hdist", state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt)));
-            BasicSimulation.WriteToDiagram("Ballstate", bs == BallState.RollOnPlate ? 0 : 1);
-            //BasicSimulation.WriteToDiagram("wouldhit", Utilities.Physics.WouldHit(state) ? 1 : 0);
+            BasicSimulation.WriteToDiagram("hdist", Math.Abs(state.Position.Z - Mathematics.HightOfPlate(new Point(state.Position.X, state.Position.Y), Mathematics.CalcNormalVector(state.Tilt))));
+            if (bs == BallState.RollOnPlate)
+            { BasicSimulation.WriteToDiagram("Ballstate", 0); }
+            else { BasicSimulation.WriteToDiagram("Ballstate", 1); }
+            BasicSimulation.WriteToDiagram("wouldhit", Utilities.Physics.WouldHit(state) ? 1 : 0);
             BasicSimulation.WriteToDiagram("angle", Utilities.Mathematics.AngleBetwennVectors(state.Velocity,Mathematics.CalcNormalVector(state.Tilt)));
-            BasicSimulation.WriteToDiagram("under", 1.396263401595464);
-            BasicSimulation.WriteToDiagram("upper", 1.745329251994329);
-            BasicSimulation.WriteToDiagram("newPosX", Mathematics.TransformVectorToDifferentTilt(state.Position, Mathematics.ToSequentialTilt(state.Tilt), Mathematics.ToSequentialTilt(state.Tilt + elapsedSeconds * state.PlateVelocity)).X);
-            BasicSimulation.WriteToDiagram("newPosY", Mathematics.TransformVectorToDifferentTilt(state.Position, Mathematics.ToSequentialTilt(state.Tilt), Mathematics.ToSequentialTilt(state.Tilt + elapsedSeconds * state.PlateVelocity)).Y);
-            BasicSimulation.WriteToDiagram("newPosZ", Mathematics.TransformVectorToDifferentTilt(state.Position, Mathematics.ToSequentialTilt(state.Tilt), Mathematics.ToSequentialTilt(state.Tilt + elapsedSeconds * state.PlateVelocity)).Z);
+            BasicSimulation.WriteToDiagram("vN", Physics.CalcNormalPart(state.Velocity, state.Tilt).Length);
             #endregion
         }
 
         /// <summary>
         /// Represents the Status of the Ball.
-        /// Enum, die Ausdrueckten soll, in welchen Zustand sich der Ball befindet.
+        /// Enum, die Ausdruekten soll, in welchen Zustand sich der Ball befindet.
         /// </summary>
         private enum BallState
         {

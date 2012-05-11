@@ -63,7 +63,7 @@
                 <Button x:Name="ToggleConntectButton" Content="Connect" Command="{StaticResource ToggleConnectCmd}" ToolTip="Ctrl+D"/>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="SerialPortNumber:  _COM" />
-                    <TextBox x:Name="SerialPortNumber" Text="4" Width="25" />
+                    <TextBox x:Name="SerialPortNumber" Text="3" Width="25" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="EnableControlButton" Content="Enable Controll" Command="{StaticResource EnableControlCmd}" ToolTip="Ctrl+E"/>
@@ -75,6 +75,8 @@
             />
                 <TextBlock x:Name="SendTiltValuesDisplay"/>
                 <CheckBox x:Name="TransmitImmediately" Content="Transmit _Immediately"/>
+                <CheckBox x:Name="AllowTiltToBeSet" Content="Allo_w Tilt to be Set" IsChecked="True"/>
+                <CheckBox x:Name="ShowDeltaTime" Content="Sh_ow Dela time"/>
                 <Button Content="Transmit Now" Command="{StaticResource TransmitDataCmd}" ToolTip="Ctrl+T"/>
                 <Button Content="Get Current Plate Postion" Command="{StaticResource GetCurrentPositionCmd}" ToolTip="Ctrl+P"/>
                 <Button Content="Reset MicroControler" Command="{StaticResource ResetMicroControlerCmd}" ToolTip="Ctrl+R"/>
@@ -141,9 +143,10 @@
                 </controlsB3:SettingsSaverB3>
             </Expander>
         <Label Content="Send Command:"/>
-        <TextBox KeyDown="SendCommandTextBox_KeyDown"/>
+        <TextBox KeyDown="SendCommandTextBox_KeyDown" MinWidth="150"/>
         <CheckBox x:Name="LoggingActivated" Content="Log Se_nd/Recive"/>
-        <Button x:Name="ClearLogBtn" Content="Clear L_og" Click="ClearLogBtn_Click"/>
+            <CheckBox x:Name="LoggingToFileActivated" Content="Log Send/Recive To File"/>
+            <Button x:Name="ClearLogBtn" Content="Clear L_og" Click="ClearLogBtn_Click"/>
         <TextBlock>Send and Recive Log:</TextBlock>
     </WrapPanel>
     <ScrollViewer x:Name="LogScrollViewer" DockPanel.Dock="Bottom">

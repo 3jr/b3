@@ -15,15 +15,26 @@ namespace JRapp.WPF
 
         protected override void OnInitialized(EventArgs e)
         {
-            SaveLocation = GetSaveFolder();
+            SetSaveLocationToModule();
             base.OnInitialized(e);
 
             GlobalSettings.Instance.EnviromentVariableChanged += OnEnviromentVarChanged;
         }
 
+        void SetSaveLocationToModule()
+        {
+            if (DesignMode)
+            {
+                this.IsEnabled = false;
+                SaveLocation = @"C:\";
+            }
+            else
+                SaveLocation = GetSaveFolder();
+        }
+
         void OnEnviromentVarChanged(object sender, EventArgs e)
         {
-            SaveLocation = GetSaveFolder();
+            SetSaveLocationToModule();
         }
 
         private string GetSaveFolder()
@@ -36,14 +47,22 @@ namespace JRapp.WPF
                 if (items.Count() > 0)
                     break;
 
-                current = (FrameworkElement)current.Parent;
+                current = current.Parent as FrameworkElement;
                 if (current == null)
-                    return null; // throw new InvalidOperationException("SettingsSaverB3 must be used in the context of an IBallOnPlateItem of the BallOnTiltablePlate2 Project with the JanRapp.MainApp.MainWindow as Application.Current.MainWindow and BPItems must be loaded");
+                    return string.Empty; // throw new InvalidOperationException("SettingsSaverB3 must be used in the context of an IBallOnPlateItem of the BallOnTiltablePlate2 Project with the JanRapp.MainApp.MainWindow as Application.Current.MainWindow and BPItems must be loaded");
             }
 
             var item = items.First();
 
             return GlobalSettings.ItemSettingsFolder(item.Info);
+        }
+
+        public bool DesignMode
+        {
+            get
+            {
+                return (System.Diagnostics.Process.GetCurrentProcess().ProcessName == "XDesProc");
+            }
         }
     }
 }

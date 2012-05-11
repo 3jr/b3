@@ -42,7 +42,8 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         {
             this.Dispatcher.Invoke((Action)delegate
             {
-                WriteLog(port.ReadExisting(), true);
+                string read = port.ReadExisting();
+                WriteLog(read, true);
             }
             );
         }
@@ -50,11 +51,15 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
         public void SetTilt(System.Windows.Vector tilt)
         {
-            WriteLog("(" + stopWatch.ElapsedMilliseconds + ")", false);
+            if(ShowDeltaTime.IsChecked ?? true)
+                WriteLog("(" + stopWatch.ElapsedMilliseconds + ")", false);
             stopWatch.Restart();
 
-            TiltAngle.Value = GlobalSettings.Instance.ToValidTilt(tilt);
-            SendData(true);
+            if (AllowTiltToBeSet.IsChecked ?? true)
+            {
+                TiltAngle.Value = GlobalSettings.Instance.ToValidTilt(tilt);
+                SendData(true);
+            }
         }
 
         public void Start()
@@ -102,7 +107,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             if (port.IsOpen && (TransmitImmediately.IsChecked == true || force))
             {
                 WritePortWithRightEndian(
-                    "!xdxC{0}{1}{2}{3}{4}{5}",
+                    "!xDxK{0}{1}{2}{3}{4}{5}",
                         (UInt16)PropertionalX.Value,
                         (UInt16)IntegralX.Value,
                         (UInt16)DerivativX.Value,
@@ -112,7 +117,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
                 );
                 System.Threading.Thread.Sleep(100);
                 if (controlEnabled && (XEnabled.IsChecked ?? true))
-                    WritePort("xe");
+                    WritePort("xE");
             }
         }
 
@@ -121,7 +126,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             if (port.IsOpen && (TransmitImmediately.IsChecked == true || force))
             {
                 WritePortWithRightEndian(
-                    "!ydyC{0}{1}{2}{3}{4}{5}",
+                    "!yDyK{0}{1}{2}{3}{4}{5}",
                         (UInt16)PropertionalY.Value,
                         (UInt16)IntegralY.Value,
                         (UInt16)DerivativY.Value,
@@ -131,7 +136,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
                     );
                 System.Threading.Thread.Sleep(100);
                 if (controlEnabled && (YEnabled.IsChecked ?? true))
-                    WritePort("ye");
+                    WritePort("yE");
             }
         }
 
@@ -152,10 +157,10 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
                 try
                 {
                     port.PortName = "COM" + SerialPortNumber.Text;
-                    port.BaudRate = 38400;
+                    port.BaudRate = 57600;
 
                     port.Open();
-                    WritePort("!xeyexpyp");
+                    WritePort("!xEyExpyp");
 
                     ToggleConntectButton.Content = "Disconnect";
                     EnableControlButton.Content = "Disable Control";
@@ -237,15 +242,15 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         {
             if (controlEnabled)
             {
-                WritePort("xdyd");
+                WritePort("xDyD");
                 EnableControlButton.Content = "Enable Control";
             }
             else
             {
                 if (XEnabled.IsChecked ?? true)
-                    WritePort("xe");
+                    WritePort("xE");
                 if (YEnabled.IsChecked ?? true)
-                    WritePort("ye");
+                    WritePort("yE");
                 EnableControlButton.Content = "Disable Control";
             }
 
@@ -256,18 +261,18 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
         {
             if (controlEnabled)
                 if (XEnabled.IsChecked ?? true)
-                    WritePort("xe");
+                    WritePort("xE");
                 else
-                    WritePort("xd");
+                    WritePort("xD");
         }
 
         private void YEnabled_CheckedChanged(object sender, RoutedEventArgs e)
         {
             if (controlEnabled)
                 if (YEnabled.IsChecked ?? true)
-                    WritePort("ye");
+                    WritePort("yE");
                 else
-                    WritePort("yd");
+                    WritePort("yD");
         }
 
         private void SendCommandTextBox_KeyDown(object sender, KeyboardEventArgs e)
@@ -337,6 +342,7 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
             }
         }
 
+        System.IO.StreamWriter logFile;
         void WriteLog(string s, bool Bold)
         {
             if (LoggingActivated.IsChecked ?? true)
@@ -346,6 +352,15 @@ namespace BallOnTiltablePlate.JanRapp.Output.Output2
                 else
                     LogParagraph.Inlines.Add(s);
             }
+
+            if (LoggingToFileActivated.IsChecked ?? true)
+            {
+                if (logFile == null)
+                    logFile = new System.IO.StreamWriter(@"f:\s\prj\BallOnTiltablePlate2\log.txt");
+                logFile.Write(s);
+                logFile.Flush();
+            }
+
             //if(LogScrollViewer.VerticalOffset == LogScrollViewer.ScrollableHeight)
             // LogScrollViewer.ScrollToBottom();
         }

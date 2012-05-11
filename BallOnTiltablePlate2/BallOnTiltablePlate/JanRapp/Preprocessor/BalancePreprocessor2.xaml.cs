@@ -16,17 +16,11 @@ using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 
 namespace BallOnTiltablePlate.JanRapp.Preprocessor
 {
-    public interface IBalancePreprocessor : IBasicPreprocessor, IControledSystemPreprocessor
-    {
-        Vector TargetPosition { set; get; }
-        bool IsAutoBalancing { get; set; }
-    }
-
     /// <summary>
     /// Interaction logic for BasicPreprocessor.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Jan","Rapp", "Balance Preprocessor", "1.0")]
-    public partial class BalancePreprocessor : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
+    [ControledSystemModuleInfo("Jan","Rapp", "Balance Preprocessor", "2.0")]
+    public partial class BalancePreprocessor2 : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
     {
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 
@@ -45,14 +39,13 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             get { return this; }
         }
 
-        public BalancePreprocessor()
+        public BalancePreprocessor2()
         {
             InitializeComponent();
             lastTicks = DateTime.Now.Ticks;
         }
 
         Vector integral;
-        double integralOfAbsense;
         double deltaTime;
         long lastTicks;
 
@@ -110,11 +103,9 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                 if (this.ValuesValid)
                 {
                     Vector currentRelativePosition = this.Position - TargetPosition;
-                    //integral += currentRelativePosition * deltaTime;
-                    integralOfAbsense += deltaTime;
+                    integral += currentRelativePosition * deltaTime;
                     var tilt = currentRelativePosition * PositionFactor.Value +
                         integral * IntegralFactor.Value * deltaTime +
-                        currentRelativePosition.GetNormalized() * integralOfAbsense * IntegralOfAbsenseFactor.Value +
                         this.Velocity * VelocityFactor.Value;
 
                     IntegralDisplay.Text = "Integral: " + integral;

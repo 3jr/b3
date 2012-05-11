@@ -52,7 +52,11 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
 
             if (lastAccelerationData.Count >= countForAverage)
             {
-                if (wii.WiimoteState.ButtonState.B)
+                if (wii.WiimoteState.ButtonState.A)
+                {
+                    // change nothing
+                }
+                else if (wii.WiimoteState.ButtonState.B)
                 {
                     IO.TargetPosition = new Vector();
                     IO.IsAutoBalancing = true;

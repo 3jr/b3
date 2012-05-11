@@ -27,7 +27,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>C:\Users\Jan\Documents\b3\</OutputPath>
+    <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -36,7 +36,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>C:\Users\Jan\Documents\b3R\</OutputPath>
+    <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -68,9 +68,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\JRapp.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Expression.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\C4FCKinect\Microsoft.Expression.Drawing.dll</HintPath>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\Reference Source\MathNet.Numerics\lib\Net40\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -223,6 +222,12 @@
     <Compile Include="JanRapp\Preprocessor\BalancePreprocessor.xaml.cs">
       <DependentUpon>BalancePreprocessor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Preprocessor\BalancePreprocessor2.xaml.cs">
+      <DependentUpon>BalancePreprocessor2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Preprocessor\BalancePreprocessor3.xaml.cs">
+      <DependentUpon>BalancePreprocessor3.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Preprocessor\TestPreprocessor.xaml.cs">
       <DependentUpon>TestPreprocessor.xaml</DependentUpon>
     </Compile>
@@ -231,6 +236,7 @@
     </Compile>
     <Compile Include="JanRapp\SettingsSaverB3.cs" />
     <Compile Include="JanRapp\General\Utilities\WPFConverter.cs" />
+    <Compile Include="JanRapp\StateObserver.cs" />
     <Compile Include="MoritzUehling\Juggler\Circle.cs" />
     <Compile Include="MoritzUehling\Juggler\Wifi.cs" />
     <Compile Include="MoritzUehling\Juggler\WifiHelper.cs" />
@@ -406,6 +412,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Preprocessor\BalancePreprocessor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="JanRapp\Preprocessor\BalancePreprocessor2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="JanRapp\Preprocessor\BalancePreprocessor3.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

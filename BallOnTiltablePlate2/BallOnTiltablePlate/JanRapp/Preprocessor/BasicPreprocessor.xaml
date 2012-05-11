@@ -8,7 +8,6 @@
     <StackPanel>
         <TextBlock x:Name="PositionDisplay" />
         <TextBlock x:Name="VelocityDisplay" />
-        <TextBlock x:Name="AccelerationDisplay" />
         <Button Content="Reset Pevious Data" Click="Reset_Click"/>
     </StackPanel>
 </UserControl>

@@ -236,6 +236,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         {
             if (backupAfterClosing)
                 GlobalSettings.BackupSettingsSaves();
+
+            ((IControledSystemModule)AlgorithmList.SelectedValue).Stop();
+            ((IControledSystemModule)PreprocessorList.SelectedValue).Stop();
+            ((IControledSystemModule)InputList.SelectedValue).Stop();
+            ((IControledSystemModule)OutputList.SelectedValue).Stop();
             base.OnClosed(e);
         }
 

@@ -16,17 +16,12 @@ using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 
 namespace BallOnTiltablePlate.JanRapp.Preprocessor
 {
-    public interface IBalancePreprocessor : IBasicPreprocessor, IControledSystemPreprocessor
-    {
-        Vector TargetPosition { set; get; }
-        bool IsAutoBalancing { get; set; }
-    }
 
     /// <summary>
     /// Interaction logic for BasicPreprocessor.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Jan","Rapp", "Balance Preprocessor", "1.0")]
-    public partial class BalancePreprocessor : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
+    [ControledSystemModuleInfo("Jan", "Rapp", "Balance Preprocessor", "1.9")]
+    public partial class BalancePreprocessor3 : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
     {
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 
@@ -45,76 +40,61 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             get { return this; }
         }
 
-        public BalancePreprocessor()
+        public BalancePreprocessor3()
         {
             InitializeComponent();
-            lastTicks = DateTime.Now.Ticks;
+
+            ReinitialiceStateObservers();
         }
 
         Vector integral;
-        double integralOfAbsense;
         double deltaTime;
-        long lastTicks;
 
-        Vector estimationX = new Vector();
-        Vector estimationY = new Vector();
+        StateObserver SoX;
+        StateObserver SoY;
         Vector lastTilt = new Vector();
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
             if (Position.HasNaN() && !e.BallPosition.HasNaN())
             {
-                estimationX.X = e.BallPosition.X;
-                estimationX.Y = 0;
-                estimationY.X = e.BallPosition.Y;
-                estimationY.Y = 0;
+                SoX.xh[0] = e.BallPosition.X;
+                SoX.xh[1] = 0;
+                SoY.xh[0] = e.BallPosition.Y;
+                SoY.xh[1] = 0;
             }
 
             deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
             deltaTime = ((UseDelataTime.IsChecked ?? true) ? deltaTime : StaticPeriod.Value);
-            long currentTicks = DateTime.Now.Ticks;
-            long deltaTicks = currentTicks - lastTicks;
-            lastTicks = currentTicks;
 
             Vector newPosition = e.BallPosition;
 
-            double g = 9.81;
+            if (!newPosition.HasNaN())
+            {
 
-            Vector newEstimationX = new Vector();
-            Vector newEstimationY = new Vector();
+                SoX.NextStep(newPosition.X, lastTilt.X, deltaTime);
+                SoY.NextStep(newPosition.Y, lastTilt.Y, deltaTime);
 
-            newEstimationX.X = (estimationX.Y - LFactor.Value.X * (estimationX.X - newPosition.X)) * deltaTime + estimationX.X;
-            newEstimationX.Y = (-g * lastTilt.X - LFactor.Value.Y * (estimationX.X - newPosition.X)) * deltaTime + estimationX.Y;
-            newEstimationY.X = (estimationY.Y - LFactor.Value.X * (estimationY.X - newPosition.Y)) * deltaTime + estimationY.X;
-            newEstimationY.Y = (-g * lastTilt.Y - LFactor.Value.Y * (estimationY.X - newPosition.Y)) * deltaTime + estimationY.Y;
-
-            Velocity = new Vector(newEstimationX.Y, newEstimationY.Y);
-
-            estimationX = newEstimationX;
-            estimationY = newEstimationY;
-
-            Position = newPosition;
-
+                Velocity = new Vector(SoX.xh[1], SoY.xh[1]);
+                Position = newPosition;
+            }
             ValuesValid = !Position.HasNaN() && !Velocity.HasNaN();
 
             PositionDisplay.Text = "Position: " + Position.ToString();
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
             DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
-            DeltaTicksDisplay.Text = "DeltaTicks: " + deltaTicks.ToString();
 
-            if(this.IsVisible)
+            if (this.IsVisible)
                 History.FeedUpdate(Position, Velocity);
-            
+
             AddDataToDiagramCreator();
             if (IsAutoBalancing)
             {
                 if (this.ValuesValid)
                 {
                     Vector currentRelativePosition = this.Position - TargetPosition;
-                    //integral += currentRelativePosition * deltaTime;
-                    integralOfAbsense += deltaTime;
+                    integral += currentRelativePosition * deltaTime;
                     var tilt = currentRelativePosition * PositionFactor.Value +
-                        integral * IntegralFactor.Value * deltaTime +
-                        currentRelativePosition.GetNormalized() * integralOfAbsense * IntegralOfAbsenseFactor.Value +
+                        integral * IntegralFactor.Value +
                         this.Velocity * VelocityFactor.Value;
 
                     IntegralDisplay.Text = "Integral: " + integral;
@@ -147,8 +127,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             Position = VectorUtil.NaNVector;
             Velocity = VectorUtil.NaNVector;
             lastTilt = new Vector();
-            estimationX = new Vector(); //VectorUtil.NaNVector;
-            estimationY = new Vector(); //VectorUtil.NaNVector;
+            SoX.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
+            SoY.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
             sinceLastUpdate.Restart();
         }
 
@@ -183,7 +163,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         public Vector TargetPosition
         {
             get { return TargetPositionVecBox.Value; }
-            
+
             set
             {
                 if (TargetPositionVecBox.Value != value)
@@ -238,5 +218,55 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             }
         }
         #endregion
+
+        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            ReinitialiceStateObservers();
+        }
+
+        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
+        {
+            ReinitialiceStateObservers();
+        }
+
+        private void ReinitialiceStateObservers()
+        {
+            var g = gDB.Value;
+            var s1 = SDB.Value.X;
+            var s2 = SDB.Value.Y;
+
+            var l1_1 = L1DB.Value.X;
+            var l1_2 = L1DB.Value.Y;
+            var l2_1 = L2DB.Value.X;
+            var l2_2 = L2DB.Value.Y;
+
+            var A = new double[,]{
+               {0,  1,  0,  0,  },
+               {0,  0,  g,  0,  },
+               {0,  0,  0,  1,  },
+               {0,  0,  s1, s2, },
+            };
+
+            var B = new double[,]{
+               {0,  },
+               {0,  },
+               {0,  },
+               {1,  },
+            };
+
+            var C = new double[,]{
+               {1,  0,  0,  0,  },
+            };
+
+            var L = new double[,]{
+               {l1_1,  },
+               {l1_2,  },
+               {l2_1,  },
+               {l2_2,  },
+            };
+
+            SoX = new StateObserver(A, B, C, L, new double[] { 0, 0, 0, 0 });
+            SoY = new StateObserver(A, B, C, L, new double[] { 0, 0, 0, 0 });
+        }
     }
 }

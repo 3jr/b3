@@ -23,7 +23,6 @@ namespace BallOnTiltablePlate.MoritzUehling.Juggler
     //[BallOnPlateItemInfo("Moritz", "Uehling", "BallCircle", "0.1")]
     public class CircleJuggler : UserControl, IControledSystemProcessor<BallOnTiltablePlate.JanRapp.Preprocessor.IBasicPreprocessor>
     {
-        double veloFactor = 0;
         double posFactor = 1;
 
         double factor = 0.1;

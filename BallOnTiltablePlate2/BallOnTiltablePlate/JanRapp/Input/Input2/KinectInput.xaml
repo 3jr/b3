@@ -19,8 +19,11 @@
     </UserControl.Resources>
     <controlsB3:SettingsSaverB3>
     <WrapPanel Orientation="Vertical" x:Name="MainPanel">
-        <controls:DoubleBox x:Name="ToleranceDoubelBox" Text="_Tolerance of Height Anormalities: " Value="10.0"/>
-        <controls:DoubleBox x:Name="MinHeightAnormalities" Text="Heigh Anormalities Thre_shold: " Value="15.0" SmallChange="1" RegularChange="2" LargeChange="5"/>
+            <Button Content="Switch to 320x240" Click="LowRes_Click"/>
+            <CheckBox Name="UseMedian" Content="Use Median of Amormalies" />
+            <controls:DoubleBox x:Name="ToleranceDoubelBox" Text="_Tolerance of Height Anormalities: " Value="10.0"/>
+            <controls:DoubleBox x:Name="UpperToleranceDoubelBox" Text="Upper _Tolerance of Height Anormalities: " Value="10.0"/>
+            <controls:DoubleBox x:Name="MinHeightAnormalities" Text="Heigh Anormalities Thre_shold: " Value="15.0" SmallChange="1" RegularChange="2" LargeChange="5"/>
         <StackPanel Orientation="Horizontal">
             <TextBlock>Center: </TextBlock>
             <controls:VectorBox x:Name="CenterPositionBox" IsEnabled="False"/>
@@ -84,6 +87,7 @@
         <Expander Header="Time Debug">
             <StackPanel x:Name="TimeDegugContainer">
                     <TextBlock x:Name="FramesSkippedDisplay"/>
+                    <TextBlock x:Name="DeltaFrameDisplay"/>
                 </StackPanel>
         </Expander>
         </WrapPanel>

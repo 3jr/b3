@@ -34,9 +34,10 @@ namespace BallOnTiltablePlate.JanRapp.Input2
             new Dictionary<string, DisplayDescribtion>();
         int framesSkipt = 0;
 
-        readonly int KinectInputImageWidth;
-        readonly int KinectInputImageHeight;
-        readonly Vector KinectInputImageSize;
+        int KinectInputImageWidth;
+        int KinectInputImageHeight;
+        Vector KinectInputImageSize;
+        
         public KinectInput()
         {
             KinectInputImageWidth = 640;
@@ -90,10 +91,14 @@ namespace BallOnTiltablePlate.JanRapp.Input2
             BallSelector.IdealSize = vec;
         }
 
+        System.Diagnostics.Stopwatch deltaFrameSw = new System.Diagnostics.Stopwatch();
         void kinect_DepthFrameReady(object sender, Kinect.ImageFrameReadyEventArgs e)
         {
+            DeltaFrameDisplay.Text = "Delta Frame: " + deltaFrameSw.Elapsed;
+            deltaFrameSw.Restart();
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
+
 
             if (computaionTask == null || computaionTask.IsCompleted)
             {
@@ -116,6 +121,7 @@ namespace BallOnTiltablePlate.JanRapp.Input2
                     {"cameraConstant", CameraConstantBox.Value},
                     {"clip", ConvertUtil.ToIntRect(ClipSelector.ValueFromIdealSize)},
                     {"tolerance", (float)ToleranceDoubelBox.Value},
+                    {"upperTolerance", (float)UpperToleranceDoubelBox.Value},
                     {"minHightAnormalities", (int)MinHeightAnormalities.Value},
                     {"sizeAtZeroTilt", OneSizeSelector.ValueFromIdealSize},
                     {"projectionAdjustRotation", rotation},
@@ -125,6 +131,7 @@ namespace BallOnTiltablePlate.JanRapp.Input2
                     {"axesSeperatly", AxesSeperalty.IsChecked ?? false},
                     {"projectionInverted", ProjectionInverted.IsChecked ?? false},
                     {"generatePrettyPictures", this.IsVisible},
+                    {"useMedian", this.UseMedian.IsChecked ?? true},
                 };
 
                 computaionTask = new Task<ImageProcessing.Output>(DoMainComputaionAsync, state);
@@ -185,14 +192,7 @@ namespace BallOnTiltablePlate.JanRapp.Input2
             {
                 if(!item.Value.Display.IsValueCreated)
                 {
-                    if (item.Key.StartsWith("OutputImageSelector_"))
-                        OutputImagePanel.Children.Add(item.Value.Display.Value);
-                    else if (item.Key.StartsWith("Corner"))
-                        CornerContainer.Children.Add(item.Value.Display.Value);
-                    else if (item.Key.StartsWith("TimeDebug_"))
-                        TimeDegugContainer.Children.Add(item.Value.Display.Value);
-                    else
-                        MainPanel.Children.Add(item.Value.Display.Value);
+                    DisplayDescribtionToPanelMapping(item.Key).Children.Add(item.Value.Display.Value);
                 }
 
                 item.Value.ToDisplay(item.Value.Display.Value, item.Value.Data);
@@ -209,6 +209,18 @@ namespace BallOnTiltablePlate.JanRapp.Input2
                 mainWindow.JugglerTimer();
 
             GC.Collect(0, GCCollectionMode.Optimized);
+        }
+
+        Panel DisplayDescribtionToPanelMapping(string dDName)
+        {
+            if (dDName.StartsWith("OutputImageSelector_"))
+                return OutputImagePanel;
+            else if (dDName.StartsWith("Corner"))
+                return CornerContainer;
+            else if (dDName.StartsWith("TimeDebug_"))
+                return TimeDegugContainer;
+            else
+                return MainPanel;
         }
 
         BitmapSource CreateMyStandartBitmapSource(byte[] data, int width, int height)
@@ -306,6 +318,51 @@ namespace BallOnTiltablePlate.JanRapp.Input2
         public void OneSizeBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Rect> e)
         {
             CenterPositionBox.Value = (Vector)e.NewValue.TopLeft + new Vector(e.NewValue.Width, e.NewValue.Height) / 2;
+        }
+
+        bool lowRes = false;
+        private void LowRes_Click(object sender, RoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+
+            if (lowRes)
+            {
+                SetNewResoultion(640, 480);
+                b.Content = "Swtich to Low Res 320x240";
+                kinect.Uninitialize();
+                kinect.Initialize(Kinect.RuntimeOptions.UseDepth);
+                kinect.DepthStream.Open(Kinect.ImageStreamType.Depth, 4, Kinect.ImageResolution.Resolution640x480, Kinect.ImageType.Depth);
+            }
+            else
+            {
+                SetNewResoultion(320, 240);
+                b.Content = "Swtich to Hight Res 640x480";
+                kinect.Uninitialize();
+                kinect.Initialize(Kinect.RuntimeOptions.UseDepth);
+                kinect.DepthStream.Open(Kinect.ImageStreamType.Depth, 4, Kinect.ImageResolution.Resolution320x240, Kinect.ImageType.Depth);
+            }
+
+            lowRes = !lowRes;
+        }
+
+        void SetNewResoultion(int newWidth, int newHeight)
+        {
+            KinectInputImageSize = new Vector(newWidth, newHeight);
+            KinectInputImageWidth = newWidth;
+            KinectInputImageHeight = newHeight;
+
+            Size s = new Size(newWidth, newHeight);
+
+            CenterSelector.IdealSize = s;
+            ClipSelector.IdealSize = s;
+            OneSizeSelector.IdealSize = s;
+            BallSelector.IdealSize = s;
+
+
+            foreach (var dd in displays)
+                DisplayDescribtionToPanelMapping(dd.Key).Children.Remove(dd.Value.Display.Value);
+
+            displays.Clear();
         }
     }
 }

@@ -29,18 +29,6 @@ namespace BallOnTiltablePlate.JanRapp.Input2
             public readonly byte[] prettyPicture;
         }
 
-        [Flags]
-        public enum Requests
-        {
-            None = 0,
-            Regular = 1 << 0,
-            DeltaX = 1 << 1,
-            DeltaY = 1 << 2,
-            AnormalyX = 1 << 3,
-            AnormalyY = 1 << 4,
-            HightAnormalys = 1 << 5,
-        }
-
         public static Vector Average(byte[] depthData, int depthHorizontalResulotion, Int32Rect clip,
             Dictionary<string, DisplayDescribtion> displays
             )
@@ -268,8 +256,16 @@ namespace BallOnTiltablePlate.JanRapp.Input2
 
             Vector sequentialTilt = tiltToAxis.ToSequentailTilt();
 
+            Vector3D projectionAdjustScale = (Vector3D)input["projectionAdjustScale"];
+            projectionAdjustScale.X *= (double)depthHorizontalResulotion / 640;
+            projectionAdjustScale.Y *= (double)depthVerticalResulotion / 480;
+
+            Vector3D projectionAdjustTranslation = (Vector3D)input["projectionAdjustTranslation"];
+            projectionAdjustTranslation.X *= (double)depthHorizontalResulotion / 640;
+            projectionAdjustTranslation.Y *= (double)depthVerticalResulotion / 480;
+
             Vector3D[] transformedCorners = TransformedCorners(sequentialTilt, (QuaternionRotation3D)input["projectionAdjustRotation"],
-                (Vector3D)input["projectionAdjustScale"], (Vector3D)input["projectionAdjustTranslation"], displays);
+                projectionAdjustScale, projectionAdjustTranslation, displays);
 
             Int32Vector[] cornerPoints = (Int32Vector[])ImageProcessing.ConersInPicture(transformedCorners,
                 (double)input["cameraConstant"], centerPosition, (bool)input["projectionInverted"], displays, new Size(depthHorizontalResulotion, depthVerticalResulotion));
@@ -290,9 +286,10 @@ namespace BallOnTiltablePlate.JanRapp.Input2
             traversed = new byte[depthData.Length / 2];
             anormalies = new byte[depthData.Length / 2];
             plate = new byte[depthData.Length / 2];
-            int ballX = 0, ballY = 0, ballPointsCount = 0;
+            int ballPointsCount = 0;
 
             int tolerance = (int)(float)input["tolerance"];
+            int upperTolerance = (int)(float)input["upperTolerance"];
             int centerDepth = (int)input["centerDepth"];
 
 
@@ -301,81 +298,192 @@ namespace BallOnTiltablePlate.JanRapp.Input2
             int top = left[0].Top.Y;
             int bottom = NumberUtil.Min(left[0].Bottom.Y, right[0].Bottom.Y);
 
-            while (true)
+            Vector resultingBallPos;
+            if ((bool)input["useMedian"])
             {
+                byte[] bucketsX = new byte[depthHorizontalResulotion];
+                byte[] bucketsY = new byte[depthVerticalResulotion];
 
-                double rwStart = left[l].XPosAt(top);
-                double rwEnd = right[r].XPosAt(top);
-
-                for (int y = top; y < bottom; y++)
+                #region WithMedian
+                while (true)
                 {
-                    rwStart += left[l].Change;
-                    rwEnd += right[r].Change;
 
-                    int j = (y * depthHorizontalResulotion + (int)rwStart) * 2;
+                    double rwStart = left[l].XPosAt(top);
+                    double rwEnd = right[r].XPosAt(top);
 
-                    for (int x = (int)rwStart; x < (rwEnd); x++)
+                    for (int y = top; y < bottom; y++)
                     {
-                        int depthOfPlate = (int)((x - centerPosition.X) * average.X) + (int)((y - centerPosition.Y) * average.Y) + centerDepth;
+                        rwStart += left[l].Change;
+                        rwEnd += right[r].Change;
 
-                        int dept = depthData[j++] | depthData[j++] << 8;
-                        
-                        if (createPictures)
+                        int j = (y * depthHorizontalResulotion + (int)rwStart) * 2;
+
+                        for (int x = (int)rwStart; x < (rwEnd); x++)
                         {
-                            plate[y * depthHorizontalResulotion + x] = (byte)(depthOfPlate - dept);
-                            traversed[y * depthHorizontalResulotion + x] = 255;
-                        }
+                            int depthOfPlate = (int)((x - centerPosition.X) * average.X) + (int)((y - centerPosition.Y) * average.Y) + centerDepth;
 
-                        if (depthOfPlate - tolerance > dept && dept != 0)
-                        {
-                            ballX += x;
-                            ballY += y;
-                            ballPointsCount++;
+                            int dept = depthData[j++] | depthData[j++] << 8;
 
-                            if(createPictures)
-                                anormalies[y * depthHorizontalResulotion + x] = 255;
+                            int differenceFromPlate = depthOfPlate - dept;
+
+                            if (createPictures)
+                            {
+                                plate[y * depthHorizontalResulotion + x] = (byte)(differenceFromPlate);
+                                traversed[y * depthHorizontalResulotion + x] = 255;
+                            }
+
+                            if (differenceFromPlate > tolerance && differenceFromPlate < upperTolerance && dept != 0)
+                            {
+                                bucketsX[x] += 1;
+                                bucketsY[y] += 1;
+
+                                ballPointsCount++;
+
+                                if (createPictures)
+                                    anormalies[y * depthHorizontalResulotion + x] = 255;
+                            }
                         }
                     }
+
+
+                    if (l == left.Length - 1 && r == right.Length - 1)
+                        break;
+
+                    if (left[l].Bottom.Y == bottom)
+                        l++;
+                    if (right[r].Bottom.Y == bottom)
+                        r++;
+
+                    top = bottom;
+                    bottom = NumberUtil.Min(left[l].Bottom.Y, right[r].Bottom.Y);
                 }
 
-                if (l == left.Length - 1 && r == right.Length - 1)
-                    break;
 
-                if (left[l].Bottom.Y == bottom)
-                    l++;
-                if (right[r].Bottom.Y == bottom)
-                    r++;
+                DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_TraverseQuadrant", displays, "Traverse Quadrant: {0}", stopwatch.ElapsedMilliseconds);
 
-                top = bottom;
-                bottom = NumberUtil.Min(left[l].Bottom.Y, right[r].Bottom.Y);
-            }
-            #endregion TraverseBLABLA
-            DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_TraverseQuadrant", displays, "Traverse Quadrant: {0}", stopwatch.ElapsedMilliseconds);
+                if ((bool)input["generatePrettyPictures"])
+                {
 
-            if ((bool)input["generatePrettyPictures"])
-            {
+                    DisplayDescribtion.CreateOrUpdateImageDisplay("Traversed Pixels", displays, traversed, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
+                    DisplayDescribtion.CreateOrUpdateImageDisplay("Anormalie Pixels", displays, anormalies, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
+                    DisplayDescribtion.CreateOrUpdateImageDisplay("Plate Pixels", displays, plate, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
+                }
 
-                DisplayDescribtion.CreateOrUpdateImageDisplay("Traversed Pixels", displays, traversed, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
-                DisplayDescribtion.CreateOrUpdateImageDisplay("Anormalie Pixels", displays, anormalies, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
-                DisplayDescribtion.CreateOrUpdateImageDisplay("Plate Pixels", displays, plate, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
-            }
+                stopwatch.Stop();
+                if (ballPointsCount > (int)input["minHightAnormalities"])
+                {
+                    int medianOfValues = ballPointsCount / 2;
+                    int countOnLeftX = 0;
+                    int x = 0;
+                    for (; countOnLeftX < medianOfValues; x++)
+                        countOnLeftX += bucketsX[x];
+                    int countOnLeftY = 0;
+                    int y = 0;
+                    for (; countOnLeftY < medianOfValues; y++)
+                        countOnLeftY += bucketsY[y];
 
-            stopwatch.Stop();
-            if (ballPointsCount > (int)input["minHightAnormalities"])
-            {
-                Vector ballPos = new Vector(ballX / ballPointsCount, ballY / ballPointsCount);
-                Vector centerPos = (Vector)input["centerPosition"];
-                double widthThatIsPlateSizePixel = ((Rect)input["sizeAtZeroTilt"]).Width / 2;
-                double withThatIsPlateSizeMeter = GlobalSettings.Instance.HalfPlateSize;
+                    Vector ballPos = new Vector(x, y);
 
-                return (ballPos - centerPos) *  withThatIsPlateSizeMeter / widthThatIsPlateSizePixel;
+                    Vector centerPos = (Vector)input["centerPosition"];
+                    double widthThatIsPlateSizePixel = ((Rect)input["sizeAtZeroTilt"]).Width / 2;
+                    double withThatIsPlateSizeMeter = GlobalSettings.Instance.HalfPlateSize;
+
+                    resultingBallPos = (ballPos - centerPos) * withThatIsPlateSizeMeter / widthThatIsPlateSizePixel;
+                }
+                else
+                    resultingBallPos = VectorUtil.NaNVector;
+
+                #endregion WithMedian
             }
             else
-                return VectorUtil.NaNVector;
+            {
+                int ballX = 0, ballY = 0;
+
+                #region WithOutMedian
+                while (true)
+                {
+
+                    double rwStart = left[l].XPosAt(top);
+                    double rwEnd = right[r].XPosAt(top);
+
+                    for (int y = top; y < bottom; y++)
+                    {
+                        rwStart += left[l].Change;
+                        rwEnd += right[r].Change;
+
+                        int j = (y * depthHorizontalResulotion + (int)rwStart) * 2;
+
+                        for (int x = (int)rwStart; x < (rwEnd); x++)
+                        {
+                            int depthOfPlate = (int)((x - centerPosition.X) * average.X) + (int)((y - centerPosition.Y) * average.Y) + centerDepth;
+
+                            int dept = depthData[j++] | depthData[j++] << 8;
+
+                            int differenceFromPlate = depthOfPlate - dept;
+
+                            if (createPictures)
+                            {
+                                plate[y * depthHorizontalResulotion + x] = (byte)(differenceFromPlate);
+                                traversed[y * depthHorizontalResulotion + x] = 255;
+                            }
+
+                            if (differenceFromPlate > tolerance && differenceFromPlate < upperTolerance && dept != 0)
+                            {
+                                ballX += x;
+                                ballY += y;
+                                ballPointsCount++;
+
+                                if (createPictures)
+                                    anormalies[y * depthHorizontalResulotion + x] = 255;
+                            }
+                        }
+                    }
+
+
+                    if (l == left.Length - 1 && r == right.Length - 1)
+                        break;
+
+                    if (left[l].Bottom.Y == bottom)
+                        l++;
+                    if (right[r].Bottom.Y == bottom)
+                        r++;
+
+                    top = bottom;
+                    bottom = NumberUtil.Min(left[l].Bottom.Y, right[r].Bottom.Y);
+                }
+
+                DisplayDescribtion.CreateOrUpdateTextBoxDisplay("TimeDebug_TraverseQuadrant", displays, "Traverse Quadrant: {0}", stopwatch.ElapsedMilliseconds);
+
+                if ((bool)input["generatePrettyPictures"])
+                {
+
+                    DisplayDescribtion.CreateOrUpdateImageDisplay("Traversed Pixels", displays, traversed, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
+                    DisplayDescribtion.CreateOrUpdateImageDisplay("Anormalie Pixels", displays, anormalies, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
+                    DisplayDescribtion.CreateOrUpdateImageDisplay("Plate Pixels", displays, plate, new Int32Rect(0, 0, depthHorizontalResulotion, depthVerticalResulotion));
+                }
+
+                stopwatch.Stop();
+                if (ballPointsCount > (int)input["minHightAnormalities"])
+                {
+                    Vector ballPos = new Vector(ballX / ballPointsCount, ballY / ballPointsCount);
+                    Vector centerPos = (Vector)input["centerPosition"];
+                    double widthThatIsPlateSizePixel = ((Rect)input["sizeAtZeroTilt"]).Width / 2;
+                    double withThatIsPlateSizeMeter = GlobalSettings.Instance.HalfPlateSize;
+
+                    resultingBallPos = (ballPos - centerPos) * withThatIsPlateSizeMeter / widthThatIsPlateSizePixel;
+                }
+                else
+                    resultingBallPos = VectorUtil.NaNVector;
+
+
+                #endregion WithOutMedian
+            }
+
+            #endregion TraverseBLABLA
+
+            return resultingBallPos;
         }
-
     }
-
     public class DisplayDescribtion
     {
         public Lazy<FrameworkElement> Display { get; set; }
