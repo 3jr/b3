@@ -68,8 +68,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\JRapp.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>..\Reference Source\MathNet.Numerics\lib\Net40\MathNet.Numerics.dll</HintPath>
+    <Reference Include="MathNet.Numerics, Version=2011.4.17.0, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -516,8 +517,11 @@
     <Content Include="Resources\Ionic.Zip.dll" />
     <Content Include="Resources\JRapp.dll" />
     <Content Include="Resources\JRapp.WPF.dll" />
+    <Content Include="Resources\MathNet.Numerics.dll" />
+    <Resource Include="Resources\MathNet.Numerics.xml" />
     <Content Include="Resources\Microsoft.Research.Kinect.dll" />
     <Content Include="Resources\WiimoteLib.dll" />
+    <Content Include="Resources\zlib.net.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
