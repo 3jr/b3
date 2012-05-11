@@ -138,6 +138,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             {
                 time += deltaSeconds;
                 IPhysicsCalculator Calc = (IPhysicsCalculator)(((TreeViewItem)PhysicsCalculatorList.SelectedItem).Tag);
+                this.Tilt = GlobalSettings.Instance.ToValidTilt(this.Tilt);
                 wrapper.RunSimulation(Calc, this, deltaSeconds);
                 if (recording)
                 {
