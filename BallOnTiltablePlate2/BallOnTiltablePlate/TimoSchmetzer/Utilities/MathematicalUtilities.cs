@@ -349,7 +349,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         public static Vector ToSequentialTilt(Vector Tilt)
         {
             return new Vector(
-                -Math.Acos(1/(Math.Cos(Tilt.Y)*Math.Sqrt(1+Math.Tan(Tilt.X)*Math.Tan(Tilt.X)+Math.Tan(Tilt.Y)*Math.Tan(Tilt.Y))))
+                -Math.Sign(Tilt.X)*Math.Acos(1/(Math.Cos(Tilt.Y)*Math.Sqrt(1+Math.Tan(Tilt.X)*Math.Tan(Tilt.X)+Math.Tan(Tilt.Y)*Math.Tan(Tilt.Y))))
                 ,Tilt.Y);
         }
 
@@ -523,5 +523,25 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         }
         #endregion
 
+        #region Numerics
+        /// <summary>
+        /// Does Numeric Differential Equation solving for an equation of Type:
+        /// dx/dt = f(t,x)
+        /// </summary>
+        /// <param name="f">Funktion of t,x for dx/dt</param>
+        /// <param name="t">Time of Initial Value</param>
+        /// <param name="h">Stepwide</param>
+        /// <param name="x0">Value for Initial Time</param>
+        /// <returns>Value at time t+h</returns>
+        public static double RungeKutta44(Func<double, double, double> f, double t, double h, double x0)
+        {
+            double k1 = f(t, x0);
+            double k2 = f(t + 0.5 * h, x0 + 0.5 * h * k1);
+            double k3 = f(t + 0.5 * h, x0 + 0.5 * h * k2);
+            double k4 = f(t + h, x0 + h * k3);
+            return x0 + (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4);
+        }
+        #endregion
+
     }
-    }
+}
