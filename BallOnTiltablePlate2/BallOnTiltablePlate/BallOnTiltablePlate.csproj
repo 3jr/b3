@@ -268,6 +268,8 @@
     <Compile Include="TimoSchmetzer\Simulation\ExcelWriteSelector.xaml.cs">
       <DependentUpon>ExcelWriteSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\ETHImplementation.cs" />
+    <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\LagrangePhysics.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsWrapper.cs" />
     <Compile Include="TimoSchmetzer\Test\ControlExamle.xaml.cs">
       <DependentUpon>ControlExamle.xaml</DependentUpon>
