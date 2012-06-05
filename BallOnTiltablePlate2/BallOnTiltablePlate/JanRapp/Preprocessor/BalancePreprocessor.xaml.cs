@@ -56,17 +56,11 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         double deltaTime;
         long lastTicks;
 
-        Vector estimationX = new Vector();
-        Vector estimationY = new Vector();
-        Vector lastTilt = new Vector();
+        Vector lastPosition;
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
             if (Position.HasNaN() && !e.BallPosition.HasNaN())
             {
-                estimationX.X = e.BallPosition.X;
-                estimationX.Y = 0;
-                estimationY.X = e.BallPosition.Y;
-                estimationY.Y = 0;
             }
 
             deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
@@ -77,21 +71,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             Vector newPosition = e.BallPosition;
 
-            double g = 9.81;
-
-            Vector newEstimationX = new Vector();
-            Vector newEstimationY = new Vector();
-
-            newEstimationX.X = (estimationX.Y - LFactor.Value.X * (estimationX.X - newPosition.X)) * deltaTime + estimationX.X;
-            newEstimationX.Y = (-g * lastTilt.X - LFactor.Value.Y * (estimationX.X - newPosition.X)) * deltaTime + estimationX.Y;
-            newEstimationY.X = (estimationY.Y - LFactor.Value.X * (estimationY.X - newPosition.Y)) * deltaTime + estimationY.X;
-            newEstimationY.Y = (-g * lastTilt.Y - LFactor.Value.Y * (estimationY.X - newPosition.Y)) * deltaTime + estimationY.Y;
-
-            Velocity = new Vector(newEstimationX.Y, newEstimationY.Y);
-
-            estimationX = newEstimationX;
-            estimationY = newEstimationY;
-
+            Velocity = (newPosition - Position) / deltaTime;
             Position = newPosition;
 
             ValuesValid = !Position.HasNaN() && !Velocity.HasNaN();
@@ -146,15 +126,11 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         {
             Position = VectorUtil.NaNVector;
             Velocity = VectorUtil.NaNVector;
-            lastTilt = new Vector();
-            estimationX = new Vector(); //VectorUtil.NaNVector;
-            estimationY = new Vector(); //VectorUtil.NaNVector;
             sinceLastUpdate.Restart();
         }
 
         public void SetTilt(Vector tiltToAxis)
         {
-            lastTilt = GlobalSettings.Instance.ToValidTilt(tiltToAxis);
             IsAutoBalancing = false;
             Output.SetTilt(tiltToAxis);
             if (recording)

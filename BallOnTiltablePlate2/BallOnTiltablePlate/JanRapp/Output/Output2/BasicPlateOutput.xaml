@@ -63,7 +63,7 @@
                 <Button x:Name="ToggleConntectButton" Content="Connect" Command="{StaticResource ToggleConnectCmd}" ToolTip="Ctrl+D"/>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="SerialPortNumber:  _COM" />
-                    <TextBox x:Name="SerialPortNumber" Text="3" Width="25" />
+                    <TextBox x:Name="SerialPortNumber" Text="4" Width="25" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="EnableControlButton" Content="Enable Controll" Command="{StaticResource EnableControlCmd}" ToolTip="Ctrl+E"/>
@@ -144,7 +144,7 @@
             </Expander>
         <Label Content="Send Command:"/>
         <TextBox KeyDown="SendCommandTextBox_KeyDown" MinWidth="150"/>
-        <CheckBox x:Name="LoggingActivated" Content="Log Se_nd/Recive"/>
+        <CheckBox x:Name="LoggingActivated" Content="Lo_g Send/Recive"/>
             <CheckBox x:Name="LoggingToFileActivated" Content="Log Send/Recive To File"/>
             <Button x:Name="ClearLogBtn" Content="Clear L_og" Click="ClearLogBtn_Click"/>
         <TextBlock>Send and Recive Log:</TextBlock>

@@ -1,0 +1,17 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Controls="clr-namespace:BallOnTiltablePlate.JanRapp.Controls"
+             xmlns:WPF="clr-namespace:JRapp.WPF"
+             x:Class="BallOnTiltablePlate.JanRapp.Input.TestByHand.TestByHand0_1" 
+             mc:Ignorable="d" 
+             d:DesignHeight="398" d:DesignWidth="703.5">
+    <Grid>
+        <Controls:Visualizer3D x:Name="Visualization3D" HorizontalAlignment="Left" VerticalAlignment="Top" Height="377" Width="377" Margin="315,10,0,0"/>
+
+        <WPF:HistoryVisualizer x:Name="HistoricVisualizer" Margin="10,10" VerticalAlignment="Top" HorizontalAlignment="Left" MouseMove="HistoricVisualizer_MouseMove_1" MouseDown="HistoricVisualizer_MouseDown_1"/>
+
+    </Grid>
+</UserControl>

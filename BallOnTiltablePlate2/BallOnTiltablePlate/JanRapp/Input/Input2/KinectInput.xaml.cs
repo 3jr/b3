@@ -54,7 +54,7 @@ namespace BallOnTiltablePlate.JanRapp.Input2
         {
             if (Kinect.Runtime.Kinects.Count == 0 || Kinect.Runtime.Kinects[0].Status != Kinect.KinectStatus.Connected)
             {
-                MessageBox.Show("Kinect[0] not (properly) connected.");
+                MessageBox.Show("Kinect[0] not (properly) connected. Kinect Status: " + Kinect.Runtime.Kinects[0].Status.ToString());
                 this.IsEnabled = false;
             }
             else

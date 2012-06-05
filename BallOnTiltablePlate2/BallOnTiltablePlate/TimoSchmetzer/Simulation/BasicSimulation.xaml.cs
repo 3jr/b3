@@ -90,7 +90,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             #endregion
 
             DateTime now = DateTime.Now;
-            Update((now - lastUpdateTime).TotalSeconds);
+            Update(1e0/3e1);
 
             //System.Diagnostics.Debug.WriteLine("Calc" + Position);
             //System.Diagnostics.Debug.WriteLine("Send" + PositionQueue.ElementAt(0));

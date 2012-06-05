@@ -70,18 +70,28 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             if (!newPosition.HasNaN())
             {
-
-                SoX.NextStep(newPosition.X, lastTilt.X, deltaTime);
-                SoY.NextStep(newPosition.Y, lastTilt.Y, deltaTime);
-
-                Velocity = new Vector(SoX.xh[1], SoY.xh[1]);
-                Position = newPosition;
+                for (int i = 0; i < 100; i++)
+                {
+                    SoX.NextStep(newPosition.X, lastTilt.X, deltaTime/100);
+                    SoY.NextStep(newPosition.Y, lastTilt.Y, deltaTime/100);
+                }
             }
+            Velocity = new Vector(SoX.xh[1], SoY.xh[1]);
+            Position = new Vector(SoX.xh[0], SoY.xh[0]);
+
             ValuesValid = !Position.HasNaN() && !Velocity.HasNaN();
 
             PositionDisplay.Text = "Position: " + Position.ToString();
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
             DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
+            xhDispaly.Text = SoX.xh[0] + "\n\r" +
+                SoX.xh[1] + "\n\r" +
+                SoX.xh[2] + "\n\r" +
+                SoX.xh[3] + "\n\r" +
+                SoY.xh[0] + "\n\r" +
+                SoY.xh[1] + "\n\r" +
+                SoY.xh[2] + "\n\r" +
+                SoY.xh[3] + "\n\r";
 
             if (this.IsVisible)
                 History.FeedUpdate(Position, Velocity);
@@ -105,7 +115,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                     //if (Math.Abs(tilt.Y) > GlobalSettings.Instance.MaxTilt)
                     //    tilt.Y = GlobalSettings.Instance.MaxTilt * Math.Sign(tilt.Y);
 
-                    Output.SetTilt(tilt);
+                    this.InternalSetTilt(new Vector());
                     if (recording)
                     {
                         diagramcreator.AddPoint("TiltX", new Point(time, tilt.X));
@@ -114,7 +124,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                 }
                 else
                 {
-                    Output.SetTilt(new Vector());
+                    this.InternalSetTilt(new Vector());
                     integral = new Vector();
                 }
             }
@@ -142,8 +152,14 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                 diagramcreator.AddPoint("JugglerTiltX", new Point(time, tiltToAxis.X));
                 diagramcreator.AddPoint("JugglerTiltY", new Point(time, tiltToAxis.Y));
             }
+            this.InternalSetTilt(tiltToAxis);
         }
 
+        public void InternalSetTilt(Vector tilt)
+        {
+            lastTilt = GlobalSettings.Instance.ToValidTilt(tilt);
+            Output.SetTilt(tilt);
+        }
         public void Start()
         {
             Input.DataRecived += (Input_DataRecived);
@@ -229,6 +245,11 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             ReinitialiceStateObservers();
         }
 
+        private void S1UsedInB_Checked_1(object sender, RoutedEventArgs e)
+        {
+            ReinitialiceStateObservers();
+        }
+
         private void ReinitialiceStateObservers()
         {
             var g = gDB.Value;
@@ -251,7 +272,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                {0,  },
                {0,  },
                {0,  },
-               {1,  },
+               {S1UsedInB.IsChecked ?? true ? -s1 : 1,  },
             };
 
             var C = new double[,]{

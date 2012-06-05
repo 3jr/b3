@@ -28,6 +28,7 @@
                     
                     <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime" IsChecked="True"/>
                     <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: "/>
+                    <controls:DoubleBox x:Name="Gravity" Text="g: "/>
                     <TextBlock x:Name="IntegralDisplay"/>
                 </StackPanel>
             </controlsB3:SettingsSaverB3>

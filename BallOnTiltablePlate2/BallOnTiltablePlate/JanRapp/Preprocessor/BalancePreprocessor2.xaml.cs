@@ -70,7 +70,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             Vector newPosition = e.BallPosition;
 
-            double g = 9.81;
+            double g = Gravity.Value;
 
             Vector newEstimationX = new Vector();
             Vector newEstimationY = new Vector();
@@ -116,7 +116,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                     //if (Math.Abs(tilt.Y) > GlobalSettings.Instance.MaxTilt)
                     //    tilt.Y = GlobalSettings.Instance.MaxTilt * Math.Sign(tilt.Y);
 
-                    Output.SetTilt(tilt);
+                    this.InternalSetTilt(tilt);
                     if (recording)
                     {
                         diagramcreator.AddPoint("TiltX", new Point(time, tilt.X));
@@ -125,7 +125,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                 }
                 else
                 {
-                    Output.SetTilt(new Vector());
+                    this.InternalSetTilt(new Vector());
                     integral = new Vector();
                 }
             }
@@ -145,14 +145,19 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
         public void SetTilt(Vector tiltToAxis)
         {
-            lastTilt = GlobalSettings.Instance.ToValidTilt(tiltToAxis);
             IsAutoBalancing = false;
-            Output.SetTilt(tiltToAxis);
             if (recording)
             {
                 diagramcreator.AddPoint("JugglerTiltX", new Point(time, tiltToAxis.X));
                 diagramcreator.AddPoint("JugglerTiltY", new Point(time, tiltToAxis.Y));
             }
+            this.InternalSetTilt(tiltToAxis);
+        }
+
+        public void InternalSetTilt(Vector tilt)
+        {
+            lastTilt = GlobalSettings.Instance.ToValidTilt(tilt);
+            Output.SetTilt(tilt);
         }
 
         public void Start()

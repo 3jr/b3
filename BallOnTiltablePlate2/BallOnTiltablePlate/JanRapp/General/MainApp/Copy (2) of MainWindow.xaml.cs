@@ -24,9 +24,6 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             timer.Tick += (timer_Tick);
         }
 
-        public static Type SelectedInputType() { return ((BallOnTiltablePlate.JanRapp.MainApp.MainWindow)Application.Current.MainWindow).InputList.SelectedValue == null ? null : ((dynamic)Application.Current.MainWindow).InputList.SelectedItem.DataContext.Type; }
-        public static Type SelectedOutputType() { return ((BallOnTiltablePlate.JanRapp.MainApp.MainWindow)Application.Current.MainWindow).OutputList.SelectedValue == null ? null : ((dynamic)Application.Current.MainWindow).OutputList.SelectedItem.DataContext.Type; }
-        public static Type SelectedPreprocessorType() { return ((BallOnTiltablePlate.JanRapp.MainApp.MainWindow)Application.Current.MainWindow).PreprocessorList.SelectedValue == null ? null : ((dynamic)Application.Current.MainWindow).PreprocessorList.SelectedItem.DataContext.Type; }
         private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             settingsCmdMetadata = new Dictionary<object, Tuple<TreeView, string>>()
@@ -45,26 +42,33 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         bool jugglerStarted = false;
         private void AlgorithmList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            tryToKeppPreprocessorModule = true;
             ControlListItems(e.NewValue, e.OldValue, (TreeView)sender, ref jugglerStarted,
-                () =>
-                {
-                    PreprocessorList.ItemsSource = ((dynamic)AlgorithmList.SelectedItem).DataContext.Preprocessors;
+                () => {
+                PreprocessorList.ItemsSource = ((dynamic)AlgorithmList.SelectedItem).DataContext.Preprocessors;
 
-                    if (PreprocessorList.SelectedItem != null)
-                    {
-                        dynamic juggelerInstance = AlgorithmList.SelectedValue;
-                        juggelerInstance.IO = (dynamic)PreprocessorList.SelectedValue;
-                    }
+                if (PreprocessorList.SelectedItem != null)
+                {
+                    dynamic juggelerInstance = AlgorithmList.SelectedValue;
+                    juggelerInstance.IO = (dynamic)PreprocessorList.SelectedValue;
+                }
                 }
             );
+            tryToKeppPreprocessorModule = false;
         }
+        bool tryToKeppPreprocessorModule;
 
         bool preprocessorStarted = false;
         private void PreprocessorList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (tryToKeppPreprocessorModule)
+                if (WasItPossibleTokeepLastModule(PreprocessorList, e.OldValue))
+                    return;
+
+            tryToKeepIOModule = true;
+
             ControlListItems(e.NewValue, e.OldValue, (TreeView)sender, ref preprocessorStarted,
-                () =>
-                {
+                () => {
                     Helper.PreprocessorItemUI item = ((Helper.PreprocessorItemUI)((FrameworkElement)PreprocessorList.SelectedItem).DataContext);
                     InputList.ItemsSource = item.Inputs;
                     OutputList.ItemsSource = item.Outputs;
@@ -77,34 +81,39 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
                     dynamic juggelerInstance = AlgorithmList.SelectedValue;
                     //if (juggelerInstance.IO != preprocessorInstance)
-                    if (!jugglerStarted)
-                        juggelerInstance.IO = (dynamic)preprocessorInstance;
-                    else
-                    {
-                        juggelerInstance.Stop();
-                        juggelerInstance.IO = (dynamic)preprocessorInstance;
-                        juggelerInstance.Start();
-                    }
+                        if (!jugglerStarted)
+                            juggelerInstance.IO = (dynamic)preprocessorInstance;
+                        else
+                        {
+                            juggelerInstance.Stop();
+                            juggelerInstance.IO = (dynamic)preprocessorInstance;
+                            juggelerInstance.Start();
+                        }
                 }
             );
+
+            tryToKeepIOModule = false;
         }
+        bool tryToKeepIOModule;
 
         bool inputStarted = false;
         private void InputList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (tryToKeepIOModule)
+                if (WasItPossibleTokeepLastModule(InputList, e.OldValue))
+                    return;
+
             ControlListItems(e.NewValue, e.OldValue, (TreeView)sender, ref inputStarted,
-                () =>
-                {
+                () => {
                     dynamic preprocessorInstance = PreprocessorList.SelectedValue;
-                    //if (preprocessorInstance.Input != OutputList.SelectedValue)
-                    if (!preprocessorStarted)
-                        preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
-                    else
-                    {
-                        preprocessorInstance.Stop();
-                        preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
-                        preprocessorInstance.Start();
-                    }
+                        if (!preprocessorStarted)
+                            preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                        else
+                        {
+                            preprocessorInstance.Stop();
+                            preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
+                            preprocessorInstance.Start();
+                        }
                 }
             );
         }
@@ -112,27 +121,29 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         bool outputStarted = false;
         private void OutputList_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            if (tryToKeepIOModule)
+                if (WasItPossibleTokeepLastModule(OutputList, e.OldValue))
+                    return;
+
             ControlListItems(e.NewValue, e.OldValue, (TreeView)sender, ref outputStarted,
-                () =>
-                {
+                () => {
                     dynamic preprocessorInstance = PreprocessorList.SelectedValue;
-                    //if (preprocessorInstance.Output != OutputList.SelectedValue)
-                    if (!preprocessorStarted)
-                        preprocessorInstance.Input = (dynamic)InputList.SelectedValue;
-                    else
-                    {
-                        preprocessorInstance.Stop();
-                        preprocessorInstance.Output = (dynamic)OutputList.SelectedValue;
-                        preprocessorInstance.Start();
-                    }
+                        if (!preprocessorStarted)
+                            preprocessorInstance.Output = (dynamic)OutputList.SelectedValue;
+                        else
+                        {
+                            preprocessorInstance.Stop();
+                            preprocessorInstance.Output = (dynamic)OutputList.SelectedValue;
+                            preprocessorInstance.Start();
+                        }
                 }
             );
         }
 
         void ControlListItems(object newValue, object oldValue, TreeView list, ref bool started, Action maintnace)
         {
-            //if (newValue == oldValue)
-            // return;
+            if (newValue == oldValue)
+                return;
 
             if (oldValue != null && started)
                 ((Helper.BPItemUI)((FrameworkElement)oldValue).DataContext).Instance.Stop();
@@ -155,6 +166,46 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                 timer.Stop();
         }
 
+        IEnumerable<TreeViewItem> GetAllModules(TreeView list)
+        {
+            return list.Items.Cast<TreeViewItem>()
+                    .SelectMany(i => i.Items.Cast<TreeViewItem>()) // All Version Items
+                    .Concat(list.Items.Cast<TreeViewItem>()) // All TopLevel Items
+                    ;
+        }
+
+        bool sucessfullyKeeptLastModule = false;
+        bool WasItPossibleTokeepLastModule(TreeView changedList, object previousModule)
+        {
+            if (sucessfullyKeeptLastModule)
+            {
+                return true;
+            }
+
+            if (previousModule != null)
+            {
+                sucessfullyKeeptLastModule = true;
+
+                var sameModuleInNewList = GetAllModules(changedList)
+                    .Where(m => m.DataContext == ((TreeViewItem)previousModule).DataContext)
+                    .SingleOrDefault();
+
+                if (sameModuleInNewList != null)
+                {
+                    sucessfullyKeeptLastModule = true;
+
+                    sameModuleInNewList.IsSelected = true;
+                    if (sameModuleInNewList.Parent is TreeViewItem)
+                        ((TreeViewItem)sameModuleInNewList.Parent).IsExpanded = true;
+
+                    sucessfullyKeeptLastModule = false;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         void timer_Tick(object sender, EventArgs e)
         {
             timer.Interval = TimeSpan.FromSeconds(1 / GlobalSettings.Instance.FPSOfAlgorithm);
@@ -163,10 +214,10 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         public void JugglerTimer()
         {
-            if (timer.IsEnabled)
+            if(timer.IsEnabled)
                 ((dynamic)AlgorithmList.SelectedValue).Update();
         }
-
+        
         private void GlobalSettingsCmdExecuted(object target, ExecutedRoutedEventArgs e)
         {
             if (globalSettingsWindow == null)
@@ -220,7 +271,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            var userchois = MessageBox.Show("Do you want your SettingsSaverSaves to be Backuped?", "",
+            var userchois = MessageBox.Show("Do you want your SettingsSaverSaves to be Backuped?","",
                 MessageBoxButton.YesNoCancel);
 
             switch (userchois)
@@ -251,8 +302,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             base.OnClosed(e);
         }
 
-        Dictionary<object, Tuple<TreeView, string>> settingsCmdMetadata;
-        Dictionary<IControledSystemModule, SettingsWindow> windows = new Dictionary<IControledSystemModule, SettingsWindow>();
+        Dictionary<object,Tuple<TreeView,string>> settingsCmdMetadata;
+        Dictionary<IControledSystemModule, SettingsWindow> windows = new Dictionary<IControledSystemModule,SettingsWindow>();
     }
 
     internal class SettingsWindow : Window

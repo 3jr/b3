@@ -91,7 +91,7 @@ namespace BallOnTiltablePlate.JanRapp.Input2
             stopwatch.Stop();
             //////////////////////////////////////////////////////////////////////////////////////////
 
-            Vector average = new Vector((double)averageX / lenght, (double)averageY / lenght);
+            Vector average = new Vector((double)averageX / ((width - 1) * height), (double)averageY / (width * (height -1)));
 
             //if (!displays.ContainsKey("average"))
             //{

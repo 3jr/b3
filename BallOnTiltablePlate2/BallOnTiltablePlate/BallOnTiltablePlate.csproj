@@ -125,6 +125,9 @@
     <Compile Include="JanRapp\Input\Input2\KinectInput.xaml.cs">
       <DependentUpon>KinectInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Input\TestByHand\TestByHand0_1.xaml.cs">
+      <DependentUpon>TestByHand0_1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Juggler\SequentailMoveTo2.xaml.cs">
       <DependentUpon>SequentailMoveTo2.xaml</DependentUpon>
     </Compile>
@@ -303,6 +306,10 @@
     <Page Include="JanRapp\Input\Input2\KinectInput.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="JanRapp\Input\TestByHand\TestByHand0_1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Juggler\SequentailMoveTo2.xaml">
       <Generator>MSBuild:Compile</Generator>

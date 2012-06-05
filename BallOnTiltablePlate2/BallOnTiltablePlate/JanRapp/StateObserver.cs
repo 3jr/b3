@@ -31,9 +31,13 @@ namespace BallOnTiltablePlate.JanRapp
             this.xh = xInitial;
         }
 
+        DenseVector cache1 = new DenseVector(1);
+        DenseVector cache2 = new DenseVector(1);
         public void NextStep(double y, double u, double deltaTime)
         {
-            NextStep(new DenseVector(1, y), new DenseVector(1, u), deltaTime);
+            cache1[0] = y;
+            cache2[0] = u;
+            NextStep(cache1, cache2, deltaTime);
         }
 
         public void NextStep(double[] y, double[] u, double deltaTime)
@@ -43,7 +47,7 @@ namespace BallOnTiltablePlate.JanRapp
 
         public void NextStep(DenseVector y, DenseVector u, double deltaTime)
         {
-            xh = (A * xh - L * (C * xh - y)) * deltaTime + xh;
+            xh = (A*xh + B*u - L*(C*xh - y)) * deltaTime + xh;
         }
 
         DenseMatrix Sigma

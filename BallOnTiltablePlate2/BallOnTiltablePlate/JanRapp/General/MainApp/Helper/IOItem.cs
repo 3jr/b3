@@ -21,6 +21,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         protected readonly Type type;
         public Type Type { get { return type; } }
 
+        public bool IsProcessor { get { return type.GetInterface("IControledSystemProcessor`1") != null; } }
+        public bool IsPreprocessor { get { return type.GetInterface("IControledSystemPreprocessor") != null; } }
+        public bool IsInput { get { return type.GetInterface("IControledSystemInput") != null; } }
+        public bool IsOutput { get { return type.GetInterface("IControledSystemOutput") != null; } }
+
         public BPItemUI(Type type)
         {
             this.type = type;
@@ -29,8 +34,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             this.instance = new Lazy<IControledSystemModule>(
                 delegate
                 {
-                    AllInitializedBPItemsList.Add(this); 
-                    var createdInstance = (IControledSystemModule)Activator.CreateInstance(type); 
+                    AllInitializedBPItemsList.Add(this);
+                    var createdInstance = (IControledSystemModule)Activator.CreateInstance(type);
                     return createdInstance;
                 }
             );
@@ -62,9 +67,10 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.dll")
                 .Concat(System.IO.Directory.EnumerateFiles(Environment.CurrentDirectory, "*.exe"))
                 .Where(f => IsAssemblyManged(f))
-                .Select(f => {
+                .Select(f =>
+                {
                     try { return Assembly.LoadFrom(f); }
-                    catch { return null; } 
+                    catch { return null; }
                 })
                 .Where(a => a != null)
                 .SelectMany(a => a.GetTypes())
@@ -76,7 +82,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
             PopulateJugglerLists =
                 OrderForTreeView(
                     AllBPItems
-                    //.Where(t => t.Type.GetInterface("IJuggler`1") != null).ToArray();
+                //.Where(t => t.Type.GetInterface("IJuggler`1") != null).ToArray();
                     .Where(i => i is JugglerItemUI)
                 );
         }
@@ -177,11 +183,11 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 .GroupBy(i =>
                     new { i.Info.AuthorFirstName, i.Info.AuthorLastName, i.Info.ItemName }
                     )
-                .OrderBy(g =>g.Key.AuthorFirstName).ThenBy(g => g.Key.AuthorLastName).ThenBy(g => g.Key.ItemName)
+                .OrderBy(g => g.Key.AuthorFirstName).ThenBy(g => g.Key.AuthorLastName).ThenBy(g => g.Key.ItemName)
                 .Select(g => g.ToArray()).ToArray();
 
             var returnList = new List<TreeViewItem>();
-                
+
             foreach (var group in groupedItems)
             {
                 var sorted = group.OrderByDescending(g => g.Info.Version);
@@ -196,8 +202,25 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 returnList.Add(headUI);
             }
 
-            if(returnList.Count > 0)
-                returnList.First().IsSelected = true;
+            if (returnList.Count > 0)
+            {
+                if (((BPItemUI)returnList.First().DataContext).IsInput && MainWindow.SelectedInputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedInputType()))
+                {
+                    returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedInputType()).IsSelected = true;
+                }
+                else if (((BPItemUI)returnList.First().DataContext).IsOutput && MainWindow.SelectedOutputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedOutputType()))
+                {
+                    returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedOutputType()).IsSelected = true;
+                }
+                else if (((BPItemUI)returnList.First().DataContext).IsPreprocessor && MainWindow.SelectedInputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedPreprocessorType()))
+                {
+                    returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedPreprocessorType()).IsSelected = true;
+                }
+                else
+                {
+                    returnList.First().IsSelected = true;
+                }
+            }
 
             return returnList.Select(h => h);
         }
@@ -205,61 +228,79 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
 
     internal class JugglerItemUI : BPItemUI
     {
-        private Lazy<IEnumerable<object>> preprocessors;
-        public IEnumerable<object> Preprocessors { get { return preprocessors.Value; } }
+        private Type preprocessorType;
+        public IEnumerable<object> Preprocessors
+        {
+            get
+            {
+                Lazy<IEnumerable<object>> preprocessors = new Lazy<IEnumerable<object>>(
+                     () =>
+                     OrderForTreeView(
+                     BPItemUI.AllBPItems
+                         //.Where(t => t.Type.GetInterface("IPreprocessorIO`2") != null)
+                     .Where(t => t is PreprocessorItemUI)
+                     .Where(t => preprocessorType.IsAssignableFrom(t.Type))
+                         //.Select(t => (PreprocessorItemUI)t)
+                     )
+                     );
+                return preprocessors.Value;
+            }
+        }
 
         public JugglerItemUI(Type type)
             : base(type)
         {
-            Type preprocessorType = type.GetInterface("IControledSystemProcessor`1").GetGenericArguments()[0];
+            preprocessorType = type.GetInterface("IControledSystemProcessor`1").GetGenericArguments()[0];
 
-            preprocessors = new Lazy<IEnumerable<object>>(
-                () => 
-                    OrderForTreeView(
-                        BPItemUI.AllBPItems
-                        //.Where(t => t.Type.GetInterface("IPreprocessorIO`2") != null)
-                        .Where(t => t is PreprocessorItemUI)
-                        .Where(t => preprocessorType.IsAssignableFrom(t.Type))
-                        //.Select(t => (PreprocessorItemUI)t)
-                    )
-            );
+
         }
     }
 
     internal class PreprocessorItemUI : BPItemUI
     {
-        private Lazy<IEnumerable<object>> inputs;
-        public IEnumerable<object> Inputs { get { return inputs.Value; } }
+        private Type input;
+        public IEnumerable<object> Inputs
+        {
+            get
+            {
+                Lazy<IEnumerable<object>> inputs = new Lazy<IEnumerable<object>>(
+                    () =>
+                    OrderForTreeView(
+                    BPItemUI.AllBPItems
+                    .Where(t => input.IsAssignableFrom(t.Type))
+                    .Select(t => t)
+                    )
+                    );
+                return inputs.Value;
+            }
+        }
 
-        private Lazy<IEnumerable<object>> outputs;
-        public IEnumerable<object> Outputs { get { return outputs.Value; } }
+        private Type output;
+        public IEnumerable<object> Outputs
+        {
+            get
+            {
+                Lazy<IEnumerable<object>> outputs = new Lazy<IEnumerable<object>>(
+                    () =>
+                    OrderForTreeView(
+                    BPItemUI.AllBPItems
+                    .Where(t => output.IsAssignableFrom(t.Type))
+                    .Select(t => t)
+                    )
+                    );
+                return outputs.Value;
+            }
+        }
 
         public PreprocessorItemUI(Type type)
             : base(type)
         {
             Type[] genericArguments = type.GetInterface("IControledSystemPreprocessorIO`2").GetGenericArguments();
-            Type input = genericArguments[0];
-            Type output = genericArguments[1];
+            input = genericArguments[0];
+            output = genericArguments[1];
 
             Debug.Assert(genericArguments.Length == 2);
 
-            inputs = new Lazy<IEnumerable<object>>(
-                () => 
-                    OrderForTreeView(
-                        BPItemUI.AllBPItems
-                        .Where(t => input.IsAssignableFrom(t.Type))
-                        .Select(t => t)
-                    )
-            );
-
-            outputs = new Lazy<IEnumerable<object>>(
-                () =>
-                    OrderForTreeView(
-                        BPItemUI.AllBPItems
-                        .Where(t => output.IsAssignableFrom(t.Type))
-                        .Select(t => t)
-                    )
-            );
         }
     }
 }

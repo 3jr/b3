@@ -24,8 +24,9 @@ namespace JRapp.WPF
     {
         class DataPoint : Canvas
         {
-            Ellipse visual = new Ellipse() { Width = 5, Height = 5, Fill = Brushes.Gray };
-            Line velocity = new Line() { Stroke = Brushes.Blue };
+            Ellipse visual = new Ellipse() { Width = 5, Height = 5,
+                Fill = Brushes.Red, Margin = new Thickness(-3.0, -3.0, -0.0, -0.0) };
+            Line velocity = new Line() { Stroke = Brushes.Red };
             //Line acceleration = new Line() { Stroke = Brushes.Green };
 
             public DataPoint()
@@ -34,6 +35,18 @@ namespace JRapp.WPF
                 this.Children.Add(velocity);
                 this.velocity.X1 = this.velocity.Y1 = 0.0;
                 //this.Children.Add(acceleration);
+            }
+
+            public void ChangeColorToNormal()
+            {
+                visual.Fill = Brushes.Gray;
+                velocity.Stroke = Brushes.Blue;
+            }
+
+            public void ChangeColorToRed()
+            {
+                visual.Fill = Brushes.Red;
+                velocity.Stroke = Brushes.Red;
             }
 
             public void SetValues(Vector position, Vector velocity)
@@ -95,15 +108,19 @@ namespace JRapp.WPF
 
         public void FeedUpdate(Vector position, Vector velocity)
         {
-            DataPoint p = dataPoints[nextDataPoint];
-            p.SetValues(GetDisplayPos(position), velocity);
+            dataPoints[nextDataPoint].ChangeColorToNormal();
+
             nextDataPoint++;
             nextDataPoint %= dataPoints.Length;
+
+            DataPoint p = dataPoints[nextDataPoint];
+            p.SetValues(GetDisplayPos(position), velocity);
+            p.ChangeColorToRed();
         }
 
-        Vector GetDisplayPos(Vector platePos)
+        public Vector GetDisplayPos(Vector platePos)
         {
-            Vector halfeArea = new Vector(Container.Width / 2, Container.Height / 2);
+            Vector halfeArea = new Vector(Container.ActualWidth / 2, Container.ActualHeight/ 2);
             platePos.X /= GlobalSettings.Instance.HalfPlateSize;
             platePos.Y /= GlobalSettings.Instance.HalfPlateSize;
             platePos.X *= halfeArea.X;
@@ -113,6 +130,21 @@ namespace JRapp.WPF
             platePos.Y = Container.Height - platePos.Y;
 
             return platePos;
+        }
+
+        public Vector GetPlatePos(Vector displayPos)
+        {
+            Vector halfeArea = new Vector(Container.ActualWidth / 2, Container.ActualHeight / 2);
+            displayPos.Y = Container.ActualHeight - displayPos.Y;
+            displayPos -= halfeArea;
+
+            displayPos.X /= halfeArea.X;
+            displayPos.Y /= halfeArea.Y;
+
+            displayPos.X *= GlobalSettings.Instance.HalfPlateSize;
+            displayPos.Y *= GlobalSettings.Instance.HalfPlateSize;
+
+            return displayPos;
         }
     }
 }

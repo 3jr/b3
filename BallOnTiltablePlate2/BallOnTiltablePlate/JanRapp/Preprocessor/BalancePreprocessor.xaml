@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
              xmlns:controlsB3="clr-namespace:JRapp.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="300" Width="300">
+             d:DesignHeight="709" Width="300">
     <UserControl.Resources>
         <RoutedCommand x:Key="ToogleRecordCmd">
             <RoutedCommand.InputGestures>
@@ -25,8 +25,7 @@
                     <controls:DoubleBox x:Name="IntegralFactor" Text="_Integral: " />
                     <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(_Differencial): " />
                     <controls:DoubleBox x:Name="IntegralOfAbsenseFactor" Text="Integral of _Absense: " />
-                    <controls:VectorBox x:Name="LFactor" Text="L: "/>
-                    
+
                     <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime" IsChecked="True"/>
                     <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: "/>
                     <TextBlock x:Name="IntegralDisplay"/>
