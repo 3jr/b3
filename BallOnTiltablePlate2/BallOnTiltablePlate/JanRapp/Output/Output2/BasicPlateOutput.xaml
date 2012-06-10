@@ -61,10 +61,12 @@
     <WrapPanel DockPanel.Dock="Top">
             <StackPanel>
                 <Button x:Name="ToggleConntectButton" Content="Connect" Command="{StaticResource ToggleConnectCmd}" ToolTip="Ctrl+D"/>
+                <controlsB3:SettingsSaverB3 x:Name="COM">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="SerialPortNumber:  _COM" />
                     <TextBox x:Name="SerialPortNumber" Text="4" Width="25" />
                 </StackPanel>
+                </controlsB3:SettingsSaverB3>
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="EnableControlButton" Content="Enable Controll" Command="{StaticResource EnableControlCmd}" ToolTip="Ctrl+E"/>
                     <CheckBox x:Name="XEnabled" Content="_X Enabled  " IsChecked="True" Unchecked="XEnabled_CheckedChanged" Checked="XEnabled_CheckedChanged"/>

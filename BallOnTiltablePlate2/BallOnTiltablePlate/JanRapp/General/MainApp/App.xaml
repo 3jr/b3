@@ -36,10 +36,14 @@
                 <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave"
     				Value="Value"/>
             </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave" 
+    				Value="Text"/>
+            </Style>
             <Style TargetType="{x:Type CheckBox}">
                 <Setter Property="JRappWPF:SettingsSaver.PropertiesToSave"    
     				Value="IsChecked"/>
-                <!--Old SettingSaver-->
+            <!--Old SettingSaver-->
                 <Setter Property="controls:SettingSaver.PropertysToSave"    
     				Value="IsChecked"/>
             </Style>
