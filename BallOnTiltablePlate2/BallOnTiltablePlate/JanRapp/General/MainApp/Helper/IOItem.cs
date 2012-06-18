@@ -202,25 +202,25 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
                 returnList.Add(headUI);
             }
 
-            if (returnList.Count > 0)
-            {
-                if (((BPItemUI)returnList.First().DataContext).IsInput && MainWindow.SelectedInputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedInputType()))
-                {
-                    returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedInputType()).IsSelected = true;
-                }
-                else if (((BPItemUI)returnList.First().DataContext).IsOutput && MainWindow.SelectedOutputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedOutputType()))
-                {
-                    returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedOutputType()).IsSelected = true;
-                }
-                else if (((BPItemUI)returnList.First().DataContext).IsPreprocessor && MainWindow.SelectedInputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedPreprocessorType()))
-                {
-                    returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedPreprocessorType()).IsSelected = true;
-                }
-                else
-                {
-                    returnList.First().IsSelected = true;
-                }
-            }
+            //if (returnList.Count > 0)
+            //{
+            //    if (((BPItemUI)returnList.First().DataContext).IsInput && MainWindow.SelectedInputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedInputType()))
+            //    {
+            //        returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedInputType()).IsSelected = true;
+            //    }
+            //    else if (((BPItemUI)returnList.First().DataContext).IsOutput && MainWindow.SelectedOutputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedOutputType()))
+            //    {
+            //        returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedOutputType()).IsSelected = true;
+            //    }
+            //    else if (((BPItemUI)returnList.First().DataContext).IsPreprocessor && MainWindow.SelectedInputType() != null && returnList.Any(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedPreprocessorType()))
+            //    {
+            //        returnList.First(t => ((BPItemUI)t.DataContext).Type == MainWindow.SelectedPreprocessorType()).IsSelected = true;
+            //    }
+            //    else
+            //    {
+            //        returnList.First().IsSelected = true;
+            //    }
+            //}
 
             return returnList.Select(h => h);
         }

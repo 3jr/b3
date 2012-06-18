@@ -15,7 +15,7 @@
         x:ClassModifier="internal"
         mc:Ignorable="d">
     <Window.Resources>
-        <RoutedCommand x:Key="JugglerSettings">
+        <RoutedCommand x:Key="ProcessorSettings">
             <RoutedCommand.InputGestures>
                 <KeyGesture>Control+J</KeyGesture>
             </RoutedCommand.InputGestures>
@@ -46,7 +46,7 @@
                         CanExecute="SettingsCmdCanExecute"
                         Executed ="SettingsCmdExecuted"/>
                         <!--Executed="PreprocessorSettingsCmdExecuted" />-->
-        <CommandBinding Command="{StaticResource ResourceKey=JugglerSettings}" 
+        <CommandBinding Command="{StaticResource ResourceKey=ProcessorSettings}" 
                         CanExecute="SettingsCmdCanExecute"
                         Executed ="SettingsCmdExecuted"/>
                         <!--Executed="JugglerSettingsCmdExecuted" />-->
@@ -68,7 +68,7 @@
             </MenuItem>
             <MenuItem Header="_Settings">
                 <MenuItem Command="{StaticResource PreprocessorSettings}" Header="_Preprocessor" />
-                <MenuItem Command="{StaticResource JugglerSettings}" Header="Juggler _Algorithm" />
+                <MenuItem Command="{StaticResource ProcessorSettings}" Header="Pr_ocessor" />
                 <MenuItem Command="{StaticResource InputSettings}" Header="_Input" />
                 <MenuItem Command="{DynamicResource OutputSettings}" Header="_Output" />
                 <Separator />
@@ -80,19 +80,18 @@
                     Width="75"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
-                    Command="{StaticResource JugglerSettings}"
+                    Command="{StaticResource ProcessorSettings}"
                     Content="Settings"
-                    ToolTip="Algorithm Settings (Ctrl+J)" />
+                    ToolTip="Processor Settings (Ctrl+J)" />
             <Label HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Content="Juggler _Algorithm"
-                   Target="{Binding ElementName=AlgorithmList}" />
+                   Content="Pr_ocessor"
+                   Target="{Binding ElementName=ProcessorList}" />
         </Grid>
-        <TreeView x:Name="AlgorithmList"
+        <TreeView x:Name="ProcessorList"
                   Margin="7,0" 
-                  ItemsSource="{x:Static helper:BPItemUI.PopulateJugglerLists}"
-                  SelectedValuePath="DataContext.Instance"
-                  SelectedItemChanged="AlgorithmList_SelectionChanged"
+                  SelectedValuePath="DataContext"
+                  SelectedItemChanged="ProcessorList_SelectionChanged"
                   />
         <Grid Margin="7">
             <Button x:Name="PreprocessorSettingButton"
@@ -111,7 +110,7 @@
         </Grid>
         <TreeView x:Name="PreprocessorList"
                  Margin="7,0"
-                  SelectedValuePath="DataContext.Instance"
+                  SelectedValuePath="DataContext"
                   SelectedItemChanged="PreprocessorList_SelectionChanged"
                  />
         <Grid Margin="7">
@@ -130,7 +129,7 @@
         </Grid>
         <TreeView x:Name="InputList"
                  Margin="7,0"
-                 SelectedValuePath="DataContext.Instance"
+                 SelectedValuePath="DataContext"
                  SelectedItemChanged="InputList_SelectionChanged"
                  />
         <Grid Margin="7">
@@ -149,7 +148,7 @@
         </Grid>
         <TreeView x:Name="OutputList"
                  Margin="7,0"
-                  SelectedValuePath="DataContext.Instance"
+                  SelectedValuePath="DataContext"
                   SelectedItemChanged="OutputList_SelectionChanged"
                  />
     </StackPanel>

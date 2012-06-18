@@ -40,10 +40,10 @@ namespace JRapp.WPF
         private string GetSaveFolder()
         {
             FrameworkElement current = (FrameworkElement)this.Parent;
-            IEnumerable<BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI> items;
+            IEnumerable<BallOnTiltablePlate.TimoSchmetzer.MainApp.ControlledSystemItem> items;
             while (true)
             {
-                items = BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI.AllInitializedBPItems.Where(i => i.Type == current.GetType());
+                items = BallOnTiltablePlate.TimoSchmetzer.MainApp.ControlledSystemItems.CSItems.Where(i => i.Type == current.GetType());
                 if (items.Count() > 0)
                     break;
 
@@ -54,7 +54,7 @@ namespace JRapp.WPF
 
             var item = items.First();
 
-            return GlobalSettings.ItemSettingsFolder(item.Info);
+            return GlobalSettings.ItemSettingsFolder(item.Attribute);
         }
 
         public bool DesignMode
