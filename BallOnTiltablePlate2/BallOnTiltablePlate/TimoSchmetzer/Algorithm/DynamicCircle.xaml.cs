@@ -57,7 +57,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
                 vs *= outputorthagonalvelocityfactor;
 
                 var tilt = VelocityFactor.Value*( IO.Velocity -vs) + PositionFactor.Value* IO.Position;
-
+                if (double.IsNaN(Pos.X))
+                    tilt = new Vector(0.1, 0.1);
                 IO.SetTilt(tilt);
             }
         }
