@@ -124,21 +124,21 @@ namespace BallOnTiltablePlate.JanRapp.Controls
         private string GetSaveFolder()
         {
             FrameworkElement current = (FrameworkElement)this.Parent;
-            IEnumerable<BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI> items;
+            IEnumerable<BallOnTiltablePlate.TimoSchmetzer.MainApp.ControlledSystemItem> items;
             while (true)
             {
-                items = BallOnTiltablePlate.JanRapp.MainApp.Helper.BPItemUI.AllInitializedBPItems.Where(i => i.Instance == current);
+                items = BallOnTiltablePlate.TimoSchmetzer.MainApp.ControlledSystemItems.CSItems.Where(i => i.Type == current.GetType());
                 if (items.Count() > 0)
                     break;
 
-                current = (FrameworkElement)current.Parent;
+                current = current.Parent as FrameworkElement;
                 if (current == null)
-                    throw new InvalidOperationException("SettingsSaver must be used in the context of an IBallOnPlateItem of the BallOnTiltablePlate2 Project with the JanRapp.MainApp.MainWindow as Application.Current.MainWindow and BPItems must be loaded");
+                    return string.Empty; // throw new InvalidOperationException("SettingsSaverB3 must be used in the context of an IBallOnPlateItem of the BallOnTiltablePlate2 Project with the JanRapp.MainApp.MainWindow as Application.Current.MainWindow and BPItems must be loaded");
             }
 
             var item = items.First();
 
-            return IO.Path.Combine(GlobalSettings.ItemSettingsFolder(item.Info), "SettingSaver");
+            return IO.Path.Combine(GlobalSettings.ItemSettingsFolder(item.Attribute), "SettingSaver");
         }
 
         IEnumerable<FrameworkElement> GetControllsToSave()
