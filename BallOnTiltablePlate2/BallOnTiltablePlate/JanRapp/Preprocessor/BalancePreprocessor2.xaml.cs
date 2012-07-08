@@ -22,6 +22,12 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     [ControledSystemModuleInfo("Jan","Rapp", "Balance Preprocessor", "2.0")]
     public partial class BalancePreprocessor2 : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
     {
+        public BalancePreprocessor2()
+        {
+            InitializeComponent();
+            lastTicks = DateTime.Now.Ticks;
+        }
+
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 
         public Vector Position { get; private set; }
@@ -37,12 +43,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         public FrameworkElement SettingsUI
         {
             get { return this; }
-        }
-
-        public BalancePreprocessor2()
-        {
-            InitializeComponent();
-            lastTicks = DateTime.Now.Ticks;
         }
 
         Vector integral;

@@ -85,13 +85,13 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
             DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
             xhDispaly.Text = SoX.xh[0] + "\n\r" +
-                SoX.xh[1] + "\n\r" +
-                SoX.xh[2] + "\n\r" +
-                SoX.xh[3] + "\n\r" +
-                SoY.xh[0] + "\n\r" +
-                SoY.xh[1] + "\n\r" +
-                SoY.xh[2] + "\n\r" +
-                SoY.xh[3] + "\n\r";
+                SoX.xh[1] + "\n" +
+                SoX.xh[2] + "\n" +
+                SoX.xh[3] + "\n" +
+                SoY.xh[0] + "\n" +
+                SoY.xh[1] + "\n" +
+                SoY.xh[2] + "\n" +
+                SoY.xh[3] + "\n";
 
             if (this.IsVisible)
                 History.FeedUpdate(Position, Velocity);
@@ -109,13 +109,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
                     IntegralDisplay.Text = "Integral: " + integral;
 
-                    //if (Math.Abs(tilt.X) > GlobalSettings.Instance.MaxTilt)
-                    //    tilt.X = GlobalSettings.Instance.MaxTilt * Math.Sign(tilt.X);
-
-                    //if (Math.Abs(tilt.Y) > GlobalSettings.Instance.MaxTilt)
-                    //    tilt.Y = GlobalSettings.Instance.MaxTilt * Math.Sign(tilt.Y);
-
-                    this.InternalSetTilt(new Vector());
+                    this.InternalSetTilt(tilt);
                     if (recording)
                     {
                         diagramcreator.AddPoint("TiltX", new Point(time, tilt.X));

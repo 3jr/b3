@@ -72,9 +72,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\MathNet.Numerics.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
     <Reference Include="Microsoft.Research.Kinect, Version=1.0.0.45, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -216,6 +213,9 @@
     </Compile>
     <Compile Include="JanRapp\Output\TestOutput.xaml.cs">
       <DependentUpon>TestOutput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Preprocessor\BalancePreprocessor2SO.xaml.cs">
+      <DependentUpon>BalancePreprocessor2SO.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Preprocessor\BasicPreprocessor.xaml.cs">
       <DependentUpon>BasicPreprocessor.xaml</DependentUpon>
@@ -415,6 +415,10 @@
     <Page Include="JanRapp\Output\TestOutput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="JanRapp\Preprocessor\BalancePreprocessor2SO.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JanRapp\Preprocessor\BasicPreprocessor.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -531,6 +535,35 @@
     <Content Include="Resources\Microsoft.Research.Kinect.dll" />
     <Content Include="Resources\WiimoteLib.dll" />
     <Content Include="Resources\zlib.net.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>6</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

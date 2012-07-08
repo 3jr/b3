@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Preprocessor.BalancePreprocessor2SO"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
+             xmlns:controlsB3="clr-namespace:JRapp.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="675" Width="300">
+    <UserControl.Resources>
+        <RoutedCommand x:Key="ToogleRecordCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+R</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ToogleRecordCmd}" Executed="ToogleRecordCmd_Executed"/>
+    </UserControl.CommandBindings>
+    <StackPanel>
+        <GroupBox Header="PID Ball Balance">
+            <controlsB3:SettingsSaverB3>
+                <StackPanel>
+                    <controls:DoubleBox x:Name="PositionFactor" Text="_Position: " />
+                    <controls:DoubleBox x:Name="IntegralFactor" Text="_Integral: " />
+                    <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(_Differencial): " />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Current Integral Value:</TextBlock>
+                        <TextBlock x:Name="IntegralDisplay"/>
+                    </StackPanel>
+                    <controls:VectorBox x:Name="LFactor" Text="L: " ValueChanged="SoLFactor_ValueChanged"/>
+                    <controls:DoubleBox x:Name="Gravity" Text="g: " ValueChanged="SoGFactor_ValueChanged"/>
+                    <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: "/>
+                </StackPanel>
+            </controlsB3:SettingsSaverB3>
+        </GroupBox>
+        <controls:VectorBox x:Name="TargetPositionVecBox" Text="Target Position"/>
+        <CheckBox x:Name="IsAutoBalancingOnCheckBox" Content="AutoBalancing On"/>
+        <GroupBox Header="Data">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Position:</TextBlock>
+                    <TextBlock x:Name="PositionDisplay" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Velocity:</TextBlock>
+                    <TextBlock x:Name="VelocityDisplay" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>DeltaTime:</TextBlock>
+                    <TextBlock x:Name="DeltaTimeDisplay"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Reset _Pevious Data" Click="ResetButton_Click"/>
+                    <Button Command="{StaticResource ToogleRecordCmd}" x:Name="ToggleReccordBtn" Content="Record" ToolTip="Ctrl+R"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <controlsB3:HistoryVisualizer x:Name="History"/>
+    </StackPanel>
+</UserControl>

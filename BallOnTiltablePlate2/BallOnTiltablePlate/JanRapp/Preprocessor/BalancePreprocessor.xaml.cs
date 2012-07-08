@@ -55,8 +55,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         double integralOfAbsense;
         double deltaTime;
         long lastTicks;
-
-        Vector lastPosition;
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
             if (Position.HasNaN() && !e.BallPosition.HasNaN())

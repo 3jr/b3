@@ -71,6 +71,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
             CosMaxTilt.Width = CosMaxTilt.Height = cosMaxTilt * 2;
             Canvas.SetTop(CosMaxTilt, nextPositionInput.Width / 2 - cosMaxTilt);
             Canvas.SetLeft(CosMaxTilt, nextPositionInput.Width / 2 - cosMaxTilt);
+
+            IO.IsAutoBalancing = true;
         }
 
         public void Stop() { }
