@@ -150,7 +150,9 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             if (this.Position.HasNaN() && !newBallPos.HasNaN())
             {
                 this.SoX.xh[0] = newBallPos.X;
+                this.SoX.xh[1] = 0;
                 this.SoY.xh[0] = newBallPos.Y;
+                this.SoY.xh[1] = 0;
             }
 
             double deltaTime = StaticPeriod.Value;
@@ -159,10 +161,16 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             {
                 this.SoX.NextStep(newBallPos.X, lastTilt.X, deltaTime);
                 this.SoY.NextStep(newBallPos.Y, lastTilt.Y, deltaTime);
+
+                this.Velocity = new Vector(this.SoX.xh[1], SoY.xh[1]);
+                this.Position = newBallPos; // new Vector(this.SoX.xh[0], SoY.xh[0]);
+            }
+            else 
+            {
+                this.Velocity = VectorUtil.NaNVector;
+                this.Position = VectorUtil.NaNVector;
             }
 
-            this.Velocity = new Vector(this.SoX.xh[1], SoY.xh[1]);
-            this.Position = new Vector(this.SoX.xh[0], SoY.xh[0]);
 
             this.ValuesValid = !this.Position.HasNaN() && !this.Velocity.HasNaN();
 
@@ -209,7 +217,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             var B = new double[,]{
                {0,  },
-               {g,  },
+               {-g,  },
             };
 
             var C = new double[,]{

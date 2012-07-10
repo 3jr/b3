@@ -61,6 +61,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
                     tilt = new Vector(0.1, 0.1);
                 IO.SetTilt(tilt);
             }
+            else
+            {
+                IO.SetTilt(BallOnTiltablePlate.JanRapp.Utilities.VectorUtil.ZeroVector);
+            }
         }
         private void InverseSignCmd_Executed(object sender, ExecutedRoutedEventArgs e)
         {

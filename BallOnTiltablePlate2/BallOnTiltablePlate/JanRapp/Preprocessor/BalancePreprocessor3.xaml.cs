@@ -246,7 +246,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
         private void ReinitialiceStateObservers()
         {
-            var g = gDB.Value;
+            var g = -gDB.Value;
             var s1 = SDB.Value.X;
             var s2 = SDB.Value.Y;
 
