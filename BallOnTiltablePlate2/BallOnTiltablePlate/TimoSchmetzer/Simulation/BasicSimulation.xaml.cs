@@ -17,6 +17,8 @@ using BallOnTiltablePlate.JanRapp.Utilities;
 using BallOnTiltablePlate.TimoSchmetzer.Utilities;
 using System.Reflection;
 using System.Diagnostics;
+using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 {
@@ -135,6 +137,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             lastUpdateTime = now;
         }
 
+        ObservableDataSource<Point> sourceX = null;
+        ObservableDataSource<Point> sourceY = null;
+
         public void Update(double deltaSeconds)
         {
             if (PhysicsCalculatorList.SelectedItem != null)
@@ -147,6 +152,34 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 {
                     AddDataToDiagramCreator();
                 }
+                #region D3
+                if (D3Diagram.IsExpanded)
+                {
+                    if (sourceX == null)
+                    {
+                        #region ddd init
+
+                        // Create second source
+                        sourceX = new ObservableDataSource<Point>();
+                        // Set identity mapping of point in collection to point on plot
+                        sourceX.SetXYMapping(p => p);
+
+                        // Create third source
+                        sourceY = new ObservableDataSource<Point>();
+                        // Set identity mapping of point in collection to point on plot
+                        sourceY.SetXYMapping(p => p);
+
+                        // Add all three graphs. Colors are not specified and chosen random
+                        plotter.AddLineGraph(sourceX, System.Windows.Media.Color.FromRgb(255, 0, 0), 2, "PositionX");
+                        plotter.AddLineGraph(sourceY, System.Windows.Media.Color.FromRgb(0, 0, 255), 2, "PositionY");
+                        #endregion
+                    }
+                    sourceX.AppendAsync(Dispatcher, new Point(time, Position.X));
+                    sourceY.AppendAsync(Dispatcher, new Point(time, Position.Y));
+                }
+                else if (sourceX != null)
+                { sourceX.Collection.Clear(); sourceY.Collection.Clear(); }
+                #endregion
             }
         }
 

@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:d3="clr-namespace:Microsoft.Research.DynamicDataDisplay;assembly=DynamicDataDisplay"
              xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
              xmlns:controlsB3="clr-namespace:JRapp.WPF"
              xmlns:JRappWPF="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
@@ -67,6 +68,17 @@
     </UserControl.CommandBindings>
     <WrapPanel Orientation="Vertical">
         <Visualizer:Visualizer3D Height="300" Width="300" x:Name="Visualizer3DCtrl" Margin="8"/>
+        <Expander Name="D3Diagram" Header="D_3Diagram" Margin="8">
+            <StackPanel MaxHeight="250" MaxWidth="600" Height="250" Width="600">
+                <ScrollViewer VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Visible">
+                <d3:ChartPlotter Name="plotter" Margin="10,10,20,10">
+                    <d3:Header FontFamily="Arial" Content="D3Diagram"/>
+                    <d3:VerticalAxisTitle FontFamily="Arial" Content="Value"/>
+                    <d3:HorizontalAxisTitle FontFamily="Arial" Content="Time"/>
+                </d3:ChartPlotter>
+            </ScrollViewer>
+            </StackPanel>
+        </Expander>
         <Grid x:Name="C1">
             <WrapPanel>
                 <Button Command="{StaticResource ToogleRunningCmd}" x:Name="ToogelRunningBtn" Content="Play" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+P"/>
