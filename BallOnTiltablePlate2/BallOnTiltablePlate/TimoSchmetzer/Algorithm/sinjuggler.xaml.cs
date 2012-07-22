@@ -32,12 +32,13 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
 
         public void Start()
         {
-            watch.Start();
+            time = 0;
+            //watch.Start();
         }
 
         public void Stop()
         {
-            watch.Stop();
+            //watch.Stop();
         }
 
         public SinJuggler()
@@ -45,16 +46,27 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
             InitializeComponent();
         }
 
-        Stopwatch watch = new Stopwatch();
+        //Stopwatch watch = new Stopwatch();
+        double time = 0;
+
+        private void ResetTimerCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            time = 0;
+            //watch.Reset();
+        }
 
         public void Update()
         {
+            //System.Diagnostics.Debug.WriteLine(watch.Elapsed.TotalSeconds);
             if (IO.ValuesValid)
             {
-                var tilt = new Vector(Xa.Value * Math.Sin(Xb.Value * (watch.Elapsed.TotalSeconds - Xc.Value)), Ya.Value * Math.Sin(Yb.Value * (watch.Elapsed.TotalSeconds - Yc.Value)));
+                var tilt = new Vector(Xa.Value * Math.Sin(Xb.Value * (time - Xc.Value)), Ya.Value * Math.Sin(Yb.Value * (time - Yc.Value)));
 
                 IO.SetTilt(tilt);
             }
+            time += UpdateTime.Value;
+            //if (!watch.IsRunning)
+            //    watch.Start();
         }
     }
 }

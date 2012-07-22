@@ -18,7 +18,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Timo", "Schmetzer", "LissajousJuggler", "0.0")]
+    [ControledSystemModuleInfo("Timo", "Schmetzer", "LissajousJuggler", "0.1")]
     public partial class LissajousJuggler : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
@@ -32,12 +32,11 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
 
         public void Start()
         {
-            watch.Start();
+            time = 0;
         }
 
         public void Stop()
         {
-            watch.Stop();
         }
 
         public LissajousJuggler()
@@ -45,15 +44,34 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
             InitializeComponent();
         }
 
-        Stopwatch watch = new Stopwatch();
+        double time = 0;
+
+        private void ResetTimerCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            time = 0;
+            UpdateValues();
+        }
 
         public void Update()
         {
             if (IO.ValuesValid)
             {
-                var tilt = new Vector(IO.Position.X * Math.Pow(Xk.Value, 2), IO.Position.Y * Math.Pow(Yk.Value, 2));
-                IO.SetTilt(tilt);
+                UpdateValues();
+                IO.SetTilt(Tilt.Value);
             }
+            time += UpdateTime.Value;
+        }
+
+        private void Param_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            UpdateValues();
+        }
+        private void UpdateValues() 
+        {
+            Position.Value = new Vector(Xa.Value * Math.Sin(Xw.Value * time - Xc.Value), Ya.Value * Math.Sin(Yw.Value * time - Yc.Value));
+            Velocity.Value = new Vector(Xa.Value * Xw.Value * Math.Cos(Xw.Value * time - Xc.Value), Ya.Value * Yw.Value * Math.Cos(Yw.Value * time - Yc.Value));
+            Acceleration.Value = new Vector((-1) * Xa.Value * Xw.Value * Xw.Value * Math.Sin(Xw.Value * time - Xc.Value), (-1) * Ya.Value * Yw.Value * Yw.Value * Math.Sin(Yw.Value * time - Yc.Value));
+            Tilt.Value = Acceleration.Value * (5.0 / 3.0) / Gravity.Value;
         }
     }
 }

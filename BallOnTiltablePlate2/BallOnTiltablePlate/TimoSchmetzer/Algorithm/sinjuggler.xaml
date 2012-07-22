@@ -7,6 +7,16 @@
              xmlns:controlsB3="clr-namespace:JRapp.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+<UserControl.Resources>
+        <RoutedCommand x:Key="ResetTimerCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+R</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ResetTimerCmd}" Executed="ResetTimerCmd_Executed" />
+    </UserControl.CommandBindings>
     <controlsB3:SettingsSaverB3 x:Name="SinJugglerSaver">
         <WrapPanel>
             <StackPanel>
@@ -21,6 +31,8 @@
                 <controls:DoubleBox x:Name="Yb" Text="b: " />
                 <controls:DoubleBox x:Name="Yc" Text="c: " />
             </StackPanel>
+            <Button Command="{StaticResource ResetTimerCmd}" x:Name="ResetTimerBtn" Content="ResetTimer" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+R"/>
+            <controls:DoubleBox x:Name="UpdateTime" Text="UpdateTime: " />
         </WrapPanel>
     </controlsB3:SettingsSaverB3>
 </UserControl>

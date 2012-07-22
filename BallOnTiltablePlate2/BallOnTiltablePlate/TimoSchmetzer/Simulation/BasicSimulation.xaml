@@ -132,6 +132,23 @@
                         <Label Content="P_hysicsCalculators" Target="PhysicsCalculatorList"/>
                         <TreeView x:Name="PhysicsCalculatorList" SelectedItemChanged="PCSelectionChanged" Margin="7,0">
                         </TreeView>
+                        
+                    </StackPanel>
+                </Expander>
+                <Expander Header="E_xelDiagram" Margin="8">
+                    <StackPanel Margin="8">
+                        <CheckBox Content="2DFigure" x:Name="DiagramEnable2DFigure" IsChecked="True"/>
+                        <CheckBox Content="XPosition" x:Name="DiagramEnableXPosition" IsChecked="True"/>
+                        <CheckBox Content="YPosition" x:Name="DiagramEnableYPosition" IsChecked="True"/>
+                        <CheckBox Content="ZPosition" x:Name="DiagramEnableZPosition" IsChecked="True"/>
+                        <CheckBox Content="XVelocity" x:Name="DiagramEnableXVelocity" IsChecked="True"/>
+                        <CheckBox Content="YVelocity" x:Name="DiagramEnableYVelocity" IsChecked="True"/>
+                        <CheckBox Content="ZVelocity" x:Name="DiagramEnableZVelocity" IsChecked="True"/>
+                        <CheckBox Content="XAcceleration" x:Name="DiagramEnableXAcceleration" IsChecked="True"/>
+                        <CheckBox Content="YAcceleration" x:Name="DiagramEnableYAcceleration" IsChecked="True"/>
+                        <CheckBox Content="ZAcceleration" x:Name="DiagramEnableZAcceleration" IsChecked="True"/>
+                        <CheckBox Content="XTilt" x:Name="DiagramEnableXTilt" IsChecked="True"/>
+                        <CheckBox Content="YTilt" x:Name="DiagramEnableYTilt" IsChecked="True"/>
                         <Label Content="DiagramWritePerm_issions" Target="PermissionList"/>
                         <TreeView x:Name="PermissionList" Margin="7,0" >
                         </TreeView>

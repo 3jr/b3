@@ -66,8 +66,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
 
         private void PCSSLoaded(object sender, TextChangedEventArgs e)
         {
-            if (PCItems.Any(t => (String)t.Header == (String)PCSaveBox.Text) && PCItems.Where(t => (String)t.Header == (String)PCSaveBox.Text).ElementAt(0).IsSelected==false)
-            PCItems.Where(t => (String)t.Header == (String)PCSaveBox.Text).ElementAt(0).IsSelected = true;
+            if (PCItems.Any(t => (String)t.Header == (String)PCSaveBox.Text) && PCItems.Where(t => (String)t.Header == (String)PCSaveBox.Text).ElementAt(0).IsSelected == false)
+                PCItems.Where(t => (String)t.Header == (String)PCSaveBox.Text).ElementAt(0).IsSelected = true;
         }
 
         private Queue<Vector3D> PositionQueue = new Queue<Vector3D>();
@@ -375,17 +375,30 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         private static double time = 0;
         private void AddDataToDiagramCreator()
         {
-            diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
-            diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
-            diagramcreator.AddPoint("PositionZ", new Point(time, Position.Z));
-            diagramcreator.AddPoint("VelocityX", new Point(time, Velocity.X));
-            diagramcreator.AddPoint("VelocityY", new Point(time, Velocity.Y));
-            diagramcreator.AddPoint("VelocityZ", new Point(time, Velocity.Z));
-            diagramcreator.AddPoint("AccelerationX", new Point(time, Acceleration.X));
-            diagramcreator.AddPoint("AccelerationY", new Point(time, Acceleration.Y));
-            diagramcreator.AddPoint("AccelerationZ", new Point(time, Acceleration.Z));
-            diagramcreator.AddPoint("TiltX", new Point(time, Tilt.X));
-            diagramcreator.AddPoint("TiltY", new Point(time, Tilt.Y));
+            if (DiagramEnable2DFigure.IsChecked ?? true)
+                diagramcreator.AddPoint("2DFigure", new Point(Position.X, Position.Y));
+            if (DiagramEnableXPosition.IsChecked ?? true)
+                diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
+            if (DiagramEnableYPosition.IsChecked ?? true)
+                diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
+            if (DiagramEnableZPosition.IsChecked ?? true)
+                diagramcreator.AddPoint("PositionZ", new Point(time, Position.Z));
+            if (DiagramEnableXVelocity.IsChecked ?? true)
+                diagramcreator.AddPoint("VelocityX", new Point(time, Velocity.X));
+            if (DiagramEnableYVelocity.IsChecked ?? true)
+                diagramcreator.AddPoint("VelocityY", new Point(time, Velocity.Y));
+            if (DiagramEnableZVelocity.IsChecked ?? true)
+                diagramcreator.AddPoint("VelocityZ", new Point(time, Velocity.Z));
+            if (DiagramEnableXAcceleration.IsChecked ?? true)
+                diagramcreator.AddPoint("AccelerationX", new Point(time, Acceleration.X));
+            if (DiagramEnableYAcceleration.IsChecked ?? true)
+                diagramcreator.AddPoint("AccelerationY", new Point(time, Acceleration.Y));
+            if (DiagramEnableZAcceleration.IsChecked ?? true)
+                diagramcreator.AddPoint("AccelerationZ", new Point(time, Acceleration.Z));
+            if (DiagramEnableXTilt.IsChecked ?? true)
+                diagramcreator.AddPoint("TiltX", new Point(time, Tilt.X));
+            if (DiagramEnableYTilt.IsChecked ?? true)
+                diagramcreator.AddPoint("TiltY", new Point(time, Tilt.Y));
         }
         private void CreateDiagram()
         {

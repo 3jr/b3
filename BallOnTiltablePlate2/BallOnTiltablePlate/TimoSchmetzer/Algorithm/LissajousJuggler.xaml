@@ -7,17 +7,43 @@
              xmlns:controlsB3="clr-namespace:JRapp.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <controlsB3:SettingsSaverB3 x:Name="LissajousJugglerSaver">
-        <StackPanel>
-            <Expander Header="Harmonic Oszillation Controll" IsExpanded="True">
-                <WrapPanel>
-                    <StackPanel>
-                        <Label Content="xpp = x*k*k"/>
-                        <controls:DoubleBox x:Name="Xk" Text="Xk: " />
-                        <controls:DoubleBox x:Name="Yk" Text="Yk: " />
-                    </StackPanel>
-                </WrapPanel>
-            </Expander>
-        </StackPanel>
+    <UserControl.Resources>
+        <RoutedCommand x:Key="ResetTimerCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+R</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ResetTimerCmd}" Executed="ResetTimerCmd_Executed" />
+    </UserControl.CommandBindings>
+    <controlsB3:SettingsSaverB3 x:Name="SinJugglerSaver">
+        <WrapPanel>
+            <StackPanel>
+                <Label Content="X = a*sin(wt-c))"/>
+                <controls:DoubleBox x:Name="Xa" Text="a: " ValueChanged="Param_ValueChanged"/>
+                <controls:DoubleBox x:Name="Xw" Text="w: " ValueChanged="Param_ValueChanged"/>
+                <controls:DoubleBox x:Name="Xc" Text="c: " ValueChanged="Param_ValueChanged"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="Y = a*sin(wt-c))"/>
+                <controls:DoubleBox x:Name="Ya" Text="a: " ValueChanged="Param_ValueChanged"/>
+                <controls:DoubleBox x:Name="Yw" Text="w: " ValueChanged="Param_ValueChanged"/>
+                <controls:DoubleBox x:Name="Yc" Text="c: " ValueChanged="Param_ValueChanged"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="Expected Values"/>
+                <controls:VectorBox x:Name="Position" Text="Position: " IsEnabled="False"/>
+                <controls:VectorBox x:Name="Velocity" Text="Velocity: " IsEnabled="False"/>
+                <controls:VectorBox x:Name="Acceleration" Text="Acceleration: " IsEnabled="False"/>
+                <controls:VectorBox x:Name="Tilt" Text="Tilt: " IsEnabled="False"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="Constants"/>
+                <Button Command="{StaticResource ResetTimerCmd}" x:Name="ResetTimerBtn" Content="ResetTimer" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+R"/>
+                <controls:DoubleBox x:Name="UpdateTime" Text="UpdateTime: " />
+                <controls:DoubleBox x:Name="Gravity" Text="Gravity: " />
+            </StackPanel>
+        </WrapPanel>
     </controlsB3:SettingsSaverB3>
 </UserControl>
