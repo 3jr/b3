@@ -275,6 +275,9 @@
     <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler3.xaml.cs">
       <DependentUpon>CircleJuggler3.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Algorithm\LissajousJuggler2.xaml.cs">
+      <DependentUpon>LissajousJuggler2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Algorithm\LissajousJuggler.xaml.cs">
       <DependentUpon>LissajousJuggler.xaml</DependentUpon>
     </Compile>
@@ -477,6 +480,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TimoSchmetzer\Algorithm\CircleJuggler3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TimoSchmetzer\Algorithm\LissajousJuggler2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
