@@ -39,6 +39,13 @@
                         SmallChange="0.02454369260617025967548940143187" RegularChange="0.04908738521234051935097880286374" LargeChange="0.09817477042468103870195760572748"
                         Value="{Binding MaxTilt, Mode=TwoWay, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}}"
                       />
+                    <controls:DoubleBox
+                        x:Name="UpdateTime"
+                        Text="_Time that is passed between two updates of a component: "
+                        Margin="8,0"
+                        SmallChange="0.001" RegularChange="0.01" LargeChange="0.1"
+                        Value="{Binding UpdateTime, Mode=TwoWay, Source={x:Static ballOnTiltablePlate:GlobalSettings.Instance}}"
+                      />
                 </StackPanel>
             </controls:SettingsSaver>
         </Border>

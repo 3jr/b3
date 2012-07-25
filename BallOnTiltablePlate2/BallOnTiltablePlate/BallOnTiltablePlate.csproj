@@ -287,6 +287,9 @@
     <Compile Include="TimoSchmetzer\Algorithm\DynamicCircle.xaml.cs">
       <DependentUpon>DynamicCircle.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Algorithm\SequentailMoveTo4.xaml.cs">
+      <DependentUpon>SequentailMoveTo4.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Algorithm\sinjuggler.xaml.cs">
       <DependentUpon>sinjuggler.xaml</DependentUpon>
     </Compile>
@@ -499,6 +502,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="TimoSchmetzer\Algorithm\DynamicCircle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TimoSchmetzer\Algorithm\SequentailMoveTo4.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

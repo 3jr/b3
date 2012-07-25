@@ -37,6 +37,19 @@ namespace BallOnTiltablePlate
             }
         }
 
+        private double updateTime = 0.03333333333333333333333333333;
+        public double UpdateTime
+        {
+            get
+            {
+                return updateTime;
+            }
+            set
+            {
+                updateTime = value;
+            }
+        }
+
         // in Meter
         private double halfPlateSize = 0.25;
         public double HalfPlateSize
