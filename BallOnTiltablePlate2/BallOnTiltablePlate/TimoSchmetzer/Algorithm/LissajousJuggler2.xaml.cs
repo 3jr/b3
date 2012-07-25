@@ -61,6 +61,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
                 IO.SetTilt(tilt);
                 //IO.SetTilt(Tilt.Value);
             }
+            else
+            {
+                IO.SetTilt(new Vector());
+            }
             time += UpdateTime.Value;
         }
 
