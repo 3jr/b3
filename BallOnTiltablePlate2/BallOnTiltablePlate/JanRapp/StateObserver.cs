@@ -9,6 +9,7 @@ namespace BallOnTiltablePlate.JanRapp
     class StateObserver
     {
         public DenseVector xh;
+        public DenseVector xhp;
 
         public DenseMatrix A;
         public DenseMatrix B;
@@ -29,6 +30,7 @@ namespace BallOnTiltablePlate.JanRapp
             this.C = C;
             this.L = L;
             this.xh = xInitial;
+            this.xhp = xInitial;
         }
 
         DenseVector cache1 = new DenseVector(1);
@@ -47,7 +49,8 @@ namespace BallOnTiltablePlate.JanRapp
 
         public void NextStep(DenseVector y, DenseVector u, double deltaTime)
         {
-            xh = (A*xh + B*u - L*(C*xh - y)) * deltaTime + xh;
+            xhp = A * xh + B * u - L * (C * xh - y);
+            xh = xhp * deltaTime + xh;
         }
 
         DenseMatrix Sigma

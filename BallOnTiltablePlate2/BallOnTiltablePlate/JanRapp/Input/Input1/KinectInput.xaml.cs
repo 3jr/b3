@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 using Kinect = Microsoft.Research.Kinect.Nui;
 using System.Threading.Tasks;
 using System.Threading;
-using Coding4Fun.Kinect.Wpf;
 using BallOnTiltablePlate.JanRapp.Utilities;
 using BallOnTiltablePlate.JanRapp.Input;
 
@@ -64,7 +63,7 @@ namespace BallOnTiltablePlate.JanRapp.Input1
             {
                 Vector center = CenterSelector.GetValueFromSize(KinectInputImageSize);
 
-                DepthAtCenterDisplay.Text = e.ImageFrame.GetDistance((int)center.X, (int)center.Y).ToString();
+                //DepthAtCenterDisplay.Text = e.ImageFrame.GetDistance((int)center.X, (int)center.Y).ToString();
 
                 var rotationX = new Quaternion(new Vector3D(1, 0, 0), ProjectionAdjustRotaion.Value.X);
                 var rotationY = new Quaternion(new Vector3D(0, 1, 0), ProjectionAdjustRotaion.Value.Y);

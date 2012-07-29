@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.JanRapp.Preprocessor.BalancePreprocessor4"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc= "http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
+             xmlns:controlsB3="clr-namespace:JRapp.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="496" Width="300">
+    <UserControl.Resources>
+        <RoutedCommand x:Key="ToogleRecordCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+R</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ToogleRecordCmd}" Executed="ToogleRecordCmd_Executed"/>
+    </UserControl.CommandBindings>
+    <StackPanel>
+        <GroupBox Header="PID Ball Balance">
+            <controlsB3:SettingsSaverB3 x:Name="PID">
+                <StackPanel>
+                    <controls:DoubleBox x:Name="PositionFactor" Text="_Position: " />
+                    <controls:DoubleBox x:Name="IntegralFactor" Text="_Integral: " />
+                    <controls:DoubleBox x:Name="VelocityFactor" Text="Velocity(_Differencial): " />
+                </StackPanel>
+            </controlsB3:SettingsSaverB3>
+        </GroupBox>
+        <GroupBox Header="State Observer">
+            <controlsB3:SettingsSaverB3 x:Name="StateObserver">
+                <StackPanel>
+                    <controls:DoubleBox x:Name="gDB" Text="g: " ValueChanged="gDB_ValueChanged"/>
+                    <CheckBox x:Name="S1UsedInB" Content="use -s1 in B[4,1]" Checked="S1UsedInB_Checked_1"/>
+                    <controls:VectorBox x:Name="SDB" Text="S: " ValueChanged="gDB_ValueChanged"/>
+                    <controls:VectorBox x:Name="L1DB" Text="L1: " ValueChanged="gDB_ValueChanged"/>
+                    <controls:VectorBox x:Name="L2DB" Text="L2: " ValueChanged="gDB_ValueChanged"/>
+                </StackPanel>
+            </controlsB3:SettingsSaverB3>
+        </GroupBox>
+        <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime" IsChecked="False"/>
+        <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: " Value="0.0333333333333333"/>
+        <TextBlock x:Name="IntegralDisplay"/>
+        <controls:VectorBox x:Name="TargetPositionVecBox" Text="Target Position"/>
+        <CheckBox x:Name="IsAutoBalancingOnCheckBox" Content="AutoBalancing On"/>
+        <GroupBox Header="Data">
+            <StackPanel>
+                <TextBlock x:Name="PositionDisplay" />
+                <TextBlock x:Name="VelocityDisplay" />
+                <TextBlock x:Name="DeltaTimeDisplay"/>
+                <TextBlock x:Name="DeltaTicksDisplay"/>
+                <TextBlock x:Name="xhDispaly" />
+                <Button Content="Reset _Pevious Data" Click="Reset_Click"/>
+                <Button Command="{StaticResource ToogleRecordCmd}" x:Name="ToggleReccordBtn" Content="Record" ToolTip="Ctrl+R"/>
+            </StackPanel>
+        </GroupBox>
+        <controlsB3:HistoryVisualizer x:Name="History"/>
+    </StackPanel>
+</UserControl>

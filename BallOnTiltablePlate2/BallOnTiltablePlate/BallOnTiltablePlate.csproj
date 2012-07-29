@@ -95,9 +95,6 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Reactive">
-      <HintPath>Resources\System.Reactive.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -146,6 +143,12 @@
     </Compile>
     <Compile Include="JanRapp\Input\TestByHand\TestByHand0_1.xaml.cs">
       <DependentUpon>TestByHand0_1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Juggler\LissajousJuggler3.xaml.cs">
+      <DependentUpon>LissajousJuggler3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Juggler\SequentailMoveTo5.xaml.cs">
+      <DependentUpon>SequentailMoveTo5.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Juggler\SequentailMoveTo3.xaml.cs">
       <DependentUpon>SequentailMoveTo3.xaml</DependentUpon>
@@ -257,6 +260,12 @@
     <Compile Include="JanRapp\Preprocessor\BalancePreprocessor3.xaml.cs">
       <DependentUpon>BalancePreprocessor3.xaml</DependentUpon>
     </Compile>
+    <Compile Include="JanRapp\Preprocessor\BalancePreprocessor4.xaml.cs">
+      <DependentUpon>BalancePreprocessor4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JanRapp\Preprocessor\PVASetable.xaml.cs">
+      <DependentUpon>PVASetable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="JanRapp\Preprocessor\TestPreprocessor.xaml.cs">
       <DependentUpon>TestPreprocessor.xaml</DependentUpon>
     </Compile>
@@ -344,6 +353,14 @@
     <Page Include="JanRapp\Input\TestByHand\TestByHand0_1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JanRapp\Juggler\LissajousJuggler3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="JanRapp\Juggler\SequentailMoveTo5.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="JanRapp\Juggler\SequentailMoveTo3.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -475,6 +492,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="JanRapp\Preprocessor\BalancePreprocessor4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="JanRapp\Preprocessor\PVASetable.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="JanRapp\Preprocessor\TestPreprocessor.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -482,8 +507,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MoritzUehling\Juggler\WifiSettings.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TimoSchmetzer\Algorithm\CircleJuggler.xaml">
       <SubType>Designer</SubType>

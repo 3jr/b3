@@ -20,8 +20,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     /// <summary>
     /// Interaction logic for BasicPreprocessor.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Jan", "Rapp", "Balance Preprocessor", "2.1")]
-    public partial class BalancePreprocessor3 : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
+    [ControledSystemModuleInfo("Jan", "Rapp", "Balance Preprocessor", "2.2")]
+    public partial class BalancePreprocessor4 : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
     {
         System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
 
@@ -40,7 +40,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             get { return this; }
         }
 
-        public BalancePreprocessor3()
+        public BalancePreprocessor4()
         {
             InitializeComponent();
 
@@ -83,7 +83,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                 Velocity = VectorUtil.NaNVector;
                 Position = VectorUtil.NaNVector;
             }
-
             ValuesValid = !Position.HasNaN() && !Velocity.HasNaN();
 
             PositionDisplay.Text = "Position: " + Position.ToString();
@@ -132,7 +131,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         }
 
         public void Reset()
-        {
+        { 
             Position = VectorUtil.NaNVector;
             Velocity = VectorUtil.NaNVector;
             lastTilt = new Vector();
