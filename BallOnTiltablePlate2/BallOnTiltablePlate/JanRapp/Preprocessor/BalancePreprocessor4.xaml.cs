@@ -21,8 +21,74 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     /// Interaction logic for BasicPreprocessor.xaml
     /// </summary>
     [ControledSystemModuleInfo("Jan", "Rapp", "Balance Preprocessor", "2.2")]
-    public partial class BalancePreprocessor4 : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
+    public partial class BalancePreprocessor4 : UserControl,
+        IBalancePreprocessor, IBasicPreprocessor,
+        IControledSystemPreprocessor,
+        IControledSystemPreprocessorIO<IBallInput, IPlateOutput>
     {
+        public BalancePreprocessor4()
+        {
+            InitializeComponent();
+
+            ReinitialiceStateObservers();
+        }
+
+        #region Interface Properties
+        public Vector TargetPosition
+        {
+            get { return TargetPositionVecBox.Value; }
+
+            set
+            {
+                if (TargetPositionVecBox.Value != value)
+                {
+                    integral = new Vector();
+                    TargetPositionVecBox.Value = value;
+                }
+            }
+        }
+
+        public bool IsAutoBalancing
+        {
+            get { return IsAutoBalancingOnCheckBox.IsChecked ?? true; }
+            set { IsAutoBalancingOnCheckBox.IsChecked = value; }
+        }
+
+        public Vector Position { get; private set; }
+
+        public Vector Velocity { get; private set; }
+
+        public bool ValuesValid { get; private set; }
+
+        public IBallInput Input { get; set; }
+
+        public IPlateOutput Output { get; set; }
+
+        public FrameworkElement SettingsUI
+        {
+            get { return this; }
+        }
+        #endregion
+
+        #region Interface Methods
+        public void Start()
+        {
+            Input.DataRecived += Input_DataRecived;
+            Reset();
+        }
+
+        public void Stop()
+        {
+            Input.DataRecived -= Input_DataRecived;
+        }
+
+        void IBasicPreprocessor.SetTilt(Vector tiltToAxis)
+        {
+            this.IsAutoBalancing = false;
+            this.SetTilt(tiltToAxis);
+        }
+        #endregion
+
         #region Diagram
         private ExcelUtilities.ExcelDiagramCreator diagramcreator;
         private bool recording = false;
@@ -62,70 +128,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         }
         #endregion
 
-        #region Interface Methods
-        public void Start()
-        {
-            Input.DataRecived += Input_DataRecived;
-            Reset();
-        }
-
-        public void Stop()
-        {
-            Input.DataRecived -= Input_DataRecived;
-        }
-
-        void IBasicPreprocessor.SetTilt(Vector tiltToAxis)
-        {
-            this.IsAutoBalancing = false;
-            this.SetTilt(tiltToAxis);
-        }
-        #endregion
-
-        #region Interface Properties and Fields
-        public Vector TargetPosition
-        {
-            get { return TargetPositionVecBox.Value; }
-
-            set
-            {
-                if (TargetPositionVecBox.Value != value)
-                {
-                    integral = new Vector();
-                    TargetPositionVecBox.Value = value;
-                }
-            }
-        }
-
-        public bool IsAutoBalancing
-        {
-            get { return IsAutoBalancingOnCheckBox.IsChecked ?? true; }
-            set { IsAutoBalancingOnCheckBox.IsChecked = value; }
-        }
-
-        public Vector Position { get; private set; }
-
-        public Vector Velocity { get; private set; }
-
-        public bool ValuesValid { get; private set; }
-
-        public IBallInput Input { get; set; }
-
-        public IPlateOutput Output { get; set; }
-
-        public FrameworkElement SettingsUI
-        {
-            get { return this; }
-        }
-
-        public BalancePreprocessor4()
-        {
-            InitializeComponent();
-
-            ReinitialiceStateObservers();
-        }
-        #endregion
-        
-
         StateObserver SoX, SoY;
         Vector lastTilt = new Vector();
         Vector integral;
@@ -135,14 +137,12 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             if (Position.HasNaN() && !e.BallPosition.HasNaN())
             {
-                SoX.xh[0] = e.BallPosition.X;
-                SoX.xh[1] = 0;
-                SoX.xh[2] = 0;
-                SoX.xh[3] = 0;
-                SoY.xh[0] = e.BallPosition.Y;
-                SoY.xh[1] = 0;
-                SoY.xh[2] = 0;
-                SoY.xh[3] = 0;
+                double[] resetX = new double[SoX.xh.Count];
+                resetX[0] = e.BallPosition.X;
+                SoX.xh.SetValues(resetX);
+                double[] resetY = new double[SoY.xh.Count];
+                resetY[0] = e.BallPosition.Y;
+                SoY.xh.SetValues(resetY);
             }
 
             double deltaTime = StaticPeriod.Value;
@@ -163,40 +163,52 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             this.ValuesValid = !this.Position.HasNaN() && !this.Velocity.HasNaN();
 
+            #region Display
             this.PositionDisplay.Text = "Position: " + this.Position.ToString();
             this.VelocityDisplay.Text = "Velocity: " + this.Velocity.ToString();
             this.DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
-            this.xhDispaly.Text = this.SoX.xh[0] + "\n\r" +
-                this.SoX.xh[1] + "\n" +
-                this.SoX.xh[2] + "\n" +
-                this.SoX.xh[3] + "\n" +
-                this.SoY.xh[0] + "\n" +
-                this.SoY.xh[1] + "\n" +
-                this.SoY.xh[2] + "\n" +
-                this.SoY.xh[3] + "\n";
+            this.xhDispaly.Text = ""
+                + this.SoX.xh[0] + "\n"
+                + this.SoX.xh[1] + "\n"
+                //+ this.SoX.xh[2] + "\n"
+                //+ this.SoX.xh[3] + "\n"
+                + this.SoY.xh[0] + "\n"
+                + this.SoY.xh[1] + "\n"
+                //+ this.SoY.xh[2] + "\n"
+                //+ this.SoY.xh[3] + "\n"
+            ;
 
             if (this.IsVisible)
                 this.History.FeedUpdate(Position, Velocity);
 
-            AddDataToDiagramCreator();
+            AddDataToDiagramCreator(); 
+            #endregion
+
             if (this.IsAutoBalancing)
             {
                 if (this.ValuesValid)
                 {
                     Vector currentRelativePosition = this.Position - this.TargetPosition;
                     this.integral += currentRelativePosition * deltaTime;
-                    var tilt = currentRelativePosition * this.PositionFactor.Value +
-                        integral * this.IntegralFactor.Value +
-                        this.Velocity * this.VelocityFactor.Value;
 
-                    this.IntegralDisplay.Text = "Integral: " + this.integral;
+                    var tilt =
+                        currentRelativePosition
+                            * this.PositionFactor.Value + //P
+                        this.integral
+                            * this.IntegralFactor.Value + //I
+                        this.Velocity
+                            * this.VelocityFactor.Value; //D
 
                     SetTilt(tilt);
+
+                    #region Display
+                    IntegralDisplay.Text = "Integral: " + integral;
                     if (recording)
                     {
                         diagramcreator.AddPoint("TiltX", new Point(time, tilt.X));
                         diagramcreator.AddPoint("TiltY", new Point(time, tilt.Y));
                     }
+                    #endregion
                 }
                 else
                 {
@@ -206,7 +218,44 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             }
         }
 
+        // No MotorDynamik
         private void ReinitialiceStateObservers()
+        {
+            var g = -gDB.Value;
+            var s1 = SDB.Value.X;
+            var s2 = SDB.Value.Y;
+
+            var l1_1 = L1DB.Value.X;
+            var l1_2 = L1DB.Value.Y;
+            var l2_1 = L2DB.Value.X;
+            var l2_2 = L2DB.Value.Y;
+
+            var A = new double[,]{
+               {0,  1,  },
+               {0,  0,  },
+            };
+
+            var B = new double[,]{
+               {0,  },
+               {g,  },
+            };
+
+            var C = new double[,]{
+               {1,  0,  },
+            };
+
+            var L = new double[,]{
+               {l1_1,  },
+               {l1_2,  },
+            };
+
+            SoX = new StateObserver(A, B, C, L,
+                new double[] { 0, 0, });
+            SoY = new StateObserver(A, B, C, L,
+                new double[] { 0, 0, });
+        }
+        // MotorDynamik
+        private void ReinitialiceStateObservers2()
         {
             var g = -gDB.Value;
             var s1 = SDB.Value.X;
@@ -228,7 +277,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                {0,  },
                {0,  },
                {0,  },
-               {S1UsedInB.IsChecked ?? true ? -s1 : 1,  },
+               {-s1,},
             };
 
             var C = new double[,]{
@@ -246,18 +295,16 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             SoY = new StateObserver(A, B, C, L, new double[] { 0, 0, 0, 0 });
         }
 
+
         public void Reset()
         {
-            this.Position = VectorUtil.NaNVector;
-            this.Velocity = VectorUtil.NaNVector;
-            this.lastTilt = new Vector();
-            this.SoX.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
-            this.SoY.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
+            this.integral = new Vector();
+            ReinitialiceStateObservers();
         }
 
         private void SetTilt(Vector tilt)
         {
-            this.lastTilt = tilt;
+            this.lastTilt = GlobalSettings.Instance.ToValidTilt(tilt);
             this.Output.SetTilt(tilt);
         }
 
@@ -276,11 +323,6 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         {
             ReinitialiceStateObservers();
         }
-
-        private void S1UsedInB_Checked_1(object sender, RoutedEventArgs e)
-        {
-            ReinitialiceStateObservers();
-        } 
         #endregion
     }
 }

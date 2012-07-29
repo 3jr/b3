@@ -29,8 +29,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     [ControledSystemModuleInfo("Jan", "Rapp", "PVASetable", "0.1")]
     public partial class PVASetable : UserControl,
         IPVASetable,
-        IControledSystemPreprocessorIO<IBallInput, IPlateOutput>,
-        IControledSystemPreprocessor
+        IControledSystemPreprocessor,
+        IControledSystemPreprocessorIO<IBallInput, IPlateOutput>
     {
         public PVASetable()
         {
@@ -82,7 +82,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         }
         #endregion
 
-        #region Start Stop Methods
+        #region Interface Methods
         public void Start()
         {
             Input.DataRecived += (Input_DataRecived);
@@ -137,60 +137,61 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         StateObserver SoX, SoY;
         Vector integral;
         Vector lastTilt;
-
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
             Vector newBallPos = e.BallPosition;
 
             if (Position.HasNaN() && !newBallPos.HasNaN())
             {
-                SoX.xh[0] = e.BallPosition.X;
-                SoX.xh[1] = 0;
-                SoX.xh[2] = 0;
-                SoX.xh[3] = 0;
-                SoY.xh[0] = e.BallPosition.Y;
-                SoY.xh[1] = 0;
-                SoY.xh[2] = 0;
-                SoY.xh[3] = 0;
+                double[] resetX = new double[SoX.xh.Count];
+                resetX[0] = e.BallPosition.X;
+                SoX.xh.SetValues(resetX);
+                double[] resetY = new double[SoY.xh.Count];
+                resetY[0] = e.BallPosition.Y;
+                SoY.xh.SetValues(resetY);
             }
 
             double deltaTime = StaticPeriod.Value;
 
             if (!newBallPos.HasNaN())
             {
-                SoX.NextStep(newBallPos.X, lastTilt.X, deltaTime);
-                SoY.NextStep(newBallPos.Y, lastTilt.Y, deltaTime);
-                Acceleration = new Vector(SoX.xhp[1], SoY.xhp[1]);
-                Velocity = new Vector(SoX.xh[1], SoY.xh[1]);
-                Position = newBallPos;// new Vector(SoX.xh[0], SoY.xh[0]);
+                this.SoX.NextStep(newBallPos.X, this.lastTilt.X, deltaTime);
+                this.SoY.NextStep(newBallPos.Y, this.lastTilt.Y, deltaTime);
+
+                this.Acceleration = new Vector(this.SoX.xh[2], this.SoY.xh[2]);
+                this.Velocity = new Vector(this.SoX.xh[1], this.SoY.xh[1]);
+                this.Position = newBallPos; // new Vector(SoX.xh[0], SoY.xh[0]);
             }
             else
             {
-                Acceleration = VectorUtil.NaNVector;
-                Velocity = VectorUtil.NaNVector;
-                Position = VectorUtil.NaNVector;
+                this.Acceleration = VectorUtil.NaNVector;
+                this.Velocity = VectorUtil.NaNVector;
+                this.Position = VectorUtil.NaNVector;
             }
 
-            #region Display of Values
-            PositionDisplay.Text = "Position: " + Position.ToString();
-            VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
-            DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
-            xhDispaly.Text = SoX.xh[0] + "\n\r" +
-                SoX.xh[1] + "\n" +
-                SoX.xh[2] + "\n" +
-                SoX.xh[3] + "\n" +
-                SoY.xh[0] + "\n" +
-                SoY.xh[1] + "\n" +
-                SoY.xh[2] + "\n" +
-                SoY.xh[3] + "\n";
+            #region Display
+            this.PositionDisplay.Text = "Position: " + this.Position.ToString();
+            this.VelocityDisplay.Text = "Velocity: " + this.Velocity.ToString();
+            this.DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
+            this.xhDispaly.Text = ""
+                + this.SoX.xh[0] + "\n"
+                + this.SoX.xh[1] + "\n"
+                + this.SoX.xh[2] + "\n"
+                + this.SoX.xh[3] + "\n"
+                + this.SoY.xh[0] + "\n"
+                + this.SoY.xh[1] + "\n"
+                + this.SoY.xh[2] + "\n"
+                + this.SoY.xh[3] + "\n"
+            ;
 
             if (this.IsVisible)
                 History.FeedUpdate(Position, Velocity);
+
             AddDataToDiagramCreator();
             #endregion
 
             // PD Regeler
-            if (!Position.HasNaN() && !Velocity.HasNaN())
+            if (!this.Position.HasNaN() && !this.Velocity.HasNaN())
             {
                 Vector currentRelativePosition = this.TargetPosition - this.Position;
                 Vector currentRelativeVelocity = this.TargetVelocity - this.Velocity;
@@ -204,7 +205,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                     currentRelativeVelocity
                         * this.VelocityFactor.Value; //D
 
-                //this.InternalSetTilt(tilt);
+                //this.SetTilt(tilt);
                 this.SetTilt(1 / (-gDB.Value) * (tilt + this.TargetAcceleration));
 
                 #region Display
@@ -219,7 +220,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             else
             {
                 this.SetTilt(new Vector());
-                integral = new Vector();
+                this.integral = new Vector();
             }
         }
 
@@ -271,8 +272,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
         private void SetTilt(Vector tilt)
         {
-            lastTilt = GlobalSettings.Instance.ToValidTilt(tilt);
-            Output.SetTilt(tilt);
+            this.lastTilt = GlobalSettings.Instance.ToValidTilt(tilt);
+            this.Output.SetTilt(tilt);
         }
 
         #region UI Events

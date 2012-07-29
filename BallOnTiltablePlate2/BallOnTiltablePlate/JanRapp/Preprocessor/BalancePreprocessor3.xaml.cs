@@ -125,6 +125,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         }
         #endregion
 
+
         StateObserver SoX, SoY;
         Vector lastTilt = new Vector();
         Vector integral;
@@ -134,14 +135,12 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             if (Position.HasNaN() && !e.BallPosition.HasNaN())
             {
-                SoX.xh[0] = e.BallPosition.X;
-                SoX.xh[1] = 0;
-                SoX.xh[2] = 0;
-                SoX.xh[3] = 0;
-                SoY.xh[0] = e.BallPosition.Y;
-                SoY.xh[1] = 0;
-                SoY.xh[2] = 0;
-                SoY.xh[3] = 0;
+                double[] resetX = new double[SoX.xh.Count];
+                resetX[0] = e.BallPosition.X;
+                SoX.xh.SetValues(resetX);
+                double[] resetY = new double[SoY.xh.Count];
+                resetY[0] = e.BallPosition.Y;
+                SoY.xh.SetValues(resetY);
             }
 
             double deltaTime = StaticPeriod.Value;
@@ -162,6 +161,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             this.ValuesValid = !this.Position.HasNaN() && !this.Velocity.HasNaN();
 
+            #region Display
             this.PositionDisplay.Text = "Position: " + this.Position.ToString();
             this.VelocityDisplay.Text = "Velocity: " + this.Velocity.ToString();
             this.DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
@@ -178,6 +178,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                 this.History.FeedUpdate(Position, Velocity);
 
             AddDataToDiagramCreator();
+            #endregion
+
             if (this.IsAutoBalancing)
             {
                 if (this.ValuesValid)
@@ -227,7 +229,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                {0,  },
                {0,  },
                {0,  },
-               {S1UsedInB.IsChecked ?? true ? -s1 : 1,  },
+               {-s1,},
             };
 
             var C = new double[,]{

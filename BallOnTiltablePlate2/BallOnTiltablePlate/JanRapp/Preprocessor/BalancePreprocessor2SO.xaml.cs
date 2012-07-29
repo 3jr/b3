@@ -22,13 +22,72 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     /// </summary>
     [ControledSystemModuleInfo("Jan", "Rapp", "Balance Preprocessor", "1.8")]
     public partial class BalancePreprocessor2SO : UserControl,
-        IControledSystemPreprocessorIO<IBallInput, IPlateOutput>,
-        IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
+        IBalancePreprocessor, IBasicPreprocessor, 
+        IControledSystemPreprocessor,
+        IControledSystemPreprocessorIO<IBallInput, IPlateOutput>
     {
         public BalancePreprocessor2SO()
         {
             InitializeComponent();
+
+            ReinitialiceStateObservers();
         }
+
+        #region Interface Properties
+        public Vector TargetPosition
+        {
+            get { return TargetPositionVecBox.Value; }
+
+            set
+            {
+                if (TargetPositionVecBox.Value != value)
+                {
+                    integral = new Vector();
+                    TargetPositionVecBox.Value = value;
+                }
+            }
+        }
+
+        public bool IsAutoBalancing
+        {
+            get { return IsAutoBalancingOnCheckBox.IsChecked ?? true; }
+            set { IsAutoBalancingOnCheckBox.IsChecked = value; }
+        }
+
+        public Vector Position { get; private set; }
+
+        public Vector Velocity { get; private set; }
+
+        public bool ValuesValid { get; private set; }
+
+        public IBallInput Input { get; set; }
+
+        public IPlateOutput Output { get; set; }
+
+        public FrameworkElement SettingsUI
+        {
+            get { return this; }
+        }
+        #endregion
+
+        #region Interface Methods
+        public void Start()
+        {
+            Input.DataRecived += input_DataRecived;
+            Reset();
+        }
+
+        public void Stop()
+        {
+            Input.DataRecived -= input_DataRecived;
+        }
+
+        void IBasicPreprocessor.SetTilt(Vector tiltToAxis)
+        {
+            this.IsAutoBalancing = false;
+            this.SetTilt(tiltToAxis);
+        }
+        #endregion
 
         #region Diagram
         private ExcelUtilities.ExcelDiagramCreator diagramcreator;
@@ -69,80 +128,9 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         }
         #endregion
 
-        #region Interface Properties and Fieldswe
-        public FrameworkElement SettingsUI
-        {
-            get { return this; }
-        }
-
-        IBallInput input;
-        public IBallInput Input
-        {
-            set { input = value; }
-        }
-
-        IPlateOutput output;
-        public IPlateOutput Output
-        {
-            set { output = value; }
-        }
-
-        Vector targetPositon;
-        public Vector TargetPosition
-        {
-            get
-            {
-                return targetPositon;
-            }
-            set
-            {
-                targetPositon = value;
-            }
-        }
-
-        bool isAutoBalancing;
-        public bool IsAutoBalancing
-        {
-            get
-            {
-                return isAutoBalancing;
-            }
-            set
-            {
-                isAutoBalancing = true;
-            }
-        }
-
-        public Vector Position { get; private set; }
-
-        public Vector Velocity { get; private set; }
-
-        public bool ValuesValid { get; private set; }
-        #endregion
-
-        #region Interface Methods
-        public void Start()
-        {
-            input.DataRecived += input_DataRecived;
-            ReinitialiceStateObservers();
-        }
-
-        public void Stop()
-        {
-            input.DataRecived -= input_DataRecived;
-        }
-
-        void IBasicPreprocessor.SetTilt(Vector tiltToAxis)
-        {
-            this.isAutoBalancing = false;
-            this.SetTilt(tiltToAxis);
-        }
-        #endregion
-
         StateObserver SoX, SoY;
         private Vector lastTilt;
         private Vector integral;
-
         void input_DataRecived(object sender, BallInputEventArgs e)
         {
             Vector newBallPos = e.BallPosition;
@@ -206,7 +194,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
         private void ReinitialiceStateObservers()
         {
-            double g = Gravity.Value;
+            double g = -Gravity.Value;
             double l1 = LFactor.Value.X;
             double l2 = LFactor.Value.Y;
 
@@ -217,7 +205,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             var B = new double[,]{
                {0,  },
-               {-g,  },
+               {g,  },
             };
 
             var C = new double[,]{
@@ -243,7 +231,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         private void SetTilt(Vector tilt)
         {
             this.lastTilt = tilt;
-            this.output.SetTilt(tilt);
+            this.Output.SetTilt(tilt);
         }
 
         #region UI Events

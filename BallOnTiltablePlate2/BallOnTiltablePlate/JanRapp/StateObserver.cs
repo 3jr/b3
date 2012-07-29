@@ -8,7 +8,7 @@ namespace BallOnTiltablePlate.JanRapp
 {
     class StateObserver
     {
-        public DenseVector xh;
+        public DenseVector xh {get;set;}
         public DenseVector xhp;
 
         public DenseMatrix A;

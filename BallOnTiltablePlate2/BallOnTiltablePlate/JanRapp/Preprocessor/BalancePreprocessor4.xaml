@@ -30,9 +30,8 @@
         <GroupBox Header="State Observer">
             <controlsB3:SettingsSaverB3 x:Name="StateObserver">
                 <StackPanel>
-                    <controls:DoubleBox x:Name="gDB" Text="g: " ValueChanged="gDB_ValueChanged"/>
-                    <CheckBox x:Name="S1UsedInB" Content="use -s1 in B[4,1]" Checked="S1UsedInB_Checked_1"/>
-                    <controls:VectorBox x:Name="SDB" Text="S: " ValueChanged="gDB_ValueChanged"/>
+                    <controls:DoubleBox x:Name="gDB" Text="g: " ValueChanged="gDB_ValueChanged" Margin="0,0,0.2,0"/>
+                    <controls:VectorBox x:Name="SDB" Text="S: " ValueChanged="gDB_ValueChanged" Margin="6,0,-5.8,0"/>
                     <controls:VectorBox x:Name="L1DB" Text="L1: " ValueChanged="gDB_ValueChanged"/>
                     <controls:VectorBox x:Name="L2DB" Text="L2: " ValueChanged="gDB_ValueChanged"/>
                 </StackPanel>
