@@ -118,8 +118,8 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             // PD Regeler
             if (!Position.HasNaN() && !Velocity.HasNaN())
             {
-                Vector currentRelativePosition = this.Position - this.TargetPosition;
-                Vector currentRelativeVelocity = this.Velocity - this.TargetVelocity;
+                Vector currentRelativePosition = this.TargetPosition - this.Position;
+                Vector currentRelativeVelocity = this.TargetVelocity - this.Velocity;
                 this.integral += currentRelativePosition * deltaTime;
 
                 var tilt =
@@ -131,7 +131,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                         * this.VelocityFactor.Value; //D
 
                 //this.InternalSetTilt(tilt);
-                this.InternalSetTilt(1/gDB.Value * (tilt + this.TargetAcceleration));
+                this.InternalSetTilt(1/(-gDB.Value) * (tilt + this.TargetAcceleration));
 
                 #region Display
                 IntegralDisplay.Text = "Integral: " + integral;
