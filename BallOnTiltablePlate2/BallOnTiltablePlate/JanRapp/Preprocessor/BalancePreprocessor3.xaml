@@ -38,7 +38,6 @@
                 </StackPanel>
             </controlsB3:SettingsSaverB3>
         </GroupBox>
-        <CheckBox x:Name="UseDelataTime" Content="_Use DeltaTime" IsChecked="False"/>
         <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: " Value="0.0333333333333333"/>
         <TextBlock x:Name="IntegralDisplay"/>
         <controls:VectorBox x:Name="TargetPositionVecBox" Text="Target Position"/>

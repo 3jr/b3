@@ -69,7 +69,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         }
         #endregion
 
-        #region Interface Properties and Fields
+        #region Interface Properties and Fieldswe
         public FrameworkElement SettingsUI
         {
             get { return this; }

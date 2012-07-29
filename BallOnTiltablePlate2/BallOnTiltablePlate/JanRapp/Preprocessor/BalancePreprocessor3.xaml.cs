@@ -23,187 +23,15 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
     [ControledSystemModuleInfo("Jan", "Rapp", "Balance Preprocessor", "2.1")]
     public partial class BalancePreprocessor3 : UserControl, IControledSystemPreprocessorIO<IBallInput, IPlateOutput>, IBalancePreprocessor, IBasicPreprocessor, IControledSystemPreprocessor
     {
-        System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
-
-        public Vector Position { get; private set; }
-
-        public Vector Velocity { get; private set; }
-
-        public bool ValuesValid { get; private set; }
-
-        public IBallInput Input { get; set; }
-
-        public IPlateOutput Output { get; set; }
-
-        public FrameworkElement SettingsUI
-        {
-            get { return this; }
-        }
-
-        public BalancePreprocessor3()
-        {
-            InitializeComponent();
-
-            ReinitialiceStateObservers();
-        }
-
-        Vector integral;
-        double deltaTime;
-
-        StateObserver SoX;
-        StateObserver SoY;
-        Vector lastTilt = new Vector();
-        void Input_DataRecived(object sender, BallInputEventArgs e)
-        {
-            if (Position.HasNaN() && !e.BallPosition.HasNaN())
-            {
-                SoX.xh[0] = e.BallPosition.X;
-                SoX.xh[1] = 0;
-                SoY.xh[0] = e.BallPosition.Y;
-                SoY.xh[1] = 0;
-            }
-
-            deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
-            deltaTime = ((UseDelataTime.IsChecked ?? true) ? deltaTime : StaticPeriod.Value);
-
-            Vector newPosition = e.BallPosition;
-
-            if (!newPosition.HasNaN())
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    SoX.NextStep(newPosition.X, lastTilt.X, deltaTime / 100);
-                    SoY.NextStep(newPosition.Y, lastTilt.Y, deltaTime / 100);
-                    Velocity = new Vector(SoX.xh[1], SoY.xh[1]);
-                    Position = new Vector(SoX.xh[0], SoY.xh[0]);
-                }
-            }
-            else
-            {
-                Velocity = VectorUtil.NaNVector;
-                Position = VectorUtil.NaNVector;
-            }
-
-            ValuesValid = !Position.HasNaN() && !Velocity.HasNaN();
-
-            PositionDisplay.Text = "Position: " + Position.ToString();
-            VelocityDisplay.Text = "Velocity: " + Velocity.ToString();
-            DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
-            xhDispaly.Text = SoX.xh[0] + "\n\r" +
-                SoX.xh[1] + "\n" +
-                SoX.xh[2] + "\n" +
-                SoX.xh[3] + "\n" +
-                SoY.xh[0] + "\n" +
-                SoY.xh[1] + "\n" +
-                SoY.xh[2] + "\n" +
-                SoY.xh[3] + "\n";
-
-            if (this.IsVisible)
-                History.FeedUpdate(Position, Velocity);
-
-            AddDataToDiagramCreator();
-            if (IsAutoBalancing)
-            {
-                if (this.ValuesValid)
-                {
-                    Vector currentRelativePosition = this.Position - TargetPosition;
-                    integral += currentRelativePosition * deltaTime;
-                    var tilt = currentRelativePosition * PositionFactor.Value +
-                        integral * IntegralFactor.Value +
-                        this.Velocity * VelocityFactor.Value;
-
-                    IntegralDisplay.Text = "Integral: " + integral;
-
-                    this.InternalSetTilt(tilt);
-                    if (recording)
-                    {
-                        diagramcreator.AddPoint("TiltX", new Point(time, tilt.X));
-                        diagramcreator.AddPoint("TiltY", new Point(time, tilt.Y));
-                    }
-                }
-                else
-                {
-                    this.InternalSetTilt(new Vector());
-                    integral = new Vector();
-                }
-            }
-
-            sinceLastUpdate.Restart();
-        }
-
-        public void Reset()
-        {
-            Position = VectorUtil.NaNVector;
-            Velocity = VectorUtil.NaNVector;
-            lastTilt = new Vector();
-            SoX.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
-            SoY.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
-            sinceLastUpdate.Restart();
-        }
-
-        public void SetTilt(Vector tiltToAxis)
-        {
-            lastTilt = GlobalSettings.Instance.ToValidTilt(tiltToAxis);
-            IsAutoBalancing = false;
-            Output.SetTilt(tiltToAxis);
-            if (recording)
-            {
-                diagramcreator.AddPoint("JugglerTiltX", new Point(time, tiltToAxis.X));
-                diagramcreator.AddPoint("JugglerTiltY", new Point(time, tiltToAxis.Y));
-            }
-            this.InternalSetTilt(tiltToAxis);
-        }
-
-        public void InternalSetTilt(Vector tilt)
-        {
-            lastTilt = GlobalSettings.Instance.ToValidTilt(tilt);
-            Output.SetTilt(tilt);
-        }
-        public void Start()
-        {
-            Input.DataRecived += (Input_DataRecived);
-            Reset();
-        }
-
-        public void Stop()
-        {
-            Input.DataRecived -= Input_DataRecived;
-        }
-
-        private void Reset_Click(object sender, RoutedEventArgs e)
-        {
-            Reset();
-        }
-
-        public Vector TargetPosition
-        {
-            get { return TargetPositionVecBox.Value; }
-
-            set
-            {
-                if (TargetPositionVecBox.Value != value)
-                {
-                    integral = new Vector();
-                    TargetPositionVecBox.Value = value;
-                }
-            }
-        }
-
-        public bool IsAutoBalancing
-        {
-            get { return IsAutoBalancingOnCheckBox.IsChecked ?? true; }
-            set { IsAutoBalancingOnCheckBox.IsChecked = value; }
-        }
-
         #region Diagram
-        private static ExcelUtilities.ExcelDiagramCreator diagramcreator;
-        private static bool recording = false;
-        private static double time = 0;
+        private ExcelUtilities.ExcelDiagramCreator diagramcreator;
+        private bool recording = false;
+        private double time;
         private void AddDataToDiagramCreator()
         {
             if (recording)
             {
-                time += sinceLastUpdate.ElapsedMilliseconds / 1000.0;
+                time += StaticPeriod.Value;
                 diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
                 diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
                 diagramcreator.AddPoint("VelocityX", new Point(time, Velocity.X));
@@ -234,19 +62,147 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         }
         #endregion
 
-        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        #region Interface Methods
+        public void Start()
         {
-            ReinitialiceStateObservers();
+            Input.DataRecived += Input_DataRecived;
+            Reset();
         }
 
-        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
+        public void Stop()
         {
-            ReinitialiceStateObservers();
+            Input.DataRecived -= Input_DataRecived;
         }
 
-        private void S1UsedInB_Checked_1(object sender, RoutedEventArgs e)
+        void IBasicPreprocessor.SetTilt(Vector tiltToAxis)
         {
+            this.IsAutoBalancing = false;
+            this.SetTilt(tiltToAxis);
+        }
+        #endregion
+
+        #region Interface Properties and Fields
+        public Vector TargetPosition
+        {
+            get { return TargetPositionVecBox.Value; }
+
+            set
+            {
+                if (TargetPositionVecBox.Value != value)
+                {
+                    integral = new Vector();
+                    TargetPositionVecBox.Value = value;
+                }
+            }
+        }
+
+        public bool IsAutoBalancing
+        {
+            get { return IsAutoBalancingOnCheckBox.IsChecked ?? true; }
+            set { IsAutoBalancingOnCheckBox.IsChecked = value; }
+        }
+
+        public Vector Position { get; private set; }
+
+        public Vector Velocity { get; private set; }
+
+        public bool ValuesValid { get; private set; }
+
+        public IBallInput Input { get; set; }
+
+        public IPlateOutput Output { get; set; }
+
+        public FrameworkElement SettingsUI
+        {
+            get { return this; }
+        }
+
+        public BalancePreprocessor3()
+        {
+            InitializeComponent();
+
             ReinitialiceStateObservers();
+        }
+        #endregion
+
+        StateObserver SoX, SoY;
+        Vector lastTilt = new Vector();
+        Vector integral;
+        void Input_DataRecived(object sender, BallInputEventArgs e)
+        {
+            Vector newBallPos = e.BallPosition;
+
+            if (Position.HasNaN() && !e.BallPosition.HasNaN())
+            {
+                SoX.xh[0] = e.BallPosition.X;
+                SoX.xh[1] = 0;
+                SoX.xh[2] = 0;
+                SoX.xh[3] = 0;
+                SoY.xh[0] = e.BallPosition.Y;
+                SoY.xh[1] = 0;
+                SoY.xh[2] = 0;
+                SoY.xh[3] = 0;
+            }
+
+            double deltaTime = StaticPeriod.Value;
+
+            if (!newBallPos.HasNaN())
+            {
+                this.SoX.NextStep(newBallPos.X, this.lastTilt.X, deltaTime);
+                this.SoY.NextStep(newBallPos.Y, this.lastTilt.Y, deltaTime);
+
+                this.Velocity = new Vector(this.SoX.xh[1], this.SoY.xh[1]);
+                this.Position = newBallPos; // new Vector(SoX.xh[0], SoY.xh[0]);
+            }
+            else
+            {
+                this.Velocity = VectorUtil.NaNVector;
+                this.Position = VectorUtil.NaNVector;
+            }
+
+            this.ValuesValid = !this.Position.HasNaN() && !this.Velocity.HasNaN();
+
+            this.PositionDisplay.Text = "Position: " + this.Position.ToString();
+            this.VelocityDisplay.Text = "Velocity: " + this.Velocity.ToString();
+            this.DeltaTimeDisplay.Text = "DeltaTime: " + deltaTime.ToString();
+            this.xhDispaly.Text = this.SoX.xh[0] + "\n\r" +
+                this.SoX.xh[1] + "\n" +
+                this.SoX.xh[2] + "\n" +
+                this.SoX.xh[3] + "\n" +
+                this.SoY.xh[0] + "\n" +
+                this.SoY.xh[1] + "\n" +
+                this.SoY.xh[2] + "\n" +
+                this.SoY.xh[3] + "\n";
+
+            if (this.IsVisible)
+                this.History.FeedUpdate(Position, Velocity);
+
+            AddDataToDiagramCreator();
+            if (this.IsAutoBalancing)
+            {
+                if (this.ValuesValid)
+                {
+                    Vector currentRelativePosition = this.Position - this.TargetPosition;
+                    this.integral += currentRelativePosition * deltaTime;
+                    var tilt = currentRelativePosition * this.PositionFactor.Value +
+                        integral * this.IntegralFactor.Value +
+                        this.Velocity * this.VelocityFactor.Value;
+
+                    this.IntegralDisplay.Text = "Integral: " + this.integral;
+
+                    SetTilt(tilt);
+                    if (recording)
+                    {
+                        diagramcreator.AddPoint("TiltX", new Point(time, tilt.X));
+                        diagramcreator.AddPoint("TiltY", new Point(time, tilt.Y));
+                    }
+                }
+                else
+                {
+                    this.SetTilt(new Vector());
+                    this.integral = new Vector();
+                }
+            }
         }
 
         private void ReinitialiceStateObservers()
@@ -288,5 +244,42 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             SoX = new StateObserver(A, B, C, L, new double[] { 0, 0, 0, 0 });
             SoY = new StateObserver(A, B, C, L, new double[] { 0, 0, 0, 0 });
         }
+
+        public void Reset()
+        {
+            this.Position = VectorUtil.NaNVector;
+            this.Velocity = VectorUtil.NaNVector;
+            this.lastTilt = new Vector();
+            this.SoX.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
+            this.SoY.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
+        }
+
+        private void SetTilt(Vector tilt)
+        {
+            this.lastTilt = tilt;
+            this.Output.SetTilt(tilt);
+        }
+
+        #region UI Events
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            Reset();
+        }
+
+        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            ReinitialiceStateObservers();
+        }
+
+        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
+        {
+            ReinitialiceStateObservers();
+        }
+
+        private void S1UsedInB_Checked_1(object sender, RoutedEventArgs e)
+        {
+            ReinitialiceStateObservers();
+        }
+        #endregion
     }
 }

@@ -32,7 +32,39 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         IControledSystemPreprocessorIO<IBallInput, IPlateOutput>,
         IControledSystemPreprocessor
     {
-        System.Diagnostics.Stopwatch sinceLastUpdate = new System.Diagnostics.Stopwatch();
+        public PVASetable()
+        {
+            InitializeComponent();
+
+            ReinitialiceStateObservers();
+        }
+
+        #region Interface Properties
+        public Vector TargetPosition
+        {
+            get { return TargetPositionVecBox.Value; }
+
+            set
+            {
+                if (TargetPositionVecBox.Value != value)
+                {
+                    integral = new Vector();
+                    TargetPositionVecBox.Value = value;
+                }
+            }
+        }
+
+        public Vector TargetVelocity
+        {
+            get { return TargetVelocityVecBox.Value; }
+            set { TargetVelocityVecBox.Value = value; }
+        }
+
+        public Vector TargetAcceleration
+        {
+            get { return TargetAccelerationVecBox.Value; }
+            set { TargetAccelerationVecBox.Value = value; }
+        }
 
         public Vector Position { get; private set; }
 
@@ -48,22 +80,69 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         {
             get { return this; }
         }
+        #endregion
 
-        public PVASetable()
+        #region Start Stop Methods
+        public void Start()
         {
-            InitializeComponent();
-
-            ReinitialiceStateObservers();
+            Input.DataRecived += (Input_DataRecived);
+            Reset();
         }
 
-        Vector integral;
+        public void Stop()
+        {
+            Input.DataRecived -= Input_DataRecived;
+        }
+        #endregion
 
-        StateObserver SoX;
-        StateObserver SoY;
-        Vector lastTilt = new Vector();
+        #region Diagram
+        private static ExcelUtilities.ExcelDiagramCreator diagramcreator;
+        private static bool recording = false;
+        private static double time = 0;
+        private void AddDataToDiagramCreator()
+        {
+            if (recording)
+            {
+                time += StaticPeriod.Value;
+                diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
+                diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
+                diagramcreator.AddPoint("VelocityX", new Point(time, Velocity.X));
+                diagramcreator.AddPoint("VelocityY", new Point(time, Velocity.Y));
+            }
+        }
+        private void CreateDiagram()
+        {
+            diagramcreator.AxisNameX = "Time";
+            diagramcreator.AxisNameY = "Value";
+            diagramcreator.DiagramTitle = "NoTitle";
+            diagramcreator.GenerateAndShowDiagram();
+        }
+        private void ToogleRecordCmd_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            recording = !recording;
+            if (recording)
+            {
+                diagramcreator = new ExcelUtilities.ExcelDiagramCreator();
+                time = 0;
+                ToggleReccordBtn.Content = "Stop Recording";
+            }
+            else
+            {
+                System.Threading.Tasks.Task.Factory.StartNew(CreateDiagram);
+                ToggleReccordBtn.Content = "Record";
+            }
+        }
+        #endregion
+
+        StateObserver SoX, SoY;
+        Vector integral;
+        Vector lastTilt;
+
         void Input_DataRecived(object sender, BallInputEventArgs e)
         {
-            if (Position.HasNaN() && !e.BallPosition.HasNaN())
+            Vector newBallPos = e.BallPosition;
+
+            if (Position.HasNaN() && !newBallPos.HasNaN())
             {
                 SoX.xh[0] = e.BallPosition.X;
                 SoX.xh[1] = 0;
@@ -77,18 +156,13 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
 
             double deltaTime = StaticPeriod.Value;
 
-            Vector newPosition = e.BallPosition;
-
-            if (!newPosition.HasNaN())
+            if (!newBallPos.HasNaN())
             {
-                for (int i = 0; i < 100; i++)
-                {
-                    SoX.NextStep(newPosition.X, lastTilt.X, deltaTime / 100);
-                    SoY.NextStep(newPosition.Y, lastTilt.Y, deltaTime / 100);
-                    Acceleration = new Vector(SoX.xhp[1], SoY.xhp[1]);
-                    Velocity = new Vector(SoX.xh[1], SoY.xh[1]);
-                    Position = new Vector(SoX.xh[0], SoY.xh[0]);
-                }
+                SoX.NextStep(newBallPos.X, lastTilt.X, deltaTime);
+                SoY.NextStep(newBallPos.Y, lastTilt.Y, deltaTime);
+                Acceleration = new Vector(SoX.xhp[1], SoY.xhp[1]);
+                Velocity = new Vector(SoX.xh[1], SoY.xh[1]);
+                Position = newBallPos;// new Vector(SoX.xh[0], SoY.xh[0]);
             }
             else
             {
@@ -131,7 +205,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                         * this.VelocityFactor.Value; //D
 
                 //this.InternalSetTilt(tilt);
-                this.InternalSetTilt(1/(-gDB.Value) * (tilt + this.TargetAcceleration));
+                this.SetTilt(1 / (-gDB.Value) * (tilt + this.TargetAcceleration));
 
                 #region Display
                 IntegralDisplay.Text = "Integral: " + integral;
@@ -144,117 +218,9 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             }
             else
             {
-                this.InternalSetTilt(new Vector());
+                this.SetTilt(new Vector());
                 integral = new Vector();
             }
-
-            sinceLastUpdate.Restart();
-        }
-
-        public void Reset()
-        {
-            Position = VectorUtil.NaNVector;
-            Velocity = VectorUtil.NaNVector;
-            lastTilt = new Vector();
-            SoX.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
-            SoY.xh = new MathNet.Numerics.LinearAlgebra.Double.DenseVector(4, 0.0);
-            sinceLastUpdate.Restart();
-        }
-
-        private void InternalSetTilt(Vector tilt)
-        {
-            lastTilt = GlobalSettings.Instance.ToValidTilt(tilt);
-            Output.SetTilt(tilt);
-        }
-        public void Start()
-        {
-            Input.DataRecived += (Input_DataRecived);
-            Reset();
-        }
-
-        public void Stop()
-        {
-            Input.DataRecived -= Input_DataRecived;
-        }
-
-        private void Reset_Click(object sender, RoutedEventArgs e)
-        {
-            Reset();
-        }
-
-        public Vector TargetPosition
-        {
-            get { return TargetPositionVecBox.Value; }
-
-            set
-            {
-                if (TargetPositionVecBox.Value != value)
-                {
-                    integral = new Vector();
-                    TargetPositionVecBox.Value = value;
-                }
-            }
-        }
-
-        public Vector TargetVelocity
-        {
-            get { return TargetVelocityVecBox.Value; }
-            set { TargetVelocityVecBox.Value = value; }
-        }
-
-        public Vector TargetAcceleration
-        {
-            get { return TargetAccelerationVecBox.Value; }
-            set { TargetAccelerationVecBox.Value = value; }
-        }
-
-        #region Diagram
-        private static ExcelUtilities.ExcelDiagramCreator diagramcreator;
-        private static bool recording = false;
-        private static double time = 0;
-        private void AddDataToDiagramCreator()
-        {
-            if (recording)
-            {
-                time += sinceLastUpdate.ElapsedMilliseconds / 1000.0;
-                diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
-                diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
-                diagramcreator.AddPoint("VelocityX", new Point(time, Velocity.X));
-                diagramcreator.AddPoint("VelocityY", new Point(time, Velocity.Y));
-            }
-        }
-        private void CreateDiagram()
-        {
-            diagramcreator.AxisNameX = "Time";
-            diagramcreator.AxisNameY = "Value";
-            diagramcreator.DiagramTitle = "NoTitle";
-            diagramcreator.GenerateAndShowDiagram();
-        }
-        private void ToogleRecordCmd_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            recording = !recording;
-            if (recording)
-            {
-                diagramcreator = new ExcelUtilities.ExcelDiagramCreator();
-                time = 0;
-                ToggleReccordBtn.Content = "Stop Recording";
-            }
-            else
-            {
-                System.Threading.Tasks.Task.Factory.StartNew(CreateDiagram);
-                ToggleReccordBtn.Content = "Record";
-            }
-        }
-        #endregion
-
-        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            ReinitialiceStateObservers();
-        }
-
-        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
-        {
-            ReinitialiceStateObservers();
         }
 
         private void ReinitialiceStateObservers()
@@ -296,5 +262,34 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             SoX = new StateObserver(A, B, C, L, new double[] { 0, 0, 0, 0 });
             SoY = new StateObserver(A, B, C, L, new double[] { 0, 0, 0, 0 });
         }
+
+        public void Reset()
+        {
+            this.integral = new Vector();
+            ReinitialiceStateObservers();
+        }
+
+        private void SetTilt(Vector tilt)
+        {
+            lastTilt = GlobalSettings.Instance.ToValidTilt(tilt);
+            Output.SetTilt(tilt);
+        }
+
+        #region UI Events
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            Reset();
+        }
+
+        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            ReinitialiceStateObservers();
+        }
+
+        private void gDB_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Vector> e)
+        {
+            ReinitialiceStateObservers();
+        }
+        #endregion
     }
 }
