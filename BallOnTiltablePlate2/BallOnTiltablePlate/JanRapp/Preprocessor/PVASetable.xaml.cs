@@ -205,7 +205,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                     currentRelativeVelocity
                         * this.VelocityFactor.Value; //D
 
-                //this.SetTilt(tilt);
+                //this.SetTilt(-tilt);
                 this.SetTilt(1 / (-gDB.Value) * (tilt + this.TargetAcceleration));
 
                 #region Display
@@ -224,7 +224,44 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             }
         }
 
+        // No MotorDynamik
         private void ReinitialiceStateObservers()
+        {
+            var g = -gDB.Value;
+            var s1 = SDB.Value.X;
+            var s2 = SDB.Value.Y;
+
+            var l1_1 = L1DB.Value.X;
+            var l1_2 = L1DB.Value.Y;
+            var l2_1 = L2DB.Value.X;
+            var l2_2 = L2DB.Value.Y;
+
+            var A = new double[,]{
+               {0,  1,  },
+               {0,  0,  },
+            };
+
+            var B = new double[,]{
+               {0,  },
+               {g,  },
+            };
+
+            var C = new double[,]{
+               {1,  0,  },
+            };
+
+            var L = new double[,]{
+               {l1_1,  },
+               {l1_2,  },
+            };
+
+            SoX = new StateObserver(A, B, C, L,
+                new double[] { 0, 0, });
+            SoY = new StateObserver(A, B, C, L,
+                new double[] { 0, 0, });
+        }
+        // MotorDynamik
+        private void ReinitialiceStateObservers2()
         {
             var g = -gDB.Value;
             var s1 = SDB.Value.X;
