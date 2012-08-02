@@ -58,8 +58,19 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
             {
                 UpdateValues();
                 var tilt = (IO.Position - Position.Value) * PositionFactor.Value + (IO.Velocity - Velocity.Value) * VelocityFactor.Value;
+                //tilt = (1 / (-(3.0/5.0)*Gravity.Value) * (Acceleration.Value))+tilt;
                 IO.SetTilt(tilt);
-                //IO.SetTilt(Tilt.Value);
+
+                if (this.IsVisible)
+                {
+                    Vector displayPos = GetDisplayPos(IO.Position);
+                    Canvas.SetLeft(NextPositionEllipse, displayPos.X);
+                    Canvas.SetTop(NextPositionEllipse, displayPos.Y);
+
+                    Vector targetDisplayPos = GetDisplayPos(Position.Value);
+                    Canvas.SetLeft(CurrentTargetPositionEllipse, targetDisplayPos.X);
+                    Canvas.SetTop(CurrentTargetPositionEllipse, targetDisplayPos.Y);
+                }
             }
             else
             {
@@ -78,6 +89,20 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
             Velocity.Value = new Vector(Xa.Value * Xw.Value * Math.Cos(Xw.Value * time - Xc.Value), Ya.Value * Yw.Value * Math.Cos(Yw.Value * time - Yc.Value));
             Acceleration.Value = new Vector((-1) * Xa.Value * Xw.Value * Xw.Value * Math.Sin(Xw.Value * time - Xc.Value), (-1) * Ya.Value * Yw.Value * Yw.Value * Math.Sin(Yw.Value * time - Yc.Value));
             Tilt.Value = Acceleration.Value * (5.0 / 3.0) / Gravity.Value;
+        }
+
+        private Vector GetDisplayPos(Vector v)
+        {
+            Vector halfeArea = new Vector(nextPositionInput.Width / 2, nextPositionInput.Height / 2);
+            v.X /= GlobalSettings.Instance.HalfPlateSize;
+            v.Y /= GlobalSettings.Instance.HalfPlateSize;
+            v.X *= halfeArea.X;
+            v.Y *= halfeArea.Y;
+            v += halfeArea;
+
+            v.Y = nextPositionInput.Height - v.Y;
+
+            return v;
         }
     }
 }
