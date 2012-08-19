@@ -18,8 +18,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
     /// <summary>
     /// Interaction logic for ExperimentalAlgorithm.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Timo", "Schmetzer", "ExperimentalAlgorithm", "0.0")]
-    public partial class ExperimentalAlgorithm : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
+    [ControledSystemModuleInfo("Timo", "Schmetzer", "ExperimentalProcessor", "0.0")]
+    public partial class ExperimentalProcessor : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -38,7 +38,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
         {
         }
 
-        public ExperimentalAlgorithm()
+        public ExperimentalProcessor()
         {
             InitializeComponent();
         }

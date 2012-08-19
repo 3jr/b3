@@ -11,15 +11,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Diagnostics;
 
 namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
 {
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Timo", "Schmetzer", "SinJuggler", "0.1")]
-    public partial class SinJuggler : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
+    [ControledSystemModuleInfo("Timo", "Schmetzer", "CircleProcessor", "0.1")]
+    public partial class CircleProcessor : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -32,41 +31,26 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
 
         public void Start()
         {
-            time = 0;
-            //watch.Start();
         }
 
         public void Stop()
         {
-            //watch.Stop();
         }
 
-        public SinJuggler()
+        public CircleProcessor()
         {
             InitializeComponent();
         }
 
-        //Stopwatch watch = new Stopwatch();
-        double time = 0;
-
-        private void ResetTimerCmd_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            time = 0;
-            //watch.Reset();
-        }
-
         public void Update()
         {
-            //System.Diagnostics.Debug.WriteLine(watch.Elapsed.TotalSeconds);
             if (IO.ValuesValid)
             {
-                var tilt = new Vector(Xa.Value * Math.Sin(Xb.Value * (time - Xc.Value)), Ya.Value * Math.Sin(Yb.Value * (time - Yc.Value)));
+                double velocityfactoractive = IO.Velocity.Length > VelocityLimit.Value ? 1 : 0;
+                var tilt = IO.Velocity * velocityfactoractive * VelocityFactor.Value + IO.Position * PositionFactor.Value;
 
                 IO.SetTilt(tilt);
             }
-            time += UpdateTime.Value;
-            //if (!watch.IsRunning)
-            //    watch.Start();
         }
     }
 }

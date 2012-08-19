@@ -18,8 +18,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Timo", "Schmetzer", "LissajousJuggler", "0.2")]
-    public partial class LissajousJuggler2 : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
+    [ControledSystemModuleInfo("Timo", "Schmetzer", "LissajousProcessor", "0.1")]
+    public partial class LissajousProcessor : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -39,7 +39,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
         {
         }
 
-        public LissajousJuggler2()
+        public LissajousProcessor()
         {
             InitializeComponent();
         }
@@ -57,24 +57,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
             if (IO.ValuesValid)
             {
                 UpdateValues();
-                var tilt = (IO.Position - Position.Value) * PositionFactor.Value + (IO.Velocity - Velocity.Value) * VelocityFactor.Value;
-                //tilt = (1 / (-(3.0/5.0)*Gravity.Value) * (Acceleration.Value))+tilt;
-                IO.SetTilt(tilt);
-
-                if (this.IsVisible)
-                {
-                    Vector displayPos = GetDisplayPos(IO.Position);
-                    Canvas.SetLeft(NextPositionEllipse, displayPos.X);
-                    Canvas.SetTop(NextPositionEllipse, displayPos.Y);
-
-                    Vector targetDisplayPos = GetDisplayPos(Position.Value);
-                    Canvas.SetLeft(CurrentTargetPositionEllipse, targetDisplayPos.X);
-                    Canvas.SetTop(CurrentTargetPositionEllipse, targetDisplayPos.Y);
-                }
-            }
-            else
-            {
-                IO.SetTilt(new Vector());
+                IO.SetTilt(Tilt.Value);
             }
             time += UpdateTime.Value;
         }
@@ -89,20 +72,6 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
             Velocity.Value = new Vector(Xa.Value * Xw.Value * Math.Cos(Xw.Value * time - Xc.Value), Ya.Value * Yw.Value * Math.Cos(Yw.Value * time - Yc.Value));
             Acceleration.Value = new Vector((-1) * Xa.Value * Xw.Value * Xw.Value * Math.Sin(Xw.Value * time - Xc.Value), (-1) * Ya.Value * Yw.Value * Yw.Value * Math.Sin(Yw.Value * time - Yc.Value));
             Tilt.Value = Acceleration.Value * (5.0 / 3.0) / Gravity.Value;
-        }
-
-        private Vector GetDisplayPos(Vector v)
-        {
-            Vector halfeArea = new Vector(nextPositionInput.Width / 2, nextPositionInput.Height / 2);
-            v.X /= GlobalSettings.Instance.HalfPlateSize;
-            v.Y /= GlobalSettings.Instance.HalfPlateSize;
-            v.X *= halfeArea.X;
-            v.Y *= halfeArea.Y;
-            v += halfeArea;
-
-            v.Y = nextPositionInput.Height - v.Y;
-
-            return v;
         }
     }
 }

@@ -18,8 +18,8 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Jan", "Rapp", "LissajousJuggler", "0.2")]
-    public partial class LissajousJuggler3 : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IPVASetable>
+    [ControledSystemModuleInfo("Jan", "Rapp", "LissajousProcessor", "0.2")]
+    public partial class LissajousProcessor3 : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IPVASetable>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -39,7 +39,7 @@ namespace BallOnTiltablePlate.JanRapp.Juggler
         {
         }
 
-        public LissajousJuggler3()
+        public LissajousProcessor3()
         {
             InitializeComponent();
         }

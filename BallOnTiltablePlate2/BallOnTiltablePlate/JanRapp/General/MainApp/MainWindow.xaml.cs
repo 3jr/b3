@@ -27,7 +27,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             ControlledSystemItems.StaticInit(this);
             LoadedCSItems = true;
             ProcessorList.ItemsSource = ControlledSystemItem.ProcessorTreeViewSource;
-            Guid init = typeof(BallOnTiltablePlate.JanRapp.MainApp.Helper.TestJuggler).GUID;
+            Guid init = typeof(BallOnTiltablePlate.JanRapp.MainApp.Helper.TestProcessor).GUID;
             SelectedProcessor = init;
             select(init, ProcessorList);
         }

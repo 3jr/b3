@@ -17,8 +17,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
     /// <summary>
     /// Interaction logic for TestJuggler.xaml
     /// </summary>
-    [ControledSystemModuleInfo(" Jan", "Rapp", "TestJuggler", "1.0")]
-    public partial class TestJuggler : UserControl, IControledSystemProcessor<IControledSystemPreprocessor>
+    [ControledSystemModuleInfo(" Jan", "Rapp", "TestProcessor", "1.0")]
+    public partial class TestProcessor : UserControl, IControledSystemProcessor<IControledSystemPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -27,7 +27,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp.Helper
         }
         #endregion
 
-        public TestJuggler()
+        public TestProcessor()
         {
             InitializeComponent();
         }

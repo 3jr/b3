@@ -17,8 +17,8 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
     /// </summary>
-    [ControledSystemModuleInfo("Timo", "Schmetzer", "CircleJuggler", "0.1")]
-    public partial class CircleJuggler : UserControl, IControledSystemProcessor<JanRapp.Preprocessor.IBasicPreprocessor>
+    [BallOnPlateItemInfo("Timo", "Schmetzer", "CircleJuggler", "0.2")]
+    public partial class CircleJuggler2 : UserControl, IJuggler<JanRapp.Preprocessor.IBasicPreprocessor>
     {
         #region Base
         public System.Windows.FrameworkElement SettingsUI
@@ -37,7 +37,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
         {
         }
 
-        public CircleJuggler()
+        public CircleJuggler2()
         {
             InitializeComponent();
         }
@@ -46,10 +46,16 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
         {
             if (IO.ValuesValid)
             {
-                double velocityfactoractive = IO.Velocity.Length > VelocityLimit.Value ? 1 : 0;
-                var tilt = IO.Velocity * velocityfactoractive * VelocityFactor.Value + IO.Position * PositionFactor.Value;
 
-                IO.SetTilt(tilt);
+                //var tilt = IO.Acceleration *  VelocityFactor.Value + IO.Velocity * PositionFactor.Value;
+
+                //var v_X_soll = Math.Sqrt(2 * (TotalEnergie.Value / Mass.Value + Gravity.Value * (Radius.Value - Math.Sqrt(Radius.Value * Radius.Valuie - IO.Position.X * IO.Position.X)));
+
+                //var delta_v_X = v_X_soll - IO.Velocity.X;
+                
+                //tilt.X = Math.Atan(IO.Position.X) + PID(delta_v_X);
+
+                //IO.SetTilt(tilt);
             }
         }
     }

@@ -144,19 +144,19 @@
     <Compile Include="JanRapp\Input\TestByHand\TestByHand0_1.xaml.cs">
       <DependentUpon>TestByHand0_1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\LissajousJuggler3.xaml.cs">
-      <DependentUpon>LissajousJuggler3.xaml</DependentUpon>
+    <Compile Include="JanRapp\Processor\LissajousProcessor3.xaml.cs">
+      <DependentUpon>LissajousProcessor3.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\SequentailMoveTo5.xaml.cs">
+    <Compile Include="JanRapp\Processor\SequentailMoveTo5.xaml.cs">
       <DependentUpon>SequentailMoveTo5.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\SequentailMoveTo3.xaml.cs">
+    <Compile Include="JanRapp\Processor\SequentailMoveTo3.xaml.cs">
       <DependentUpon>SequentailMoveTo3.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\SequentailMoveTo2.xaml.cs">
+    <Compile Include="JanRapp\Processor\SequentailMoveTo2.xaml.cs">
       <DependentUpon>SequentailMoveTo2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\HarmonicOscillator.xaml.cs">
+    <Compile Include="JanRapp\Processor\HarmonicOscillator.xaml.cs">
       <DependentUpon>HarmonicOscillator.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Input\Input1\Input101\ImageProcessing.cs" />
@@ -212,22 +212,22 @@
     <Compile Include="JanRapp\Input\TestInput.xaml.cs">
       <DependentUpon>TestInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\BasicBalance.xaml.cs">
+    <Compile Include="JanRapp\Processor\BasicBalance.xaml.cs">
       <DependentUpon>BasicBalance.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\BasicBalance\BasicBalance1.xaml.cs">
+    <Compile Include="JanRapp\Processor\BasicBalance\BasicBalance1.xaml.cs">
       <DependentUpon>BasicBalance1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\SequentailMoveTo.xaml.cs">
+    <Compile Include="JanRapp\Processor\SequentailMoveTo.xaml.cs">
       <DependentUpon>SequentailMoveTo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\TestJuggler.xaml.cs">
-      <DependentUpon>TestJuggler.xaml</DependentUpon>
+    <Compile Include="JanRapp\Processor\TestProcessor.xaml.cs">
+      <DependentUpon>TestProcessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\WiiMoteControled02.xaml.cs">
+    <Compile Include="JanRapp\Processor\WiiMoteControled02.xaml.cs">
       <DependentUpon>WiiMoteControled02.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JanRapp\Juggler\WiiMoteControled01.xaml.cs">
+    <Compile Include="JanRapp\Processor\WiiMoteControled01.xaml.cs">
       <DependentUpon>WiiMoteControled01.xaml</DependentUpon>
     </Compile>
     <Compile Include="JanRapp\Output\MicroFrameworkOutput1\MicroFrameworkPlateOutput.xaml.cs">
@@ -281,29 +281,29 @@
     <Compile Include="MoritzUehling\Juggler\WifiSettings.xaml.cs">
       <DependentUpon>WifiSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler.xaml.cs">
-      <DependentUpon>CircleJuggler.xaml</DependentUpon>
+    <Compile Include="TimoSchmetzer\Processor\CircleProcessor.xaml.cs">
+      <DependentUpon>CircleProcessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\CircleJuggler3.xaml.cs">
-      <DependentUpon>CircleJuggler3.xaml</DependentUpon>
+    <Compile Include="TimoSchmetzer\Processor\CircleProcessor3.xaml.cs">
+      <DependentUpon>CircleProcessor3.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\LissajousJuggler2.xaml.cs">
-      <DependentUpon>LissajousJuggler2.xaml</DependentUpon>
+    <Compile Include="TimoSchmetzer\Processor\LissajousProcessor2.xaml.cs">
+      <DependentUpon>LissajousProcessor2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\LissajousJuggler.xaml.cs">
-      <DependentUpon>LissajousJuggler.xaml</DependentUpon>
+    <Compile Include="TimoSchmetzer\Processor\LissajousProcessor.xaml.cs">
+      <DependentUpon>LissajousProcessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\DynamicCircle.xaml.cs">
+    <Compile Include="TimoSchmetzer\Processor\DynamicCircle.xaml.cs">
       <DependentUpon>DynamicCircle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\SequentailMoveTo4.xaml.cs">
+    <Compile Include="TimoSchmetzer\Processor\SequentailMoveTo4.xaml.cs">
       <DependentUpon>SequentailMoveTo4.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\sinjuggler.xaml.cs">
-      <DependentUpon>sinjuggler.xaml</DependentUpon>
+    <Compile Include="TimoSchmetzer\Processor\SinProcessor.xaml.cs">
+      <DependentUpon>SinProcessor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimoSchmetzer\Algorithm\ExperimentalAlgorithm.xaml.cs">
-      <DependentUpon>ExperimentalAlgorithm.xaml</DependentUpon>
+    <Compile Include="TimoSchmetzer\Processor\ExperimentalProcessor.xaml.cs">
+      <DependentUpon>ExperimentalProcessor.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Preprocessor\CirclePreprocessor.xaml.cs">
       <DependentUpon>CirclePreprocessor.xaml</DependentUpon>
@@ -354,23 +354,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Juggler\LissajousJuggler3.xaml">
+    <Page Include="JanRapp\Processor\LissajousProcessor3.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\Juggler\SequentailMoveTo5.xaml">
+    <Page Include="JanRapp\Processor\SequentailMoveTo5.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\Juggler\SequentailMoveTo3.xaml">
+    <Page Include="JanRapp\Processor\SequentailMoveTo3.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\Juggler\SequentailMoveTo2.xaml">
+    <Page Include="JanRapp\Processor\SequentailMoveTo2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="JanRapp\Juggler\HarmonicOscillator.xaml">
+    <Page Include="JanRapp\Processor\HarmonicOscillator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -423,10 +423,10 @@
     <Page Include="JanRapp\Input\TestInput.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Juggler\BasicBalance.xaml">
+    <Page Include="JanRapp\Processor\BasicBalance.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Juggler\BasicBalance\BasicBalance1.xaml">
+    <Page Include="JanRapp\Processor\BasicBalance\BasicBalance1.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\General\MainApp\MainWindow.xaml">
@@ -442,17 +442,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="JanRapp\Juggler\SequentailMoveTo.xaml">
+    <Page Include="JanRapp\Processor\SequentailMoveTo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Juggler\TestJuggler.xaml">
+    <Page Include="JanRapp\Processor\TestProcessor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="JanRapp\Processor\WiiMoteControled02.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="JanRapp\Juggler\WiiMoteControled02.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="JanRapp\Juggler\WiiMoteControled01.xaml">
+    <Page Include="JanRapp\Processor\WiiMoteControled01.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="JanRapp\Output\MicroFrameworkOutput1\MicroFrameworkPlateOutput.xaml">
@@ -510,35 +511,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\CircleJuggler.xaml">
+    <Page Include="TimoSchmetzer\Processor\CircleProcessor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\CircleJuggler3.xaml">
+    <Page Include="TimoSchmetzer\Processor\CircleProcessor3.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\LissajousJuggler2.xaml">
+    <Page Include="TimoSchmetzer\Processor\LissajousProcessor2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\LissajousJuggler.xaml">
+    <Page Include="TimoSchmetzer\Processor\LissajousProcessor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\DynamicCircle.xaml">
+    <Page Include="TimoSchmetzer\Processor\DynamicCircle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\SequentailMoveTo4.xaml">
+    <Page Include="TimoSchmetzer\Processor\SequentailMoveTo4.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\sinjuggler.xaml">
+    <Page Include="TimoSchmetzer\Processor\SinProcessor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimoSchmetzer\Algorithm\ExperimentalAlgorithm.xaml">
+    <Page Include="TimoSchmetzer\Processor\ExperimentalProcessor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
