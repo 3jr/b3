@@ -15,7 +15,7 @@ using BallOnTiltablePlate.JanRapp.Preprocessor;
 using JRapp;
 using BallOnTiltablePlate.JanRapp.Utilities;
 
-namespace BallOnTiltablePlate.JanRapp.Juggler
+namespace BallOnTiltablePlate.JanRapp.Processor
 {
     /// <summary>
     /// Interaction logic for HarmonicOscillator.xaml

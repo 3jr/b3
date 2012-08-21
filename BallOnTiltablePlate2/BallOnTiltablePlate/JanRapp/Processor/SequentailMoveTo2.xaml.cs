@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BallOnTiltablePlate.JanRapp.Preprocessor;
 
-namespace BallOnTiltablePlate.JanRapp.Juggler
+namespace BallOnTiltablePlate.JanRapp.Processor
 {
     /// <summary>
     /// Interaction logic for SequentailMoveTo.xaml

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="BallOnTiltablePlate.TimoSchmetzer.Algorithm.SinProcessor"
+﻿<UserControl x:Class="BallOnTiltablePlate.TimoSchmetzer.Processor.SinProcessor"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

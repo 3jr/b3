@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WiimoteLib;
 
-namespace BallOnTiltablePlate.JanRapp.Juggler
+namespace BallOnTiltablePlate.JanRapp.Processor
 {
     /// <summary>
     /// Interaction logic for WiiMoteControled.xaml

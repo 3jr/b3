@@ -37,9 +37,9 @@ namespace BallOnTiltablePlate
     public interface IControledSystemPreprocessor { }
 
     /// <summary>
-    /// Common Interface for all Juggler Algorithms
+    /// Common Interface for all Processor Algorithms
     /// Do only derive Finished Jugglers from this interface and not other interfaces.
-    /// It's only purpose is to tell the MainApp that is is a Juggler and the Preprocessor required.
+    /// It's only purpose is to tell the MainApp that is is a Processor and the Preprocessor required.
     /// </summary>
     /// <typeparam name="T">Must be a type of IPreprocessor</typeparam>
     public interface IControledSystemProcessor<T>

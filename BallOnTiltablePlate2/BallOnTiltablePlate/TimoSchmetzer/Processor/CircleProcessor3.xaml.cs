@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BallOnTiltablePlate.TimoSchmetzer.Algorithm
+namespace BallOnTiltablePlate.TimoSchmetzer.Processor
 {
     /// <summary>
     /// Interaction logic for CircleJuggler.xaml
