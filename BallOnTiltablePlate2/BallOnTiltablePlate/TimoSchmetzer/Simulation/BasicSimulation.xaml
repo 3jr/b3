@@ -79,6 +79,9 @@
             </ScrollViewer>
             </StackPanel>
         </Expander>
+        <Expander Name="HistoryVisualiser" Header="History_Visualiser">
+            <controlsB3:HistoryVisualizer x:Name="History"/>
+        </Expander>
         <Grid x:Name="C1">
             <WrapPanel>
                 <Button Command="{StaticResource ToogleRunningCmd}" x:Name="ToogelRunningBtn" Content="Play" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+P"/>

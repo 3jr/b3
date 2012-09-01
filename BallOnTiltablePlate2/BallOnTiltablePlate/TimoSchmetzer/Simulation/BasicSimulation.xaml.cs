@@ -148,10 +148,12 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 IPhysicsCalculator Calc = (IPhysicsCalculator)(((TreeViewItem)PhysicsCalculatorList.SelectedItem).Tag);
                 this.Tilt = GlobalSettings.Instance.ToValidTilt(this.Tilt);
                 wrapper.RunSimulation(Calc, this, deltaSeconds);
+                #region ExcelDiagram
                 if (recording)
                 {
                     AddDataToDiagramCreator();
                 }
+                #endregion
                 #region D3
                 if (D3Diagram.IsExpanded)
                 {
@@ -179,6 +181,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                 }
                 else if (sourceX != null)
                 { sourceX.Collection.Clear(); sourceY.Collection.Clear(); }
+                #endregion
+                #region HistoryVisualizer
+                this.History.FeedUpdate(new Vector(Position.X,Position.Y), new Vector(Velocity.X,Velocity.Y));
                 #endregion
             }
         }
