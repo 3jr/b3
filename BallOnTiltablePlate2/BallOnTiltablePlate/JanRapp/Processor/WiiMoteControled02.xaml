@@ -12,6 +12,8 @@
             <controls:DoubleBox x:Name="MovementFactor" Text="_Movement Factor: " Value="1"/>
             <controls:DoubleBox x:Name="CountForAverage" Text="Average: " Value="5" SmallChange="1" RegularChange="1" LargeChange="5"/>
             <TextBlock x:Name="AccelerationDataDisplay"/>
+            <CheckBox Name="InvertX" Content="Invert_X"/>
+            <CheckBox Name="InvertY" Content="Invert_Y"/>
         </StackPanel>
     </controlsB3:SettingsSaverB3>
 </UserControl>
