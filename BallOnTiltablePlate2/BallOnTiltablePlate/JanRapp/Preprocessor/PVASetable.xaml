@@ -24,7 +24,7 @@
                     <controls:DoubleBox x:Name="PositionFactor" Text="_Position: " Margin="18,0,0.2,0" />
                     <controls:DoubleBox x:Name="IntegralFactor" Text="_Integral: " Margin="19,0,0.2,0" />
                     <controls:DoubleBox x:Name="VelocityFactor" Text="_Differencial: " />
-                    <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: " Value="0.0333333333333333"/>
+                    <!--<controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: " Value="0.0333333333333333"/>-->
                 </StackPanel>
             </controlsB3:SettingsSaverB3>
         </Expander>

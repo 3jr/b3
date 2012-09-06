@@ -92,10 +92,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             #endregion
 
             DateTime now = DateTime.Now;
-            if (UpdateTimeBox.Value == 0)
+            if (GlobalSettings.Instance.UpdateTime/*UpdateTimeBox.Value*/ == 0)
                 Update((now - lastUpdateTime).TotalSeconds);
             else
-                Update(UpdateTimeBox.Value);
+                Update(GlobalSettings.Instance.UpdateTime/*UpdateTimeBox.Value*/);
 
             //System.Diagnostics.Debug.WriteLine("Calc" + Position);
             //System.Diagnostics.Debug.WriteLine("Send" + PositionQueue.ElementAt(0));

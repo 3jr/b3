@@ -62,7 +62,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
             }
 
             deltaTime = (double)sinceLastUpdate.ElapsedMilliseconds / 1000.0;
-            deltaTime = ((UseDelataTime.IsChecked ?? true) ? deltaTime : StaticPeriod.Value);
+            deltaTime = ((UseDelataTime.IsChecked ?? true) ? deltaTime : GlobalSettings.Instance.UpdateTime/*StaticPeriod.Value*/);
             long currentTicks = DateTime.Now.Ticks;
             long deltaTicks = currentTicks - lastTicks;
             lastTicks = currentTicks;

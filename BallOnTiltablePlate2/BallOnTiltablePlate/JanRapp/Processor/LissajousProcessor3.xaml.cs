@@ -59,7 +59,7 @@ namespace BallOnTiltablePlate.JanRapp.Processor
             IO.TargetVelocity = Velocity.Value;
             IO.TargetAcceleration = Acceleration.Value;
 
-            time += UpdateTime.Value;
+            time += GlobalSettings.Instance.UpdateTime/*UpdateTime.Value*/;
         }
 
         private void Param_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -76,7 +76,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Processor
             {
                 IO.SetTilt(new Vector());
             }
-            time += UpdateTime.Value;
+            time += GlobalSettings.Instance.UpdateTime/*UpdateTime.Value*/;
         }
 
         private void Param_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -30,7 +30,7 @@
                     </StackPanel>
                     <controls:VectorBox x:Name="LFactor" Text="L: " ValueChanged="SoLFactor_ValueChanged"/>
                     <controls:DoubleBox x:Name="Gravity" Text="g: " ValueChanged="SoGFactor_ValueChanged"/>
-                    <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: "/>
+                    <!--<controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: "/>-->
                 </StackPanel>
             </controlsB3:SettingsSaverB3>
         </GroupBox>

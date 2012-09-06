@@ -64,7 +64,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Processor
 
                 IO.SetTilt(tilt);
             }
-            time += UpdateTime.Value;
+            time += GlobalSettings.Instance.UpdateTime/*UpdateTime.Value*/;
             //if (!watch.IsRunning)
             //    watch.Start();
         }

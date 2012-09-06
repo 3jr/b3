@@ -38,7 +38,7 @@
                 </StackPanel>
             </controlsB3:SettingsSaverB3>
         </GroupBox>
-        <controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: " Value="0.0333333333333333"/>
+        <!--<controls:DoubleBox x:Name="StaticPeriod" Text="Static Period: " Value="0.0333333333333333"/>-->
         <TextBlock x:Name="IntegralDisplay"/>
         <controls:VectorBox x:Name="TargetPositionVecBox" Text="Target Position"/>
         <CheckBox x:Name="IsAutoBalancingOnCheckBox" Content="AutoBalancing On"/>

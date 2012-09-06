@@ -49,7 +49,7 @@
                 <StackPanel>
                     <Label Content="Constants"/>
                     <Button Command="{StaticResource ResetTimerCmd}" x:Name="ResetTimerBtn" Content="ResetTimer" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+R"/>
-                    <controls:DoubleBox x:Name="UpdateTime" Text="UpdateTime: " />
+                    <!--<controls:DoubleBox x:Name="UpdateTime" Text="UpdateTime: " />-->
                     <controls:DoubleBox x:Name="Gravity" Text="Gravity: " />
                 </StackPanel>
             </Expander>

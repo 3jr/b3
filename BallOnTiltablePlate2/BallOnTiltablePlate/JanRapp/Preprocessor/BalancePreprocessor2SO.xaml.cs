@@ -97,7 +97,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
         {
             if (recording)
             {
-                time += StaticPeriod.Value;
+                time += GlobalSettings.Instance.UpdateTime/*StaticPeriod.Value*/;
                 diagramcreator.AddPoint("PositionX", new Point(time, Position.X));
                 diagramcreator.AddPoint("PositionY", new Point(time, Position.Y));
                 diagramcreator.AddPoint("VelocityX", new Point(time, Velocity.X));
@@ -143,7 +143,7 @@ namespace BallOnTiltablePlate.JanRapp.Preprocessor
                 this.SoY.xh[1] = 0;
             }
 
-            double deltaTime = StaticPeriod.Value;
+            double deltaTime = GlobalSettings.Instance.UpdateTime/*StaticPeriod.Value*/;
 
             if (!newBallPos.HasNaN())
             {

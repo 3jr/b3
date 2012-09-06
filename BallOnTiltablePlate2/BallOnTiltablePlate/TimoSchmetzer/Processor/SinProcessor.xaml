@@ -32,7 +32,7 @@
                 <controls:DoubleBox x:Name="Yc" Text="c: " />
             </StackPanel>
             <Button Command="{StaticResource ResetTimerCmd}" x:Name="ResetTimerBtn" Content="ResetTimer" Margin="8,8,0,8" Padding="8,1" HorizontalAlignment="Left" d:LayoutOverrides="Height, VerticalMargin" ToolTip="Ctrl+R"/>
-            <controls:DoubleBox x:Name="UpdateTime" Text="UpdateTime: " />
+            <!--<controls:DoubleBox x:Name="UpdateTime" Text="UpdateTime: " />-->
         </WrapPanel>
     </controlsB3:SettingsSaverB3>
 </UserControl>
