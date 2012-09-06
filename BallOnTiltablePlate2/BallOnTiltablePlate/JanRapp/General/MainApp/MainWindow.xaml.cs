@@ -154,6 +154,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
         #region HelperMethods
         private void exchage(Guid newModule, Guid OldModule, CSItemType ItemType, Guid HigherModule)
         {
+            if ((ItemType == CSItemType.Input || ItemType == CSItemType.Output) && (SelectedProcessor != Guid.Empty))//compability for older processors that used input/output directly
+                SelectedProcessor.AsCSItem().Stop();
             if (HigherModule != Guid.Empty)
                 HigherModule.AsCSItem().Stop();
             if (OldModule != Guid.Empty)
@@ -162,7 +164,7 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
             {
                 case CSItemType.Processor:
                     if (OldModule != Guid.Empty)
-                    OldModule.AsCSItem().SetPreprocessor(null);
+                        OldModule.AsCSItem().SetPreprocessor(null);
                     newModule.AsCSItem().SetPreprocessor(SelectedPreprocessor.AsCSItem());
                     SelectedProcessor = newModule;
                     UpdateTreeView(ProcessorList, HigherModule, CSItemType.Processor);
@@ -170,9 +172,9 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                     break;
                 case CSItemType.Preprocessor:
                     if (OldModule != Guid.Empty)
-                    OldModule.AsCSItem().SetInput(null);
+                        OldModule.AsCSItem().SetInput(null);
                     if (OldModule != Guid.Empty)
-                    OldModule.AsCSItem().SetOutput(null);
+                        OldModule.AsCSItem().SetOutput(null);
                     newModule.AsCSItem().SetInput(SelectedInput.AsCSItem());
                     newModule.AsCSItem().SetOutput(SelectedOutput.AsCSItem());
                     SelectedPreprocessor = newModule;
@@ -200,6 +202,8 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
                 newModule.AsCSItem().Start();
             if (HigherModule != Guid.Empty)
                 HigherModule.AsCSItem().Start();
+            if ((ItemType == CSItemType.Input || ItemType == CSItemType.Output) && (SelectedProcessor != Guid.Empty))//compability for older processors that used input/output directly
+                SelectedProcessor.AsCSItem().Start();
         }
         /// <summary>
         /// Selects an CSItem in an existing treeview
@@ -638,9 +642,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.MainApp
                 return createdInstance;
             }
             catch (Exception)
-            { 
-                if(!InstanceCrationFailed)
-                MessageBox.Show("Creating Instance failed");
+            {
+                if (!InstanceCrationFailed)
+                    MessageBox.Show("Creating Instance failed");
                 InstanceCrationFailed = true;
             }
             return null;
@@ -680,9 +684,9 @@ namespace BallOnTiltablePlate.TimoSchmetzer.MainApp
             }
         }
 
-        public bool HasSettingsWindow 
+        public bool HasSettingsWindow
         {
-            get 
+            get
             {
                 try
                 {
