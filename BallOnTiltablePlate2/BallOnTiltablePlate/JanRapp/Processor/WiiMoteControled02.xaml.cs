@@ -66,6 +66,7 @@ namespace BallOnTiltablePlate.JanRapp.Processor
                     Vector sum = lastAccelerationData.Take(countForAverage).Aggregate(new Vector(), (aggregator, item) => aggregator += item);
                     Vector median = sum / countForAverage;
                     median = new Vector(median.X * (InvertX.IsChecked ?? true ? 1 : -1), median.Y * (InvertY.IsChecked ?? true ? 1 : -1));
+                    median = new Vector(ExchangeXY.IsChecked ?? true ? median.Y : median.X, ExchangeXY.IsChecked ?? true ? median.X : median.Y);
                     IO.SetTilt(median * MovementFactor.Value);
                 }
 
