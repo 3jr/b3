@@ -287,6 +287,9 @@
     <Compile Include="TimoSchmetzer\Processor\CircleProcessor3.xaml.cs">
       <DependentUpon>CircleProcessor3.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Processor\ExperimentalProcessor2.xaml.cs">
+      <DependentUpon>ExperimentalProcessor2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Processor\LissajousProcessor2.xaml.cs">
       <DependentUpon>LissajousProcessor2.xaml</DependentUpon>
     </Compile>
@@ -320,6 +323,7 @@
     <Compile Include="TimoSchmetzer\Test\ControlExamle.xaml.cs">
       <DependentUpon>ControlExamle.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Utilities\CodeUtilities.cs" />
     <Compile Include="TimoSchmetzer\Utilities\ExcelUtilities.cs" />
     <Compile Include="TimoSchmetzer\Utilities\MathematicalUtilities.cs" />
     <Compile Include="TimoSchmetzer\Simulation\PhysicsCalculators\PhysicsInAir.cs" />
@@ -518,6 +522,10 @@
     <Page Include="TimoSchmetzer\Processor\CircleProcessor3.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TimoSchmetzer\Processor\ExperimentalProcessor2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TimoSchmetzer\Processor\LissajousProcessor2.xaml">
       <Generator>MSBuild:Compile</Generator>
