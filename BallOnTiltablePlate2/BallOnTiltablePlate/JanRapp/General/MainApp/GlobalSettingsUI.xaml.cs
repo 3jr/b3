@@ -69,20 +69,21 @@ namespace BallOnTiltablePlate.JanRapp.MainApp
 
         private void SetEnviromentVariables_Click(object sender, RoutedEventArgs e)
         {
-            //Set on User Level
-            System.Diagnostics.ProcessStartInfo elevatedProcessInfo = new System.Diagnostics.ProcessStartInfo();
-            elevatedProcessInfo.FileName = "cmd";
-            elevatedProcessInfo.Arguments =
-                "\"/c SETX " + GlobalSettings.b3SettingsSaverSaveLocationVariableName + " \"" + SettingsSaverSaveLocation.Text + "\" " +
-                "&& SETX " + GlobalSettings.b3SettingsSaverBackupZipVariableName + " \"" + SettingsSaverBackupLocation.Text + "\" ";
-            elevatedProcessInfo.UseShellExecute = true;
-            elevatedProcessInfo.Verb = "runas";
-            elevatedProcessInfo.CreateNoWindow = true;
+            ////Set on User Level
+            //System.Diagnostics.ProcessStartInfo elevatedProcessInfo = new System.Diagnostics.ProcessStartInfo();
+            //elevatedProcessInfo.FileName = "cmd";
+            //elevatedProcessInfo.Arguments =
+            //    "\"/c SETX " + GlobalSettings.b3SettingsSaverSaveLocationVariableName + " \"" + SettingsSaverSaveLocation.Text + "\" " +
+            //    "&& SETX " + GlobalSettings.b3SettingsSaverBackupZipVariableName + " \"" + SettingsSaverBackupLocation.Text + "\" ";
+            //elevatedProcessInfo.UseShellExecute = true;
+            //elevatedProcessInfo.Verb = "runas";
+            //elevatedProcessInfo.CreateNoWindow = true;
 
-            var process = System.Diagnostics.Process.Start(elevatedProcessInfo);
+            //var process = System.Diagnostics.Process.Start(elevatedProcessInfo);
 
-            process.WaitForExit();
-
+            //process.WaitForExit();
+            Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Environment", GlobalSettings.b3SettingsSaverSaveLocationVariableName, SettingsSaverSaveLocation.Text);
+            Microsoft.Win32.Registry.SetValue(@"HKEY_CURRENT_USER\Environment", GlobalSettings.b3SettingsSaverBackupZipVariableName, SettingsSaverBackupLocation.Text);
             if(GlobalSettings.Instance.EnviromentVariableChanged != null)
                 GlobalSettings.Instance.EnviromentVariableChanged(this, new EventArgs());
 

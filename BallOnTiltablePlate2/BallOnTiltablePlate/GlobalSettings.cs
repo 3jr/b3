@@ -73,7 +73,7 @@ namespace BallOnTiltablePlate
             if (Directory.Exists(SettinsSaverSaveLocation))
                 return enviromentSetSaveLocation;
             
-            MessageBox.Show("The enviroment Variable " + b3SettingsSaverSaveLocationVariableName + " is not set to a valid path, witch would be used to store the SettingsSaver Save files. This is also possible in the Global Settings under Settings.\n\rThe Current Directory is default and currently used.");
+            //MessageBox.Show("The enviroment Variable " + b3SettingsSaverSaveLocationVariableName + " is not set to a valid path, witch would be used to store the SettingsSaver Save files. This is also possible in the Global Settings under Settings.\n\rThe Current Directory is default and currently used.");
             return Environment.CurrentDirectory;
         }
         
