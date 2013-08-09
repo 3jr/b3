@@ -126,7 +126,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
                     Mathematics.Random(-RandomDoubleBox.Value, RandomDoubleBox.Value), Mathematics.Random(-RandomDoubleBox.Value, RandomDoubleBox.Value));
             }
             #endregion
-            SendData((Vector3D)SendPosition);
+            if (!(DisableSendingDataBox.IsChecked ?? true))
+            {
+                SendData((Vector3D)SendPosition);
+            }
 
             #region jugglerupdate
             BallOnTiltablePlate.JanRapp.MainApp.MainWindow mainWindow = (BallOnTiltablePlate.JanRapp.MainApp.MainWindow)Application.Current.MainWindow;
