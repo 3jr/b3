@@ -16,10 +16,10 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Utilities
         //Modified for Func<double, double> from http://stackoverflow.com/questions/8857871/creating-lambda-expression-from-a-string (James Manning)
 
         /// <summary>
-        /// Returns a Func<double, double> from LambdaExpression string.
+        /// Returns a Func&lt;double, double&gt; from LambdaExpression string.
         /// </summary>
         /// <param name="code">Lambda Expression</param>
-        /// <returns>Corresponding Func<double, double></returns>
+        /// <returns>Corresponding Func&lt;double, double&gt;</returns>
         public static Func<double, double> GetFuncFromCodeString(string code)
         {
             var classSource = String.Format(classTemplate, code);
