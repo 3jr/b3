@@ -19,7 +19,8 @@
     </UserControl.Resources>
     <controlsB3:SettingsSaverB3>
     <WrapPanel Orientation="Vertical" x:Name="MainPanel">
-            <Button Content="Switch to 320x240" Click="LowRes_Click"/>
+            <Button Content="Restart KinectManagement Service" Click="KinectManagmentRestart_Click"/>
+                <Button Content="Switch to 320x240" Click="LowRes_Click"/>
             <CheckBox Name="UseMedian" Content="Use Median of Amormalies" />
             <controls:DoubleBox x:Name="ToleranceDoubelBox" Text="_Tolerance of Height Anormalities: " Value="10.0"/>
             <controls:DoubleBox x:Name="UpperToleranceDoubelBox" Text="Upper _Tolerance of Height Anormalities: " Value="10.0"/>

@@ -363,5 +363,20 @@ namespace BallOnTiltablePlate.JanRapp.Input2
 
             displays.Clear();
         }
+
+        private void KinectManagmentRestart_Click(object sender, RoutedEventArgs e)
+        {
+            Stop();
+            //Run with Administrative Privileges
+            System.Diagnostics.ProcessStartInfo elevatedProcessInfo = new System.Diagnostics.ProcessStartInfo();
+            elevatedProcessInfo.FileName = "cmd";
+            elevatedProcessInfo.Arguments = "net stop KinectManagement && net start KinectManagement";
+            elevatedProcessInfo.UseShellExecute = true;
+            elevatedProcessInfo.Verb = "runas";
+            elevatedProcessInfo.CreateNoWindow = true;
+            var process = System.Diagnostics.Process.Start(elevatedProcessInfo);
+            process.WaitForExit();
+            Start();
+        }
     }
 }
