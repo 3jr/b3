@@ -37,7 +37,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         private List<TreeViewItem> PCItems = new List<TreeViewItem>();
         public BasicSimulation()
         {
-            timer = new DispatcherTimer(DispatcherPriority.Normal, this.Dispatcher);
+            timer = new DispatcherTimer(DispatcherPriority.Send, this.Dispatcher);
 
             InitializeComponent();
 
@@ -71,8 +71,11 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
         }
 
         private Queue<Vector3D> PositionQueue = new Queue<Vector3D>();
+        //DateTime lastExec;
         void timer_Tick(object sender, EventArgs e)
         {
+            //Debug.WriteLine("Executing every" + (DateTime.Now - lastExec).TotalMilliseconds+"ms");
+            //lastExec = DateTime.Now;
             #region queue
             if (PositionQueue.Count < LatencyFramesDoubleBox.Value - 1)
             {
@@ -138,6 +141,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Simulation
             #endregion
 
             lastUpdateTime = now;
+            //Debug.WriteLine("Execution took:" + (DateTime.Now - lastExec).TotalMilliseconds + "ms");
         }
 
         ObservableDataSource<Point> sourceX = null;
