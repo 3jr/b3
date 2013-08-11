@@ -61,7 +61,7 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Processor
                 //tilt = (1 / (-(3.0/5.0)*Gravity.Value) * (Acceleration.Value))+tilt;
                 IO.SetTilt(tilt);
 
-                if (this.IsVisible)
+                if (Container.IsVisible)
                 {
                     Vector displayPos = GetDisplayPos(IO.Position);
                     Canvas.SetLeft(NextPositionEllipse, displayPos.X);
