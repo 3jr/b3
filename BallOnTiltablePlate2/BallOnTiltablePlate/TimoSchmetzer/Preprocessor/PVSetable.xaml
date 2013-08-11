@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="BallOnTiltablePlate.TimoSchmetzer.Preprocessor.PVSetable"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc= "http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:JRapp.WPF;assembly=JRapp.WPF"
+             xmlns:controlsB3="clr-namespace:JRapp.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="496" Width="300">
+    <UserControl.Resources>
+        <RoutedCommand x:Key="ToogleRecordCmd">
+            <RoutedCommand.InputGestures>
+                <KeyGesture>Control+R</KeyGesture>
+            </RoutedCommand.InputGestures>
+        </RoutedCommand>
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ToogleRecordCmd}" Executed="ToogleRecordCmd_Executed"/>
+    </UserControl.CommandBindings>
+    <StackPanel>
+        <Expander Header="PID Ball Balance">
+            <controlsB3:SettingsSaverB3 x:Name="PID">
+                <StackPanel>
+                    <controls:DoubleBox x:Name="PositionFactor" Text="_Position: " Margin="18,0,0.2,0" />
+                    <controls:DoubleBox x:Name="VelocityFactor" Text="_Differencial: " />
+                </StackPanel>
+            </controlsB3:SettingsSaverB3>
+        </Expander>
+        <Expander Header="State Observer">
+            <controlsB3:SettingsSaverB3 x:Name="StateObserver">
+                <StackPanel>
+                    <controls:DoubleBox x:Name="gDB" Text="g: " ValueChanged="gDB_ValueChanged"/>
+                    <controls:VectorBox x:Name="SDB" Text="S:" ValueChanged="gDB_ValueChanged" Margin="10,0,0.2,0"/>
+                    <controls:VectorBox x:Name="L1DB" Text="L1: " ValueChanged="gDB_ValueChanged"/>
+                    <controls:VectorBox x:Name="L2DB" Text="L2: " ValueChanged="gDB_ValueChanged"/>
+                </StackPanel>
+            </controlsB3:SettingsSaverB3>
+        </Expander>
+        <Expander Header="Simulation">
+            <!--<controlsB3:SettingsSaverB3 x:Name="Simulation">-->
+            <StackPanel>
+                <controls:DoubleBox x:Name="SimulationTimer" Text="Simulation Timer [ms]: " Value="10" SmallChange="1" LargeChange="10" Minimum="1" Maximum="100" ValueChanged="SimulationTimer_ValueChanged"/>
+                <controls:DoubleBox x:Name="SOUpdateTheshold" Text=" SO Update Theshold [ms]:" Value="45" SmallChange="1" LargeChange="10" Minimum="1" Maximum="100"/>
+            </StackPanel>
+            <!--</controlsB3:SettingsSaverB3>-->
+        </Expander>
+        <Expander Header="Current State">
+            <StackPanel>
+                <TextBlock x:Name="IntegralDisplay"/>
+                <controls:VectorBox x:Name="TargetPositionVecBox" Text="Target Position:" IsEnabled="False" Margin="24,0,0,0"/>
+                <controls:VectorBox x:Name="TargetVelocityVecBox" Text="Target Velocity:" IsEnabled="False" Margin="24,0,0,0"/>
+                <controls:VectorBox x:Name="TargetAccelerationVecBox" Text="Target Acceleration:" IsEnabled="False"/>
+                <GroupBox Header="Data">
+                    <StackPanel>
+                        <TextBlock x:Name="PositionDisplay" />
+                        <TextBlock x:Name="VelocityDisplay" />
+                        <TextBlock x:Name="DeltaTimeDisplay"/>
+                        <TextBlock x:Name="DeltaTicksDisplay"/>
+                        <TextBlock x:Name="xhDispaly" />
+                        <Button Content="Reset _Pevious Data" Click="Reset_Click" Margin="0,0,0.2,0"/>
+                        <Button Command="{StaticResource ToogleRecordCmd}" x:Name="ToggleReccordBtn" Content="Record" ToolTip="Ctrl+R"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Expander>
+        <Expander Header="Visualization" IsExpanded="True">
+            <controlsB3:HistoryVisualizer x:Name="History"/>
+        </Expander>
+        <Expander Header="Canvas">
+            <Canvas Height="300" Width="300" VerticalAlignment="Top" Margin="10,10,0,0" HorizontalAlignment="Left" x:Name="Container">
+                <Rectangle Height="300" Width="300" VerticalAlignment="Top" x:Name="nextPositionInput" HorizontalAlignment="Left" StrokeThickness="2" Stroke="Black" Fill="#FFD4DEBD"/>
+                <Rectangle Height="300" Width="300" VerticalAlignment="Top" x:Name="CosMaxTilt" HorizontalAlignment="Left" StrokeThickness="1" Stroke="Gray" Fill="#FFD4DEBD"/>
+                <Ellipse x:Name="NextPositionEllipse" Width="6" Height="6" Margin="-3,-3" Fill="Red"/>
+                <Ellipse x:Name="CurrentTargetPositionEllipse" Width="6" Height="6" Margin="-3,-3" Fill="Blue"/>
+            </Canvas>
+        </Expander>
+    </StackPanel>
+</UserControl>

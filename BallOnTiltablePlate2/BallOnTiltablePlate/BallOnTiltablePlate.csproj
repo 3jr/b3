@@ -281,11 +281,17 @@
     <Compile Include="MoritzUehling\Juggler\WifiSettings.xaml.cs">
       <DependentUpon>WifiSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TimoSchmetzer\Preprocessor\PVSetable.xaml.cs">
+      <DependentUpon>PVSetable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimoSchmetzer\Processor\CircleProcessor.xaml.cs">
       <DependentUpon>CircleProcessor.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Processor\CircleProcessor3.xaml.cs">
       <DependentUpon>CircleProcessor3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TimoSchmetzer\Processor\FunctionProcessor.xaml.cs">
+      <DependentUpon>FunctionProcessor.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimoSchmetzer\Processor\ExperimentalProcessor2.xaml.cs">
       <DependentUpon>ExperimentalProcessor2.xaml</DependentUpon>
@@ -515,11 +521,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="TimoSchmetzer\Preprocessor\PVSetable.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="TimoSchmetzer\Processor\CircleProcessor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TimoSchmetzer\Processor\CircleProcessor3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TimoSchmetzer\Processor\FunctionProcessor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
