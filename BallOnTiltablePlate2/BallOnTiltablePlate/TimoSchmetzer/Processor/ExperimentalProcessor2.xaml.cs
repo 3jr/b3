@@ -55,6 +55,18 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Processor
                 Vector Velocity = new Vector((X(time + h) - X(time)) / h, (Y(time + h) - Y(time)) / h);
                 var tilt = (IO.Position - Position) * PositionFactor.Value + (IO.Velocity - Velocity) * VelocityFactor.Value;
                 IO.SetTilt(tilt);
+                #region CanvasDisplay
+                if (Container.IsVisible)
+                {
+                    Vector displayPos = GetDisplayPos(IO.Position);
+                    Canvas.SetLeft(NextPositionEllipse, displayPos.X);
+                    Canvas.SetTop(NextPositionEllipse, displayPos.Y);
+
+                    Vector targetDisplayPos = GetDisplayPos(Position);
+                    Canvas.SetLeft(CurrentTargetPositionEllipse, targetDisplayPos.X);
+                    Canvas.SetTop(CurrentTargetPositionEllipse, targetDisplayPos.Y);
+                }
+                #endregion
             }
             else
             {
@@ -77,6 +89,20 @@ namespace BallOnTiltablePlate.TimoSchmetzer.Processor
                 MessageBox.Show("Compiling failed. Please check your expression.");
             }
         }
-        
+        #region UIHelper
+        private Vector GetDisplayPos(Vector v)
+        {
+            Vector halfeArea = new Vector(nextPositionInput.Width / 2, nextPositionInput.Height / 2);
+            v.X /= GlobalSettings.Instance.HalfPlateSize;
+            v.Y /= GlobalSettings.Instance.HalfPlateSize;
+            v.X *= halfeArea.X;
+            v.Y *= halfeArea.Y;
+            v += halfeArea;
+
+            v.Y = nextPositionInput.Height - v.Y;
+
+            return v;
+        }
+        #endregion
     }
 }
